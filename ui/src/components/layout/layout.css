@@ -1,0 +1,15 @@
+/* A saved desktop width must never make the mobile layout unusable. */
+.dragorbit-editable-grid {
+	max-width: 100%;
+}
+@media (max-width: 640px) {
+	.dragorbit-editable-grid {
+		width: 100% !important;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.dragorbit-editable-grid * {
+		animation-duration: 0s !important;
+		transition-duration: 0s !important;
+	}
+}
