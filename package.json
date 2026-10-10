@@ -1,4 +1,24 @@
 {
-  "name": "dragorbit",
-  "packageManager": "yarn@4.9.1"
+  "name": "dragorbit-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "ui",
+    "core",
+    "features",
+    "screens"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:watch": "tsc --noEmit -p tsconfig.json --watch"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
 }

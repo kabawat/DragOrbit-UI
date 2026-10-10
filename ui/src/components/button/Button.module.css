@@ -1,0 +1,22 @@
+.button {
+  padding: 10px 16px;
+  border: 0;
+  border-radius: var(--do-radius, 8px);
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--do-primary, #2563eb);
+  color: white;
+}
+
+.outline {
+  background: transparent;
+  border: 1px solid var(--do-primary, #2563eb);
+  color: var(--do-primary, #2563eb);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

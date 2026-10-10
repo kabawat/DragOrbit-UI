@@ -1,0 +1,198 @@
+/* Theme Variables */
+:root {
+	/* Default Theme Colors */
+	--color-primary: 59 130 246;
+	/* blue-500 */
+	--color-secondary: 107 114 128;
+	/* gray-500 */
+	--color-success: 34 197 94;
+	/* green-500 */
+	--color-warning: 245 158 11;
+	/* amber-500 */
+	--color-danger: 239 68 68;
+	/* red-500 */
+
+	/* Background Colors - Light Theme */
+	--color-bg-primary: 255 255 255;
+	/* white */
+	--color-bg-secondary: 252 252 253;
+	/* very light gray */
+	--color-bg-tertiary: 248 249 250;
+	/* light gray */
+
+	/* Text Colors */
+	--color-text-primary: 17 24 39;
+	/* gray-900 */
+	--color-text-secondary: 75 85 99;
+	/* gray-600 */
+	--color-text-tertiary: 156 163 175;
+	/* gray-400 */
+
+	/* Border Colors */
+	--color-border-primary: 229 231 235;
+	/* gray-200 */
+	--color-border-secondary: 209 213 219;
+	/* gray-300 */
+	--color-border-primary-light: rgba(229, 231, 235, 0.3);
+	/* light border with opacity for light mode */
+
+	/* Gradient Colors for Metric Cards - Light Mode */
+	--gradient-green: linear-gradient(
+		to bottom right,
+		rgb(220 252 231),
+		rgb(187 247 208)
+	);
+	--gradient-blue: linear-gradient(
+		to bottom right,
+		rgb(219 234 254),
+		rgb(191 219 254)
+	);
+	--gradient-purple: linear-gradient(
+		to bottom right,
+		rgb(243 232 255),
+		rgb(233 213 255)
+	);
+	--gradient-orange: linear-gradient(
+		to bottom right,
+		rgb(255 237 213),
+		rgb(254 215 170)
+	);
+	--gradient-red: linear-gradient(
+		to bottom right,
+		rgb(254 226 226),
+		rgb(254 202 202)
+	);
+	--gradient-yellow: linear-gradient(
+		to bottom right,
+		rgb(254 249 195),
+		rgb(253 224 71)
+	);
+	--gradient-teal: linear-gradient(
+		to bottom right,
+		rgb(204 251 241),
+		rgb(153 246 228)
+	);
+	--gradient-gray: linear-gradient(
+		to bottom right,
+		rgb(249 250 251),
+		rgb(243 244 246)
+	);
+	--gradient-indigo: linear-gradient(
+		to bottom right,
+		rgb(224 231 255),
+		rgb(199 210 254)
+	);
+
+	/* Shadow Colors */
+	--color-shadow: 0 0 0;
+
+	/* Premium Design Tokens */
+	--glass-bg: rgba(255, 255, 255, 0.7);
+	--glass-border: rgba(255, 255, 255, 0.5);
+	--glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+	--card-shadow:
+		0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -3px rgba(0, 0, 0, 0.02);
+	--card-shadow-hover:
+		0 20px 40px -8px rgba(0, 0, 0, 0.08), 0 8px 16px -4px rgba(0, 0, 0, 0.04);
+
+	/* Font Variables */
+	--font-primary:
+		"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		sans-serif;
+
+	/* Theme Name */
+	--theme-name: "default";
+	--theme-variant: "light";
+}
+
+/* Dark Theme Variant */
+[data-theme="default"][data-variant="dark"] {
+	--color-bg-primary: 9 9 11;
+	/* zinc-950 */
+	--color-bg-secondary: 18 18 18;
+	/* zinc-900 */
+	--color-bg-tertiary: 30 30 32;
+	/* zinc-800 */
+
+	--color-text-primary: 255 255 255;
+	/* white - more light */
+	--color-text-secondary: 229 231 235;
+	/* gray-200 - more light */
+	--color-text-tertiary: 209 213 219;
+	/* gray-300 - more light */
+
+	--color-border-primary: 30 30 32;
+	/* zinc-800 */
+	--color-border-secondary: 45 45 48;
+	/* zinc-700 */
+	--color-border-primary-light: rgba(75, 85, 99, 0.4);
+	/* light border with opacity for dark mode - more visible */
+
+	--color-shadow: 0 0 0;
+	--theme-variant: "dark";
+
+	/* Premium Design Tokens - Dark */
+	--glass-bg: rgba(9, 9, 11, 0.7);
+	--glass-border: rgba(255, 255, 255, 0.1);
+	--glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Force light text in dark mode */
+[data-variant="dark"] {
+	--color-text-primary: 255 255 255;
+	/* white */
+	--color-text-secondary: 229 231 235;
+	/* gray-200 */
+	--color-text-tertiary: 209 213 219;
+	/* gray-300 */
+	--color-border-primary-light: rgba(75, 85, 99, 0.4);
+	/* light border with opacity for dark mode - more visible */
+
+	/* Gradient Colors for Metric Cards - Dark Mode */
+	--gradient-green: linear-gradient(
+		to bottom right,
+		rgba(20, 83, 45, 0.2),
+		rgba(22, 101, 52, 0.3)
+	) !important;
+	--gradient-blue: linear-gradient(
+		to bottom right,
+		rgba(30, 58, 138, 0.2),
+		rgba(30, 64, 175, 0.3)
+	) !important;
+	--gradient-purple: linear-gradient(
+		to bottom right,
+		rgba(88, 28, 135, 0.2),
+		rgba(107, 33, 168, 0.3)
+	) !important;
+	--gradient-orange: linear-gradient(
+		to bottom right,
+		rgba(154, 52, 18, 0.2),
+		rgba(194, 65, 12, 0.3)
+	) !important;
+	--gradient-red: linear-gradient(
+		to bottom right,
+		rgba(153, 27, 27, 0.2),
+		rgba(185, 28, 28, 0.3)
+	) !important;
+	--gradient-yellow: linear-gradient(
+		to bottom right,
+		rgba(133, 77, 14, 0.2),
+		rgba(161, 98, 7, 0.3)
+	) !important;
+	--gradient-teal: linear-gradient(
+		to bottom right,
+		rgba(19, 78, 74, 0.2),
+		rgba(15, 118, 110, 0.3)
+	) !important;
+	--gradient-gray: linear-gradient(
+		to bottom right,
+		rgba(55, 65, 81, 0.2),
+		rgba(75, 85, 99, 0.3)
+	) !important;
+	--gradient-indigo: linear-gradient(
+		to bottom right,
+		rgba(55, 48, 163, 0.2),
+		rgba(67, 56, 202, 0.3)
+	) !important;
+}

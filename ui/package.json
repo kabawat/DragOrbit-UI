@@ -1,0 +1,52 @@
+{
+  "name": "@dragorbit/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./table": {
+      "types": "./src/table/index.ts",
+      "default": "./src/table/index.ts"
+    },
+    "./legacy": "./src/legacy.js",
+    "./rich-text": {
+      "types": "./src/components/common/RichTextEditor.jsx",
+      "default": "./src/components/common/RichTextEditor.jsx"
+    },
+    "./date-range": {
+      "types": "./src/components/common/dateRange.js",
+      "default": "./src/components/common/dateRange.js"
+    },
+    "./header": {
+      "types": "./src/components/header/AppHeader.tsx",
+      "default": "./src/components/header/AppHeader.tsx"
+    },
+    "./app": "./src/app.js"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "dompurify": "^3.3.1"
+  },
+  "dependencies": {
+    "lucide-react": "^0.544.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0",
+    "@dragorbit/core": "0.1.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "peerDependenciesMeta": {
+    "dompurify": {
+      "optional": true
+    }
+  }
+}

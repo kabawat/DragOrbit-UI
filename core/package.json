@@ -1,0 +1,37 @@
+{
+  "name": "@dragorbit/core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./themes": {
+      "types": "./src/themes/index.js",
+      "default": "./src/themes/index.js"
+    },
+    "./themes.css": "./src/themes/themes.css",
+    "./api": {
+      "types": "./src/api/index.js",
+      "import": "./src/api/index.js",
+      "require": "./src/api/runtime.cjs",
+      "default": "./src/api/index.js"
+    },
+    "./date-range": {
+      "types": "./src/forms/dateRange.js",
+      "default": "./src/forms/dateRange.js"
+    },
+    "./phone": {
+      "types": "./src/forms/phone.js",
+      "default": "./src/forms/phone.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ]
+}
