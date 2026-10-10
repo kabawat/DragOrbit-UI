@@ -1,3 +1,4 @@
+// Generated from index.js by scripts/build-api.cjs. Do not edit directly.
 function attachQueryParams(baseUrl, params = {}) {
 	if (!baseUrl) {
 		return "";
@@ -161,12 +162,4 @@ class HttpService {
 	}
 }
 
-module.exports = {
-	attachQueryParams,
-	HttpService,
-	normalizeMessage,
-	handleSuccess,
-	handleError,
-	formatErrorWithFields,
-	toApiError,
-};
+module.exports = { attachQueryParams, HttpService, normalizeMessage, handleSuccess, handleError, formatErrorWithFields, toApiError };

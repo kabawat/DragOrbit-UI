@@ -29,7 +29,9 @@
     }
   },
   "scripts": {
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "build:api": "node scripts/build-api.cjs",
+    "prepack": "node scripts/build-api.cjs"
   },
   "sideEffects": [
     "**/*.css"

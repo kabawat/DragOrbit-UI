@@ -122,3 +122,10 @@ export type {
 } from "./components/header/AppHeader";
 
 export * from "./app";
+
+export { default as FormDrawer } from "./components/drawer/FormDrawer";
+export { CopyableContactValue } from "./components/common/CopyableContactValue";
+export { RowActionsMenu } from "./components/common/RowActionsMenu";
+export { RowContextMenuLayer } from "./components/common/RowContextMenuLayer";
+export { clampFloatingMenuPosition } from "./components/common/floatingMenuPosition";
+export { default as GlobalToastContainer } from "./components/feedback/GlobalToastContainer";
