@@ -32,21 +32,16 @@
   ],
   "peerDependencies": {
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "dompurify": "^3.3.1"
+    "react-dom": "^19.2.3"
   },
   "dependencies": {
     "lucide-react": "^0.544.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
-    "@dragorbit/core": "0.1.0"
+    "@dragorbit/core": "0.1.0",
+    "dompurify": "^3.3.1"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json"
-  },
-  "peerDependenciesMeta": {
-    "dompurify": {
-      "optional": true
-    }
   }
 }
