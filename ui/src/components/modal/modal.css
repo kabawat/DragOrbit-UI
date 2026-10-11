@@ -1,10 +1,10 @@
 .dragorbit-modal-overlay { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 16px; background: #0003; backdrop-filter: blur(1px); opacity: 0; transition: opacity 220ms ease; }
-.dragorbit-modal-panel { max-height: calc(100dvh - 32px); overflow: auto; outline: none; transform: translateY(14px) scale(.98); opacity: 0; transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
+.dragorbit-modal-panel { min-width: 0; max-height: calc(100dvh - 32px); overflow: auto; outline: none; transform: translateY(14px) scale(.98); opacity: 0; transition: transform 220ms cubic-bezier(.2,.8,.2,1), opacity 220ms ease; }
 .dragorbit-modal-overlay[data-open="true"] { opacity: 1; }
 .dragorbit-modal-overlay[data-open="true"] .dragorbit-modal-panel { opacity: 1; transform: translateY(0) scale(1); }
 @media(prefers-reduced-motion: reduce) { .dragorbit-modal-overlay, .dragorbit-modal-panel { transition: none; transform: none; } }
 .dragorbit-modal-overlay[data-position="right"] { align-items: flex-start; justify-content: flex-end; padding: 10px; }
-.dragorbit-modal-window { position: relative; display: flex; flex-direction: column; background: rgb(var(--color-bg-primary, 255 255 255)); color: rgb(var(--color-text-primary, 39 50 70)); border-radius: 10px; box-shadow: 0 20px 60px #0003; overflow: hidden; max-width: calc(100vw - 20px); max-height: calc(100dvh - 20px); }
+.dragorbit-modal-window { position: relative; display: flex; flex-direction: column; background: rgb(var(--color-bg-primary, 255 255 255)); color: rgb(var(--color-text-primary, 39 50 70)); border-radius: 10px; box-shadow: 0 20px 60px #0003; overflow: hidden; max-height: calc(100dvh - 20px); }
 .dragorbit-modal-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 24px; border-bottom: 1px solid rgb(var(--color-border-primary, 226 232 240)); flex-shrink: 0; }
 .dragorbit-modal-header h2 { font-size: 16px; font-weight: 600; margin: 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .dragorbit-modal-header.is-draggable { cursor: move; user-select: none; touch-action: none; }
