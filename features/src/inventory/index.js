@@ -6,3 +6,5 @@ export { InventoryListHeaderView } from "./component/InventoryListHeaderView.jsx
 export { InventoryListContentView } from "./component/InventoryListContentView.jsx";
 export { InventoryTableView } from "./component/InventoryTableView.jsx";
 export { InventoryCardView } from "./component/InventoryCardView.jsx";
+export { DeleteInventoryModalPresentation } from "./component/DeleteInventoryModalView.jsx";
+export { InventoryFormPresentation } from "./component/InventoryFormView.jsx";

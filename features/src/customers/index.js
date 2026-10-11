@@ -7,3 +7,16 @@ export { default as CustomerAddressFields } from "./component/CustomerAddressFie
 export { default as CustomerViewTabs } from "./component/CustomerViewTabs.jsx";
 export { default as CustomerCompanyDetails } from "./component/CustomerCompanyDetails.jsx";
 export { default as CustomerForm } from "./component/CustomerForm.jsx";
+export { CustomerBulkUploadDrawerIndexPresentation } from "./component/CustomerBulkUploadDrawer/indexView.jsx";
+export { CustomerDownloadDrawerDateRangePreviewPresentation } from "./component/CustomerDownloadDrawer/DateRangePreviewView.jsx";
+export { CustomerDownloadDrawerDateRangeSelectorPresentation } from "./component/CustomerDownloadDrawer/DateRangeSelectorView.jsx";
+export { CustomerDownloadDrawerFieldSelectorPresentation } from "./component/CustomerDownloadDrawer/FieldSelectorView.jsx";
+export { CustomerFormPresentation } from "./component/CustomerFormView.jsx";
+export { CustomerImportMenuPresentation } from "./component/CustomerImportMenuView.jsx";
+export { CustomerSourceBadgePresentation } from "./component/CustomerSourceBadgeView.jsx";
+export { ListCustomerDeleteModalPresentation } from "./component/list/CustomerDeleteModalView.jsx";
+export { SectionsAddressSectionPresentation } from "./component/sections/AddressSectionView.jsx";
+export { SectionsBasicInfoPresentation } from "./component/sections/BasicInfoView.jsx";
+export { ViewComponentsAccountDetailsPresentation } from "./component/view/components/AccountDetailsView.jsx";
+export { ViewComponentsCustomerBasicInfoPresentation } from "./component/view/components/CustomerBasicInfoView.jsx";
+export { ViewComponentsDeleteModalPresentation } from "./component/view/components/DeleteModalView.jsx";
