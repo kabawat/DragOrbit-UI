@@ -291,7 +291,7 @@ export function Modal({
 				aria-labelledby={titleId}
 				aria-label={titleId ? undefined : ariaLabel}
 				tabIndex={-1}
-				className={`dragorbit-modal-panel ${title || showCloseButton ? "dragorbit-modal-window" : ""} ${className}`}
+				className={`dragorbit-modal-panel dragorbit-modal-window ${className}`}
 				style={{
 					...style,
 					...(bounds
