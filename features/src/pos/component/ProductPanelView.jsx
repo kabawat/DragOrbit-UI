@@ -20,6 +20,7 @@ export function ProductPanelView({ model }) {
 		sentinelRef,
 		isFetchingMore,
 		getProductPrice,
+		cartQtyById,
 		t,
 		actions,
 	} = model;
@@ -120,15 +121,23 @@ export function ProductPanelView({ model }) {
 					</div>
 				) : (
 					<>
-						{filteredProducts.map((p) => (
-							<ProductCard
-								getProductPrice={getProductPrice}
-								key={p._id || p.id}
-								product={p}
-								onAdd={addToCart}
-								viewMode={viewMode}
-							/>
-						))}
+						{filteredProducts.map((p) => {
+							const lineId = String(p._id || p.id || "");
+							const selectedQty =
+								typeof cartQtyById?.get === "function"
+									? cartQtyById.get(lineId) || 0
+									: cartQtyById?.[lineId] || 0;
+							return (
+								<ProductCard
+									getProductPrice={getProductPrice}
+									key={lineId}
+									product={p}
+									onAdd={addToCart}
+									viewMode={viewMode}
+									selectedQty={selectedQty}
+								/>
+							);
+						})}
 						{pagination.hasNextPage && (
 							<div
 								ref={sentinelRef}
