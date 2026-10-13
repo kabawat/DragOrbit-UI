@@ -16,7 +16,12 @@ export default function ProductCard({
 	onAdd,
 	viewMode,
 	getProductPrice = (product) =>
-		Number(product?.pricing?.sellingPrice ?? product?.sellingPrice ?? 0),
+		Number(
+			product?.sellingPrice ??
+				product?.pricing?.sellingPrice ??
+				product?.price ??
+				0,
+		),
 }) {
 	const isGrid = viewMode === "grid";
 	const imageUrl = getProductImageUrl(product);

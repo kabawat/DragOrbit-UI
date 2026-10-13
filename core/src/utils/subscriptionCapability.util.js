@@ -8,7 +8,7 @@ export function hasFeatureCapability(feature, capability) {
     return false;
   }
   const includes = getCapabilityIncludes(feature);
-  if (includes.length > 0) {
+  if (Array.isArray(feature.metadata?.includes)) {
     return includes.includes(capability);
   }
   if (feature.usageType === "UNLIMITED" || feature.maxLimit === null) {
