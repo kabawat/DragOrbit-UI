@@ -1,5 +1,5 @@
 "use client";
-import { Building2, Edit2, Plus, QrCode, Trash2 } from "lucide-react";
+import { Building2, Crown, Edit2, Plus, QrCode, Trash2 } from "lucide-react";
 export function StoreListView({ model }) {
   const {
     stores,
@@ -10,6 +10,8 @@ export function StoreListView({ model }) {
     CopyableContactValue,
     onShowCatalog,
     onAddStore,
+    canAddStore = true,
+    storeLimit = null,
     catalogHost,
   } = model;
   return (
@@ -154,20 +156,40 @@ export function StoreListView({ model }) {
           </div>
         );
       })}
-      {/* Create New Store Card */}
+      {/* Create New Store / Upgrade Card */}
       <button
         type="button"
         onClick={onAddStore}
-        className="bg-[rgb(var(--color-bg-primary))]/20 rounded-lg border border-dashed border-[rgb(var(--color-border-primary))]/70 p-6 relative flex flex-col items-center justify-center h-full min-h-[220px] hover:border-[rgb(var(--color-primary))]/60 hover:bg-[rgb(var(--color-primary))]/5 transition-colors cursor-pointer"
+        className={`bg-[rgb(var(--color-bg-primary))]/20 rounded-lg border border-dashed p-6 relative flex flex-col items-center justify-center h-full min-h-[220px] transition-colors cursor-pointer ${
+          canAddStore
+            ? "border-[rgb(var(--color-border-primary))]/70 hover:border-[rgb(var(--color-primary))]/60 hover:bg-[rgb(var(--color-primary))]/5"
+            : "border-[#f59e0b]/40 hover:border-[#f59e0b]/70 hover:bg-[#f59e0b]/5"
+        }`}
       >
-        <div className="w-12 h-12 mb-4 rounded-full bg-[rgb(var(--color-primary))]/10 flex items-center justify-center">
-          <Plus className="w-6 h-6 text-[rgb(var(--color-primary))]" />
+        <div
+          className={`w-12 h-12 mb-4 rounded-full flex items-center justify-center ${
+            canAddStore
+              ? "bg-[rgb(var(--color-primary))]/10"
+              : "bg-[#f59e0b]/10"
+          }`}
+        >
+          {canAddStore ? (
+            <Plus className="w-6 h-6 text-[rgb(var(--color-primary))]" />
+          ) : (
+            <Crown className="w-6 h-6 text-[#f59e0b]" />
+          )}
         </div>
         <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))] mb-1">
-          {t("settings.createNewStore")}
+          {canAddStore
+            ? t("settings.createNewStore")
+            : t("settings.upgradeToAddStore")}
         </h3>
         <p className="text-sm text-[rgb(var(--color-text-secondary))] text-center max-w-[220px]">
-          {t("settings.addAnotherStoreToAccount")}
+          {canAddStore
+            ? t("settings.addAnotherStoreToAccount")
+            : storeLimit != null
+              ? t("settings.storePlanLimitReached", { limit: storeLimit })
+              : t("settings.storePlanLimitReachedGeneric")}
         </p>
       </button>
     </div>

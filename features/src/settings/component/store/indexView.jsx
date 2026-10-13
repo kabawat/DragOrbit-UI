@@ -5,6 +5,8 @@ export function StoreSettingsView({ model }) {
     stores,
     isLoading,
     handleAddStore,
+    canAddStore,
+    storeLimit,
     StoreList,
     selectedStore,
     handleEditStore,
@@ -47,6 +49,8 @@ export function StoreSettingsView({ model }) {
         isLoading={isLoading}
         selectedStore={selectedStore}
         onAddStore={handleAddStore}
+        canAddStore={canAddStore}
+        storeLimit={storeLimit}
         onEditStore={handleEditStore}
         onDeleteStore={handleDeleteStore}
         onShowCatalog={handleShowCatalog}

@@ -53,3 +53,33 @@ export function isKhataFreeSubscription(subscription) {
     Number(invoice?.maxLimit) === 30
   );
 }
+
+/**
+ * Whether the plan still has room for `quantity` more units of a feature.
+ * `fallbackUsage` covers stale subscription.currentUsage (e.g. live store count).
+ */
+export function canUseFeatureQuota(
+  feature,
+  { quantity = 1, fallbackUsage = 0 } = {},
+) {
+  if (!feature) return false;
+  if (feature.usageType === "UNLIMITED" || feature.maxLimit === null) {
+    return true;
+  }
+
+  const limit = Math.max(0, Number(feature.maxLimit) || 0);
+  if (limit === 0) return false;
+
+  const usage = Math.max(
+    0,
+    Number(feature.currentUsage) || 0,
+    Number(fallbackUsage) || 0,
+  );
+
+  return usage + quantity <= limit;
+}
+
+export function getFeatureFromSubscription(subscription, moduleName) {
+  if (!subscription || !moduleName) return null;
+  return (subscription.features || []).find((f) => f.module === moduleName) || null;
+}
