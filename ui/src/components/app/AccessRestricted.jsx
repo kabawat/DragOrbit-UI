@@ -14,10 +14,10 @@ export function AccessRestricted({
 				<div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] bg-[rgb(var(--color-primary))]/5 rounded-full blur-[100px]" />
 			</div>
 
-			{/* Centered content — stacked on all sizes for true page center */}
-			<div className="relative z-10 flex flex-col items-center justify-center text-center gap-6 max-w-lg w-full">
+			{/* Content: stacked on mobile, side-by-side from md+ */}
+			<div className="relative z-10 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-4xl w-full">
 				{/* Decorative 403 + status */}
-				<div className="flex flex-col items-center select-none">
+				<div className="flex flex-col items-center select-none shrink-0">
 					<div className="relative">
 						<span className="text-[7.5rem] sm:text-[8.75rem] font-black leading-none tracking-tighter text-[rgb(var(--color-text-primary))]/5 select-none">
 							403
@@ -61,7 +61,7 @@ export function AccessRestricted({
 				</div>
 
 				{/* Text + CTA */}
-				<div className="flex flex-col items-center w-full">
+				<div className="flex flex-col items-center md:items-start text-center md:text-left w-full max-w-md">
 					<h1 className="text-3xl font-bold text-[rgb(var(--color-text-primary))] mb-3 leading-tight">
 						{isSubscriptionRestricted ? (
 							<>
@@ -75,18 +75,18 @@ export function AccessRestricted({
 					</h1>
 
 					{isSubscriptionRestricted ? (
-						<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-8 max-w-md">
+						<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-8">
 							Your current plan does not include this module. Please upgrade
 							your subscription or contact your store admin to access this
 							feature.
 						</p>
 					) : (
 						<>
-							<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-2 max-w-md">
+							<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-2">
 								You don&apos;t have the required permissions to view this
 								section.
 							</p>
-							<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-8 max-w-md">
+							<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-8">
 								Please contact your{" "}
 								<span className="text-[rgb(var(--color-primary))] font-semibold">
 									store owner
