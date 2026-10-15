@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./DataTable.module.css";
 import { Pin, PinOff } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, HTMLAttributes, Key, ReactNode } from "react";
@@ -8,7 +9,9 @@ export type TableColumn<T> = {
 	id: string;
 	header: ReactNode;
 	cell: (row: T, index: number) => ReactNode;
+	/** Fixed-layout width; numeric values become minimums in content layout. */
 	width?: CSSProperties["width"];
+	minWidth?: CSSProperties["minWidth"];
 	align?: "left" | "center" | "right";
 	hidden?: boolean;
 	/** Set false to disable pinning. Columns start unpinned. */
@@ -30,6 +33,8 @@ export type DataTableProps<T> = {
 	loadingContent?: ReactNode;
 	emptyContent?: ReactNode;
 	errorContent?: ReactNode;
+	/** Content layout avoids percentage widths stretching short columns. */
+	layout?: "content" | "fixed";
 	minWidth?: number;
 	maxHeight?: CSSProperties["maxHeight"];
 	density?: "comfortable" | "compact";
@@ -62,7 +67,8 @@ export function DataTable<T>({
 	loadingContent = "Loading…",
 	emptyContent = "No records found.",
 	errorContent,
-	minWidth = 880,
+	minWidth = 0,
+	layout = "content",
 	maxHeight,
 	density = "comfortable",
 	className = "",
@@ -111,26 +117,37 @@ export function DataTable<T>({
 		...indexedRows.filter((item) => item.pin === "bottom"),
 	];
 
+	const measurementKey = JSON.stringify(
+		visibleColumns.map((column) => [
+			column.id,
+			column.pin,
+			column.width,
+			column.minWidth,
+		]),
+	);
+	const hasPinnedRows = orderedRows.some((item) => item.pin);
+	const hasPinnedColumns = visibleColumns.some((column) => column.pin);
+	const showingState = loading || errorContent != null || rows.length === 0;
+
 	// Measure rendered sizes: percentage columns, wrapped content and resized images
 	// must contribute their actual width/height to the next sticky offset.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: rebuild DOM observers when rows, column order or layout change.
 	useLayoutEffect(() => {
 		const table = tableRef.current;
-		if (
-			!table ||
-			(!visibleColumns.some((column) => column.pin) &&
-				!orderedRows.some((item) => item.pin))
-		)
-			return;
+		if (!table || (!hasPinnedColumns && !hasPinnedRows)) return;
 		const headers = Array.from(
 			table.querySelectorAll<HTMLTableCellElement>("thead th"),
 		);
 		const bodyRows = Array.from(
 			table.querySelectorAll<HTMLTableRowElement>("tbody tr"),
 		);
+		let frame = 0;
 		const measure = () => {
 			const next = {
 				widths: headers.map((cell) => cell.getBoundingClientRect().width),
-				heights: bodyRows.map((row) => row.getBoundingClientRect().height),
+				heights: hasPinnedRows
+					? bodyRows.map((row) => row.getBoundingClientRect().height)
+					: [],
 				header: table.tHead?.getBoundingClientRect().height ?? 0,
 			};
 			setMeasurements((previous) =>
@@ -144,39 +161,62 @@ export function DataTable<T>({
 			);
 		};
 		measure();
-		const observer = new ResizeObserver(measure);
+		const observer = new ResizeObserver(() => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(measure);
+		});
 		observer.observe(table);
-		headers.forEach((cell) => observer.observe(cell));
-		bodyRows.forEach((row) => observer.observe(row));
-		return () => observer.disconnect();
-	});
+		headers.forEach((cell) => {
+			observer.observe(cell);
+		});
+		if (hasPinnedRows)
+			bodyRows.forEach((row) => {
+				observer.observe(row);
+			});
+		return () => {
+			observer.disconnect();
+			cancelAnimationFrame(frame);
+		};
+	}, [
+		rows,
+		measurementKey,
+		hasPinnedRows,
+		hasPinnedColumns,
+		showingState,
+		density,
+		layout,
+	]);
 
+	const minimumColumnWidth = (column: DisplayColumn<T>) =>
+		column.minWidth ?? (typeof column.width === "number" ? column.width : 80);
+
+	// Compute sticky offsets once per render rather than for every body cell.
+	let leftOffset = 0;
+	const leftOffsets = visibleColumns.map((column, index) => {
+		const offset = leftOffset;
+		if (column.pin) leftOffset += measurements.widths[index] ?? 0;
+		return offset;
+	});
 	const columnStyle = (
 		column: DisplayColumn<T>,
 		index: number,
-	): CSSProperties => {
-		if (!column.pin) return {};
-		const indices = visibleColumns
-			.map((_, i) => i)
-			.filter(
-				(i) =>
-					visibleColumns[i]?.pin === column.pin &&
-					(column.pin === "left" ? i < index : i > index),
-			);
-		const offset = indices.reduce(
-			(total, i) => total + (measurements.widths[i] ?? 0),
-			0,
-		);
-		return { position: "sticky", [column.pin]: offset };
-	};
+	): CSSProperties =>
+		column.pin ? { position: "sticky", left: leftOffsets[index] } : {};
+	let topOffset = measurements.header;
+	const topOffsets = orderedRows.map((item, index) => {
+		const offset = topOffset;
+		if (item.pin === "top") topOffset += measurements.heights[index] ?? 0;
+		return offset;
+	});
+	let bottomOffset = 0;
+	const bottomOffsets = Array<number>(orderedRows.length).fill(0);
+	for (let index = orderedRows.length - 1; index >= 0; index--) {
+		bottomOffsets[index] = bottomOffset;
+		if (orderedRows[index]?.pin === "bottom")
+			bottomOffset += measurements.heights[index] ?? 0;
+	}
 	const pinnedRowOffset = (pin: string, index: number) =>
-		orderedRows.reduce(
-			(total, item, i) =>
-				item.pin === pin && (pin === "top" ? i < index : i > index)
-					? total + (measurements.heights[i] ?? 0)
-					: total,
-			pin === "top" ? measurements.header : 0,
-		);
+		pin === "top" ? topOffsets[index] : bottomOffsets[index];
 
 	const padding = density === "compact" ? "px-4 py-2" : "px-6 py-4";
 	const stateContent = loading
@@ -192,40 +232,49 @@ export function DataTable<T>({
 	return (
 		<section className={`min-w-0 ${className}`} aria-busy={loading}>
 			{toolbar}
-			<div
-				className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] overflow-auto focus-visible:outline-2 focus-visible:outline-[rgb(var(--color-primary))]"
+			{/* Keyboard focus lets users scroll the table without a pointer. */}
+			<section
+				className={`${styles.scroller} bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] overflow-auto focus-visible:outline-2 focus-visible:outline-[rgb(var(--color-primary))]`}
 				style={{ maxHeight }}
-				tabIndex={0}
-				role="region"
+				{...{ tabIndex: 0 }}
 				aria-label={caption}
 			>
 				<table
 					ref={tableRef}
-					className="w-full table-fixed border-separate border-spacing-0"
-					style={{ minWidth }}
+					className={`border-separate border-spacing-0 ${layout === "fixed" ? "w-full table-fixed" : "table-auto"}`}
+					style={{
+						minWidth:
+							layout === "fixed" ? minWidth : `max(100%, ${minWidth}px)`,
+					}}
 				>
 					<caption className="sr-only">{caption}</caption>
 					<colgroup>
 						{visibleColumns.map((column) => (
-							<col key={column.id} style={{ width: column.width }} />
+							<col
+								key={column.id}
+								style={{ width: layout === "fixed" ? column.width : undefined }}
+							/>
 						))}
 					</colgroup>
-					<thead className="sticky top-0 z-10 bg-linear-to-r from-[rgb(var(--color-bg-tertiary))] to-[rgb(var(--color-bg-secondary))]">
+					<thead className="sticky top-0 z-10 bg-[color-mix(in_srgb,rgb(var(--color-primary))_8%,rgb(var(--color-bg-primary)))]">
 						<tr>
 							{visibleColumns.map((column, columnIndex) => (
 								<th
 									key={column.id}
 									scope="col"
 									style={{
+										minWidth: minimumColumnWidth(column),
 										...columnStyle(column, columnIndex),
 										zIndex: column.pin ? 30 : undefined,
 									}}
-									className={`px-6 py-4 border-b border-[rgb(var(--color-border-primary))] text-xs font-semibold text-[rgb(var(--color-text-primary))] uppercase tracking-wider ${alignClasses[column.align ?? "left"]} ${column.pin ? "bg-[rgb(var(--color-bg-tertiary))]" : ""}`}
+									className={`${padding} border-b border-[rgb(var(--color-border-primary))] text-xs font-semibold text-[rgb(var(--color-text-primary))] uppercase tracking-wider ${alignClasses[column.align ?? "left"]} bg-[color-mix(in_srgb,rgb(var(--color-primary))_8%,rgb(var(--color-bg-primary)))]`}
 								>
 									<span
 										className={`flex min-w-0 items-center gap-2 ${column.align === "right" ? "justify-end" : column.align === "center" ? "justify-center" : ""}`}
 									>
-										<span className="min-w-0">{column.header}</span>
+										<span className="min-w-0 whitespace-nowrap">
+											{column.header}
+										</span>
 										{column.canPin && (
 											<button
 												type="button"
@@ -282,6 +331,7 @@ export function DataTable<T>({
 											} = column.cellProps?.(row) ?? {};
 											const isSticky = Boolean(pin || column.pin);
 											const stickyStyle: CSSProperties = {
+												minWidth: minimumColumnWidth(column),
 												...customCellStyle,
 												...columnStyle(column, columnIndex),
 												...(pin
@@ -314,7 +364,7 @@ export function DataTable<T>({
 					</tbody>
 				</table>
 				{scrollFooter}
-			</div>
+			</section>
 			{footer}
 		</section>
 	);

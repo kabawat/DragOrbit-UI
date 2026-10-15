@@ -21,6 +21,7 @@ export const SidebarMenu = ({
 }) => {
 	const [hoveredItem, setHoveredItem] = useState(null);
 	const hideTimerRef = useRef(null);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: route changes dismiss the flyout.
 	useEffect(() => {
 		setHoveredItem(null);
 	}, [pathname]);
@@ -60,8 +61,9 @@ export const SidebarMenu = ({
 	};
 
 	return (
-		<div
-			className={`bg-[rgb(var(--color-bg-primary))]/80 backdrop-blur-md border-r border-[rgb(var(--color-border-primary))]/40 h-screen flex flex-col shadow-lg relative z-[150] flex-shrink-0 ${className}`}
+		<aside
+			aria-label={navigationLabel}
+			className={`bg-[rgb(var(--color-bg-primary))] border-r border-[rgb(var(--color-border-primary))]/40 h-screen flex flex-col relative z-[150] flex-shrink-0 ${className}`}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") setHoveredItem(null);
 			}}
@@ -70,7 +72,7 @@ export const SidebarMenu = ({
 				minWidth: isCollapsed ? collapsedWidth : expandedWidth,
 				maxWidth: isCollapsed ? collapsedWidth : expandedWidth,
 				transition:
-					"width 0.3s ease-in-out, min-width 0.3s ease-in-out, max-width 0.3s ease-in-out",
+					"width 120ms ease-out, min-width 120ms ease-out, max-width 120ms ease-out",
 				willChange: "width",
 			}}
 		>
@@ -82,10 +84,14 @@ export const SidebarMenu = ({
 
 			{/* Scrollable Navigation Section */}
 			<div
-				className="min-h-0 flex-1 overflow-y-auto"
+				className="min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
 				onScroll={() => setHoveredItem(null)}
 			>
-				<nav aria-label={navigationLabel} className="p-3 space-y-1">
+				<nav
+					aria-label={navigationLabel}
+					className="p-3 space-y-1"
+					style={{ width: isCollapsed ? collapsedWidth : expandedWidth }}
+				>
 					{navigationItems.map((item) => (
 						<SidebarNavItem
 							key={item.key || item.href || item.name}
@@ -132,6 +138,6 @@ export const SidebarMenu = ({
 				onMouseLeave={handleMouseLeaveFlyout}
 				onClose={() => setHoveredItem(null)}
 			/>
-		</div>
+		</aside>
 	);
 };

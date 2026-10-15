@@ -15,3 +15,5 @@ export { StatCards } from "./components/stats/StatCards";
 export { HeaderProvider, useHeader } from "./contexts/HeaderContext";
 export { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 export { ToastProvider, useGlobalToast } from "./contexts/ToastContext";
+
+export { ResponsiveSidebar } from "./components/sidebar/ResponsiveSidebar";

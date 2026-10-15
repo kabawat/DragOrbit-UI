@@ -4,11 +4,13 @@ export function DashboardStats({ metrics, loading, layout, onSave, scope, t }) {
 	return (
 		<StatCards
 			key={`${scope}:stats`}
-			// title={t("dashboard.title")}
+			title={t("dashboard.businessOverview")}
 			data={metrics}
 			loading={loading}
 			maxCol={4}
-			layout={layout}
+			minCol={2}
+			itemMinWidth={140}
+			layout={{ ...layout, columns: 4 }}
 			onSave={onSave}
 		/>
 	);

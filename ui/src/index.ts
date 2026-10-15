@@ -129,3 +129,9 @@ export { RowActionsMenu } from "./components/common/RowActionsMenu";
 export { RowContextMenuLayer } from "./components/common/RowContextMenuLayer";
 export { clampFloatingMenuPosition } from "./components/common/floatingMenuPosition";
 export { default as GlobalToastContainer } from "./components/feedback/GlobalToastContainer";
+
+export { ResponsiveSidebar } from "./components/sidebar/ResponsiveSidebar";
+
+export { DocumentPreview } from "./components/document/DocumentPreview";
+
+export { PaperDocument } from "./components/document/PaperDocument";

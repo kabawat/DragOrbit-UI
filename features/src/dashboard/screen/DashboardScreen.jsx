@@ -91,14 +91,14 @@ export function DashboardScreen({
 			onClick={() => onNavigate?.(routes["stock/alerts"])}
 		/>
 	);
-	
+
 	return (
 		<div className="p-4 sm:p-6 lg:p-8 space-y-6">
 			{layoutVariant === "sectioned" ? (
 				<>
+					{stats}
 					{cashbook}
 					{alerts}
-					{stats}
 					<DashboardSections
 						sections={sectionOrder}
 						onSave={onSaveSections}
@@ -109,13 +109,8 @@ export function DashboardScreen({
 			) : (
 				<>
 					<div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-4">
-						<div className="order-2 min-w-0 xl:order-1 xl:col-span-3">
-							{stats}
-						</div>
-						<aside
-							className="order-1 min-w-0 xl:order-2"
-							aria-label={t("dashboard.quickActions")}
-						>
+						<div className="min-w-0 xl:col-span-3">{stats}</div>
+						<aside className="min-w-0" aria-label={t("dashboard.quickActions")}>
 							{actions}
 						</aside>
 					</div>

@@ -1,4 +1,5 @@
 "use client";
+import { normalizeStoreSummary } from "../model/summary";
 import { useEffect, useRef, useState } from "react";
 export function useDashboardData({
 	repository,
@@ -8,16 +9,14 @@ export function useDashboardData({
 	initialSummary,
 	onSummary,
 }) {
-	const [summary, setSummary] = useState(
-		Array.isArray(initialSummary) ? initialSummary : [],
-	);
+	const [summary, setSummary] = useState(normalizeStoreSummary(initialSummary));
 	const [loading, setLoading] = useState(false);
 	const [today, setToday] = useState(null);
 	const cached = useRef(summary);
 	useEffect(() => {
 		if (Array.isArray(initialSummary)) {
-			cached.current = initialSummary;
-			setSummary(initialSummary);
+			cached.current = normalizeStoreSummary(initialSummary);
+			setSummary(cached.current);
 		}
 	}, [initialSummary]);
 	useEffect(() => {
@@ -28,9 +27,9 @@ export function useDashboardData({
 			.then(() => repository.getSummary({ storeId }))
 			.then((rows) => {
 				if (cancelled || !Array.isArray(rows)) return;
-				cached.current = rows;
-				setSummary(rows);
-				onSummary?.(rows);
+				cached.current = normalizeStoreSummary(rows);
+				setSummary(cached.current);
+				onSummary?.(cached.current);
 			})
 			.catch(() => {
 				if (!cancelled) setSummary(cached.current);

@@ -67,14 +67,14 @@ export const SidebarNavItem = ({
 
 					{!isCollapsed && (
 						<ChevronDown
-							className={`h-4 w-4 shrink-0 text-[rgb(var(--color-text-tertiary))] transition-all duration-200 ${isExpanded ? "rotate-180 opacity-100 text-[rgb(var(--color-primary))]" : "opacity-50 group-hover:opacity-100"}`}
+							className={`h-4 w-4 shrink-0 text-[rgb(var(--color-text-tertiary))] transition-all duration-100 ${isExpanded ? "rotate-180 opacity-100 text-[rgb(var(--color-primary))]" : "opacity-50 group-hover:opacity-100"}`}
 						/>
 					)}
 				</button>
 
 				<div
 					inert={!(isExpanded && !isCollapsed) ? true : undefined}
-					className={`overflow-hidden transition-all duration-300 ease-in-out ${
+					className={`overflow-hidden transition-[max-height,opacity] duration-100 ease-out ${
 						isExpanded && !isCollapsed
 							? "max-h-[960px] opacity-100 mt-1"
 							: "max-h-0 opacity-0"
@@ -113,7 +113,7 @@ export const SidebarNavItem = ({
 											e.preventDefault();
 											onNavigate?.(subItem);
 										}}
-										className={`group relative flex min-h-9 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-all duration-200 ${
+										className={`group relative flex min-h-9 items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-all duration-100 ${
 											isSubActive
 												? "bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))]"
 												: "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))]"

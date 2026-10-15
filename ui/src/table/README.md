@@ -143,3 +143,20 @@ const columns: TableColumn<Customer>[] = [
 ## Header pin buttons
 
 Each pinnable header has a pin icon beside its name. Click to pin to the left; click again to unpin and restore the original position. Column definitions do not need a `pin` field. `pin: false` hides the icon and prevents pinning. `pin: true` only enables pinning; it does not set pinned state. State is keyed by column ID, local to the mounted table, and does not mutate caller columns. Non-text headers can set `pinLabel` for the accessible button label.
+
+
+### Content sizing and scrolling
+
+`DataTable` defaults to `layout="content"`: native automatic column sizing, with
+percentage `width` hints ignored so short columns do not reserve a fixed share.
+Each column accepts `minWidth` (default 80px, or its numeric `width` for compatibility).
+Cells can grow with their content; the table fills the available container and scrolls
+when its content cannot fit. `minWidth` on the table defaults to 0; an explicit value
+still sets an overall minimum. Use `layout="fixed"` to retain percentage/fixed column
+allocation where needed. Existing truncation and wrapping in cell renderers remain
+under the caller's control. Headers follow the selected density.
+
+The scoped scrollbar uses theme background/border tokens, has an 8px horizontal
+and vertical track on WebKit, and a thin native scrollbar on Firefox. Pinned
+measurements are batched per animation frame and offsets are computed once per
+render. Row height observation only runs when rows are pinned.

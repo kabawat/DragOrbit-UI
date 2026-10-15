@@ -12,6 +12,8 @@ import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 import "./modal.css";
 const modalStack: HTMLDivElement[] = [];
+// Legacy dialogs use 9999. Shared dialogs sit above them, in opening order.
+let nextModalLayer = 10000;
 let previousBodyOverflow = "";
 export interface ModalProps {
 	isOpen: boolean;
@@ -199,6 +201,8 @@ export function Modal({
 		if (!element) return;
 		if (!modalStack.length) previousBodyOverflow = document.body.style.overflow;
 		modalStack.push(element);
+		const overlay = element.parentElement;
+		if (overlay) overlay.style.zIndex = String(nextModalLayer++);
 		document.body.style.overflow = "hidden";
 		element.focus();
 		const keydown = (event: KeyboardEvent) => {
@@ -252,8 +256,10 @@ export function Modal({
 			const wasTop = modalStack[modalStack.length - 1] === element;
 			const index = modalStack.indexOf(element);
 			if (index >= 0) modalStack.splice(index, 1);
-			if (!modalStack.length)
+			if (!modalStack.length) {
 				document.body.style.overflow = previousBodyOverflow;
+				nextModalLayer = 10000;
+			}
 			document.removeEventListener("keydown", keydown);
 			if (wasTop) {
 				const top = modalStack[modalStack.length - 1];

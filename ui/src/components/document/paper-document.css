@@ -1,0 +1,13 @@
+.dragorbit-paper-document {
+	color-scheme: light;
+	--color-bg-primary: 255 255 255;
+	--color-bg-secondary: 252 252 253;
+	--color-bg-tertiary: 248 249 250;
+	--color-text-primary: 17 24 39;
+	--color-text-secondary: 75 85 99;
+	--color-text-tertiary: 107 114 128;
+	--color-border-primary: 229 231 235;
+	--color-border-secondary: 209 213 219;
+	color: rgb(var(--color-text-primary));
+	background: white;
+}

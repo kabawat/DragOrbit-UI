@@ -8,6 +8,7 @@ export type StatCardData = {
 	onClick?: () => void;
 	onclick?: () => void;
 	iconColor?: string;
+	iconTone?: "subtle" | "solid";
 	change?: string;
 	changeType?: "up" | "down";
 };
@@ -30,7 +31,7 @@ export function StatCard({
 				<div className="text-sm font-medium text-[rgb(var(--color-text-secondary))] mb-1">
 					{data.title}
 				</div>
-				<div className="break-words text-2xl font-bold tracking-tight tabular-nums text-[rgb(var(--color-text-primary))]">
+				<div className="break-words text-xl sm:text-2xl font-semibold tracking-tight tabular-nums text-[rgb(var(--color-text-primary))]">
 					{loading ? (
 						<span
 							aria-hidden="true"
@@ -51,14 +52,17 @@ export function StatCard({
 			</div>
 			{Icon && (
 				<span
-					className={`w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${data.iconColor || "bg-[rgb(var(--color-primary))]"}`}
+					className={`w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${data.iconTone === "subtle" ? "bg-[rgb(var(--color-primary))]/5 text-[rgb(var(--color-primary))]" : data.iconColor || "bg-[rgb(var(--color-primary))]"}`}
 				>
-					<Icon className="w-5 h-5 text-white" aria-hidden />
+					<Icon
+						className={`w-5 h-5 ${data.iconTone === "subtle" ? "" : "text-white"}`}
+						aria-hidden
+					/>
 				</span>
 			)}
 		</>
 	);
-	const classes = `flex w-full h-full items-start justify-between gap-3 text-left min-w-0 bg-[rgb(var(--color-bg-primary))] rounded-2xl border border-[rgb(var(--color-border-primary))] p-5 ${className}`;
+	const classes = `flex w-full h-full items-start justify-between gap-3 text-left min-w-0 bg-[rgb(var(--color-bg-primary))] rounded-2xl border border-[rgb(var(--color-border-primary))] p-4 sm:p-5 ${className}`;
 	const click = data.onClick ?? data.onclick;
 	return click ? (
 		<button
