@@ -26,6 +26,10 @@ export interface ModalProps {
 	showCloseButton?: boolean;
 	closeLabel?: string;
 	className?: string;
+	/** Opt-in padding for content; existing self-padded dialogs remain unchanged. */
+	bodyClassName?: string;
+	footer?: ReactNode;
+	size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
 	overlayClassName?: string;
 	title?: ReactNode;
 	headerActions?: ReactNode;
@@ -40,6 +44,9 @@ export function Modal({
 	children,
 	labelledBy,
 	className = "",
+	bodyClassName = "",
+	footer,
+	size,
 	overlayClassName = "",
 	title,
 	headerActions,
@@ -276,7 +283,9 @@ export function Modal({
 		onLostPointerCapture: end,
 	};
 	return createPortal(
+		// biome-ignore lint/a11y/noStaticElementInteractions: decorative backdrop; keyboard dismissal and focus are managed by the dialog.
 		<div
+			role="presentation"
 			className={`dragorbit-modal-overlay ${overlayClassName}`}
 			data-position={position}
 			data-open={visible}
@@ -299,6 +308,20 @@ export function Modal({
 				tabIndex={-1}
 				className={`dragorbit-modal-panel dragorbit-modal-window ${className}`}
 				style={{
+					...(size
+						? {
+								width: "100%",
+								maxWidth: {
+									sm: "24rem",
+									md: "32rem",
+									lg: "40rem",
+									xl: "48rem",
+									"2xl": "56rem",
+									"3xl": "64rem",
+									full: "100%",
+								}[size],
+							}
+						: {}),
 					...style,
 					...(bounds
 						? {
@@ -306,6 +329,7 @@ export function Modal({
 								left: bounds.left,
 								top: bounds.top,
 								width: bounds.width,
+								maxWidth: "calc(100vw - 20px)",
 								height: bounds.height,
 							}
 						: {}),
@@ -330,11 +354,14 @@ export function Modal({
 						</div>
 					</header>
 				)}
-				{title || showCloseButton ? (
-					<div className="dragorbit-modal-content">{children}</div>
+				{title || showCloseButton || bodyClassName ? (
+					<div className={`dragorbit-modal-content ${bodyClassName}`}>
+						{children}
+					</div>
 				) : (
 					children
 				)}
+				{footer && <div className="dragorbit-modal-footer">{footer}</div>}
 				{resizable && (
 					<>
 						<div

@@ -1,7 +1,7 @@
 "use client";
-import { DataTable } from "@dragorbit/ui";
+import { DataTable, EntityLogo } from "@dragorbit/ui";
 import { Award, Plus } from "lucide-react";
-import { EmptyState, PageLoader } from "@dragorbit/ui";
+import { EmptyState } from "@dragorbit/ui";
 
 export function BrandsTable({ model }) {
 	const { t, brands, canCreate, setShowDrawer, loading } = model;
@@ -12,10 +12,37 @@ export function BrandsTable({ model }) {
 			getRowKey={(row) => row._id || row.id || row.name}
 			columns={[
 				{
+					id: "serialNumber",
+					header: "SR NO",
+					width: 64,
+					fitContent: true,
+					align: "center",
+					pin: false,
+					cell: (_row, index) => (
+						<span className="tabular-nums text-[rgb(var(--color-text-secondary))]">
+							{index + 1}
+						</span>
+					),
+				},
+				{
+					id: "icon",
+					header: "Icon",
+					width: 96,
+					pin: false,
+					align: "center",
+					cell: (brand) => (
+						<div className="flex justify-center">
+							<EntityLogo src={brand.metadata?.icon} fallbackIcon={Award} />
+						</div>
+					),
+				},
+				{
 					id: "name",
 					header: t("common.name") || "Name",
 					width: "30%",
-					cell: (brand) => <span className="font-semibold">{brand.name}</span>,
+					cell: (brand) => (
+						<span className="break-words font-semibold">{brand.name}</span>
+					),
 				},
 				{
 					id: "description",
@@ -37,7 +64,11 @@ export function BrandsTable({ model }) {
 			minWidth={640}
 			maxHeight="calc(100vh - 240px)"
 			loading={loading && brands.length === 0}
-			loadingContent={<PageLoader />}
+			loadingContent={
+				<div className="h-24 animate-pulse rounded-lg bg-[rgb(var(--color-bg-tertiary))]">
+					<span className="sr-only">{t("common.loading")}</span>
+				</div>
+			}
 			emptyContent={
 				<EmptyState
 					className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"

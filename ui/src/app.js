@@ -17,3 +17,5 @@ export { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 export { ToastProvider, useGlobalToast } from "./contexts/ToastContext";
 
 export { ResponsiveSidebar } from "./components/sidebar/ResponsiveSidebar";
+
+export { PageSkeleton } from "./components/app/PageSkeleton";

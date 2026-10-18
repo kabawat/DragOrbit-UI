@@ -135,3 +135,9 @@ export { ResponsiveSidebar } from "./components/sidebar/ResponsiveSidebar";
 export { DocumentPreview } from "./components/document/DocumentPreview";
 
 export { PaperDocument } from "./components/document/PaperDocument";
+
+export { PageSkeleton } from "./components/app/PageSkeleton";
+
+export { KhataRecordTransaction } from "./components/khata/KhataRecordTransaction";
+
+export { EntityLogo } from "./components/image/EntityLogo";

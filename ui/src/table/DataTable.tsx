@@ -11,6 +11,8 @@ export type TableColumn<T> = {
 	cell: (row: T, index: number) => ReactNode;
 	/** Fixed-layout width; numeric values become minimums in content layout. */
 	width?: CSSProperties["width"];
+	/** Keep utility columns at their intrinsic width rather than sharing spare space. */
+	fitContent?: boolean;
 	minWidth?: CSSProperties["minWidth"];
 	align?: "left" | "center" | "right";
 	hidden?: boolean;
@@ -123,6 +125,7 @@ export function DataTable<T>({
 			column.pin,
 			column.width,
 			column.minWidth,
+			column.fitContent,
 		]),
 	);
 	const hasPinnedRows = orderedRows.some((item) => item.pin);
@@ -252,7 +255,14 @@ export function DataTable<T>({
 						{visibleColumns.map((column) => (
 							<col
 								key={column.id}
-								style={{ width: layout === "fixed" ? column.width : undefined }}
+								style={{
+									width:
+										layout === "fixed"
+											? column.width
+											: column.fitContent
+												? 1
+												: undefined,
+								}}
 							/>
 						))}
 					</colgroup>
@@ -264,6 +274,13 @@ export function DataTable<T>({
 									scope="col"
 									style={{
 										minWidth: minimumColumnWidth(column),
+										...(column.fitContent
+											? {
+													paddingLeft: 12,
+													paddingRight: 12,
+													whiteSpace: "nowrap",
+												}
+											: {}),
 										...columnStyle(column, columnIndex),
 										zIndex: column.pin ? 30 : undefined,
 									}}
@@ -332,6 +349,13 @@ export function DataTable<T>({
 											const isSticky = Boolean(pin || column.pin);
 											const stickyStyle: CSSProperties = {
 												minWidth: minimumColumnWidth(column),
+												...(column.fitContent
+													? {
+															paddingLeft: 12,
+															paddingRight: 12,
+															whiteSpace: "nowrap",
+														}
+													: {}),
 												...customCellStyle,
 												...columnStyle(column, columnIndex),
 												...(pin
