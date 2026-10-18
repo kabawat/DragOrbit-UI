@@ -48,11 +48,65 @@ function greetingForLocale(locale, name, t) {
 function formatConfirmSummary(pending, t) {
 	const summary = pending?.summary || {};
 	const parts = [];
-	if (summary.action === "payment") {
-		parts.push("Payment");
-	} else if (summary.action === "debit") {
-		parts.push("Debit");
+
+	if (pending?.type === "create_expense" || summary.action === "create_expense") {
+		const amount = summary.amount ?? summary.total;
+		if (typeof amount === "number" || (typeof amount === "string" && amount.trim())) {
+			parts.push(`₹${amount}`);
+		}
+		if (summary.title) {
+			parts.push(String(summary.title));
+		}
+		if (summary.categoryLabel) {
+			parts.push(String(summary.categoryLabel));
+		} else if (summary.category) {
+			parts.push(String(summary.category));
+		}
+		return parts.length > 0
+			? parts.join(" · ")
+			: (t("voice.confirm.expense") || "Expense");
 	}
+
+	if (pending?.type === "add_stock" || summary.action === "add_stock") {
+		if (summary.productName || summary.title) {
+			parts.push(String(summary.productName || summary.title));
+		}
+		if (summary.quantity) {
+			parts.push(`+${summary.quantity}`);
+		}
+		return parts.length > 0
+			? parts.join(" · ")
+			: (t("voice.confirm.promptStock") || "Add stock");
+	}
+
+	if (
+		summary.action === "payment" ||
+		pending?.type === "ledger_credit" ||
+		pending?.type === "record_customer_payment"
+	) {
+		parts.push(t("voice.credit.label") || "Payment");
+		const amount = summary.amount ?? summary.total;
+		if (typeof amount === "number" || (typeof amount === "string" && amount.trim())) {
+			parts.push(`₹${amount}`);
+		}
+		if (summary.customerName) {
+			parts.push(String(summary.customerName));
+		}
+		return parts.length > 0 ? parts.join(" · ") : "Payment";
+	}
+
+	if (summary.action === "debit" || pending?.type === "ledger_debit") {
+		parts.push(t("voice.debit.label") || "Debit");
+		const amount = summary.amount ?? summary.total;
+		if (typeof amount === "number" || (typeof amount === "string" && amount.trim())) {
+			parts.push(`₹${amount}`);
+		}
+		if (summary.customerName) {
+			parts.push(String(summary.customerName));
+		}
+		return parts.length > 0 ? parts.join(" · ") : "Debit";
+	}
+
 	if (typeof summary.total === "number") {
 		parts.push(`₹${summary.total}`);
 	}
@@ -107,36 +161,52 @@ function AssistantMessageBubble({
 							))}
 						</ul>
 					)}
-				{item.pendingConfirmation && (
-					<div className="mt-3 space-y-2 border-t border-[rgb(var(--color-border-primary))]/50 pt-3">
-						<p className="text-[12px] leading-4 text-[rgb(var(--color-text-secondary))]">
-							{t("voice.confirm.prompt")}
-							{": "}
-							<span className="font-medium text-[rgb(var(--color-text-primary))]">
-								{formatConfirmSummary(item.pendingConfirmation, t)}
-							</span>
-						</p>
-						<div className="flex gap-2">
-							<button
-								className="ai-chat-on-primary cursor-pointer rounded-lg bg-[rgb(var(--color-primary))] px-3 py-1.5 text-[12px] font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
-								disabled={isConfirming || isSending}
-								onClick={() => confirmPending(item.pendingConfirmation)}
-								style={{ color: "#fff" }}
-								type="button"
-							>
-								{t("voice.confirm.approve")}
-							</button>
-							<button
-								className="cursor-pointer rounded-lg border border-[rgb(var(--color-border-primary))] px-3 py-1.5 text-[12px] font-medium text-[rgb(var(--color-text-primary))] transition-colors hover:bg-[rgb(var(--color-bg-primary))] disabled:cursor-not-allowed disabled:opacity-50"
-								disabled={isConfirming || isSending}
-								onClick={() => rejectPending(item.pendingConfirmation)}
-								type="button"
-							>
-								{t("voice.confirm.reject")}
-							</button>
+				{item.pendingConfirmation && (() => {
+					const pending = item.pendingConfirmation;
+					const actionType = pending?.type || pending?.summary?.action;
+					const promptLabel =
+						pending?.summary?.prompt ||
+						(actionType === "create_expense"
+							? (t("voice.confirm.promptExpense") || "Record this expense")
+							: actionType === "add_stock"
+							? (t("voice.confirm.promptStock") || "Add stock")
+							: actionType === "ledger_credit" || actionType === "payment" || actionType === "record_customer_payment"
+							? (t("voice.confirm.promptCredit") || "Record customer payment")
+							: actionType === "ledger_debit" || actionType === "debit"
+							? (t("voice.confirm.promptDebit") || "Record customer debit")
+							: (t("voice.confirm.promptInvoice") || t("voice.confirm.prompt")));
+
+					return (
+						<div className="mt-3 space-y-2 border-t border-[rgb(var(--color-border-primary))]/50 pt-3">
+							<p className="text-[12px] leading-4 text-[rgb(var(--color-text-secondary))]">
+								{promptLabel}
+								{": "}
+								<span className="font-medium text-[rgb(var(--color-text-primary))]">
+									{formatConfirmSummary(pending, t)}
+								</span>
+							</p>
+							<div className="flex gap-2">
+								<button
+									className="ai-chat-on-primary cursor-pointer rounded-lg bg-[rgb(var(--color-primary))] px-3 py-1.5 text-[12px] font-medium transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
+									disabled={isConfirming || isSending}
+									onClick={() => confirmPending(pending)}
+									style={{ color: "#fff" }}
+									type="button"
+								>
+									{t("voice.confirm.approve")}
+								</button>
+								<button
+									className="cursor-pointer rounded-lg border border-[rgb(var(--color-border-primary))] px-3 py-1.5 text-[12px] font-medium text-[rgb(var(--color-text-primary))] transition-colors hover:bg-[rgb(var(--color-bg-primary))] disabled:cursor-not-allowed disabled:opacity-50"
+									disabled={isConfirming || isSending}
+									onClick={() => rejectPending(pending)}
+									type="button"
+								>
+									{t("voice.confirm.reject")}
+								</button>
+							</div>
 						</div>
-					</div>
-				)}
+					);
+				})()}
 			</div>
 		</div>
 	);
