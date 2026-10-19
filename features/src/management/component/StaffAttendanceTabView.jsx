@@ -1,4 +1,5 @@
 "use client";
+import { NumberedTable } from "@dragorbit/ui";
 import { Button, EmptyState } from "@dragorbit/ui";
 import {
   CalendarCheck,
@@ -128,7 +129,7 @@ export function StaffAttendanceTabView({ model }) {
           />
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
+            <NumberedTable className="min-w-full text-left text-sm">
               <thead className="bg-[rgb(var(--color-bg-secondary)/0.55)] text-xs uppercase tracking-wide text-[rgb(var(--color-text-secondary))]">
                 <tr>
                   <th className="px-4 py-3 font-medium sm:px-5">
@@ -189,7 +190,7 @@ export function StaffAttendanceTabView({ model }) {
                   );
                 })}
               </tbody>
-            </table>
+            </NumberedTable>
           </div>
         )}
       </section>

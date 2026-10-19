@@ -1,6 +1,9 @@
 "use client";
 
 import styles from "./DataTable.module.css";
+import EmptyState from "../components/feedback/EmptyState";
+import { TableSkeleton } from "../components/feedback/TableSkeleton";
+import { RowNumber } from "./NumberedTable";
 import { Pin, PinOff } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { CSSProperties, HTMLAttributes, Key, ReactNode } from "react";
@@ -23,6 +26,10 @@ export type TableColumn<T> = {
 };
 
 export type DataTableProps<T> = {
+	/** Show a compact serial-number column by default. */
+	showNumOfData?: boolean;
+	/** Number of records before this page (zero for accumulated/infinite lists). */
+	rowNumberOffset?: number;
 	rows: readonly T[];
 	columns: readonly TableColumn<T>[];
 	getRowKey: (row: T) => Key;
@@ -66,8 +73,8 @@ export function DataTable<T>({
 	footer,
 	scrollFooter,
 	loading = false,
-	loadingContent = "Loading…",
-	emptyContent = "No records found.",
+	loadingContent = <TableSkeleton compact rows={5} />,
+	emptyContent = <EmptyState fullHeight title="No records found." />,
 	errorContent,
 	minWidth = 0,
 	layout = "content",
@@ -76,6 +83,8 @@ export function DataTable<T>({
 	className = "",
 	rowProps,
 	rowPinning,
+	showNumOfData = true,
+	rowNumberOffset = 0,
 }: DataTableProps<T>) {
 	const tableRef = useRef<HTMLTableElement>(null);
 	const [measurements, setMeasurements] = useState({
@@ -84,7 +93,23 @@ export function DataTable<T>({
 		header: 0,
 	});
 	const [columnPins, setColumnPins] = useState<Record<string, boolean>>({});
-	const visible: DisplayColumn<T>[] = columns
+	const numberedColumns: readonly TableColumn<T>[] = showNumOfData
+		? [
+				{
+					id: "__rowNumber",
+					header: "SR NO",
+					width: 64,
+					fitContent: true,
+					align: "center",
+					pin: false,
+					cell: (_row, index) => (
+						<RowNumber value={rowNumberOffset + index + 1} />
+					),
+				},
+				...columns,
+			]
+		: columns;
+	const visible: DisplayColumn<T>[] = numberedColumns
 		.filter((column) => !column.hidden)
 		.map((column) => ({
 			...column,
@@ -130,7 +155,8 @@ export function DataTable<T>({
 	);
 	const hasPinnedRows = orderedRows.some((item) => item.pin);
 	const hasPinnedColumns = visibleColumns.some((column) => column.pin);
-	const showingState = loading || errorContent != null || rows.length === 0;
+	const initialLoading = loading && rows.length === 0;
+	const showingState = rows.length === 0;
 
 	// Measure rendered sizes: percentage columns, wrapped content and resized images
 	// must contribute their actual width/height to the next sticky offset.
@@ -222,13 +248,21 @@ export function DataTable<T>({
 		pin === "top" ? topOffsets[index] : bottomOffsets[index];
 
 	const padding = density === "compact" ? "px-4 py-2" : "px-6 py-4";
-	const stateContent = loading
-		? loadingContent
-		: errorContent != null
-			? errorContent
-			: rows.length === 0
-				? emptyContent
-				: undefined;
+	const stateContent = initialLoading ? (
+		typeof loadingContent === "string" ? (
+			<TableSkeleton compact rows={5} label={loadingContent} />
+		) : (
+			loadingContent
+		)
+	) : errorContent != null && rows.length === 0 ? (
+		errorContent
+	) : rows.length === 0 ? (
+		typeof emptyContent === "string" ? (
+			<EmptyState fullHeight title={emptyContent} />
+		) : (
+			emptyContent
+		)
+	) : undefined;
 	if (visibleColumns.length === 0)
 		throw new Error("DataTable requires at least one visible column.");
 
@@ -321,7 +355,7 @@ export function DataTable<T>({
 							<tr>
 								<td
 									colSpan={visibleColumns.length}
-									className="px-6 py-12 text-center text-sm text-[rgb(var(--color-text-secondary))]"
+									className="p-0 text-center text-sm text-[rgb(var(--color-text-secondary))]"
 								>
 									<div
 										role={errorContent != null && !loading ? "alert" : "status"}

@@ -1,10 +1,11 @@
 "use client";
+import { NumberedTable } from "@dragorbit/ui";
 import { MoreVertical } from "lucide-react";
 export function PaymentTableHeaderView({ model }) {
   const { t } = model;
   return (
     <div className="bg-gradient-to-r from-[rgb(var(--color-bg-tertiary))] to-[rgb(var(--color-bg-secondary))] border-b border-[rgb(var(--color-border-primary))] sticky top-0 z-20">
-      <table className="w-full min-w-[1000px] table-fixed">
+      <NumberedTable className="w-full min-w-[1000px] table-fixed">
         <thead>
           <tr>
             <th className="w-1/6 px-6 py-4 text-left text-sm font-semibold text-[rgb(var(--color-text-primary))] uppercase tracking-wider">
@@ -33,7 +34,7 @@ export function PaymentTableHeaderView({ model }) {
             </th>
           </tr>
         </thead>
-      </table>
+      </NumberedTable>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 import {
   CreditCard,
   CheckCircle2,
   ShieldCheck,
   Zap,
   Info,
-  Loader2,
 } from "lucide-react";
 import { Card, CardBody, Badge, Button } from "@dragorbit/ui";
 export function SubscriptionScreen({ model }) {
@@ -26,12 +26,7 @@ export function SubscriptionScreen({ model }) {
           <div className="lg:col-span-3 space-y-6">
             <Card className="bg-[rgb(var(--color-bg-primary))] border-[rgb(var(--color-border-primary))] overflow-hidden relative">
               {isLoading ? (
-                <div className="flex items-center justify-center p-16">
-                  <Loader2
-                    size={32}
-                    className="animate-spin text-[rgb(var(--color-primary))]"
-                  />
-                </div>
+                <TableSkeleton />
               ) : !subscription ? (
                 <CardBody className="p-16 flex flex-col items-center justify-center text-center">
                   <div className="w-24 h-24 bg-[rgb(var(--color-primary))]/10 rounded-full flex items-center justify-center mb-6">

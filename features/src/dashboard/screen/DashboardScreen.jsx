@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@dragorbit/ui";
 import { useMemo } from "react";
 import { CashbookSummaryCard } from "../component/CashbookSummaryCard";
 import { DashboardSections } from "../component/DashboardSections";
@@ -34,7 +35,7 @@ export function DashboardScreen({
 	onSaveSections,
 	layoutVariant = "overview",
 }) {
-	const { summary, loading, today } = useDashboardData({
+	const { summary, loading, today, error, retry } = useDashboardData({
 		repository,
 		storeId,
 		ready,
@@ -54,6 +55,18 @@ export function DashboardScreen({
 					onNavigate={(module) => onNavigate?.(module.path)}
 				/>
 			</div>
+		);
+	if (error && !loading && !summary.length)
+		return (
+			<section role="alert" className="space-y-4 p-6">
+				<h1 className="text-base font-semibold">Unable to load dashboard</h1>
+				<p className="text-sm text-[rgb(var(--color-text-secondary))]">
+					{error}
+				</p>
+				<Button type="button" onClick={retry}>
+					Try again
+				</Button>
+			</section>
 		);
 	const stats = (
 		<DashboardStats

@@ -1,4 +1,6 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
+import { NumberedTable } from "@dragorbit/ui";
 import {
   Building2,
   Copy,
@@ -41,7 +43,7 @@ export function PurchaseOrderTableView({ model }) {
     <div className="h-full">
       {/* Fixed Header */}
       <div className="bg-gradient-to-r from-[rgb(var(--color-bg-tertiary))] to-[rgb(var(--color-bg-secondary))] border-b border-[rgb(var(--color-border-primary))] sticky top-0 z-20">
-        <table className="w-full min-w-[800px] table-fixed">
+        <NumberedTable className="w-full min-w-[800px] table-fixed">
           <thead>
             <tr>
               <th className="w-1/6 px-6 py-4 text-left">
@@ -70,12 +72,12 @@ export function PurchaseOrderTableView({ model }) {
               <th className="w-50 py-4 text-center">{t("common.actions")}</th>
             </tr>
           </thead>
-        </table>
+        </NumberedTable>
       </div>
 
       {/* Scrollable Body */}
       <div className="overflow-auto min-h-[calc(100vh-300px)]">
-        <table className="w-full min-w-[800px] table-fixed">
+        <NumberedTable className="w-full min-w-[800px] table-fixed">
           <tbody className="divide-y divide-gray-100">
             {bills.map((row) => {
               const normalizedData = normalizePurchaseOrder(row);
@@ -251,16 +253,11 @@ export function PurchaseOrderTableView({ model }) {
               );
             })}
           </tbody>
-        </table>
+        </NumberedTable>
 
         {/* Loading More Indicator */}
         {isLoadingMore && (
-          <div className="text-center py-4">
-            <div className="w-6 h-6 border-2 border-[rgb(var(--color-primary))] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
-            <p className="text-sm text-[rgb(var(--color-text-secondary))]">
-              {t("purchaseOrders.loadingMore")}
-            </p>
-          </div>
+          <TableSkeleton compact rows={2} />
         )}
       </div>
 

@@ -1,4 +1,6 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
+import { NumberedTable } from "@dragorbit/ui";
 import { MoreVertical, Package } from "lucide-react";
 export function InventoryTableView({ model }) {
   const {
@@ -24,7 +26,7 @@ export function InventoryTableView({ model }) {
   return (
     <div className={`${className}`}>
       <div className="relative">
-        <table className="w-full min-w-[1200px]">
+        <NumberedTable className="w-full min-w-[1200px]">
           {/* Table Header */}
           <thead className="bg-gradient-to-r from-[rgb(var(--color-bg-tertiary))] to-[rgb(var(--color-bg-secondary))] border-b border-[rgb(var(--color-border-primary))] sticky top-0 z-10">
             <tr>
@@ -193,21 +195,12 @@ export function InventoryTableView({ model }) {
               );
             })}
           </tbody>
-        </table>
+        </NumberedTable>
       </div>
 
       {/* Infinite Scroll Loading */}
       {isLoadingMore && (
-        <div className="bg-[rgb(var(--color-bg-primary))] border-t border-[rgb(var(--color-border-primary))] px-6 py-4">
-          <div className="flex items-center justify-center">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]"></div>
-              <span className="text-sm text-[rgb(var(--color-text-secondary))]">
-                Loading more inventory...
-              </span>
-            </div>
-          </div>
-        </div>
+        <TableSkeleton compact rows={2} />
       )}
 
       <RowContextMenuLayer

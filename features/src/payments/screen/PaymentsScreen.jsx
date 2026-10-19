@@ -19,11 +19,14 @@ export function PaymentsScreen({ model }) {
       <div className="max-w-8xl mx-auto">
         {header}
         <div className="px-5">
+          {error && !(isLoading || permissionsLoading) && payments.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
           {(isLoading || permissionsLoading) &&
             payments.length === 0 &&
             !error && <PageLoader />}
-          {!isLoading && !permissionsLoading && payments.length === 0 && (
+          {!isLoading && !permissionsLoading && payments.length === 0 && !error && (
             <EmptyState
+                fullHeight
               className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
               icon={CreditCard}
               title={t("payments.noPayments")}

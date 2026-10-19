@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 /** Host model supplies state/actions; this component owns the shared markup. */
 export function InvoiceListContentView({ model }) {
 	const {
@@ -95,15 +96,8 @@ export function InvoiceListContentView({ model }) {
 						<div ref={sentinelRef} className="h-4 w-full" />
 					)}
 
-					{(isFetchingMore || isLoading) && invoices.length > 0 && (
-						<div className="flex items-center justify-center py-16">
-							<div className="flex items-center gap-3">
-								<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-								<span className="text-sm text-[rgb(var(--color-text-secondary))]">
-									{t("common.loadingMore") || "Loading more..."}
-								</span>
-							</div>
-						</div>
+					{isFetchingMore && invoices.length > 0 && (
+						<TableSkeleton compact rows={2} />
 					)}
 				</div>
 

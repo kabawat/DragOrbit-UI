@@ -40,14 +40,16 @@ export function SuppliersScreen({ model }) {
         />
 
         <div className="px-5">
+          {error && !(isLoading || permissionsLoading) && suppliers.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
           {(isLoading || permissionsLoading) &&
             suppliers.length === 0 &&
             !error && <PageLoader />}
 
           {!(isLoading || permissionsLoading) &&
-            suppliers.length === 0 &&
-            !error && (
+            suppliers.length === 0 && !error && (
               <EmptyState
+                fullHeight
                 className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
                 icon={Building}
                 title={t("suppliers.noSuppliers")}

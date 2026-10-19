@@ -1,5 +1,6 @@
 "use client";
-import { Loader2, Save, Store } from "lucide-react";
+import { TableSkeleton } from "@dragorbit/ui";
+import { Save, Store } from "lucide-react";
 export function StoreEditDrawerView({ model }) {
   const {
     FormDrawer,
@@ -34,14 +35,7 @@ export function StoreEditDrawerView({ model }) {
       saveVariant="primary"
     >
       {isLoadingStore ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="flex items-center gap-3">
-            <Loader2 className="w-6 h-6 animate-spin text-[rgb(var(--color-primary))]" />
-            <span className="text-sm text-[rgb(var(--color-text-secondary))]">
-              Loading store details...
-            </span>
-          </div>
-        </div>
+        <TableSkeleton className="col-span-full" compact rows={3} />
       ) : (
         <StoreEditForm
           form={form}

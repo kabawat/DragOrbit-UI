@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Users, Search } from "lucide-react";
-import { EmptyState, PageSkeleton } from "@dragorbit/ui";
+import { EmptyState, PageLoader } from "@dragorbit/ui";
 
 /** Shared presentation; hosts supply data and platform-bound list adapters. */
 export function CustomersScreen({
@@ -45,11 +45,12 @@ export function CustomersScreen({
 				<div className="px-5">
 					{((!hasLoaded && !error) ||
 						(isLoading && customers.length === 0)) && (
-						<PageSkeleton label={t("common.loading")} />
+						<PageLoader text={t("common.loading")} />
 					)}
 
 					{hasLoaded && !isLoading && customers.length === 0 && (
 						<EmptyState
+                fullHeight
 							className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 							title={
 								isFiltered ? t("common.noResults") : t("customers.noCustomers")

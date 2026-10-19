@@ -1,4 +1,5 @@
 "use client";
+import { NumberedTable } from "@dragorbit/ui";
 export function DailySalesReportTemplateView({ model }) {
   const {
     hideGst,
@@ -44,7 +45,7 @@ export function DailySalesReportTemplateView({ model }) {
         </div>
       </div>
 
-      <table className="w-full text-sm border-collapse">
+      <NumberedTable className="w-full text-sm border-collapse">
         <thead>
           <tr className="bg-gray-100">
             <th className="border px-3 py-2 text-left">Invoice</th>
@@ -63,7 +64,7 @@ export function DailySalesReportTemplateView({ model }) {
             </tr>
           ))}
         </tbody>
-      </table>
+      </NumberedTable>
     </div>
   );
 }

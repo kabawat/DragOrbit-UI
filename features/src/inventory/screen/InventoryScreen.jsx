@@ -31,13 +31,16 @@ export function InventoryScreen({ model }) {
         />
 
         <div className="px-5">
+          {error && !(inventoryLoading || permissionsLoading) && inventories.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
           {(inventoryLoading || permissionsLoading) &&
             inventories.length === 0 &&
             !error && <PageLoader />}
 
           {!(inventoryLoading || permissionsLoading) &&
-            inventories.length === 0 && (
+            inventories.length === 0 && !error && (
               <EmptyState
+                fullHeight
                 className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
                 icon={Package}
                 title={t("inventory.noInventory")}

@@ -1,8 +1,9 @@
 "use client";
+import { NumberedTable } from "@dragorbit/ui";
 export function ReportTableView({ model }) {
   const { styles, columns, data } = model;
   return (
-    <table className={styles.table}>
+    <NumberedTable className={styles.table}>
       <thead>
         <tr>
           {columns.map((col, index) => (
@@ -29,6 +30,6 @@ export function ReportTableView({ model }) {
           </tr>
         ))}
       </tbody>
-    </table>
+    </NumberedTable>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import { RowNumberCell } from "@dragorbit/ui";
 import { Building2, MoreVertical } from "lucide-react";
 export function PaymentTableRowView({ model }) {
   const {
@@ -24,6 +25,7 @@ export function PaymentTableRowView({ model }) {
       className="group transition-all duration-200 hover:bg-[rgb(var(--color-bg-tertiary))] border-b border-[rgb(var(--color-border-primary))]"
       onContextMenu={(event) => openContextMenu(event, paymentId)}
     >
+      <RowNumberCell value={model.rowNumber} />
       <td className="w-1/6 px-6 py-4">
         <div
           onClick={() => onRoute0(paymentId)}

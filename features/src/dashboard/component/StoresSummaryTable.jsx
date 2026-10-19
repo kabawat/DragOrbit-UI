@@ -1,6 +1,7 @@
 "use client";
 
 import { normalizeStoreSummary } from "../model/summary";
+import { EmptyState } from "@dragorbit/ui";
 import { DataTable } from "@dragorbit/ui/table";
 import { Building2, LayoutDashboard } from "lucide-react";
 
@@ -74,9 +75,7 @@ export const StoresSummaryTable = ({
 						<span className="sr-only">{t("common.loading")}</span>
 					</div>
 				) : !data?.length ? (
-					<p className="rounded-2xl border border-[rgb(var(--color-border-primary))] p-6 text-center text-sm text-[rgb(var(--color-text-secondary))]">
-						{t("dashboard.noData")}
-					</p>
+					<EmptyState icon={Building2} title={t("dashboard.noData")} />
 				) : (
 					data.map((store) => (
 						<article
@@ -145,10 +144,7 @@ export const StoresSummaryTable = ({
 						</div>
 					}
 					emptyContent={
-						<div className="flex flex-col items-center gap-3">
-							<Building2 className="h-8 w-8 opacity-40" aria-hidden="true" />
-							<p>{t("dashboard.noData")}</p>
-						</div>
+						<EmptyState icon={Building2} title={t("dashboard.noData")} />
 					}
 					minWidth={960}
 					maxHeight={480}

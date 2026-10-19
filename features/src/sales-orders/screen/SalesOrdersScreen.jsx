@@ -39,14 +39,17 @@ export function SalesOrdersScreen({
           setEndDate={setEndDate}
         />
         <div className="px-5">
+          {error && !(isLoading || permissionsLoading) && orders.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
           {/* Loading State Wrapper */}
           {(isLoading || permissionsLoading) &&
             orders.length === 0 &&
             !error && <PageLoader />}
 
           {/* Completely Empty State Fallback */}
-          {!isLoading && orders.length === 0 && (
+          {!isLoading && !permissionsLoading && orders.length === 0 && !error && (
             <EmptyState
+                fullHeight
               className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
               title={t("common.noResults")}
               description={

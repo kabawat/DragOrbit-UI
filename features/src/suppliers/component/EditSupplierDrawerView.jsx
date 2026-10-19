@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 import { Building2, Save } from "lucide-react";
 import { Button, SideDrawer } from "@dragorbit/ui";
 export function EditSupplierDrawerPresentation({ model }) {
@@ -26,12 +27,7 @@ export function EditSupplierDrawerPresentation({ model }) {
     >
       <div className="p-3 sm:p-4 md:p-6 h-full">
         {fetching ? (
-          <div className="flex flex-col items-center justify-center h-64 space-y-4">
-            <div className="w-12 h-12 border-4 border-[rgb(var(--color-primary))] border-t-transparent rounded-full animate-spin" />
-            <p className="text-[rgb(var(--color-text-secondary))] font-medium">
-              {t("common.loading")}
-            </p>
-          </div>
+          <TableSkeleton className="col-span-full" compact rows={3} />
         ) : (
           <div className="flex flex-col h-full">
             <div className="flex-1 overflow-y-auto space-y-4 sm:space-y-6 min-h-0 pb-4">

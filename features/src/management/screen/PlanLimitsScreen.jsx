@@ -1,7 +1,7 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 import { BarChart3, Zap, AlertCircle } from "lucide-react";
 import { Badge, Button, Modal } from "@dragorbit/ui";
-import { Loader2 } from "lucide-react";
 export function PlanLimitsScreen({ model }) {
   const {
     t,
@@ -43,12 +43,7 @@ export function PlanLimitsScreen({ model }) {
               </div>
 
               {isLoading ? (
-                <div className="flex-1 min-h-0 flex items-center justify-center">
-                  <Loader2
-                    size={32}
-                    className="animate-spin text-[rgb(var(--color-primary))]"
-                  />
-                </div>
+                <TableSkeleton />
               ) : !subscriptionData ? (
                 <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar flex flex-col items-center justify-center text-center p-8">
                   <div className="w-24 h-24 bg-[rgb(var(--color-primary))]/10 rounded-full flex items-center justify-center mb-6">

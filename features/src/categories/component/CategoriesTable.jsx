@@ -7,23 +7,11 @@ export function CategoriesTable({ model }) {
 	const { t, categories, canCreate, setShowDrawer, loading } = model;
 	return (
 		<DataTable
+			errorContent={model.error ? <EmptyState fullHeight type="error" title={t("common.error")} description={model.error} /> : undefined}
 			caption={t("sidebar.categories")}
 			rows={categories}
 			getRowKey={(row) => row._id || row.id || row.name}
 			columns={[
-				{
-					id: "serialNumber",
-					header: "SR NO",
-					width: 64,
-					fitContent: true,
-					align: "center",
-					pin: false,
-					cell: (_row, index) => (
-						<span className="tabular-nums text-[rgb(var(--color-text-secondary))]">
-							{index + 1}
-						</span>
-					),
-				},
 				{
 					id: "icon",
 					header: "Icon",
@@ -64,6 +52,7 @@ export function CategoriesTable({ model }) {
 			}
 			emptyContent={
 				<EmptyState
+                fullHeight
 					className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 					icon={Tags}
 					title={t("sidebar.noCategories") || "No categories yet"}

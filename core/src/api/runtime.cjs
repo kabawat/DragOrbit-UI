@@ -69,13 +69,41 @@ function formatErrorWithFields(message, fields) {
 }
 
 function handleSuccess(response) {
-	const responseBody = response?.data || {};
-	const data =
-		responseBody.data !== undefined ? responseBody.data : responseBody;
-	const message = normalizeMessage(responseBody.message);
-	const pagination = responseBody.pagination || null;
-
-	return { success: true, data, message, pagination };
+	const body = response?.data ?? response;
+	if (
+		response?.success === false ||
+		response?.status === false ||
+		(response?.success !== true &&
+			response?.status !== true &&
+			(body?.success === false || body?.status === false))
+	) {
+		const failure =
+			response?.success === false || response?.status === false
+				? response
+				: body;
+		const error = new Error(
+			normalizeMessage(failure?.message, "Request failed."),
+		);
+		error.response = {
+			status: failure?.statusCode ?? response?.status ?? null,
+			data:
+				failure?.error && typeof failure.error === "object"
+					? {
+							...failure.error,
+							message: failure.message,
+							fields: failure.error.fields || failure.fields,
+						}
+					: failure,
+		};
+		throw error;
+	}
+	const data = body && Object.hasOwn(body, "data") ? body.data : body;
+	return {
+		success: true,
+		data,
+		message: normalizeMessage(body?.message || response?.message),
+		pagination: body?.pagination || response?.pagination || null,
+	};
 }
 
 function handleError(error) {
@@ -155,7 +183,7 @@ class HttpService {
 
 	// Helper
 	buildResourceUrl(resourceEndpoint, resourceId, storeId = null) {
-		let url = resourceId
+		const url = resourceId
 			? `${resourceEndpoint}/${resourceId}`
 			: resourceEndpoint;
 		return storeId ? this.buildUrl(url, { store: storeId }) : url;

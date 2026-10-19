@@ -39,10 +39,13 @@ export function ProductsScreen({ model }) {
 				/>
 
 				<div className="px-5">
+          {error && !(isLoading) && products.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
 					{isLoading && products.length === 0 && !error && <PageLoader />}
 
-					{!isLoading && products.length === 0 && (
+					{!isLoading && products.length === 0 && !error && (
 						<EmptyState
+                fullHeight
 							className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 							icon={Package}
 							title={t("products.noProducts")}

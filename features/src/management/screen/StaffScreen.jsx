@@ -1,9 +1,9 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 import { Button, SideDrawer } from "@dragorbit/ui";
 import {
   CalendarCheck,
   IndianRupee,
-  Loader2,
   Search,
   UserPlus,
   Users,
@@ -163,12 +163,7 @@ export function StaffScreen({ model }) {
               <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.4)] overflow-hidden">
                 <div className="max-h-[calc(100vh-280px)] overflow-y-auto custom-scrollbar p-1">
                   {listLoading ? (
-                    <div className="flex flex-col items-center justify-center py-24 gap-3">
-                      <div className="w-12 h-12 border-4 border-[rgb(var(--color-primary))] border-t-transparent rounded-full animate-spin" />
-                      <p className="text-sm font-medium text-[rgb(var(--color-text-secondary))] animate-pulse">
-                        Loading team...
-                      </p>
-                    </div>
+                    <TableSkeleton />
                   ) : filteredStaff.length === 0 ? (
                     <div className="py-12">
                       <StaffEmptyState
@@ -200,21 +195,7 @@ export function StaffScreen({ model }) {
                 </div>
 
                 {!listLoading && filteredStaff.length > 0 && (
-                  <div className="bg-[rgb(var(--color-bg-tertiary))] border-t border-[rgb(var(--color-border-primary)/0.5)] px-6 py-3 flex items-center justify-between gap-3">
-                    <p className="text-sm font-medium text-[rgb(var(--color-text-secondary))] flex items-center gap-2">
-                      <Users
-                        size={14}
-                        className="text-[rgb(var(--color-primary))]"
-                      />
-                      Showing {filteredStaff.length} team members
-                    </p>
-                    {isSyncing && (
-                      <span className="text-xs text-[rgb(var(--color-text-tertiary))] flex items-center gap-1.5">
-                        <Loader2 size={12} className="animate-spin" />
-                        Syncing...
-                      </span>
-                    )}
-                  </div>
+                  <TableSkeleton compact rows={2} />
                 )}
               </div>
             </div>

@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 export function BillListContentView({ model }) {
   const {
     viewMode,
@@ -79,15 +80,8 @@ export function BillListContentView({ model }) {
           )}
 
           {/* Infinite scroll loading indicator */}
-          {(isFetchingMore || isLoading) && (
-            <div className="col-span-full flex items-center justify-center py-8">
-              <div className="flex items-center gap-3">
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-                <span className="text-sm text-[rgb(var(--color-text-secondary))]">
-                  {t("common.loadingMore")}
-                </span>
-              </div>
-            </div>
+          {isFetchingMore && (
+            <TableSkeleton compact rows={2} />
           )}
         </div>
 

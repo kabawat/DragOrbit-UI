@@ -31,12 +31,15 @@ export function PurchaseOrdersScreen({ model }) {
           setEndDate={setEndDate}
         />
         <div className="px-5">
+          {error && !(isLoading || permissionsLoading) && purchaseOrders.length === 0 && <EmptyState fullHeight type="error" title={t("common.error")} description={typeof error === "string" ? error : error.message} />}
+
           {(isLoading || permissionsLoading) &&
             purchaseOrders.length === 0 &&
             !error && <PageLoader />}
           {!(isLoading || permissionsLoading) &&
-            purchaseOrders.length === 0 && (
+            purchaseOrders.length === 0 && !error && (
               <EmptyState
+                fullHeight
                 className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
                 icon={FileText}
                 title={t("purchaseOrders.noPurchaseOrders")}

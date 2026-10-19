@@ -27,7 +27,8 @@
       "types": "./src/forms/phone.js",
       "default": "./src/forms/phone.js"
     },
-    "./utils/*": "./src/utils/*.js"
+    "./utils/*": "./src/utils/*.js",
+    "./auth": "./src/auth/index.js"
   },
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.json",

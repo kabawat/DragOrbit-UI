@@ -25,6 +25,7 @@ export {
 	ProgressBar,
 	CircularProgress,
 } from "./components/feedback/Loading";
+export { TableSkeleton } from "./components/feedback/TableSkeleton";
 export { PageLoader } from "./components/feedback/PageLoader";
 export { StatCard } from "./components/stats/StatCard";
 export type { StatCardData } from "./components/stats/StatCard";

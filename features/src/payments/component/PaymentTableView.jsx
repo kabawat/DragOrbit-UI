@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 export function PaymentTableView({ model }) {
   const {
     PaymentTableHeader,
@@ -25,10 +26,11 @@ export function PaymentTableView({ model }) {
         <table className="w-full min-w-[1000px] table-fixed">
           <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
             {payments &&
-              payments.map((payment) => (
+              payments.map((payment, index) => (
                 <PaymentTableRow
                   key={payment._id || payment.id}
                   payment={payment}
+                  rowNumber={index + 1}
                   menuRefs={menuRefs}
                   menu={menu}
                   toggleDropdown={toggleDropdown}
@@ -42,16 +44,7 @@ export function PaymentTableView({ model }) {
         </table>
 
         {isLoadingMore && (
-          <div className="flex items-center justify-center py-4">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]"></div>
-              <span className="text-sm text-[rgb(var(--color-text-secondary))]">
-                {t("payments.loadingMore", {
-                  defaultValue: "Loading more payments...",
-                })}
-              </span>
-            </div>
-          </div>
+          <TableSkeleton compact rows={2} />
         )}
       </div>
 

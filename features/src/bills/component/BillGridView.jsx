@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 export function BillGridPresentation({ model }) {
   const {
     bills,
@@ -35,14 +36,7 @@ export function BillGridPresentation({ model }) {
 
         {/* Infinite scroll loading */}
         {isLoadingMore && (
-          <div className="col-span-full flex items-center justify-center py-8">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]"></div>
-              <span className="text-sm text-[rgb(var(--color-text-secondary))]">
-                Loading more bills...
-              </span>
-            </div>
-          </div>
+          <TableSkeleton compact rows={2} />
         )}
       </div>
     </div>

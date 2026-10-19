@@ -16,6 +16,7 @@ export function VariantsTable({ model }) {
 	} = model;
 	return (
 		<DataTable
+			errorContent={model.error ? <EmptyState fullHeight type="error" title={t("common.error")} description={model.error} /> : undefined}
 			caption={t("sidebar.variants")}
 			rows={variants}
 			getRowKey={(row) => row._id || row.id || row.name}
@@ -109,6 +110,7 @@ export function VariantsTable({ model }) {
 			loadingContent={<PageLoader />}
 			emptyContent={
 				<EmptyState
+                fullHeight
 					className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 					icon={Layers}
 					title={t("sidebar.noVariants") || "No variants yet"}

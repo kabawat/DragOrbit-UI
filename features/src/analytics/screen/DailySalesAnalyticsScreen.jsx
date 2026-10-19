@@ -1,4 +1,5 @@
 "use client";
+import { NumberedTable } from "@dragorbit/ui";
 import { FileSpreadsheet, FileText } from "lucide-react";
 import { Button, Card } from "@dragorbit/ui";
 export function DailySalesAnalyticsScreen({ model }) {
@@ -104,7 +105,7 @@ export function DailySalesAnalyticsScreen({ model }) {
             {t("analytics.noBillsToday")}
           </p>
         ) : (
-          <table className="w-full text-sm">
+          <NumberedTable className="w-full text-sm">
             <thead>
               <tr className="border-b">
                 <th className="text-left px-5 py-3">Invoice</th>
@@ -126,7 +127,7 @@ export function DailySalesAnalyticsScreen({ model }) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </NumberedTable>
         )}
       </Card>
 
