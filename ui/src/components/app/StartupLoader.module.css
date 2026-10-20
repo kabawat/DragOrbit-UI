@@ -1,0 +1,73 @@
+.screen {
+	min-height: 100dvh;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+	background: rgb(var(--color-bg-primary));
+	color: rgb(var(--color-text-primary));
+}
+.content {
+	text-align: center;
+}
+.orbit {
+	position: relative;
+	width: 168px;
+	height: 168px;
+	display: grid;
+	place-items: center;
+}
+.track,
+.ring {
+	position: absolute;
+	inset: 0;
+	border-radius: 50%;
+	border: 2px solid;
+}
+.track {
+	border-color: color-mix(in srgb, rgb(var(--color-primary)) 12%, transparent);
+}
+.ring {
+	border-color: transparent;
+	border-top-color: rgb(var(--color-primary));
+	border-right-color: color-mix(
+		in srgb,
+		rgb(var(--color-primary)) 40%,
+		transparent
+	);
+	animation: startup-orbit 1s linear infinite;
+}
+.orbit img {
+	width: 112px;
+	height: 36px;
+	object-fit: contain;
+}
+.dark {
+	display: none;
+}
+[data-variant="dark"] .light {
+	display: none;
+}
+[data-variant="dark"] .dark {
+	display: block;
+}
+.title {
+	margin: 24px 0 0;
+	font-size: 16px;
+	font-weight: 600;
+}
+.description {
+	max-width: 280px;
+	margin: 8px auto 0;
+	font-size: 14px;
+	color: rgb(var(--color-text-secondary));
+}
+@keyframes startup-orbit {
+	to {
+		transform: rotate(360deg);
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.ring {
+		animation-duration: 3s;
+	}
+}

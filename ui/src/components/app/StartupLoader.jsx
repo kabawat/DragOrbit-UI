@@ -1,24 +1,37 @@
 "use client";
-import { Spinner } from "../feedback/Loading";
+import styles from "./StartupLoader.module.css";
+
+/** App/session bootstrap only. Data-loading placeholders belong inside the page. */
 export function StartupLoader({ title, description }) {
 	return (
-		<output
-			className="min-h-screen flex items-center justify-center bg-[rgb(var(--color-bg-primary))]"
-			aria-live="polite"
+		<section
+			className={styles.screen}
+			aria-busy="true"
+			aria-label="Loading DragBizz"
 		>
-			<div className="text-center">
-				<Spinner size="xl" color="primary" className="mx-auto mb-4" />
-				{title && (
-					<h2 className="text-base font-semibold text-[rgb(var(--color-text-primary))] mb-2">
-						{title}
-					</h2>
-				)}
-				{description && (
-					<p className="text-[rgb(var(--color-text-secondary))]">
-						{description}
-					</p>
-				)}
+			<div className={styles.content}>
+				<div className={styles.orbit} aria-hidden="true">
+					<span className={styles.track} />
+					<span className={styles.ring} />
+					<img
+						className={styles.light}
+						src="/DragBizz-Logos/Dragbizz-black.svg"
+						alt=""
+						width="112"
+						height="36"
+					/>
+					<img
+						className={styles.dark}
+						src="/DragBizz-Logos/Dragbizz-white.svg"
+						alt=""
+						width="112"
+						height="36"
+					/>
+				</div>
+				{title && <h2 className={styles.title}>{title}</h2>}
+				{description && <p className={styles.description}>{description}</p>}
+				<output className="sr-only">Loading DragBizz</output>
 			</div>
-		</output>
+		</section>
 	);
 }

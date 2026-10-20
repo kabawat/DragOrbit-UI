@@ -66,7 +66,15 @@ export function sessionDecision(
 	profile,
 	{ guest = false, sessionHint = true, pathname = "/dashboard" } = {},
 ) {
-	if (guest && !sessionHint) return { state: "ready" };
+	// A cached guest layout may predate login; a false hint must not override
+	// an account already verified in this runtime.
+	if (
+		guest &&
+		!sessionHint &&
+		!profile.authProfile &&
+		!profile.authProfileLoading
+	)
+		return { state: "ready" };
 	if (
 		profile.authProfileErrorStatus === 401 ||
 		profile.retailerErrorStatus === 401

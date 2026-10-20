@@ -1,18 +1,28 @@
 "use client";
 import { sessionDecision } from "@dragorbit/core/auth";
 import { useEffect } from "react";
-import { SessionSkeleton } from "./SessionSkeleton";
+import { StartupLoader } from "./StartupLoader";
 
 export function SessionGate({
 	profile,
 	pathname,
 	guest = false,
+	allowShellPreview = false,
 	sessionHint = true,
 	onRedirect,
 	onRetry,
 	children,
 }) {
-	const decision = sessionDecision(profile, { guest, sessionHint, pathname });
+	// Cached navigation may render while auth remains explicitly unverified.
+	const preview =
+		allowShellPreview &&
+		profile.shellRestored &&
+		!profile.sessionVerified &&
+		profile.authProfileErrorStatus !== 401 &&
+		profile.retailerErrorStatus !== 401;
+	const decision = preview
+		? { state: "ready" }
+		: sessionDecision(profile, { guest, sessionHint, pathname });
 	useEffect(() => {
 		if (decision.state === "redirect") onRedirect(decision.to);
 	}, [decision.state, decision.to, onRedirect]);
@@ -36,9 +46,6 @@ export function SessionGate({
 				</button>
 			</section>
 		);
-	if (decision.state !== "ready")
-		return (
-			<SessionSkeleton guest={guest || pathname?.startsWith("/onboarding")} />
-		);
+	if (decision.state !== "ready") return <StartupLoader />;
 	return children;
 }
