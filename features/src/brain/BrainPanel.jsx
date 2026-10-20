@@ -22,6 +22,7 @@ import ChatCustomerResultCard, {
 } from "./ChatCustomerResultCard.jsx";
 import ChatSlashMenu from "./ChatSlashMenu.jsx";
 import ChatWorkspace from "./ChatWorkspace.jsx";
+import DragBizzLogoIcon from "./DragBizzLogoIcon.jsx";
 import styles from "./chat-panel.module.css";
 import "./brain.css";
 import { titleFromUserText } from "./chatHistory.js";
@@ -270,8 +271,14 @@ function AssistantMessageBubble({
       : item.content;
 
   return (
-    <div className="flex animate-[chatFadeUp_0.3s_ease-out_both] justify-start">
-      <div className="max-w-[94%] rounded-2xl rounded-bl-md border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-3">
+    <div className="flex animate-[chatFadeUp_0.3s_ease-out_both] justify-start items-start gap-2.5">
+      <div
+        className="shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 p-1 shadow-2xs"
+        title="DragBizz AI"
+      >
+        <DragBizzLogoIcon className="h-4 w-4" />
+      </div>
+      <div className="max-w-[88%] sm:max-w-[90%] rounded-2xl rounded-tl-sm border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-3 shadow-2xs">
         <ChatAssistantMessage message={assistantText} />
         <ChatCustomerResultCard toolResults={item.toolResults} />
         <DownloadButtons storeId={storeId} toolResults={item.toolResults} />
@@ -448,6 +455,9 @@ const BrainPanel = ({
     refresh: refreshHistory,
     getSession,
     optimisticTouch,
+    hasMore: historyHasMore,
+    loadingMore: historyLoadingMore,
+    loadMore: historyLoadMore,
   } = history;
 
   useEffect(() => {
@@ -481,14 +491,20 @@ const BrainPanel = ({
     isConfirming,
   ]);
 
-  // After a completed turn, refresh list from server (source of truth).
+  // After an active user turn finishes (assistant reply completed), refresh list from server
+  const wasSendingRef = useRef(false);
   useEffect(() => {
-    if (!storeId || isSending || isConfirming) return;
-    if (messages.length === 0) return;
-    const last = messages[messages.length - 1];
-    if (last?.role !== "assistant" || last?.streaming) return;
-    void refreshHistory();
-  }, [messages, storeId, isSending, isConfirming, refreshHistory]);
+    if (isSending || isConfirming) {
+      wasSendingRef.current = true;
+      return;
+    }
+    if (wasSendingRef.current) {
+      wasSendingRef.current = false;
+      if (storeId) {
+        void refreshHistory();
+      }
+    }
+  }, [isSending, isConfirming, storeId, refreshHistory]);
 
   useEffect(() => {
     if (!isListening && !interimTranscript) return;
@@ -679,6 +695,7 @@ const BrainPanel = ({
 
   const handleSelectSession = async (session) => {
     if (!session?.id) return;
+    if (session.id === activeSessionId) return;
     setDraftText("");
     const result = await getSession(session.id);
     if (!result?.success || !result.session) {
@@ -768,8 +785,11 @@ const BrainPanel = ({
       )}
 
       {(isSending || isConfirming) && (
-        <div className="flex justify-start">
-          <div className="rounded-2xl rounded-bl-md border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-2.5 text-[13px] text-[rgb(var(--color-text-secondary))]">
+        <div className="flex justify-start items-start gap-2.5">
+          <div className="shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 p-1 shadow-2xs">
+            <DragBizzLogoIcon className="h-4 w-4 animate-pulse" />
+          </div>
+          <div className="rounded-2xl rounded-tl-sm border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-2.5 text-[13px] text-[rgb(var(--color-text-secondary))] shadow-2xs">
             {isConfirming
               ? t("voice.status.confirming")
               : t("voice.status.thinking")}
@@ -778,8 +798,14 @@ const BrainPanel = ({
       )}
 
       {chatError && (
-        <div className="flex justify-start">
-          <div className="rounded-2xl rounded-bl-md border border-[rgb(var(--color-danger))]/25 bg-[rgb(var(--color-danger))]/8 px-3.5 py-2.5 text-[13px] leading-5 text-[rgb(var(--color-danger))]">
+        <div className="flex justify-start items-start gap-2.5">
+          <div className="shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-danger))]/10 border border-[rgb(var(--color-danger))]/20 p-1 shadow-2xs">
+            <DragBizzLogoIcon
+              className="h-4 w-4"
+              color="rgb(var(--color-danger))"
+            />
+          </div>
+          <div className="rounded-2xl rounded-tl-sm border border-[rgb(var(--color-danger))]/25 bg-[rgb(var(--color-danger))]/8 px-3.5 py-2.5 text-[13px] leading-5 text-[rgb(var(--color-danger))] shadow-2xs">
             {chatError.code === "STORE_REQUIRED"
               ? t("voice.status.noStore")
               : chatError.message || t("voice.errors.ai_failed")}
@@ -969,6 +995,9 @@ const BrainPanel = ({
         historyError={historyError}
         historyGrouped={grouped}
         historyLoading={historyLoading}
+        historyHasMore={historyHasMore}
+        historyLoadingMore={historyLoadingMore}
+        onLoadMoreHistory={historyLoadMore}
         onNewChat={handleNewChat}
         onQuickPrompt={handleQuickPrompt}
         onSelectSession={handleSelectSession}

@@ -5,6 +5,7 @@ export {
 } from "./AiChatPresentation.jsx";
 export { AiLottieIcon } from "./AiLottieIcon.jsx";
 export { BrainPanel, BrainPanel as default } from "./BrainPanel.jsx";
+export { DragBizzLogoIcon } from "./DragBizzLogoIcon.jsx";
 export {
   ChatAssistantMessage,
   parseBlocks,
