@@ -61,7 +61,7 @@ const parseKeyCombo = (comboStr) => {
 	return { modifiers, key };
 };
 
-export const useHotkeys = (keyMap) => {
+export const useHotkeys = (keyMap, inputs = []) => {
 	const handlersRef = useRef(keyMap);
 	useLayoutEffect(() => {
 		handlersRef.current = keyMap;
@@ -87,7 +87,7 @@ export const useHotkeys = (keyMap) => {
 			const pressedKey = pressedKeyStr;
 
 			// Loop through all defined hotkeys
-			Object.entries(handlersRef.current).forEach(([combo, handler]) => {
+			Object.entries(handlersRef.current || {}).forEach(([combo, handler]) => {
 				const { modifiers, key } = parseKeyCombo(combo);
 
 				// Check if both Key and Modifiers match
@@ -101,5 +101,7 @@ export const useHotkeys = (keyMap) => {
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 		};
-	}, []);
+	}, inputs);
 };
+
+export default useHotkeys;

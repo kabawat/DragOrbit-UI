@@ -15,6 +15,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AiChatPresentation } from "./AiChatPresentation.jsx";
+import { AiLottieIcon } from "./AiLottieIcon.jsx";
 import ChatAssistantMessage from "./ChatAssistantMessage.jsx";
 import ChatCustomerResultCard, {
 	collectCustomerWrites,
@@ -363,16 +364,18 @@ function AssistantMessageBubble({
 const NoDownloads = () => null;
 
 const BrainPanel = ({
-	t,
+	t = (key) => key,
 	locale = "en",
 	selectedStore,
 	user,
-	chat,
-	history,
-	voice,
+	chat = {},
+	history = {},
+	voice = {},
 	LinkComponent,
 	DownloadButtons = NoDownloads,
 	showToolTrace = false,
+	triggerButton = null,
+	triggerClassName = "",
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -923,7 +926,7 @@ const BrainPanel = ({
 				className={`flex shrink-0 touch-none select-none items-center justify-between gap-2 border-b border-[rgb(var(--color-border-primary))] px-3 py-3 ${isExpanded ? "" : "cursor-grab active:cursor-grabbing"}`}
 			>
 				<div className="flex min-w-0 items-center gap-2">
-					<BrainCircuit className="h-5 w-5 shrink-0 text-[rgb(var(--color-primary))]" />
+					<AiLottieIcon size={22} className="h-5 w-5 shrink-0" />
 					<div className="min-w-0">
 						<h2 className="truncate text-sm font-semibold text-[rgb(var(--color-text-primary))]">
 							{t("voice.title")}
@@ -971,15 +974,31 @@ const BrainPanel = ({
 
 	return (
 		<AiChatPresentation t={t} LinkComponent={LinkComponent}>
-			<IconButton
-				aria-expanded={isOpen}
-				aria-haspopup="dialog"
-				className="no-print"
-				icon={BrainCircuit}
-				iconClassName="h-5 w-5"
-				onClick={isOpen ? closePanel : openPanel}
-				title={`${t("voice.open")} — ${t("voice.shortcut")}`}
-			/>
+			{triggerButton ? (
+				typeof triggerButton === "function" ? (
+					triggerButton({ isOpen, openPanel, closePanel, togglePanel })
+				) : (
+					<button
+						aria-expanded={isOpen}
+						aria-haspopup="dialog"
+						className={`no-print ${triggerClassName}`}
+						onClick={isOpen ? closePanel : openPanel}
+						type="button"
+					>
+						{triggerButton}
+					</button>
+				)
+			) : (
+				<IconButton
+					aria-expanded={isOpen}
+					aria-haspopup="dialog"
+					className={`no-print ${triggerClassName}`}
+					icon={BrainCircuit}
+					iconClassName="h-5 w-5"
+					onClick={isOpen ? closePanel : openPanel}
+					title={`${t("voice.open")} — ${t("voice.shortcut")}`}
+				/>
+			)}
 			{portalReady &&
 				isOpen &&
 				panelReady &&
@@ -988,4 +1007,6 @@ const BrainPanel = ({
 	);
 };
 
+export { resizePanel } from "./useFloatingPanel.js";
+export { BrainPanel };
 export default BrainPanel;

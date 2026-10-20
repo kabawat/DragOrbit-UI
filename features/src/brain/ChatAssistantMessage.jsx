@@ -687,4 +687,5 @@ const ChatAssistantMessage = ({ message, className = "" }) => {
 	);
 };
 
+export { ChatAssistantMessage };
 export default ChatAssistantMessage;

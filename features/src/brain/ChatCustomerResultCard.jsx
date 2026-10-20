@@ -4,6 +4,7 @@ import { ArrowUpRight, Mail, Phone, UserRound } from "lucide-react";
 import { useMemo } from "react";
 import {
 	AiChatLink as Link,
+	AiChatPresentation,
 	useAiChatPresentation,
 } from "./AiChatPresentation.jsx";
 
@@ -63,7 +64,7 @@ export function stripCustomerOpenLinks(message) {
 		.trim();
 }
 
-export default function ChatCustomerResultCard({ toolResults }) {
+export function ChatCustomerResultCard({ toolResults }) {
 	const { t } = useAiChatPresentation();
 	const cards = useMemo(
 		() => collectCustomerWrites(toolResults),
@@ -143,3 +144,6 @@ export default function ChatCustomerResultCard({ toolResults }) {
 		</div>
 	);
 }
+
+export { AiChatPresentation };
+export default ChatCustomerResultCard;

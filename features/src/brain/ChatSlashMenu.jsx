@@ -9,7 +9,7 @@ export default function ChatSlashMenu({
 	activeIndex,
 	onSelect,
 	onHover,
-	t,
+	t = (key) => key,
 }) {
 	if (!items?.length) return null;
 
@@ -49,3 +49,5 @@ export default function ChatSlashMenu({
 		</div>
 	);
 }
+
+export { ChatSlashMenu };

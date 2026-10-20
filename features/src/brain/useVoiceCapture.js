@@ -623,4 +623,5 @@ export function useVoiceCapture({
 	};
 }
 
+export { useVoiceCapture };
 export default useVoiceCapture;

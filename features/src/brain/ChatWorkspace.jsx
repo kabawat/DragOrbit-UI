@@ -9,6 +9,7 @@ import {
 	Users,
 	Wallet,
 } from "lucide-react";
+import { AiLottieIcon } from "./AiLottieIcon.jsx";
 import styles from "./chat-panel.module.css";
 
 function HistoryGroup({ label, items, activeId, onSelect }) {
@@ -79,12 +80,12 @@ const QUICK_PROMPTS = [
 /**
  * One responsive workspace; columns follow the panel width, including while resizing.
  */
-export default function ChatWorkspace({
-	t,
+export function ChatWorkspace({
+	t = (key) => key,
 	greeting,
 	storeName,
 	storeGst,
-	historyGrouped,
+	historyGrouped = { today: [], yesterday: [], week: [], older: [] },
 	historyLoading = false,
 	historyError = null,
 	activeSessionId,
@@ -98,10 +99,10 @@ export default function ChatWorkspace({
 	onQuickPrompt,
 }) {
 	const hasHistory =
-		historyGrouped.today.length > 0 ||
-		historyGrouped.yesterday.length > 0 ||
-		historyGrouped.week.length > 0 ||
-		historyGrouped.older.length > 0;
+		(historyGrouped?.today?.length || 0) > 0 ||
+		(historyGrouped?.yesterday?.length || 0) > 0 ||
+		(historyGrouped?.week?.length || 0) > 0 ||
+		(historyGrouped?.older?.length || 0) > 0;
 
 	return (
 		<div className={styles.workspace}>
@@ -133,25 +134,25 @@ export default function ChatWorkspace({
 						<>
 							<HistoryGroup
 								activeId={activeSessionId}
-								items={historyGrouped.today}
+								items={historyGrouped?.today}
 								label={t("voice.history.today")}
 								onSelect={onSelectSession}
 							/>
 							<HistoryGroup
 								activeId={activeSessionId}
-								items={historyGrouped.yesterday}
+								items={historyGrouped?.yesterday}
 								label={t("voice.history.yesterday")}
 								onSelect={onSelectSession}
 							/>
 							<HistoryGroup
 								activeId={activeSessionId}
-								items={historyGrouped.week}
+								items={historyGrouped?.week}
 								label={t("voice.history.week")}
 								onSelect={onSelectSession}
 							/>
 							<HistoryGroup
 								activeId={activeSessionId}
-								items={historyGrouped.older}
+								items={historyGrouped?.older}
 								label={t("voice.history.older")}
 								onSelect={onSelectSession}
 							/>
@@ -174,7 +175,7 @@ export default function ChatWorkspace({
 								className="ai-chat-on-primary mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[rgb(var(--color-primary))]"
 								style={{ color: "#fff" }}
 							>
-								<BrainCircuit className="h-7 w-7" strokeWidth={1.75} />
+								<AiLottieIcon size={34} className="h-8 w-8" />
 							</div>
 							<h3 className="text-xl font-semibold tracking-tight text-[rgb(var(--color-text-primary))]">
 								{greeting}
@@ -315,3 +316,5 @@ export default function ChatWorkspace({
 		</div>
 	);
 }
+
+export default ChatWorkspace;
