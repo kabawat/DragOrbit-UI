@@ -1010,7 +1010,7 @@ const BrainPanel = ({
             <button
               aria-expanded={isOpen}
               aria-haspopup="dialog"
-              className={`no-print ${triggerClassName}`}
+              className={`no-print bg-[rgb(var(--color-text-primary)/0.06)] border border-[rgb(var(--color-border-primary)/0.6)] ${triggerClassName}`}
               onClick={isOpen ? closePanel : openPanel}
               type="button"
             >
@@ -1022,7 +1022,7 @@ const BrainPanel = ({
           <IconButton
             aria-expanded={isOpen}
             aria-haspopup="dialog"
-            className={`no-print ${triggerClassName}`}
+            className={`no-print bg-[rgb(var(--color-text-primary)/0.06)] border border-[rgb(var(--color-border-primary)/0.6)] ${triggerClassName}`}
             icon={AiLottieIcon}
             iconClassName="h-5 w-5"
             onClick={isOpen ? closePanel : openPanel}
