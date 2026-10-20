@@ -1,9 +1,8 @@
 "use client";
+import { Button } from "@dragorbit/ui";
+import { Plus } from "lucide-react";
 import { VariantDeleteDialog } from "../component/VariantDeleteDialog.jsx";
 import { VariantsTable } from "../component/VariantsTable.jsx";
-
-import { Plus } from "lucide-react";
-import { Button } from "@dragorbit/ui";
 export function VariantsScreen({ model }) {
 	const { t, variants, can, variantToDelete, onCreate } = model;
 	return (
@@ -15,7 +14,18 @@ export function VariantsScreen({ model }) {
 							{t("sidebar.variants")}
 						</h1>
 						<p className="text-sm text-[rgb(var(--color-text-secondary))]">
-							{variants.length} {t("common.items") || "items"}
+							{model.loading && variants.length === 0 ? (
+								<span
+									role="img"
+									aria-label={t("common.loading")}
+									aria-busy="true"
+									className="inline-block h-4 w-20 animate-pulse rounded bg-[rgb(var(--color-bg-tertiary))]"
+								/>
+							) : (
+								<>
+									{variants.length} {t("common.items")}
+								</>
+							)}
 						</p>
 					</div>
 					{can("create") && (

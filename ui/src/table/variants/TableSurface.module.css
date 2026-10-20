@@ -1,0 +1,36 @@
+.scroller {
+	scrollbar-width: thin;
+	scrollbar-color: rgb(var(--color-border-secondary))
+		rgb(var(--color-bg-secondary));
+	overscroll-behavior-x: contain;
+}
+
+.scroller::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.scroller::-webkit-scrollbar-track,
+.scroller::-webkit-scrollbar-corner {
+	background: rgb(var(--color-bg-secondary));
+}
+
+.scroller::-webkit-scrollbar-thumb {
+	background: rgb(var(--color-border-secondary));
+	border: 2px solid rgb(var(--color-bg-secondary));
+	border-radius: 999px;
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+	background: rgb(var(--color-primary));
+}
+.scroller {
+	overflow: auto;
+	border: 1px solid rgb(var(--color-border-primary));
+	border-radius: 12px;
+	background: rgb(var(--color-bg-primary));
+}
+.scroller:focus-visible {
+	outline: 2px solid rgb(var(--color-primary));
+	outline-offset: 2px;
+}

@@ -1,20 +1,33 @@
 "use client";
-import { DataTable, EntityLogo } from "@dragorbit/ui";
+import {
+	DataTable,
+	EmptyState,
+	EntityLogo,
+	TableSkeleton,
+} from "@dragorbit/ui";
 import { Award, Plus } from "lucide-react";
-import { EmptyState } from "@dragorbit/ui";
 
 export function BrandsTable({ model }) {
 	const { t, brands, canCreate, setShowDrawer, loading } = model;
 	return (
 		<DataTable
-			errorContent={model.error ? <EmptyState fullHeight type="error" title={t("common.error")} description={model.error} /> : undefined}
+			errorContent={
+				model.error ? (
+					<EmptyState
+						fullHeight
+						type="error"
+						title={t("common.error")}
+						description={model.error}
+					/>
+				) : undefined
+			}
 			caption={t("sidebar.brands")}
 			rows={brands}
 			getRowKey={(row) => row._id || row.id || row.name}
 			columns={[
 				{
 					id: "icon",
-					header: "Icon",
+					header: t("common.icon"),
 					width: 96,
 					pin: false,
 					align: "center",
@@ -53,13 +66,11 @@ export function BrandsTable({ model }) {
 			maxHeight="calc(100vh - 240px)"
 			loading={loading && brands.length === 0}
 			loadingContent={
-				<div className="h-24 animate-pulse rounded-lg bg-[rgb(var(--color-bg-tertiary))]">
-					<span className="sr-only">{t("common.loading")}</span>
-				</div>
+				<TableSkeleton compact rows={5} label={t("common.loading")} />
 			}
 			emptyContent={
 				<EmptyState
-                fullHeight
+					fullHeight
 					className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 					icon={Award}
 					title={t("sidebar.noBrands") || "No brands yet"}

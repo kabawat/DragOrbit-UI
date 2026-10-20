@@ -1,0 +1,4 @@
+.variant {
+	--table-header-background: rgb(var(--color-bg-secondary));
+	border-radius: 6px;
+}

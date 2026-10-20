@@ -1,9 +1,9 @@
 "use client";
-import { BrandsTable } from "../component/BrandsTable.jsx";
+import { Button } from "@dragorbit/ui";
 
 import { Plus } from "lucide-react";
-import { Button } from "@dragorbit/ui";
 import { Suspense } from "react";
+import { BrandsTable } from "../component/BrandsTable.jsx";
 export function BrandsScreen({ model }) {
 	const {
 		t,
@@ -24,7 +24,18 @@ export function BrandsScreen({ model }) {
 							{t("sidebar.brands")}
 						</h1>
 						<p className="text-sm text-[rgb(var(--color-text-secondary))]">
-							{brands.length} {t("common.items") || "items"}
+							{model.loading && brands.length === 0 ? (
+								<span
+									role="img"
+									aria-label={t("common.loading")}
+									aria-busy="true"
+									className="inline-block h-4 w-20 animate-pulse rounded bg-[rgb(var(--color-bg-tertiary))]"
+								/>
+							) : (
+								<>
+									{brands.length} {t("common.items")}
+								</>
+							)}
 						</p>
 					</div>
 					{canCreate && (

@@ -1,7 +1,11 @@
 "use client";
-import { DataTable, TableRowActions } from "@dragorbit/ui";
+import {
+	DataTable,
+	EmptyState,
+	TableRowActions,
+	TableSkeleton,
+} from "@dragorbit/ui";
 import { Edit, Layers, Plus, Trash2 } from "lucide-react";
-import { EmptyState, PageLoader } from "@dragorbit/ui";
 export function VariantsTable({ model }) {
 	const {
 		t,
@@ -16,7 +20,16 @@ export function VariantsTable({ model }) {
 	} = model;
 	return (
 		<DataTable
-			errorContent={model.error ? <EmptyState fullHeight type="error" title={t("common.error")} description={model.error} /> : undefined}
+			errorContent={
+				model.error ? (
+					<EmptyState
+						fullHeight
+						type="error"
+						title={t("common.error")}
+						description={model.error}
+					/>
+				) : undefined
+			}
 			caption={t("sidebar.variants")}
 			rows={variants}
 			getRowKey={(row) => row._id || row.id || row.name}
@@ -107,10 +120,12 @@ export function VariantsTable({ model }) {
 			minWidth={1000}
 			maxHeight="calc(100vh - 240px)"
 			loading={loading && variants.length === 0}
-			loadingContent={<PageLoader />}
+			loadingContent={
+				<TableSkeleton compact rows={5} label={t("common.loading")} />
+			}
 			emptyContent={
 				<EmptyState
-                fullHeight
+					fullHeight
 					className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 					icon={Layers}
 					title={t("sidebar.noVariants") || "No variants yet"}

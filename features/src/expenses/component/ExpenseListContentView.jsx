@@ -1,4 +1,5 @@
 "use client";
+
 import { TableSkeleton } from "@dragorbit/ui";
 /** Host model supplies state/actions; this component owns the shared markup. */
 export function ExpenseListContentView({ model }) {
@@ -34,23 +35,6 @@ export function ExpenseListContentView({ model }) {
 				<div className="h-[calc(100vh-210px)] overflow-y-auto">
 					{viewMode === "table" ? (
 						<>
-							{/* Fixed Table Header — outside scroll container so it never scrolls */}
-							<ExpenseTable
-								expenses={expenses}
-								onEdit={canEdit ? handleOpenEdit : undefined}
-								onDelete={
-									canDelete
-										? (id) => deleteModalRef.current?.open(id)
-										: undefined
-								}
-								onView={canView ? onView : undefined}
-								sortBy={sortBy}
-								sortOrder={sortOrder}
-								onSort={handleSort}
-								headerOnly
-							/>
-
-							{/* Scrollable Body */}
 							<div className="flex-1 overflow-y-auto overflow-x-auto">
 								<ExpenseTable
 									expenses={expenses}
@@ -64,7 +48,7 @@ export function ExpenseListContentView({ model }) {
 									sortBy={sortBy}
 									sortOrder={sortOrder}
 									onSort={handleSort}
-									bodyOnly
+									loading={isLoading}
 								/>
 
 								{/* Sentinel — IntersectionObserver triggers load more */}
@@ -72,9 +56,7 @@ export function ExpenseListContentView({ model }) {
 									<div ref={sentinelRef} className="h-4 w-full" />
 								)}
 
-								{isFetchingMore && (
-									<TableSkeleton compact rows={2} />
-								)}
+								{isFetchingMore && <TableSkeleton compact rows={2} />}
 							</div>
 						</>
 					) : (
@@ -100,9 +82,7 @@ export function ExpenseListContentView({ model }) {
 								<div ref={sentinelRef} className="h-4 w-full" />
 							)}
 
-							{isFetchingMore && (
-								<TableSkeleton compact rows={2} />
-							)}
+							{isFetchingMore && <TableSkeleton compact rows={2} />}
 						</div>
 					)}
 

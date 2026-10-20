@@ -1,9 +1,9 @@
 "use client";
-import { CategoriesTable } from "../component/CategoriesTable.jsx";
+import { Button } from "@dragorbit/ui";
 
 import { Plus } from "lucide-react";
-import { Button } from "@dragorbit/ui";
 import { Suspense } from "react";
+import { CategoriesTable } from "../component/CategoriesTable.jsx";
 export function CategoriesScreen({ model }) {
 	const {
 		t,
@@ -24,7 +24,18 @@ export function CategoriesScreen({ model }) {
 							{t("sidebar.categories")}
 						</h1>
 						<p className="text-sm text-[rgb(var(--color-text-secondary))]">
-							{categories.length} {t("common.items") || "items"}
+							{model.loading && categories.length === 0 ? (
+								<span
+									role="img"
+									aria-label={t("common.loading")}
+									aria-busy="true"
+									className="inline-block h-4 w-20 animate-pulse rounded bg-[rgb(var(--color-bg-tertiary))]"
+								/>
+							) : (
+								<>
+									{categories.length} {t("common.items")}
+								</>
+							)}
 						</p>
 					</div>
 					{canCreate && (

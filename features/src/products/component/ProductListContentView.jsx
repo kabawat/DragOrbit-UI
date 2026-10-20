@@ -44,7 +44,9 @@ export function ProductListContentView({ model }) {
 					ref={scrollRootRef}
 					className="h-[calc(100vh-210px)] overflow-y-auto"
 				>
-					{viewMode === "table" ? (
+					{isLoading && transformedProducts.length === 0 ? (
+						<TableSkeleton rows={6} label={t("common.loading")} />
+					) : viewMode === "table" ? (
 						<div className="h-full">
 							<ProductTable
 								products={transformedProducts}
@@ -90,36 +92,36 @@ export function ProductListContentView({ model }) {
 				</div>
 
 				{/* Footer */}
-				<div className="bg-[rgb(var(--color-bg-tertiary))] border-t border-[rgb(var(--color-border-primary))] px-6 py-4">
-					<div className="flex items-center justify-between">
-						<div className="text-sm text-[rgb(var(--color-text-secondary))]">
-							{pagination.hasNextPage ? (
-								<>
-									Showing{" "}
-									<span className="font-semibold text-[rgb(var(--color-text-primary))]">
-										{transformedProducts.length}
-									</span>{" "}
-									products
-									<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
-										• Scroll down to load more
-									</span>
-								</>
-							) : (
-								<>
-									<span className="font-semibold text-[rgb(var(--color-text-primary))]">
+				{!isLoading && (
+					<div className="bg-[rgb(var(--color-bg-tertiary))] border-t border-[rgb(var(--color-border-primary))] px-6 py-4">
+						<div className="flex items-center justify-between">
+							<div className="text-sm text-[rgb(var(--color-text-secondary))]">
+								{pagination.hasNextPage ? (
+									<>
 										{t("products.showingProducts", {
 											count: transformedProducts.length,
-										})}
-									</span>
-									<span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
-										• {t("products.noMore")}
-									</span>
-								</>
-							)}
+										})}{" "}
+										<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
+											• {t("products.scrollToLoadMore")}
+										</span>
+									</>
+								) : (
+									<>
+										<span className="font-semibold text-[rgb(var(--color-text-primary))]">
+											{t("products.showingProducts", {
+												count: transformedProducts.length,
+											})}
+										</span>
+										<span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
+											• {t("products.noMore")}
+										</span>
+									</>
+								)}
+							</div>
+							<div className="text-sm text-[rgb(var(--color-text-secondary))]" />
 						</div>
-						<div className="text-sm text-[rgb(var(--color-text-secondary))]" />
 					</div>
-				</div>
+				)}
 			</div>
 
 			{/* Delete confirmation modal — self-contained */}

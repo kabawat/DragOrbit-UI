@@ -160,3 +160,50 @@ The scoped scrollbar uses theme background/border tokens, has an 8px horizontal
 and vertical track on WebKit, and a thin native scrollbar on Firefox. Pinned
 measurements are batched per animation frame and offsets are computed once per
 render. Row height observation only runs when rows are pinned.
+
+## Variants and migrated tables
+
+Use `variant="default"`, `variant="minimal"` or `variant="striped"`. The default
+keeps the light primary header. Minimal uses a neutral header; striped adds subtle
+alternating rows. All variants use the same renderer, numbering, pinning, loading,
+empty/error states, sizing and scroll behaviour. No variant adds shadows.
+
+Each design has its own JSX and CSS module in `variants/<name>/`. Register a new
+design in `variants/index.ts`; use `TableSurface` for its accessible scroll region.
+Keep business rules, API calls and row actions outside variants. Variant renderers
+are pure, hook-free presentation functions returning the same `TableSurface` root.
+This keeps row/input DOM identity stable when the design changes.
+
+```jsx
+<DataTable variant="striped" rows={rows} columns={columns}
+  getRowKey={row => row.id} caption="Expenses" />
+```
+
+The JSX column API is also supported for existing feature adapters:
+
+```jsx
+<DataTable variant="minimal" caption="Expenses" loading={loading}>
+  <thead><tr><th>Title</th><th className="text-right">Amount</th></tr></thead>
+  <tbody>{expenses.map(expense => <tr key={expense.id}>
+    <td><button onClick={() => onView(expense.id)}>{expense.title}</button></td>
+    <td>{expense.amount}</td>
+  </tr>)}</tbody>
+</DataTable>
+```
+
+JSX is normalized into the same row/column model; it does not create another table
+implementation. Cell events, inputs, row keys, context menus and merged rows are
+preserved. Header/body styling and dimensions come from DataTable. Keep the head
+and body in **one instance**; split `headerOnly`/`bodyOnly` expense tables have
+been removed. New tables should prefer the explicit `rows`/`columns` API.
+
+For component rows that own hooks, `renderRow` supplies the complete `<tr>` and
+its serial cell (`meta.rowNumber` is undefined when numbering is disabled). DataTable owns their surface/header/states, disables column
+pinning for those rows, and preserves the component lifecycle (used by payments).
+Use ordinary cell renderers for new rows when possible.
+
+Store-fe and Desktop list/detail tables (expenses, invoices, sales/purchase
+orders, bills, suppliers, inventory/batches, accounts, pending payments, customer
+and staff data, credit-note inputs and audit logs) now use this shared renderer.
+Invoice/PDF/print report templates and chat Markdown tables retain their document
+markup so printed and document-specific layouts do not inherit app list styling.

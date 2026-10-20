@@ -1,5 +1,6 @@
 "use client";
-import { useId, useMemo, useRef, useState } from "react";
+import { Button, EmptyState, IconButton, Input, Select } from "@dragorbit/ui";
+import { DataTable } from "@dragorbit/ui/table";
 import {
 	ArrowDownLeft,
 	ArrowUpRight,
@@ -7,8 +8,7 @@ import {
 	Search,
 	Wallet,
 } from "lucide-react";
-import { Button, IconButton, Input, Select } from "@dragorbit/ui";
-import { DataTable } from "@dragorbit/ui/table";
+import { useId, useMemo, useRef, useState } from "react";
 
 function formatCurrency(value) {
 	return `₹${(Number(value) || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -32,6 +32,7 @@ export function CashbookScreen({
 	totals = {},
 	closingBalance,
 	listLoading,
+	refreshing = false,
 	loading,
 	error,
 	handleCashIn,
@@ -141,7 +142,9 @@ export function CashbookScreen({
 					<IconButton
 						icon={RefreshCw}
 						title={t("cashbook.refresh")}
-						disabled={listLoading || busy}
+						disabled={listLoading || refreshing || busy}
+						iconClassName={`h-4 w-4 ${listLoading || refreshing ? "animate-spin" : ""}`}
+						aria-busy={listLoading || refreshing}
 						onClick={onRefresh}
 					/>
 				)}
@@ -309,6 +312,10 @@ export function CashbookScreen({
 								</Button>
 							)}
 						</div>
+					) : !listLoading && !visibleEntries.length ? (
+						<div className={surface} aria-live="polite">
+							<EmptyState title={emptyMessage} icon={Wallet} />
+						</div>
 					) : (
 						<>
 							<div className="hidden md:block">
@@ -323,7 +330,6 @@ export function CashbookScreen({
 									loadingContent={
 										<div className="h-32 animate-pulse rounded-lg bg-[rgb(var(--color-bg-tertiary))]" />
 									}
-									emptyContent={emptyMessage}
 								/>
 							</div>
 							<div className={`${surface} overflow-hidden md:hidden`}>
@@ -336,10 +342,6 @@ export function CashbookScreen({
 											/>
 										))}
 									</div>
-								) : !visibleEntries.length ? (
-									<p className="p-8 text-center text-sm text-[rgb(var(--color-text-secondary))]">
-										{emptyMessage}
-									</p>
 								) : (
 									<ul className="divide-y divide-[rgb(var(--color-border-primary))]">
 										{visibleEntries.map((entry) => (

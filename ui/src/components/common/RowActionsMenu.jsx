@@ -23,31 +23,51 @@ export function RowActionsMenu({
 	className = "w-48",
 }) {
 	const menuRef = useRef(null);
+	const anchorRef = useRef(null);
 	const [position, setPosition] = useState({
 		left: anchorPoint?.x ?? 0,
 		top: anchorPoint?.y ?? 0,
 	});
 
 	useLayoutEffect(() => {
-		if (mode !== "context" || !anchorPoint) return;
 		const el = menuRef.current;
 		if (!el) return;
-		const { width, height } = el.getBoundingClientRect();
-		setPosition(
-			clampFloatingMenuPosition(
-				anchorPoint.x,
-				anchorPoint.y,
-				width || MENU_WIDTH,
-				height,
-			),
-		);
-	}, [mode, anchorPoint, items]);
+		const measure = () => {
+			const { width, height } = el.getBoundingClientRect();
+			const anchor = anchorRef.current?.parentElement?.getBoundingClientRect();
+			const x =
+				mode === "context"
+					? anchorPoint?.x
+					: anchor
+						? anchor.right - (width || MENU_WIDTH)
+						: undefined;
+			const y =
+				mode === "context"
+					? anchorPoint?.y
+					: anchor
+						? anchor.bottom + 4
+						: undefined;
+			if (x == null || y == null) return;
+			const next = clampFloatingMenuPosition(x, y, width || MENU_WIDTH, height);
+			setPosition((previous) =>
+				previous.left === next.left && previous.top === next.top
+					? previous
+					: next,
+			);
+		};
+		measure();
+		const observer = new ResizeObserver(measure);
+		observer.observe(el);
+		return () => observer.disconnect();
+	}, [mode, anchorPoint]);
 
 	const menuBody = items.map((item, index) => {
 		if (item.type === "separator") {
+			const adjacentKey =
+				items[index + 1]?.key || items[index - 1]?.key || "boundary";
 			return (
 				<div
-					key={`sep-${index}`}
+					key={item.key || `sep-${adjacentKey}`}
 					className="border-t border-[rgb(var(--color-border-primary))] my-1"
 				/>
 			);
@@ -58,7 +78,7 @@ export function RowActionsMenu({
 
 		return (
 			<button
-				key={item.key || index}
+				key={item.key || item.label}
 				type="button"
 				onClick={item.onClick}
 				className={toneClass[tone] || toneClass.default}
@@ -73,30 +93,25 @@ export function RowActionsMenu({
 		);
 	});
 
-	const shellClass = `${className} bg-[rgb(var(--color-bg-primary))] rounded-lg shadow-lg border border-[rgb(var(--color-border-primary))] py-1`;
+	const shellClass = `${className} bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] py-1`;
 
-	if (mode === "dropdown") {
-		return (
-			<div
-				ref={menuRef}
-				data-row-context-menu
-				className={`absolute right-0 top-full mt-1 z-50 ${shellClass}`}
-			>
-				{menuBody}
-			</div>
-		);
-	}
-
-	return createPortal(
-		<div
-			ref={menuRef}
-			data-row-context-menu
-			style={{ left: position.left, top: position.top }}
-			className={`fixed z-[10051] ${shellClass}`}
-		>
-			{menuBody}
-		</div>,
-		document.body,
+	return (
+		<>
+			{mode === "dropdown" ? (
+				<span ref={anchorRef} hidden aria-hidden="true" />
+			) : null}
+			{createPortal(
+				<div
+					ref={menuRef}
+					data-row-context-menu
+					style={{ left: position.left, top: position.top }}
+					className={`fixed z-[10051] ${shellClass}`}
+				>
+					{menuBody}
+				</div>,
+				document.body,
+			)}
+		</>
 	);
 }
 
