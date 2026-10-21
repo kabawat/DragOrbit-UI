@@ -1,24 +1,38 @@
 /* biome-ignore-all lint/complexity/noImportantStyles: Override application-wide dark-mode text rules and respect reduced-motion preferences. */
 @keyframes chatFadeUp {
-	from {
-		opacity: 0;
-		transform: translateY(6px);
-	}
-	to {
-		opacity: 1;
-		transform: none;
-	}
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
+}
+
 .brain-panel .ai-chat-on-primary,
 .brain-panel .ai-chat-on-primary * {
-	color: #fff !important;
+  color: #fff !important;
 }
+
 .brain-panel .ai-chat-accent,
 .brain-panel .ai-chat-accent * {
-	color: rgb(var(--color-primary)) !important;
+  color: rgb(var(--color-primary)) !important;
 }
+
 @media (prefers-reduced-motion: reduce) {
-	.brain-panel [class*="animate-"] {
-		animation: none !important;
-	}
+  .brain-panel [class*="animate-"] {
+    animation: none !important;
+  }
 }

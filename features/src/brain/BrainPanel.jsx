@@ -47,46 +47,199 @@ function greetingForLocale(locale, name, t) {
   return `${t("voice.greet.evening")}${who}`;
 }
 
-function getAgentStatusLabel(activeTool, isConfirming, t) {
+function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
+  const [elapsed, setElapsed] = useState(0);
+
+  useEffect(() => {
+    setElapsed(0);
+    const interval = setInterval(() => {
+      setElapsed((prev) => prev + 1);
+    }, 1200);
+    return () => clearInterval(interval);
+  }, []);
+
+  const intent = useMemo(() => {
+    const text = String(lastUserMessage || "").toLowerCase();
+    if (
+      /sale|profit|revenue|dhandha|kamai|bikri|turnover|earning|income|total/.test(
+        text
+      )
+    ) {
+      return {
+        badge: "Sales & Revenue Intelligence",
+        steps: [
+          "Analyzing sales query & time filters…",
+          "Fetching today's sales, revenue & bills…",
+          "Calculating profit margins & summarizing…",
+        ],
+        breads: ["Query Analysis", "Fetch Sales Data", "Format Summary"],
+      };
+    }
+    if (
+      /stock|inventory|product|item|maal|godown|quantity|qty|price|rate|amul|cheese/.test(
+        text
+      )
+    ) {
+      return {
+        badge: "Inventory & Stock Intelligence",
+        steps: [
+          "Searching catalog & SKU matching…",
+          "Checking warehouse & shelf stock levels…",
+          "Compiling pricing, units & availability…",
+        ],
+        breads: ["Search Catalog", "Check Stock", "Compile Details"],
+      };
+    }
+    if (
+      /customer|khata|credit|udhar|due|balance|ledger|grahak|payment/.test(text)
+    ) {
+      return {
+        badge: "Khata & Customer Ledger",
+        steps: [
+          "Locating customer ledger & accounts…",
+          "Calculating outstanding dues & credit balance…",
+          "Preparing statement & summary…",
+        ],
+        breads: ["Find Ledger", "Calculate Balance", "Prepare Summary"],
+      };
+    }
+    if (/supplier|vendor|purchase|order|party/.test(text)) {
+      return {
+        badge: "Supplier & Purchase Orders",
+        steps: [
+          "Accessing supplier database & purchase history…",
+          "Checking vendor invoices & due amounts…",
+          "Compiling supplier report…",
+        ],
+        breads: ["Supplier Record", "Check Invoices", "Compile Report"],
+      };
+    }
+    if (/invoice|bill|draft|create|add|banao|banani/.test(text)) {
+      return {
+        badge: "Smart Billing & Drafts",
+        steps: [
+          "Parsing items, quantities & customer details…",
+          "Generating draft invoice & computing taxes…",
+          "Verifying totals & preparing review card…",
+        ],
+        breads: ["Parse Details", "Draft Transaction", "Review Card"],
+      };
+    }
+    return {
+      badge: "Store Intelligence Agent",
+      steps: [
+        "Analyzing your request & context…",
+        "Consulting store database & records…",
+        "Synthesizing response & insights…",
+      ],
+      breads: ["Analyze Query", "Query Store Data", "Synthesize Answer"],
+    };
+  }, [lastUserMessage]);
+
+  const stepIndex = activeTool ? 1 : Math.min(elapsed, 2);
+
+  let activeStatusText = intent.steps[stepIndex] || intent.steps[0];
   if (isConfirming) {
-    const text = t("voice.status.confirming");
-    return text && !text.startsWith("voice.") ? text : "Updating your store…";
+    activeStatusText = "Executing approved action and updating store…";
+  } else if (activeTool) {
+    switch (activeTool) {
+      case "today_sale":
+        activeStatusText = "Querying today's sales & revenue records…";
+        break;
+      case "search_product":
+        activeStatusText = "Searching product catalog for matching items…";
+        break;
+      case "stock_summary":
+        activeStatusText = "Checking current stock & warehouse inventory…";
+        break;
+      case "customer_summary":
+      case "search_customer":
+        activeStatusText = "Fetching customer records & khata ledger…";
+        break;
+      case "supplier_summary":
+      case "search_supplier":
+        activeStatusText = "Finding supplier details & purchase history…";
+        break;
+      case "create_invoice_draft":
+        activeStatusText = "Preparing invoice draft & item calculations…";
+        break;
+      default:
+        activeStatusText = `Executing: ${activeTool.replace(/_/g, " ")}…`;
+    }
   }
-  if (!activeTool) {
-    const text = t("voice.status.thinking");
-    return text && !text.startsWith("voice.") ? text : "Thinking & analyzing…";
-  }
-  switch (activeTool) {
-    case "today_sale":
-    case "recent_sales":
-    case "daily_sales_trend":
-      return "Fetching sales & revenue…";
-    case "search_product":
-    case "stock_summary":
-    case "product_summary":
-    case "low_stock_alerts":
-    case "top_selling_products":
-      return "Checking stock & inventory…";
-    case "customer_summary":
-    case "search_customer":
-      return "Retrieving customer records…";
-    case "supplier_summary":
-    case "search_supplier":
-      return "Finding supplier information…";
-    case "credit_summary":
-    case "search_invoice":
-      return "Looking up invoices & balance…";
-    case "create_invoice_draft":
-    case "add_product_draft":
-    case "add_customer_draft":
-    case "add_supplier_draft":
-    case "create_expense_draft":
-    case "collect_payment_draft":
-    case "pay_supplier_draft":
-      return "Preparing transaction draft…";
-    default:
-      return "Executing agent tools…";
-  }
+
+  return (
+    <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] justify-start items-start gap-2.5 max-w-[94%] sm:max-w-[85%]">
+      {/* DragBizz Logo with Double Radar Pulse */}
+      <div className="relative shrink-0 mt-1 flex h-8 w-8 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/30 p-1.5 shadow-xs">
+        <DragBizzLogoIcon className="h-5 w-5 animate-pulse" />
+        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(var(--color-primary))] opacity-75" />
+          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[rgb(var(--color-primary))] ring-2 ring-[rgb(var(--color-bg-secondary))]" />
+        </span>
+      </div>
+
+      {/* Modern AI Activity Card */}
+      <div className="flex-1 overflow-hidden rounded-2xl rounded-tl-sm border border-[rgb(var(--color-primary))]/30 bg-gradient-to-b from-[rgb(var(--color-bg-secondary))] via-[rgb(var(--color-bg-secondary))] to-[rgb(var(--color-primary))]/8 p-3 shadow-sm">
+        {/* Top bar: Badge & active indicator */}
+        <div className="flex items-center justify-between gap-2 pb-2 border-b border-[rgb(var(--color-border-primary))]/40">
+          <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[rgb(var(--color-primary))]">
+            <Sparkles className="h-3.5 w-3.5 animate-spin [animation-duration:3s]" />
+            <span>{intent.badge}</span>
+          </div>
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[rgb(var(--color-text-secondary))]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            Active
+          </span>
+        </div>
+
+        {/* Current dynamic action */}
+        <div className="pt-2 pb-1.5">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[13px] font-medium text-[rgb(var(--color-text-primary))] leading-snug">
+              {activeStatusText}
+            </span>
+            <span className="inline-flex items-center gap-1 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.3s]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.15s]" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce" />
+            </span>
+          </div>
+        </div>
+
+        {/* Dynamic step breadcrumb badges */}
+        <div className="flex flex-wrap items-center gap-1 pt-1">
+          {intent.breads.map((bread, idx) => {
+            const isDone = idx < stepIndex;
+            const isCurrent = idx === stepIndex;
+            return (
+              <div key={bread} className="flex items-center gap-1">
+                <span
+                  className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10.5px] font-medium transition-all duration-300 ${
+                    isDone
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold"
+                      : isCurrent
+                        ? "bg-[rgb(var(--color-primary))]/15 text-[rgb(var(--color-primary))] font-semibold ring-1 ring-[rgb(var(--color-primary))]/30"
+                        : "opacity-45 text-[rgb(var(--color-text-secondary))]"
+                  }`}
+                >
+                  {isDone ? "✓" : isCurrent ? "▶" : "○"} {bread}
+                </span>
+                {idx < intent.breads.length - 1 && (
+                  <span className="text-[10px] opacity-30 select-none">›</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Shimmer progress line */}
+        <div className="relative mt-2.5 h-1 w-full overflow-hidden rounded-full bg-[rgb(var(--color-primary))]/10">
+          <div className="absolute inset-0 h-full w-2/5 rounded-full bg-gradient-to-r from-transparent via-[rgb(var(--color-primary))] to-transparent animate-[shimmer_1.6s_infinite]" />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function formatConfirmSummary(pending, t) {
@@ -840,27 +993,19 @@ const BrainPanel = ({
           return null;
         }
 
+        const lastUser = messages
+          .slice()
+          .reverse()
+          .find((m) => m.role === "user");
+        const lastUserMessage =
+          typeof lastUser?.content === "string" ? lastUser.content : "";
+
         return (
-          <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] justify-start items-start gap-2.5">
-            <div className="relative shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/25 p-1 shadow-2xs">
-              <DragBizzLogoIcon className="h-4 w-4 animate-pulse" />
-              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(var(--color-primary))] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[rgb(var(--color-primary))]" />
-              </span>
-            </div>
-            <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-tl-sm border border-[rgb(var(--color-primary))]/25 bg-gradient-to-r from-[rgb(var(--color-primary))]/8 via-[rgb(var(--color-bg-secondary))] to-[rgb(var(--color-bg-secondary))] px-3.5 py-2.5 text-[13px] text-[rgb(var(--color-text-primary))] shadow-2xs">
-              <Sparkles className="h-3.5 w-3.5 text-[rgb(var(--color-primary))] animate-pulse shrink-0" />
-              <span className="font-medium tracking-tight">
-                {getAgentStatusLabel(activeTool, isConfirming, t)}
-              </span>
-              <span className="inline-flex items-center gap-1 ml-0.5 shrink-0">
-                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.3s]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.15s]" />
-                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce" />
-              </span>
-            </div>
-          </div>
+          <AgentActivityCard
+            activeTool={activeTool}
+            isConfirming={isConfirming}
+            lastUserMessage={lastUserMessage}
+          />
         );
       })()}
 
