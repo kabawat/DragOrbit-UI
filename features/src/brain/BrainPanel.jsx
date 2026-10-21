@@ -9,6 +9,7 @@ import {
   Minimize2,
   RotateCcw,
   Send,
+  Sparkles,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -22,8 +23,8 @@ import ChatCustomerResultCard, {
 } from "./ChatCustomerResultCard.jsx";
 import ChatSlashMenu from "./ChatSlashMenu.jsx";
 import ChatWorkspace from "./ChatWorkspace.jsx";
-import DragBizzLogoIcon from "./DragBizzLogoIcon.jsx";
 import styles from "./chat-panel.module.css";
+import DragBizzLogoIcon from "./DragBizzLogoIcon.jsx";
 import "./brain.css";
 import { titleFromUserText } from "./chatHistory.js";
 import useFloatingPanel from "./useFloatingPanel.js";
@@ -44,6 +45,48 @@ function greetingForLocale(locale, name, t) {
   if (hour < 12) return `${t("voice.greet.morning")}${who}`;
   if (hour < 17) return `${t("voice.greet.afternoon")}${who}`;
   return `${t("voice.greet.evening")}${who}`;
+}
+
+function getAgentStatusLabel(activeTool, isConfirming, t) {
+  if (isConfirming) {
+    const text = t("voice.status.confirming");
+    return text && !text.startsWith("voice.") ? text : "Updating your store…";
+  }
+  if (!activeTool) {
+    const text = t("voice.status.thinking");
+    return text && !text.startsWith("voice.") ? text : "Thinking & analyzing…";
+  }
+  switch (activeTool) {
+    case "today_sale":
+    case "recent_sales":
+    case "daily_sales_trend":
+      return "Fetching sales & revenue…";
+    case "search_product":
+    case "stock_summary":
+    case "product_summary":
+    case "low_stock_alerts":
+    case "top_selling_products":
+      return "Checking stock & inventory…";
+    case "customer_summary":
+    case "search_customer":
+      return "Retrieving customer records…";
+    case "supplier_summary":
+    case "search_supplier":
+      return "Finding supplier information…";
+    case "credit_summary":
+    case "search_invoice":
+      return "Looking up invoices & balance…";
+    case "create_invoice_draft":
+    case "add_product_draft":
+    case "add_customer_draft":
+    case "add_supplier_draft":
+    case "create_expense_draft":
+    case "collect_payment_draft":
+    case "pay_supplier_draft":
+      return "Preparing transaction draft…";
+    default:
+      return "Executing agent tools…";
+  }
 }
 
 function formatConfirmSummary(pending, t) {
@@ -280,6 +323,9 @@ function AssistantMessageBubble({
       </div>
       <div className="max-w-[88%] sm:max-w-[90%] rounded-2xl rounded-tl-sm border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-3 shadow-2xs">
         <ChatAssistantMessage message={assistantText} />
+        {item.streaming && (
+          <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-[rgb(var(--color-primary))] animate-pulse" />
+        )}
         <ChatCustomerResultCard toolResults={item.toolResults} />
         <DownloadButtons storeId={storeId} toolResults={item.toolResults} />
         {showToolTrace &&
@@ -438,6 +484,7 @@ const BrainPanel = ({
     messages,
     isSending,
     isConfirming,
+    activeTool,
     chatError,
     sendChat,
     confirmPending,
@@ -784,18 +831,38 @@ const BrainPanel = ({
         )
       )}
 
-      {(isSending || isConfirming) && (
-        <div className="flex justify-start items-start gap-2.5">
-          <div className="shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 p-1 shadow-2xs">
-            <DragBizzLogoIcon className="h-4 w-4 animate-pulse" />
+      {(() => {
+        const lastMessage = messages[messages.length - 1];
+        const isStreamingLast =
+          lastMessage?.role === "assistant" && Boolean(lastMessage?.streaming);
+
+        if (!(isSending || isConfirming) || isStreamingLast) {
+          return null;
+        }
+
+        return (
+          <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] justify-start items-start gap-2.5">
+            <div className="relative shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/25 p-1 shadow-2xs">
+              <DragBizzLogoIcon className="h-4 w-4 animate-pulse" />
+              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(var(--color-primary))] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[rgb(var(--color-primary))]" />
+              </span>
+            </div>
+            <div className="inline-flex items-center gap-2.5 rounded-2xl rounded-tl-sm border border-[rgb(var(--color-primary))]/25 bg-gradient-to-r from-[rgb(var(--color-primary))]/8 via-[rgb(var(--color-bg-secondary))] to-[rgb(var(--color-bg-secondary))] px-3.5 py-2.5 text-[13px] text-[rgb(var(--color-text-primary))] shadow-2xs">
+              <Sparkles className="h-3.5 w-3.5 text-[rgb(var(--color-primary))] animate-pulse shrink-0" />
+              <span className="font-medium tracking-tight">
+                {getAgentStatusLabel(activeTool, isConfirming, t)}
+              </span>
+              <span className="inline-flex items-center gap-1 ml-0.5 shrink-0">
+                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.3s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.15s]" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce" />
+              </span>
+            </div>
           </div>
-          <div className="rounded-2xl rounded-tl-sm border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-2.5 text-[13px] text-[rgb(var(--color-text-secondary))] shadow-2xs">
-            {isConfirming
-              ? t("voice.status.confirming")
-              : t("voice.status.thinking")}
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       {chatError && (
         <div className="flex justify-start items-start gap-2.5">

@@ -5,8 +5,8 @@ export {
 } from "./AiChatPresentation.jsx";
 export { AiLottieIcon } from "./AiLottieIcon.jsx";
 export { BrainPanel, BrainPanel as default } from "./BrainPanel.jsx";
-export { DragBizzLogoIcon } from "./DragBizzLogoIcon.jsx";
 export {
+  areValidSequentialSteps,
   ChatAssistantMessage,
   parseBlocks,
   parseStepGuide,
@@ -19,6 +19,7 @@ export {
 export { ChatSlashMenu } from "./ChatSlashMenu.jsx";
 export { ChatWorkspace } from "./ChatWorkspace.jsx";
 export * from "./chatHistory.js";
+export { DragBizzLogoIcon } from "./DragBizzLogoIcon.jsx";
 export {
   default as useFloatingPanel,
   fitPanel,
