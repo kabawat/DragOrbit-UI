@@ -57,7 +57,7 @@ export function collectCustomerWrites(toolResults) {
 
 export function stripCustomerOpenLinks(message) {
 	return String(message || "")
-		.replace(/\[[^\]]*\]\(\/dashboard\/customers\/[^)]+\)/gi, "")
+		.replace(/\[[^\]]*\]\((?:https?:\/\/[^/]+)?\/dashboard\/customers\/[^)]+\)/gi, "")
 		.replace(/(?:^|\n)\s*Open customer\s*(?=\n|$)/gi, "\n")
 		.replace(/[ \t]+\n/g, "\n")
 		.replace(/\n{3,}/g, "\n\n")

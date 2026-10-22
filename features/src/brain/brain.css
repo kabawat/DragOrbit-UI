@@ -1,4 +1,4 @@
-/* biome-ignore-all lint/complexity/noImportantStyles: Override application-wide dark-mode text rules and respect reduced-motion preferences. */
+/* biome-ignore-all lint/complexity/noImportantStyles: Override application-wide theme rules and respect reduced-motion preferences. */
 @keyframes chatFadeUp {
   from {
     opacity: 0;
@@ -33,14 +33,17 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Light Theme (Default) — 100% preserved
+   -------------------------------------------------------------------------- */
 .brain-panel {
-  background-color: #ffffff !important;
-  color: #1e293b !important;
+  background-color: #ffffff;
+  color: #1e293b;
 }
 
 .brain-panel header {
-  background-color: #ffffff !important;
-  border-bottom: 1px solid #e2e8f0 !important;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .brain-panel .ai-chat-on-primary,
@@ -61,6 +64,141 @@
   box-shadow: none !important;
   border: none !important;
   -webkit-appearance: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Mode Capability
+   Activates automatically when host application is in dark mode
+   (via [data-variant="dark"], .dark, or dark theme attribute on html/body)
+   -------------------------------------------------------------------------- */
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel {
+  background-color: rgb(var(--color-bg-primary, 13 17 23)) !important;
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+  border-color: rgb(var(--color-border-primary, 30 41 59)) !important;
+  box-shadow: -16px 0 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel header {
+  background-color: rgb(var(--color-bg-primary, 13 17 23)) !important;
+  border-bottom: 1px solid rgb(var(--color-border-primary, 30 41 59)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel aside {
+  background-color: rgb(var(--color-bg-secondary, 9 13 22)) !important;
+  border-color: rgb(var(--color-border-primary, 30 41 59)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel section {
+  background-color: rgb(var(--color-bg-primary, 13 17 23)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-pill-handle {
+  background-color: rgb(var(--color-bg-secondary, 22 27 34)) !important;
+  border-color: rgb(var(--color-border-primary, 48 54 61)) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-pill-handle > div {
+  background-color: #64748b !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-composer-card {
+  background-color: rgb(var(--color-bg-secondary, 22 27 34)) !important;
+  border-color: rgb(var(--color-border-primary, 48 54 61)) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-composer-card textarea {
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+  background-color: transparent !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-composer-card textarea::placeholder {
+  color: #64748b !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-prompt-card {
+  background-color: rgb(var(--color-bg-secondary, 22 27 34)) !important;
+  border-color: rgb(var(--color-border-primary, 48 54 61)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-prompt-card:hover {
+  border-color: #187CC5 !important;
+  background-color: rgba(24, 124, 197, 0.12) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-prompt-card span {
+  color: rgb(var(--color-text-secondary, 148 163 184)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-prompt-card span[class*="font-semibold"] {
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-docked-composer-wrap {
+  background-color: rgb(var(--color-bg-primary, 13 17 23)) !important;
+  border-color: rgb(var(--color-border-primary, 30 41 59)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-docked-composer-box {
+  background-color: rgb(var(--color-bg-secondary, 22 27 34)) !important;
+  border-color: rgb(var(--color-border-primary, 48 54 61)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-docked-composer-box textarea {
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+  background-color: transparent !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-docked-composer-box textarea::placeholder {
+  color: #64748b !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-user-bubble {
+  background-color: rgba(24, 124, 197, 0.18) !important;
+  border-color: rgba(24, 124, 197, 0.4) !important;
+  color: #f1f5f9 !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-user-bubble span {
+  color: #f1f5f9 !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-tool-card {
+  background-color: rgb(var(--color-bg-secondary, 22 27 34)) !important;
+  border-color: rgb(var(--color-border-primary, 48 54 61)) !important;
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-tool-card span {
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-history-header {
+  color: rgb(var(--color-text-secondary, 148 163 184)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-history-item {
+  color: rgb(var(--color-text-secondary, 148 163 184)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-history-item:hover {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-history-item.active {
+  background-color: rgba(24, 124, 197, 0.2) !important;
+  border-color: rgba(24, 124, 197, 0.45) !important;
+  color: #38bdf8 !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-greeting-heading {
+  color: rgb(var(--color-text-primary, 241 245 249)) !important;
+}
+
+:is([data-variant="dark"], .dark, [data-theme*="dark"]) .brain-panel .brain-greeting-sub {
+  color: rgb(var(--color-text-secondary, 148 163 184)) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

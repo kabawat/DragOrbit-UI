@@ -23,6 +23,38 @@ function isInternalHref(href) {
   return typeof href === "string" && href.startsWith("/");
 }
 
+export function resolveInAppHref(href) {
+  if (typeof href !== "string") return href;
+  const trimmed = href.trim();
+  if (trimmed.startsWith("/")) return trimmed;
+
+  // Match absolute URLs with a dashboard path (including your-store or any dragbizz domain):
+  const dashboardMatch = trimmed.match(
+    /^https?:\/\/[^/]+(\/dashboard(?:\/[^\s?]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?)$/i
+  );
+  if (dashboardMatch) {
+    return dashboardMatch[1];
+  }
+
+  // Schema-less URLs (e.g. your-store.dragbizz.io/dashboard/customers/123):
+  const schemalessMatch = trimmed.match(
+    /^[^/]*dragbizz\.[^/]+(\/dashboard(?:\/[^\s?]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?)$/i
+  );
+  if (schemalessMatch) {
+    return schemalessMatch[1];
+  }
+
+  // Fallback for placeholder URLs containing your-store:
+  if (/your[-_]?store/i.test(trimmed)) {
+    const fallback = trimmed.match(
+      /(\/dashboard(?:\/[^\s?]*)?(?:\?[^\s#]*)?(?:#[^\s]*)?)/i
+    );
+    if (fallback) return fallback[1];
+  }
+
+  return trimmed;
+}
+
 function isExternalHref(href) {
   return typeof href === "string" && /^https?:\/\//i.test(href);
 }
@@ -259,6 +291,7 @@ function ShortcutChip({ label }) {
 }
 
 function ChatLink({ href, children, chip = false }) {
+  const resolvedHref = resolveInAppHref(href);
   const className = chip
     ? "ai-chat-accent inline-flex max-w-full items-center gap-1 rounded-full border border-[rgb(var(--color-primary))]/20 bg-[rgb(var(--color-primary))]/8 px-2 py-0.5 text-[11px] font-medium transition-colors hover:border-[rgb(var(--color-primary))]/40 hover:bg-[rgb(var(--color-primary))]/14"
     : "ai-chat-accent font-medium underline decoration-[rgb(var(--color-primary))]/30 underline-offset-2 transition-colors hover:decoration-[rgb(var(--color-primary))]";
@@ -273,19 +306,19 @@ function ChatLink({ href, children, chip = false }) {
     children
   );
 
-  if (isInternalHref(href)) {
+  if (isInternalHref(resolvedHref)) {
     return (
-      <Link className={className} href={href} style={accentStyle}>
+      <Link className={className} href={resolvedHref} style={accentStyle}>
         {content}
       </Link>
     );
   }
 
-  if (isExternalHref(href)) {
+  if (isExternalHref(resolvedHref)) {
     return (
       <a
         className={className}
-        href={href}
+        href={resolvedHref}
         rel="noopener noreferrer"
         style={accentStyle}
         target="_blank"

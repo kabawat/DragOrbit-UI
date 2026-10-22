@@ -185,16 +185,16 @@ function AgentActivityCard({ activeTool, progress, isConfirming }) {
       </div>
 
       <div className="w-full">
-        <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
+        <div className="brain-tool-card flex items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] dark:bg-[#187CC5]/20 text-[#187CC5] dark:text-[#38bdf8]">
               {isDataOp ? (
                 <Sliders className="h-4 w-4" />
               ) : (
                 <Sparkles className="h-4 w-4" />
               )}
             </div>
-            <span className="truncate text-[13.5px] font-medium text-slate-800">
+            <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
               {statusText}
             </span>
           </div>
@@ -446,13 +446,13 @@ function AssistantMessageBubble({
           {item.toolResults.map((tool, index) => (
             <div
               key={`${tool?.tool || "tool"}-${index}`}
-              className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all"
+              className="brain-tool-card flex items-center justify-between rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 shadow-2xs transition-all"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] dark:bg-[#187CC5]/20 text-[#187CC5] dark:text-[#38bdf8]">
                   <Sliders className="h-4 w-4" />
                 </div>
-                <span className="truncate text-[13.5px] font-medium text-slate-800">
+                <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
                   {formatToolTitle(tool?.tool)}
                 </span>
               </div>
@@ -1087,8 +1087,8 @@ const BrainPanel = ({
               <User className="h-3 w-3" />
               <span>{userName || "VIKRAM JANGID"}</span>
             </div>
-            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-[#eaf4fb] border border-[#187CC5]/25 text-slate-800 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
-              <span className="block whitespace-pre-wrap text-slate-800">{item.content}</span>
+            <div className="brain-user-bubble max-w-[85%] rounded-2xl rounded-tr-xs bg-[#eaf4fb] dark:bg-[#187CC5]/20 border border-[#187CC5]/25 dark:border-[#187CC5]/40 text-slate-800 dark:text-slate-100 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
+              <span className="block whitespace-pre-wrap text-slate-800 dark:text-slate-100">{item.content}</span>
             </div>
           </div>
         ) : (
@@ -1192,14 +1192,14 @@ const BrainPanel = ({
           ))}
         </div>
       )}
-      <div className="flex items-end gap-2 rounded-2xl border border-slate-200/90 bg-white px-3.5 py-2 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
+      <div className="brain-docked-composer-box flex items-end gap-2 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-2 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
         <button
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
           }
           className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-all ${isListening
             ? "bg-rose-500 text-white animate-pulse"
-            : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            : "text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
             }`}
           disabled={!isSupported || isSending || isConfirming || !storeId}
           onClick={handleMicrophoneClick}
@@ -1214,7 +1214,7 @@ const BrainPanel = ({
         <textarea
           aria-autocomplete="list"
           aria-label={t("voice.message")}
-          className="max-h-28 min-h-8 w-full resize-none !border-none !outline-none !shadow-none bg-transparent px-1 py-1.5 text-[13.5px] leading-5 text-slate-800 placeholder:text-slate-400 focus:!border-none focus:!outline-none focus:!ring-0"
+          className="max-h-28 min-h-8 w-full resize-none !border-none !outline-none !shadow-none bg-transparent px-1 py-1.5 text-[13.5px] leading-5 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:!border-none focus:!outline-none focus:!ring-0"
           style={{ outline: "none", border: "none", boxShadow: "none" }}
           disabled={isSending || isConfirming || !storeId}
           onChange={(event) => setDraftText(event.target.value)}
@@ -1241,11 +1241,11 @@ const BrainPanel = ({
   );
 
   const centerComposer = (
-    <div className="w-full rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
+    <div className="brain-composer-card w-full rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
       <textarea
         aria-autocomplete="list"
         aria-label={t("voice.message")}
-        className="w-full resize-none !border-none !outline-none !shadow-none bg-transparent p-1 text-[14px] leading-relaxed text-slate-800 placeholder:text-slate-400 focus:!border-none focus:!outline-none focus:!ring-0 min-h-[64px]"
+        className="w-full resize-none !border-none !outline-none !shadow-none bg-transparent p-1 text-[14px] leading-relaxed text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:!border-none focus:!outline-none focus:!ring-0 min-h-[64px]"
         style={{ outline: "none", border: "none", boxShadow: "none" }}
         disabled={isSending || isConfirming || !storeId}
         onChange={(event) => setDraftText(event.target.value)}
@@ -1254,7 +1254,7 @@ const BrainPanel = ({
         rows={2}
         value={draftText}
       />
-      <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5">
+      <div className="mt-3 flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-2.5">
         <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-400 select-none">
           <Sliders className="h-3.5 w-3.5 text-slate-400" />
           <span>Type / for quick actions</span>
@@ -1297,7 +1297,7 @@ const BrainPanel = ({
       {hasThread && (
         <button
           aria-label={t("voice.clear")}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
           onClick={handleNewChat}
           title={t("voice.clear")}
           type="button"
@@ -1307,7 +1307,7 @@ const BrainPanel = ({
       )}
       <button
         aria-label={isExpanded ? "Restore to drawer" : "Maximize to full screen"}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
         onClick={toggleMaximize}
         title={isExpanded ? "Restore to drawer" : "Maximize to full screen"}
         type="button"
@@ -1320,7 +1320,7 @@ const BrainPanel = ({
       </button>
       <button
         aria-label={t("common.close")}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
         onClick={closePanel}
         type="button"
       >
@@ -1363,15 +1363,15 @@ const BrainPanel = ({
           title={isExpanded ? "Click to restore or drag to resize" : "Click to maximize or drag to resize"}
           onMouseDown={handlePillMouseDown}
           onTouchStart={handlePillTouchStart}
-          className="group absolute -left-3 top-1/2 -translate-y-1/2 z-50 flex h-12 w-5 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:border-[#187CC5] hover:shadow-[0_4px_16px_rgba(24,124,197,0.2)] transition-all active:scale-95 select-none"
+          className="brain-pill-handle group absolute -left-3 top-1/2 -translate-y-1/2 z-50 flex h-12 w-5 cursor-col-resize items-center justify-center rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:border-[#187CC5] hover:shadow-[0_4px_16px_rgba(24,124,197,0.2)] transition-all active:scale-95 select-none"
         >
-          <div className="h-5 w-1 rounded-full bg-slate-300 group-hover:bg-[#187CC5] group-active:bg-[#187CC5] transition-colors" />
+          <div className="h-5 w-1 rounded-full bg-slate-300 dark:bg-slate-600 group-hover:bg-[#187CC5] group-active:bg-[#187CC5] transition-colors" />
         </div>
 
-        <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200 px-4 py-3 bg-white">
+        <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200 dark:border-slate-800 px-4 py-3 bg-white dark:bg-slate-950">
           <button
             onClick={closePanel}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-200 transition-colors"
             title="Back / Close"
             type="button"
           >
