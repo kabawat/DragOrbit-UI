@@ -180,31 +180,31 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       </div>
 
       <div className="w-full space-y-2">
-        <div className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2.5 transition-all">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-              <Sliders className="h-3.5 w-3.5" />
+        <div className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-3 shadow-xs transition-all">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+              <Sliders className="h-4 w-4" />
             </div>
-            <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
+            <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
               Loaded store intelligence & skills
             </span>
           </div>
-          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-2xs">
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xs">
             <Check className="h-3 w-3 stroke-[3]" />
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2.5 transition-all">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
-              <Sparkles className="h-3.5 w-3.5" />
+        <div className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-3 shadow-xs transition-all">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400">
+              <Sparkles className="h-4 w-4" />
             </div>
-            <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
+            <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
               {activeStatusText}
             </span>
           </div>
           <div className="flex h-5 w-5 shrink-0 items-center justify-center">
-            <span className="h-4 w-4 rounded-full border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent animate-spin" />
+            <span className="h-5 w-5 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
           </div>
         </div>
       </div>
@@ -450,21 +450,21 @@ function AssistantMessageBubble({
 
       {/* Executed Tool Steps (OpsAI style rows with green checkmarks) */}
       {Array.isArray(item.toolResults) && item.toolResults.length > 0 && (
-        <div className="w-full space-y-1.5 my-1">
+        <div className="w-full space-y-2 my-1.5">
           {item.toolResults.map((tool, index) => (
             <div
               key={`${tool?.tool || "tool"}-${index}`}
-              className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2 transition-all"
+              className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-2.5 shadow-xs transition-all"
             >
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-                  <Sliders className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+                  <Sliders className="h-4 w-4" />
                 </div>
-                <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
+                <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
                   {formatToolTitle(tool?.tool)}
                 </span>
               </div>
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-2xs">
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xs">
                 <Check className="h-3 w-3 stroke-[3]" />
               </div>
             </div>
@@ -937,7 +937,7 @@ const BrainPanel = ({
               <User className="h-3 w-3" />
               <span>{userName || "VIKRAM JANGID"}</span>
             </div>
-            <div className="max-w-[88%] rounded-2xl rounded-tr-xs bg-[#eef2ff] dark:bg-[#1e2338] border border-indigo-100/80 dark:border-indigo-900/40 px-4 py-2.5 text-[13.5px] leading-relaxed text-[rgb(var(--color-text-primary))] shadow-xs">
+            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-indigo-50/90 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed text-indigo-950 dark:text-indigo-100 shadow-xs">
               <span className="block whitespace-pre-wrap">{item.content}</span>
             </div>
           </div>
@@ -1153,10 +1153,10 @@ const BrainPanel = ({
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-[rgb(var(--color-bg-primary))] border-l border-[rgb(var(--color-border-primary))] shadow-[-16px_0_40px_rgba(0,0,0,0.12)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] ${
+        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-[rgb(var(--color-bg-primary))] border-l border-[rgb(var(--color-border-primary))] shadow-[-20px_0_50px_rgba(0,0,0,0.18)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] ${
           isExpanded
-            ? "w-full sm:w-[720px] md:w-[860px]"
-            : "w-full sm:w-[480px] md:w-[500px]"
+            ? "w-full sm:w-[85vw] md:w-[80vw] lg:w-[75vw] max-w-[1400px]"
+            : "w-full sm:w-[62vw] md:w-[56vw] lg:w-[50vw] xl:w-[48vw] min-w-[540px] max-w-[960px]"
         }`}
       >
         <header className="flex shrink-0 select-none items-center justify-between gap-3 border-b border-[rgb(var(--color-border-primary))] px-4 py-3 bg-[rgb(var(--color-bg-primary))]">

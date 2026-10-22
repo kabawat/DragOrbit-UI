@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowUpRight,
   ChevronDown,
   FileText,
   IndianRupee,
@@ -320,7 +321,7 @@ export function ChatWorkspace({
                       >
                         <Icon className="h-5 w-5" />
                       </span>
-                      <span className="min-w-0 pt-0.5">
+                      <span className="min-w-0 flex-1 pt-0.5">
                         <span className="block text-[14px] font-semibold text-[rgb(var(--color-text-primary))]">
                           {t(item.titleKey)}
                         </span>
@@ -328,6 +329,7 @@ export function ChatWorkspace({
                           {t(item.hintKey)}
                         </span>
                       </span>
+                      <ArrowUpRight className="h-4 w-4 shrink-0 text-[rgb(var(--color-text-secondary))] opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                     </button>
                   );
                 })}
