@@ -3,13 +3,17 @@
 import { IconButton } from "@dragorbit/ui";
 
 import {
+  ArrowLeft,
+  ArrowUp,
+  Check,
   Maximize2,
   Mic,
   MicOff,
   Minimize2,
   RotateCcw,
-  Send,
+  Sliders,
   Sparkles,
+  User,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -23,11 +27,9 @@ import ChatCustomerResultCard, {
 } from "./ChatCustomerResultCard.jsx";
 import ChatSlashMenu from "./ChatSlashMenu.jsx";
 import ChatWorkspace from "./ChatWorkspace.jsx";
-import styles from "./chat-panel.module.css";
 import DragBizzLogoIcon from "./DragBizzLogoIcon.jsx";
 import "./brain.css";
 import { titleFromUserText } from "./chatHistory.js";
-import useFloatingPanel from "./useFloatingPanel.js";
 import { useHotkeys } from "./useHotkeys.js";
 import { VOICE_CAPTURE_ERRORS } from "./useVoiceCapture.js";
 import { matchSlashCommands } from "./voiceSlashCommands.js";
@@ -47,6 +49,30 @@ function greetingForLocale(locale, name, t) {
   return `${t("voice.greet.evening")}${who}`;
 }
 
+function formatToolTitle(toolName) {
+  if (!toolName) return "Querying store database";
+  switch (toolName) {
+    case "today_sale":
+      return "Querying today's sales & revenue records";
+    case "search_product":
+      return "Searching product catalog";
+    case "stock_summary":
+      return "Checking inventory & stock levels";
+    case "customer_summary":
+    case "search_customer":
+      return "Fetching customer records & ledger";
+    case "supplier_summary":
+    case "search_supplier":
+      return "Searching supplier database & history";
+    case "create_invoice_draft":
+      return "Preparing draft invoice";
+    case "create_purchase_order":
+      return "Staging purchase order";
+    default:
+      return `Executing ${String(toolName).replace(/_/g, " ")}`;
+  }
+}
+
 function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
   const [elapsed, setElapsed] = useState(0);
 
@@ -54,7 +80,7 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
     setElapsed(0);
     const interval = setInterval(() => {
       setElapsed((prev) => prev + 1);
-    }, 1200);
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -68,11 +94,10 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       return {
         badge: "Sales & Revenue Intelligence",
         steps: [
-          "Analyzing sales query & time filters…",
-          "Fetching today's sales, revenue & bills…",
-          "Calculating profit margins & summarizing…",
+          "Analyzing sales query & time filters",
+          "Fetching sales, revenue & receipt records",
+          "Calculating profit margins & compiling report",
         ],
-        breads: ["Query Analysis", "Fetch Sales Data", "Format Summary"],
       };
     }
     if (
@@ -83,11 +108,10 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       return {
         badge: "Inventory & Stock Intelligence",
         steps: [
-          "Searching catalog & SKU matching…",
-          "Checking warehouse & shelf stock levels…",
-          "Compiling pricing, units & availability…",
+          "Searching catalog & SKU matching",
+          "Checking warehouse & shelf stock levels",
+          "Compiling pricing, units & availability",
         ],
-        breads: ["Search Catalog", "Check Stock", "Compile Details"],
       };
     }
     if (
@@ -96,43 +120,39 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       return {
         badge: "Khata & Customer Ledger",
         steps: [
-          "Locating customer ledger & accounts…",
-          "Calculating outstanding dues & credit balance…",
-          "Preparing statement & summary…",
+          "Locating customer ledger & accounts",
+          "Calculating outstanding dues & credit balance",
+          "Preparing statement & summary",
         ],
-        breads: ["Find Ledger", "Calculate Balance", "Prepare Summary"],
       };
     }
     if (/supplier|vendor|purchase|order|party/.test(text)) {
       return {
         badge: "Supplier & Purchase Orders",
         steps: [
-          "Accessing supplier database & purchase history…",
-          "Checking vendor invoices & due amounts…",
-          "Compiling supplier report…",
+          "Accessing supplier database & purchase history",
+          "Checking vendor invoices & due amounts",
+          "Compiling supplier report",
         ],
-        breads: ["Supplier Record", "Check Invoices", "Compile Report"],
       };
     }
     if (/invoice|bill|draft|create|add|banao|banani/.test(text)) {
       return {
         badge: "Smart Billing & Drafts",
         steps: [
-          "Parsing items, quantities & customer details…",
-          "Generating draft invoice & computing taxes…",
-          "Verifying totals & preparing review card…",
+          "Parsing items, quantities & customer details",
+          "Generating draft invoice & computing taxes",
+          "Verifying totals & preparing review card",
         ],
-        breads: ["Parse Details", "Draft Transaction", "Review Card"],
       };
     }
     return {
       badge: "Store Intelligence Agent",
       steps: [
-        "Analyzing your request & context…",
-        "Consulting store database & records…",
-        "Synthesizing response & insights…",
+        "Analyzing your request & context",
+        "Consulting store database & records",
+        "Synthesizing response & insights",
       ],
-      breads: ["Analyze Query", "Query Store Data", "Synthesize Answer"],
     };
   }, [lastUserMessage]);
 
@@ -142,100 +162,50 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
   if (isConfirming) {
     activeStatusText = "Executing approved action and updating store…";
   } else if (activeTool) {
-    switch (activeTool) {
-      case "today_sale":
-        activeStatusText = "Querying today's sales & revenue records…";
-        break;
-      case "search_product":
-        activeStatusText = "Searching product catalog for matching items…";
-        break;
-      case "stock_summary":
-        activeStatusText = "Checking current stock & warehouse inventory…";
-        break;
-      case "customer_summary":
-      case "search_customer":
-        activeStatusText = "Fetching customer records & khata ledger…";
-        break;
-      case "supplier_summary":
-      case "search_supplier":
-        activeStatusText = "Finding supplier details & purchase history…";
-        break;
-      case "create_invoice_draft":
-        activeStatusText = "Preparing invoice draft & item calculations…";
-        break;
-      default:
-        activeStatusText = `Executing: ${activeTool.replace(/_/g, " ")}…`;
-    }
+    activeStatusText = formatToolTitle(activeTool);
   }
 
   return (
-    <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] justify-start items-start gap-2.5 max-w-[94%] sm:max-w-[85%]">
-      {/* DragBizz Logo with Double Radar Pulse */}
-      <div className="relative shrink-0 mt-1 flex h-8 w-8 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/30 p-1.5 shadow-xs">
-        <DragBizzLogoIcon className="h-5 w-5 animate-pulse" />
-        <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[rgb(var(--color-primary))] opacity-75" />
-          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[rgb(var(--color-primary))] ring-2 ring-[rgb(var(--color-bg-secondary))]" />
+    <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-start gap-2.5 w-full my-2">
+      <div className="flex items-center gap-2 select-none">
+        <div className="relative flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 shadow-2xs">
+          <Sparkles className="h-3.5 w-3.5 animate-spin [animation-duration:3s]" />
+        </div>
+        <span className="text-[12px] font-bold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
+          DRAGBIZZ AI
+        </span>
+        <span className="text-[11px] font-medium text-[rgb(var(--color-text-secondary))] ml-0.5">
+          {elapsed}s
         </span>
       </div>
 
-      {/* Modern AI Activity Card */}
-      <div className="flex-1 overflow-hidden rounded-2xl rounded-tl-sm border border-[rgb(var(--color-primary))]/30 bg-gradient-to-b from-[rgb(var(--color-bg-secondary))] via-[rgb(var(--color-bg-secondary))] to-[rgb(var(--color-primary))]/8 p-3 shadow-sm">
-        {/* Top bar: Badge & active indicator */}
-        <div className="flex items-center justify-between gap-2 pb-2 border-b border-[rgb(var(--color-border-primary))]/40">
-          <div className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[rgb(var(--color-primary))]">
-            <Sparkles className="h-3.5 w-3.5 animate-spin [animation-duration:3s]" />
-            <span>{intent.badge}</span>
+      <div className="w-full space-y-2">
+        <div className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2.5 transition-all">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+              <Sliders className="h-3.5 w-3.5" />
+            </div>
+            <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
+              Loaded store intelligence & skills
+            </span>
           </div>
-          <span className="inline-flex items-center gap-1 text-[11px] font-medium text-[rgb(var(--color-text-secondary))]">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            Active
-          </span>
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-2xs">
+            <Check className="h-3 w-3 stroke-[3]" />
+          </div>
         </div>
 
-        {/* Current dynamic action */}
-        <div className="pt-2 pb-1.5">
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-[13px] font-medium text-[rgb(var(--color-text-primary))] leading-snug">
+        <div className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2.5 transition-all">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400">
+              <Sparkles className="h-3.5 w-3.5" />
+            </div>
+            <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
               {activeStatusText}
             </span>
-            <span className="inline-flex items-center gap-1 shrink-0">
-              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.3s]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce [animation-delay:-0.15s]" />
-              <span className="h-1.5 w-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-bounce" />
-            </span>
           </div>
-        </div>
-
-        {/* Dynamic step breadcrumb badges */}
-        <div className="flex flex-wrap items-center gap-1 pt-1">
-          {intent.breads.map((bread, idx) => {
-            const isDone = idx < stepIndex;
-            const isCurrent = idx === stepIndex;
-            return (
-              <div key={bread} className="flex items-center gap-1">
-                <span
-                  className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10.5px] font-medium transition-all duration-300 ${
-                    isDone
-                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold"
-                      : isCurrent
-                        ? "bg-[rgb(var(--color-primary))]/15 text-[rgb(var(--color-primary))] font-semibold ring-1 ring-[rgb(var(--color-primary))]/30"
-                        : "opacity-45 text-[rgb(var(--color-text-secondary))]"
-                  }`}
-                >
-                  {isDone ? "✓" : isCurrent ? "▶" : "○"} {bread}
-                </span>
-                {idx < intent.breads.length - 1 && (
-                  <span className="text-[10px] opacity-30 select-none">›</span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Shimmer progress line */}
-        <div className="relative mt-2.5 h-1 w-full overflow-hidden rounded-full bg-[rgb(var(--color-primary))]/10">
-          <div className="absolute inset-0 h-full w-2/5 rounded-full bg-gradient-to-r from-transparent via-[rgb(var(--color-primary))] to-transparent animate-[shimmer_1.6s_infinite]" />
+          <div className="flex h-5 w-5 shrink-0 items-center justify-center">
+            <span className="h-4 w-4 rounded-full border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent animate-spin" />
+          </div>
         </div>
       </div>
     </div>
@@ -452,7 +422,7 @@ function ExpenseConfirmCard({
 function AssistantMessageBubble({
   item,
   DownloadButtons,
-  showToolTrace,
+  showToolTrace: _showToolTrace,
   storeId,
   t,
   isSending,
@@ -467,40 +437,49 @@ function AssistantMessageBubble({
       : item.content;
 
   return (
-    <div className="flex animate-[chatFadeUp_0.3s_ease-out_both] justify-start items-start gap-2.5">
-      <div
-        className="shrink-0 mt-0.5 flex h-7 w-7 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 p-1 shadow-2xs"
-        title="DragBizz AI"
-      >
-        <DragBizzLogoIcon className="h-4 w-4" />
+    <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-start gap-2 w-full my-2">
+      {/* Brand Header */}
+      <div className="flex items-center gap-2 select-none">
+        <div className="relative flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 shadow-2xs">
+          <Sparkles className="h-3.5 w-3.5" />
+        </div>
+        <span className="text-[12px] font-bold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
+          DRAGBIZZ AI
+        </span>
       </div>
-      <div className="max-w-[88%] sm:max-w-[90%] rounded-2xl rounded-tl-sm border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3.5 py-3 shadow-2xs">
+
+      {/* Executed Tool Steps (OpsAI style rows with green checkmarks) */}
+      {Array.isArray(item.toolResults) && item.toolResults.length > 0 && (
+        <div className="w-full space-y-1.5 my-1">
+          {item.toolResults.map((tool, index) => (
+            <div
+              key={`${tool?.tool || "tool"}-${index}`}
+              className="flex items-center justify-between rounded-xl bg-slate-50/90 dark:bg-slate-900/50 border border-slate-200/70 dark:border-slate-800/70 px-3.5 py-2 transition-all"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
+                  <Sliders className="h-3.5 w-3.5" />
+                </div>
+                <span className="truncate text-[12.5px] font-medium text-[rgb(var(--color-text-primary))]">
+                  {formatToolTitle(tool?.tool)}
+                </span>
+              </div>
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-2xs">
+                <Check className="h-3 w-3 stroke-[3]" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Clean response layout */}
+      <div className="w-full text-[13.5px] leading-relaxed text-[rgb(var(--color-text-primary))]">
         <ChatAssistantMessage message={assistantText} />
         {item.streaming && (
-          <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-[rgb(var(--color-primary))] animate-pulse" />
+          <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-indigo-600 animate-pulse" />
         )}
         <ChatCustomerResultCard toolResults={item.toolResults} />
         <DownloadButtons storeId={storeId} toolResults={item.toolResults} />
-        {showToolTrace &&
-          Array.isArray(item.toolResults) &&
-          item.toolResults.length > 0 && (
-            <ul className="mt-2 space-y-1 border-t border-[rgb(var(--color-border-primary))]/50 pt-2">
-              {item.toolResults.map((tool, index) => (
-                <li
-                  className="text-[11px] leading-4 text-[rgb(var(--color-text-secondary))]"
-                  key={`${tool?.tool || "tool"}-${index}`}
-                >
-                  <span className="font-medium text-[rgb(var(--color-text-primary))]">
-                    {tool?.tool || t("voice.tool")}
-                  </span>
-                  {": "}
-                  {tool?.success
-                    ? t("voice.toolSuccess")
-                    : t("voice.toolFailed")}
-                </li>
-              ))}
-            </ul>
-          )}
         {item.pendingConfirmation &&
           (() => {
             const pending = item.pendingConfirmation;
@@ -606,13 +585,6 @@ const BrainPanel = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const {
-    style: panelStyle,
-    ready: panelReady,
-    interacting,
-    dragHandlers,
-    resizeHandles,
-  } = useFloatingPanel({ isOpen, isExpanded });
   const [draftText, setDraftText] = useState("");
   const [slashIndex, setSlashIndex] = useState(0);
   const [portalReady, setPortalReady] = useState(false);
@@ -958,13 +930,14 @@ const BrainPanel = ({
       {messages.map((item) =>
         item.role === "user" ? (
           <div
-            className="flex animate-[chatFadeUp_0.3s_ease-out_both] justify-end"
+            className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-end gap-1.5 my-2"
             key={item.id}
           >
-            <div
-              className="ai-chat-on-primary max-w-[85%] rounded-2xl rounded-br-md bg-[rgb(var(--color-primary))] px-3.5 py-2.5 text-[13px] leading-5"
-              style={{ color: "#fff" }}
-            >
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-[rgb(var(--color-text-secondary))] uppercase select-none">
+              <User className="h-3 w-3" />
+              <span>{userName || "VIKRAM JANGID"}</span>
+            </div>
+            <div className="max-w-[88%] rounded-2xl rounded-tr-xs bg-[#eef2ff] dark:bg-[#1e2338] border border-indigo-100/80 dark:border-indigo-900/40 px-4 py-2.5 text-[13.5px] leading-relaxed text-[rgb(var(--color-text-primary))] shadow-xs">
               <span className="block whitespace-pre-wrap">{item.content}</span>
             </div>
           </div>
@@ -1076,19 +1049,18 @@ const BrainPanel = ({
           ))}
         </div>
       )}
-      <div className="flex items-end gap-1.5 rounded-[22px] border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] p-1.5 transition-[border-color] focus-within:border-[rgb(var(--color-primary))]/55">
+      <div className="flex items-end gap-2 rounded-[26px] border border-slate-200/90 dark:border-slate-800 bg-[rgb(var(--color-bg-secondary))] px-3 py-1.5 shadow-xs transition-all focus-within:border-indigo-500/70 focus-within:ring-2 focus-within:ring-indigo-500/15">
         <button
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
           }
-          className={`mb-0.5 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]/40 disabled:cursor-not-allowed disabled:opacity-40 ${
+          className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
             isListening
-              ? "ai-chat-on-primary bg-[rgb(var(--color-danger))]"
-              : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))]"
+              ? "bg-rose-500 text-white animate-pulse"
+              : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] hover:text-[rgb(var(--color-text-primary))]"
           }`}
           disabled={!isSupported || isSending || isConfirming || !storeId}
           onClick={handleMicrophoneClick}
-          style={isListening ? { color: "#fff" } : undefined}
           type="button"
         >
           {isListening ? (
@@ -1100,24 +1072,23 @@ const BrainPanel = ({
         <textarea
           aria-autocomplete="list"
           aria-label={t("voice.message")}
-          className="max-h-28 min-h-9 w-full resize-none !border-0 bg-transparent px-1 py-2 text-[13px] leading-5 text-[rgb(var(--color-text-primary))] !shadow-none outline-none ring-0 placeholder:text-[rgb(var(--color-text-secondary))] focus:!border-0 focus:!shadow-none focus:outline-none focus:ring-0"
+          className="max-h-28 min-h-8 w-full resize-none !border-0 bg-transparent px-1 py-1.5 text-[13px] leading-5 text-[rgb(var(--color-text-primary))] !shadow-none outline-none ring-0 placeholder:text-[rgb(var(--color-text-secondary))] focus:!border-0 focus:!shadow-none focus:outline-none focus:ring-0"
           disabled={isSending || isConfirming || !storeId}
           onChange={(event) => setDraftText(event.target.value)}
           onKeyDown={handleDraftKeyDown}
-          placeholder={t("voice.messagePlaceholder")}
+          placeholder="Ask anything... (/ for commands)"
           ref={inputRef}
           rows={1}
           value={draftText}
         />
         <button
           aria-label={t("voice.send")}
-          className="ai-chat-on-primary mb-0.5 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[rgb(var(--color-primary))] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]/40 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
           disabled={!canSend}
           onClick={handleSend}
-          style={{ color: "#fff" }}
           type="button"
         >
-          <Send className="h-4 w-4" />
+          <ArrowUp className="h-4 w-4 stroke-[2.5]" />
         </button>
       </div>
       <p className="mt-1.5 px-1 text-center text-[10px] text-[rgb(var(--color-text-secondary))]">
@@ -1172,66 +1143,76 @@ const BrainPanel = ({
   );
 
   const chatPanel = (
-    <section
-      aria-label={t("voice.title")}
-      aria-modal="false"
-      role="dialog"
-      style={panelStyle}
-      data-interacting={interacting}
-      className={`${styles.panel} brain-panel no-print fixed z-[400] flex flex-col overflow-hidden rounded-2xl border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))]`}
-    >
-      <header
-        {...dragHandlers}
-        className={`flex shrink-0 touch-none select-none items-center justify-between gap-2 border-b border-[rgb(var(--color-border-primary))] px-3 py-3 ${isExpanded ? "" : "cursor-grab active:cursor-grabbing"}`}
+    <>
+      <div
+        className="fixed inset-0 z-[399] bg-black/20 backdrop-blur-[1px] transition-opacity duration-300 sm:bg-black/15"
+        onClick={closePanel}
+        aria-hidden="true"
+      />
+      <section
+        aria-label={t("voice.title")}
+        aria-modal="true"
+        role="dialog"
+        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-[rgb(var(--color-bg-primary))] border-l border-[rgb(var(--color-border-primary))] shadow-[-16px_0_40px_rgba(0,0,0,0.12)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] ${
+          isExpanded
+            ? "w-full sm:w-[720px] md:w-[860px]"
+            : "w-full sm:w-[480px] md:w-[500px]"
+        }`}
       >
-        <div className="flex min-w-0 items-center gap-2">
-          <AiLottieIcon size={22} className="h-5 w-5 shrink-0" />
-          <div className="min-w-0">
-            <h2 className="truncate text-sm font-semibold text-[rgb(var(--color-text-primary))]">
-              {t("voice.title")}
-            </h2>
-            <p className="truncate text-[11px] text-[rgb(var(--color-text-secondary))]">
-              {headerStatus}
-            </p>
+        <header className="flex shrink-0 select-none items-center justify-between gap-3 border-b border-[rgb(var(--color-border-primary))] px-4 py-3 bg-[rgb(var(--color-bg-primary))]">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <button
+              onClick={closePanel}
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] transition-colors"
+              title="Close"
+              type="button"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400">
+                  <Sparkles className="h-3 w-3" />
+                </div>
+                <span className="text-[13px] font-bold tracking-wide uppercase text-indigo-600 dark:text-indigo-400">
+                  DRAGBIZZ AI
+                </span>
+                <span className="flex items-center gap-1 text-[10.5px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200/50 dark:border-emerald-800/40">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  Active
+                </span>
+              </div>
+              <p className="truncate text-[11px] text-[rgb(var(--color-text-secondary))] pl-7">
+                {headerStatus}
+              </p>
+            </div>
           </div>
-        </div>
-        {headerActions}
-      </header>
-      <ChatWorkspace
-        activeSessionId={activeSessionId}
-        aiStatus={aiStatus}
-        composer={composer}
-        emptyHint={emptyHint}
-        greeting={greeting}
-        hasThread={hasThread}
-        historyError={historyError}
-        historyGrouped={grouped}
-        historyLoading={historyLoading}
-        historyHasMore={historyHasMore}
-        historyLoadingMore={historyLoadingMore}
-        onLoadMoreHistory={historyLoadMore}
-        onNewChat={handleNewChat}
-        onQuickPrompt={handleQuickPrompt}
-        onSelectSession={handleSelectSession}
-        storeGst={storeGst}
-        storeName={storeName}
-        t={t}
-      >
-        {messageList}
-      </ChatWorkspace>
-      {!isExpanded &&
-        resizeHandles.map(({ direction, handlers }) => (
-          <button
-            key={direction}
-            {...handlers}
-            type="button"
-            aria-label={`Resize chat ${direction}. Use arrow keys to adjust.`}
-            title="Drag to resize · Arrow keys to adjust"
-            data-direction={direction}
-            className={styles.resizeHandle}
-          />
-        ))}
-    </section>
+          {headerActions}
+        </header>
+        <ChatWorkspace
+          activeSessionId={activeSessionId}
+          aiStatus={aiStatus}
+          composer={composer}
+          emptyHint={emptyHint}
+          greeting={greeting}
+          hasThread={hasThread}
+          historyError={historyError}
+          historyGrouped={grouped}
+          historyLoading={historyLoading}
+          historyHasMore={historyHasMore}
+          historyLoadingMore={historyLoadingMore}
+          onLoadMoreHistory={historyLoadMore}
+          onNewChat={handleNewChat}
+          onQuickPrompt={handleQuickPrompt}
+          onSelectSession={handleSelectSession}
+          storeGst={storeGst}
+          storeName={storeName}
+          t={t}
+        >
+          {messageList}
+        </ChatWorkspace>
+      </section>
+    </>
   );
 
   return (
@@ -1271,10 +1252,7 @@ const BrainPanel = ({
           />
         );
       })()}
-      {portalReady &&
-        isOpen &&
-        panelReady &&
-        createPortal(chatPanel, document.body)}
+      {portalReady && isOpen && createPortal(chatPanel, document.body)}
     </AiChatPresentation>
   );
 };

@@ -228,10 +228,14 @@ export function ChatWorkspace({
                     {historyLoadingMore ? (
                       <>
                         <span className="h-3 w-3 animate-spin rounded-full border-2 border-[rgb(var(--color-primary))] border-t-transparent" />
-                        <span>{t("voice.history.loadingMore", "Loading...")}</span>
+                        <span>
+                          {t("voice.history.loadingMore", "Loading...")}
+                        </span>
                       </>
                     ) : (
-                      <span>{t("voice.history.loadMore", "Load older chats")}</span>
+                      <span>
+                        {t("voice.history.loadMore", "Load older chats")}
+                      </span>
                     )}
                   </button>
                 </div>
@@ -335,7 +339,7 @@ export function ChatWorkspace({
             </div>
           )}
         </div>
-        <div className="shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] px-4 py-3 pr-6">
+        <div className="shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] px-4 py-3.5">
           <div className="mx-auto w-full max-w-3xl">{composer}</div>
         </div>
       </section>

@@ -11,6 +11,18 @@
   }
 }
 
+@keyframes drawerSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0.85;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 @keyframes shimmer {
   0% {
     transform: translateX(-100%);
