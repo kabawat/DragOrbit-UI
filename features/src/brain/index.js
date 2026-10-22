@@ -19,7 +19,7 @@ export {
 export { ChatSlashMenu } from "./ChatSlashMenu.jsx";
 export { ChatWorkspace } from "./ChatWorkspace.jsx";
 export * from "./chatHistory.js";
-export { DragBizzLogoIcon } from "./DragBizzLogoIcon.jsx";
+export { DragBizzLogoIcon, DragAiIcon } from "./DragBizzLogoIcon.jsx";
 export {
   default as useFloatingPanel,
   fitPanel,
