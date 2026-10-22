@@ -1302,11 +1302,10 @@ const BrainPanel = ({
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] ${
-          isDragging
+        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] ${isDragging
             ? "transition-none select-none"
             : "transition-[width] duration-200 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)]"
-        }`}
+          }`}
         style={{
           width: isExpanded ? "100vw" : `${panelWidth}px`,
           maxWidth: "100vw",
