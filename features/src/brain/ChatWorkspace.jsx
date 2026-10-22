@@ -38,39 +38,36 @@ function HistoryGroup({
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="group/header mb-1 flex w-full cursor-pointer items-center justify-between rounded-xl px-2.5 py-1.5 text-left transition-colors hover:bg-[rgb(var(--color-bg-tertiary))]"
+        className="group/header mb-1 flex w-full cursor-pointer items-center justify-between rounded-xl px-2.5 py-1.5 text-left transition-colors hover:bg-slate-200/60"
         aria-expanded={isOpen}
       >
         <div className="flex items-center gap-2 min-w-0">
           <ChevronDown
-            className={`h-3.5 w-3.5 shrink-0 text-[rgb(var(--color-text-secondary))] transition-transform duration-200 ${
+            className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-200 ${
               isOpen ? "rotate-0" : "-rotate-90"
             }`}
           />
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[rgb(var(--color-text-secondary))] group-hover/header:text-[rgb(var(--color-text-primary))] transition-colors">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover/header:text-slate-800 transition-colors">
             {label}
           </span>
         </div>
-        <span className="rounded-full bg-[rgb(var(--color-text-primary)/0.06)] px-2 py-0.5 text-[10px] font-medium text-[rgb(var(--color-text-secondary))]">
+        <span className="rounded-full bg-slate-200/80 px-2 py-0.5 text-[10px] font-semibold text-slate-600">
           {items.length}
         </span>
       </button>
       {isOpen && (
-        <ul className="space-y-0.5 pl-1.5">
+        <ul className="space-y-0.5 pl-1">
           {items.map((session) => {
             const active = session.id === activeId;
             return (
               <li key={session.id}>
                 <button
-                  className={`group relative flex w-full cursor-pointer items-center rounded-xl px-2.5 py-2 text-left text-[13px] leading-5 transition-colors duration-150 ${
+                  className={`group relative flex w-full cursor-pointer items-center rounded-xl px-2.5 py-2 text-left text-[13px] leading-5 transition-all duration-150 ${
                     active
-                      ? "ai-chat-accent bg-[rgb(var(--color-primary))]/15 font-medium"
-                      : "text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-tertiary))]"
+                      ? "bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200/70 shadow-2xs"
+                      : "text-slate-700 hover:bg-slate-200/50 hover:text-slate-900"
                   }`}
                   onClick={() => onSelect(session)}
-                  style={
-                    active ? { color: "rgb(var(--color-primary))" } : undefined
-                  }
                   title={session.title}
                   type="button"
                 >
@@ -143,8 +140,7 @@ export function ChatWorkspace({
   centerComposer,
   aiStatus: _aiStatus,
   onQuickPrompt,
-  showHistory = false,
-  setShowHistory = () => {},
+  isExpanded = false,
 }) {
   const hasHistory =
     (historyGrouped?.today?.length || 0) > 0 ||
@@ -159,89 +155,69 @@ export function ChatWorkspace({
     (historyGrouped?.older?.length || 0);
 
   return (
-    <div className={styles.workspace}>
-      {/* Slide-over history when toggled */}
-      {showHistory && (
-        <div className="absolute inset-0 z-30 flex bg-black/20 backdrop-blur-[1px]">
-          <aside className="flex w-72 flex-col bg-white dark:bg-[#121626] border-r border-slate-200 dark:border-slate-800 shadow-xl h-full animate-[drawerSlideIn_0.2s_ease-out]">
-            <div className="flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Chat History
-              </span>
-              <button
-                type="button"
-                onClick={() => setShowHistory(false)}
-                className="text-xs text-slate-400 hover:text-slate-600 p-1 rounded-md"
-              >
-                Close
-              </button>
+    <div className="flex h-full w-full min-h-0 flex-1 overflow-hidden">
+      {/* Left History Sidebar (Visible when maximized) */}
+      {isExpanded && (
+        <aside className="flex w-72 shrink-0 flex-col border-r border-slate-200 bg-slate-50/70 h-full animate-[chatFadeUp_0.2s_ease-out]">
+          <div className="shrink-0 p-3.5 border-b border-slate-200">
+            <button
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2.5 text-[13px] font-semibold transition-all shadow-xs"
+              onClick={onNewChat}
+              type="button"
+            >
+              <Plus className="h-4 w-4" strokeWidth={2.5} />
+              <span>{t("voice.newChat")}</span>
+            </button>
+          </div>
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
+            <HistoryGroup
+              activeId={activeSessionId}
+              items={historyGrouped?.today}
+              label={t("voice.history.today")}
+              onSelect={onSelectSession}
+              defaultOpen={true}
+            />
+            <HistoryGroup
+              activeId={activeSessionId}
+              items={historyGrouped?.yesterday}
+              label={t("voice.history.yesterday")}
+              onSelect={onSelectSession}
+              defaultOpen={true}
+            />
+            <HistoryGroup
+              activeId={activeSessionId}
+              items={historyGrouped?.week}
+              label={t("voice.history.week")}
+              onSelect={onSelectSession}
+              defaultOpen={true}
+            />
+            <HistoryGroup
+              activeId={activeSessionId}
+              items={historyGrouped?.older}
+              label={t("voice.history.older")}
+              onSelect={onSelectSession}
+              defaultOpen={false}
+            />
+            {!hasHistory && !historyLoading && (
+              <div className="flex flex-col items-center justify-center py-10 px-3 text-center">
+                <MessageSquare className="h-6 w-6 text-slate-300 mb-2" />
+                <p className="text-[12px] font-medium text-slate-500">No chat history yet</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">Your conversations will show up here</p>
+              </div>
+            )}
+          </div>
+          {hasHistory && (
+            <div className="shrink-0 border-t border-slate-200 px-3.5 py-2.5 bg-white/70">
+              <p className="text-[11px] font-medium text-slate-500">
+                {totalSessions} {totalSessions === 1 ? "conversation" : "conversations"}
+              </p>
             </div>
-            <div className="p-3 border-b border-slate-200 dark:border-slate-800">
-              <button
-                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 text-[13px] font-semibold transition-all shadow-xs"
-                onClick={() => {
-                  onNewChat?.();
-                  setShowHistory(false);
-                }}
-                type="button"
-              >
-                <Plus className="h-4 w-4" strokeWidth={2.5} />
-                <span>{t("voice.newChat")}</span>
-              </button>
-            </div>
-            <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
-              <HistoryGroup
-                activeId={activeSessionId}
-                items={historyGrouped?.today}
-                label={t("voice.history.today")}
-                onSelect={(s) => {
-                  onSelectSession(s);
-                  setShowHistory(false);
-                }}
-                defaultOpen={true}
-              />
-              <HistoryGroup
-                activeId={activeSessionId}
-                items={historyGrouped?.yesterday}
-                label={t("voice.history.yesterday")}
-                onSelect={(s) => {
-                  onSelectSession(s);
-                  setShowHistory(false);
-                }}
-                defaultOpen={true}
-              />
-              <HistoryGroup
-                activeId={activeSessionId}
-                items={historyGrouped?.week}
-                label={t("voice.history.week")}
-                onSelect={(s) => {
-                  onSelectSession(s);
-                  setShowHistory(false);
-                }}
-                defaultOpen={true}
-              />
-              <HistoryGroup
-                activeId={activeSessionId}
-                items={historyGrouped?.older}
-                label={t("voice.history.older")}
-                onSelect={(s) => {
-                  onSelectSession(s);
-                  setShowHistory(false);
-                }}
-                defaultOpen={false}
-              />
-            </div>
-          </aside>
-          <div
-            className="flex-1"
-            onClick={() => setShowHistory(false)}
-            aria-hidden="true"
-          />
-        </div>
+          )}
+        </aside>
       )}
 
       {/* Main Content Area */}
-      <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
+      <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-white h-full">
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           {!hasThread ? (
             <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center pt-8 pb-10 text-center space-y-6">

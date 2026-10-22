@@ -180,12 +180,12 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       </div>
 
       <div className="w-full space-y-2">
-        <div className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-3 shadow-xs transition-all">
+        <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
               <Sliders className="h-4 w-4" />
             </div>
-            <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
+            <span className="truncate text-[13.5px] font-medium text-slate-800">
               Loaded store intelligence & skills
             </span>
           </div>
@@ -194,17 +194,17 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-3 shadow-xs transition-all">
+        <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
               <Sparkles className="h-4 w-4" />
             </div>
-            <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
+            <span className="truncate text-[13.5px] font-medium text-slate-800">
               {activeStatusText}
             </span>
           </div>
           <div className="flex h-5 w-5 shrink-0 items-center justify-center">
-            <span className="h-5 w-5 rounded-full border-2 border-indigo-500 border-t-transparent animate-spin" />
+            <span className="h-5 w-5 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
           </div>
         </div>
       </div>
@@ -376,11 +376,10 @@ function ExpenseConfirmCard({
               type="button"
               disabled={isConfirming || isSending}
               onClick={() => setStatus(opt.id)}
-              className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${
-                status === opt.id
-                  ? `${opt.activeBg} shadow-xs`
-                  : "text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))]"
-              }`}
+              className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-all cursor-pointer ${status === opt.id
+                ? `${opt.activeBg} shadow-xs`
+                : "text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))]"
+                }`}
             >
               {opt.label}
             </button>
@@ -454,13 +453,13 @@ function AssistantMessageBubble({
           {item.toolResults.map((tool, index) => (
             <div
               key={`${tool?.tool || "tool"}-${index}`}
-              className="flex items-center justify-between rounded-xl bg-white dark:bg-[#1a1f33] border border-slate-200/90 dark:border-slate-700/80 px-4 py-2.5 shadow-xs transition-all"
+              className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
                   <Sliders className="h-4 w-4" />
                 </div>
-                <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">
+                <span className="truncate text-[13.5px] font-medium text-slate-800">
                   {formatToolTitle(tool?.tool)}
                 </span>
               </div>
@@ -520,15 +519,15 @@ function AssistantMessageBubble({
                 : actionType === "create_purchase_order"
                   ? "Create purchase order"
                   : actionType === "ledger_credit" ||
-                      actionType === "payment" ||
-                      actionType === "record_customer_payment"
+                    actionType === "payment" ||
+                    actionType === "record_customer_payment"
                     ? t("voice.confirm.promptCredit") ||
-                      "Record customer payment"
+                    "Record customer payment"
                     : actionType === "ledger_debit" || actionType === "debit"
                       ? t("voice.confirm.promptDebit") ||
-                        "Record customer debit"
+                      "Record customer debit"
                       : t("voice.confirm.promptInvoice") ||
-                        t("voice.confirm.prompt"));
+                      t("voice.confirm.prompt"));
 
             return (
               <div className="mt-3 space-y-2 border-t border-[rgb(var(--color-border-primary))]/50 pt-3">
@@ -568,6 +567,11 @@ function AssistantMessageBubble({
 
 const NoDownloads = () => null;
 
+function getDefaultPanelWidth() {
+  if (typeof window === "undefined") return 820;
+  return Math.min(Math.max(window.innerWidth * 0.60, 560), 980);
+}
+
 const BrainPanel = ({
   t = (key) => key,
   locale = "en",
@@ -585,6 +589,10 @@ const BrainPanel = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [panelWidth, setPanelWidth] = useState(820);
+  const [isDragging, setIsDragging] = useState(false);
+  const panelRef = useRef(null);
+  const dragStartRef = useRef({ startX: 0, startWidth: 820, hasDragged: false });
   const [draftText, setDraftText] = useState("");
   const [slashIndex, setSlashIndex] = useState(0);
   const [portalReady, setPortalReady] = useState(false);
@@ -592,6 +600,12 @@ const BrainPanel = ({
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const sessionCreatedAtRef = useRef(Date.now());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPanelWidth(getDefaultPanelWidth());
+    }
+  }, []);
 
   const {
     isSupported,
@@ -717,7 +731,96 @@ const BrainPanel = ({
 
   const collapsePanel = useCallback(() => {
     setIsExpanded(false);
+    setPanelWidth(getDefaultPanelWidth());
   }, []);
+
+  const toggleMaximize = useCallback(() => {
+    setIsExpanded((prev) => {
+      const next = !prev;
+      if (!next) {
+        setPanelWidth(getDefaultPanelWidth());
+      }
+      return next;
+    });
+  }, []);
+
+  const handlePillMouseDown = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const startX = e.clientX;
+    const currentWidth = panelRef.current?.offsetWidth || panelWidth;
+    dragStartRef.current = { startX, startWidth: currentWidth, hasDragged: false };
+    setIsDragging(true);
+
+    const onMouseMove = (moveEvent) => {
+      const delta = dragStartRef.current.startX - moveEvent.clientX;
+      if (Math.abs(delta) > 4) {
+        dragStartRef.current.hasDragged = true;
+      }
+      const newWidth = Math.min(
+        Math.max(dragStartRef.current.startWidth + delta, 480),
+        window.innerWidth
+      );
+      setPanelWidth(newWidth);
+      if (newWidth > window.innerWidth * 0.78) {
+        setIsExpanded(true);
+      } else if (newWidth < window.innerWidth * 0.7) {
+        setIsExpanded(false);
+      }
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+      setIsDragging(false);
+      if (!dragStartRef.current.hasDragged) {
+        toggleMaximize();
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+  }, [panelWidth, toggleMaximize]);
+
+  const handlePillTouchStart = useCallback((e) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    const startX = touch.clientX;
+    const currentWidth = panelRef.current?.offsetWidth || panelWidth;
+    dragStartRef.current = { startX, startWidth: currentWidth, hasDragged: false };
+    setIsDragging(true);
+
+    const onTouchMove = (moveEvent) => {
+      const moveTouch = moveEvent.touches[0];
+      if (!moveTouch) return;
+      const delta = dragStartRef.current.startX - moveTouch.clientX;
+      if (Math.abs(delta) > 4) {
+        dragStartRef.current.hasDragged = true;
+      }
+      const newWidth = Math.min(
+        Math.max(dragStartRef.current.startWidth + delta, 480),
+        window.innerWidth
+      );
+      setPanelWidth(newWidth);
+      if (newWidth > window.innerWidth * 0.78) {
+        setIsExpanded(true);
+      } else if (newWidth < window.innerWidth * 0.7) {
+        setIsExpanded(false);
+      }
+    };
+
+    const onTouchEnd = () => {
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+      setIsDragging(false);
+      if (!dragStartRef.current.hasDragged) {
+        toggleMaximize();
+      }
+    };
+
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd);
+  }, [panelWidth, toggleMaximize]);
 
   const togglePanel = useCallback(() => {
     setIsOpen((current) => {
@@ -937,8 +1040,8 @@ const BrainPanel = ({
               <User className="h-3 w-3" />
               <span>{userName || "VIKRAM JANGID"}</span>
             </div>
-            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-[#181e34] dark:bg-[#1e2746] text-white border border-slate-700/60 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-xs">
-              <span className="block whitespace-pre-wrap text-white">{item.content}</span>
+            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-indigo-50/90 border border-indigo-200/90 text-indigo-950 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
+              <span className="block whitespace-pre-wrap text-indigo-950">{item.content}</span>
             </div>
           </div>
         ) : (
@@ -1054,11 +1157,10 @@ const BrainPanel = ({
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
           }
-          className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
-            isListening
-              ? "bg-rose-500 text-white animate-pulse"
-              : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-          }`}
+          className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${isListening
+            ? "bg-rose-500 text-white animate-pulse"
+            : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            }`}
           disabled={!isSupported || isSending || isConfirming || !storeId}
           onClick={handleMicrophoneClick}
           type="button"
@@ -1120,11 +1222,10 @@ const BrainPanel = ({
             aria-label={
               isListening ? t("voice.stopListening") : t("voice.startListening")
             }
-            className={`flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
-              isListening
-                ? "bg-rose-500 text-white animate-pulse"
-                : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-            }`}
+            className={`flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${isListening
+              ? "bg-rose-500 text-white animate-pulse"
+              : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              }`}
             disabled={!isSupported || isSending || isConfirming || !storeId}
             onClick={handleMicrophoneClick}
             type="button"
@@ -1154,7 +1255,7 @@ const BrainPanel = ({
       {hasThread && (
         <button
           aria-label={t("voice.clear")}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
           onClick={handleNewChat}
           title={t("voice.clear")}
           type="button"
@@ -1163,8 +1264,21 @@ const BrainPanel = ({
         </button>
       )}
       <button
+        aria-label={isExpanded ? "Restore to drawer" : "Maximize to full screen"}
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+        onClick={toggleMaximize}
+        title={isExpanded ? "Restore to drawer" : "Maximize to full screen"}
+        type="button"
+      >
+        {isExpanded ? (
+          <Minimize2 className="h-4 w-4" />
+        ) : (
+          <Maximize2 className="h-4 w-4" />
+        )}
+      </button>
+      <button
         aria-label={t("common.close")}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
         onClick={closePanel}
         type="button"
       >
@@ -1176,20 +1290,50 @@ const BrainPanel = ({
   const chatPanel = (
     <>
       <div
-        className="fixed inset-0 z-[399] bg-black/[0.03] transition-opacity duration-300"
+        className="fixed inset-0 z-[399] bg-black/[0.04] transition-opacity duration-300"
         onClick={closePanel}
         aria-hidden="true"
       />
+      {isDragging && (
+        <div className="fixed inset-0 z-[500] cursor-col-resize select-none" />
+      )}
       <section
+        ref={panelRef}
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className="brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] w-full sm:w-[72vw] md:w-[65vw] lg:w-[60vw] xl:w-[58vw] min-w-[540px] max-w-[1040px]"
+        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] ${
+          isDragging
+            ? "transition-none select-none"
+            : "transition-[width] duration-200 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)]"
+        }`}
+        style={{
+          width: isExpanded ? "100vw" : `${panelWidth}px`,
+          maxWidth: "100vw",
+          minWidth: isExpanded ? "100vw" : "480px",
+        }}
       >
+        {/* Left Border Draggable Pill Handle */}
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Drag to resize panel or click to maximize"
+          title={isExpanded ? "Click to restore or drag to resize" : "Click to maximize or drag to resize"}
+          onMouseDown={handlePillMouseDown}
+          onTouchStart={handlePillTouchStart}
+          className="group absolute -left-3.5 top-1/2 -translate-y-1/2 z-50 flex h-14 w-7 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] hover:border-indigo-500 hover:shadow-[0_6px_20px_rgba(99,102,241,0.25)] transition-all active:scale-95 select-none"
+        >
+          <div className="flex flex-col items-center justify-center gap-1">
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
+          </div>
+        </div>
+
         <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200 px-4 py-3 bg-white">
           <button
             onClick={closePanel}
-            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors"
             title="Back / Close"
             type="button"
           >
@@ -1198,6 +1342,7 @@ const BrainPanel = ({
           {headerActions}
         </header>
         <ChatWorkspace
+          isExpanded={isExpanded}
           activeSessionId={activeSessionId}
           aiStatus={aiStatus}
           centerComposer={centerComposer}
