@@ -132,7 +132,7 @@ export function DragAiAvatar({ isThinking = false, size = "md" }) {
       <DragBizzLogoIcon
         color="white"
         className={`${isSm ? "h-3.5 w-3.5" : "h-4 w-4"} drop-shadow-xs ${
-          isThinking ? "animate-spin [animation-duration:2.5s]" : ""
+          isThinking ? "animate-pulse" : ""
         }`}
       />
     </div>

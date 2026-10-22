@@ -46,6 +46,56 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
+.brain-panel aside {
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+}
+
+.brain-panel section {
+  background-color: #ffffff;
+}
+
+.brain-panel .brain-pill-handle {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.brain-panel .brain-docked-composer-wrap {
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+}
+
+.brain-panel .brain-docked-composer-box {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.brain-panel .brain-composer-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.brain-panel .brain-prompt-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.brain-panel .brain-user-bubble {
+  background-color: #eaf4fb;
+  border-color: rgba(24, 124, 197, 0.25);
+  color: #1e293b;
+}
+
+.brain-panel .brain-user-bubble span {
+  color: #1e293b;
+}
+
+.brain-panel .brain-tool-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+  color: #1e293b;
+}
+
 .brain-panel .ai-chat-on-primary,
 .brain-panel .ai-chat-on-primary * {
   color: #fff !important;
