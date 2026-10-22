@@ -590,6 +590,7 @@ const BrainPanel = ({
   const [slashIndex, setSlashIndex] = useState(0);
   const [portalReady, setPortalReady] = useState(false);
   const [activeSessionId, setActiveSessionId] = useState(null);
+  const [hasAnimatedIn, setHasAnimatedIn] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const sessionCreatedAtRef = useRef(Date.now());
@@ -599,6 +600,17 @@ const BrainPanel = ({
       setPanelWidth(getDefaultPanelWidth());
     }
   }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setHasAnimatedIn(false);
+      const timer = setTimeout(() => {
+        setHasAnimatedIn(true);
+      }, 350);
+      return () => clearTimeout(timer);
+    }
+    setHasAnimatedIn(false);
+  }, [isOpen]);
 
   const {
     isSupported,
@@ -748,19 +760,17 @@ const BrainPanel = ({
 
     const onMouseMove = (moveEvent) => {
       const delta = dragStartRef.current.startX - moveEvent.clientX;
-      if (Math.abs(delta) > 4) {
+      if (Math.abs(delta) > 3) {
         dragStartRef.current.hasDragged = true;
+        if (isExpanded) {
+          setIsExpanded(false);
+        }
       }
       const newWidth = Math.min(
-        Math.max(dragStartRef.current.startWidth + delta, 480),
+        Math.max(dragStartRef.current.startWidth + delta, 420),
         window.innerWidth
       );
       setPanelWidth(newWidth);
-      if (newWidth > window.innerWidth * 0.78) {
-        setIsExpanded(true);
-      } else if (newWidth < window.innerWidth * 0.7) {
-        setIsExpanded(false);
-      }
     };
 
     const onMouseUp = () => {
@@ -774,7 +784,7 @@ const BrainPanel = ({
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onMouseUp);
-  }, [panelWidth, toggleMaximize]);
+  }, [panelWidth, isExpanded, toggleMaximize]);
 
   const handlePillTouchStart = useCallback((e) => {
     const touch = e.touches[0];
@@ -788,19 +798,17 @@ const BrainPanel = ({
       const moveTouch = moveEvent.touches[0];
       if (!moveTouch) return;
       const delta = dragStartRef.current.startX - moveTouch.clientX;
-      if (Math.abs(delta) > 4) {
+      if (Math.abs(delta) > 3) {
         dragStartRef.current.hasDragged = true;
+        if (isExpanded) {
+          setIsExpanded(false);
+        }
       }
       const newWidth = Math.min(
-        Math.max(dragStartRef.current.startWidth + delta, 480),
+        Math.max(dragStartRef.current.startWidth + delta, 420),
         window.innerWidth
       );
       setPanelWidth(newWidth);
-      if (newWidth > window.innerWidth * 0.78) {
-        setIsExpanded(true);
-      } else if (newWidth < window.innerWidth * 0.7) {
-        setIsExpanded(false);
-      }
     };
 
     const onTouchEnd = () => {
@@ -814,7 +822,7 @@ const BrainPanel = ({
 
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("touchend", onTouchEnd);
-  }, [panelWidth, toggleMaximize]);
+  }, [panelWidth, isExpanded, toggleMaximize]);
 
   const togglePanel = useCallback(() => {
     setIsOpen((current) => {
@@ -1139,12 +1147,12 @@ const BrainPanel = ({
           ))}
         </div>
       )}
-      <div className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-1.5 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-2 focus-within:ring-[#187CC5]/20">
+      <div className="flex items-end gap-2 rounded-2xl border border-slate-200/90 bg-white px-3.5 py-2 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
         <button
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
           }
-          className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${isListening
+          className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-all ${isListening
             ? "bg-rose-500 text-white animate-pulse"
             : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
             }`}
@@ -1161,7 +1169,8 @@ const BrainPanel = ({
         <textarea
           aria-autocomplete="list"
           aria-label={t("voice.message")}
-          className="max-h-28 min-h-8 w-full resize-none !border-0 bg-transparent px-1 py-1.5 text-[13.5px] leading-5 text-slate-800 !shadow-none outline-none ring-0 placeholder:text-slate-400 focus:!border-0 focus:!shadow-none focus:outline-none focus:ring-0"
+          className="max-h-28 min-h-8 w-full resize-none !border-none !outline-none !shadow-none bg-transparent px-1 py-1.5 text-[13.5px] leading-5 text-slate-800 placeholder:text-slate-400 focus:!border-none focus:!outline-none focus:!ring-0"
+          style={{ outline: "none", border: "none", boxShadow: "none" }}
           disabled={isSending || isConfirming || !storeId}
           onChange={(event) => setDraftText(event.target.value)}
           onKeyDown={handleDraftKeyDown}
@@ -1187,11 +1196,12 @@ const BrainPanel = ({
   );
 
   const centerComposer = (
-    <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-2 focus-within:ring-[#187CC5]/20">
+    <div className="w-full rounded-2xl border border-slate-200/90 bg-white p-4 shadow-sm transition-all focus-within:border-[#187CC5] focus-within:ring-4 focus-within:ring-[#187CC5]/10">
       <textarea
         aria-autocomplete="list"
         aria-label={t("voice.message")}
-        className="w-full resize-none border-0 bg-transparent px-1 py-1 text-[13.5px] leading-relaxed text-slate-800 placeholder:text-slate-400 focus:outline-none min-h-[64px]"
+        className="w-full resize-none !border-none !outline-none !shadow-none bg-transparent p-1 text-[14px] leading-relaxed text-slate-800 placeholder:text-slate-400 focus:!border-none focus:!outline-none focus:!ring-0 min-h-[64px]"
+        style={{ outline: "none", border: "none", boxShadow: "none" }}
         disabled={isSending || isConfirming || !storeId}
         onChange={(event) => setDraftText(event.target.value)}
         onKeyDown={handleDraftKeyDown}
@@ -1200,7 +1210,7 @@ const BrainPanel = ({
         value={draftText}
       />
       <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5">
-        <div className="flex items-center gap-1.5 text-[11.5px] text-slate-400">
+        <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-400 select-none">
           <Sliders className="h-3.5 w-3.5 text-slate-400" />
           <span>Type / for quick actions</span>
         </div>
@@ -1209,7 +1219,7 @@ const BrainPanel = ({
             aria-label={
               isListening ? t("voice.stopListening") : t("voice.startListening")
             }
-            className={`flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${isListening
+            className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-all ${isListening
               ? "bg-rose-500 text-white animate-pulse"
               : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"
               }`}
@@ -1218,19 +1228,19 @@ const BrainPanel = ({
             type="button"
           >
             {isListening ? (
-              <MicOff className="h-3.5 w-3.5" />
+              <MicOff className="h-4 w-4" />
             ) : (
-              <Mic className="h-3.5 w-3.5" />
+              <Mic className="h-4 w-4" />
             )}
           </button>
           <button
             aria-label={t("voice.send")}
-            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-[#187CC5] hover:text-white transition-all disabled:opacity-40"
+            className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#187CC5] text-white hover:bg-[#13649f] transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:scale-100 shadow-xs"
             disabled={!canSend}
             onClick={handleSend}
             type="button"
           >
-            <ArrowUp className="h-3.5 w-3.5 stroke-[2.5]" />
+            <ArrowUp className="h-4 w-4 stroke-[2.5]" />
           </button>
         </div>
       </div>
@@ -1289,10 +1299,11 @@ const BrainPanel = ({
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] ${isDragging
+        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] ${
+          isDragging
             ? "transition-none select-none"
-            : "transition-[width] duration-200 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)]"
-          }`}
+            : `transition-[width] duration-200 ease-out ${!hasAnimatedIn ? "animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)]" : ""}`
+        }`}
         style={{
           width: isExpanded ? "100vw" : `${panelWidth}px`,
           maxWidth: "100vw",
@@ -1307,13 +1318,9 @@ const BrainPanel = ({
           title={isExpanded ? "Click to restore or drag to resize" : "Click to maximize or drag to resize"}
           onMouseDown={handlePillMouseDown}
           onTouchStart={handlePillTouchStart}
-          className="group absolute -left-3.5 top-1/2 -translate-y-1/2 z-50 flex h-14 w-7 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] hover:border-[#187CC5] hover:shadow-[0_6px_20px_rgba(24,124,197,0.3)] transition-all active:scale-95 select-none"
+          className="group absolute -left-3 top-1/2 -translate-y-1/2 z-50 flex h-12 w-5 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.08)] hover:border-[#187CC5] hover:shadow-[0_4px_16px_rgba(24,124,197,0.2)] transition-all active:scale-95 select-none"
         >
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
-          </div>
+          <div className="h-5 w-1 rounded-full bg-slate-300 group-hover:bg-[#187CC5] group-active:bg-[#187CC5] transition-colors" />
         </div>
 
         <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200 px-4 py-3 bg-white">

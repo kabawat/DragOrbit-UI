@@ -53,6 +53,16 @@
   color: #187CC5 !important;
 }
 
+.brain-panel textarea,
+.brain-panel textarea:focus,
+.brain-panel textarea:focus-visible,
+.brain-panel textarea:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  -webkit-appearance: none !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .brain-panel [class*="animate-"] {
     animation: none !important;
