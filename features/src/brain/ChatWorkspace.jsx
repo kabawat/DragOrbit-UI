@@ -241,21 +241,21 @@ export function ChatWorkspace({
       )}
 
       {/* Main Content Area */}
-      <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-white dark:bg-[#0f1422]">
+      <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           {!hasThread ? (
             <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center pt-8 pb-10 text-center space-y-6">
               {/* Centered Sparkle Icon (Screenshot 2 style) */}
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/60 shadow-xs">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-xs">
                 <Sparkles className="h-6 w-6 stroke-[2.2]" />
               </div>
 
               {/* Heading & Subtitle */}
               <div className="space-y-1.5">
-                <h3 className="text-[20px] font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                <h3 className="text-[20px] font-bold tracking-tight text-slate-900">
                   Hi, {userName || "Vikram Jangid"} 👋 How can OpsAI help you?
                 </h3>
-                <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                <p className="text-[13px] leading-relaxed text-slate-500 max-w-md mx-auto">
                   Ready to help you with anything from finding a bug to solving issues. Let&apos;s get started!
                 </p>
               </div>
@@ -271,7 +271,7 @@ export function ChatWorkspace({
                 <button
                   type="button"
                   onClick={() => onQuickPrompt?.("Show today's sales and profit")}
-                  className="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline font-medium cursor-pointer"
+                  className="flex items-center gap-1 text-indigo-600 hover:underline font-medium cursor-pointer"
                 >
                   <span>Browse all prompts</span>
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -283,18 +283,18 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Show today's sales and profit")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-rose-500">
                       <FileText className="h-4 w-4" />
-                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                      <span className="text-[13px] font-semibold text-slate-800">
                         Investigate logs
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                  <span className="text-[11.5px] text-slate-500 leading-snug">
                     Identify error logs impacting service performance
                   </span>
                 </button>
@@ -302,18 +302,18 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Check low stock and inventory alerts")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-purple-500">
                       <Package className="h-4 w-4" />
-                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                      <span className="text-[13px] font-semibold text-slate-800">
                         Find slow endpoint
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                  <span className="text-[11.5px] text-slate-500 leading-snug">
                     Show me list of endpoints which has high latency
                   </span>
                 </button>
@@ -321,18 +321,18 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Show customer dues and credit ledger")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-blue-500">
                       <Users className="h-4 w-4" />
-                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                      <span className="text-[13px] font-semibold text-slate-800">
                         Build a dashboard
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                  <span className="text-[11.5px] text-slate-500 leading-snug">
                     Create dashboard for key Kubernetes metrics
                   </span>
                 </button>
@@ -340,18 +340,18 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Draft a sales invoice or bill")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-cyan-500">
                       <Sparkles className="h-4 w-4" />
-                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                      <span className="text-[13px] font-semibold text-slate-800">
                         Create an alert
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
-                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                  <span className="text-[11.5px] text-slate-500 leading-snug">
                     Create alert to monitor Kubernetes cluster health
                   </span>
                 </button>
@@ -366,7 +366,7 @@ export function ChatWorkspace({
 
         {/* Docked bottom composer only when conversation is active */}
         {hasThread && (
-          <div className="shrink-0 border-t border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0f1422] px-4 py-3">
+          <div className="shrink-0 border-t border-slate-200 bg-white px-4 py-3">
             <div className="mx-auto w-full max-w-2xl">{composer}</div>
           </div>
         )}

@@ -33,6 +33,16 @@
   }
 }
 
+.brain-panel {
+  background-color: #ffffff !important;
+  color: #1e293b !important;
+}
+
+.brain-panel header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
 .brain-panel .ai-chat-on-primary,
 .brain-panel .ai-chat-on-primary * {
   color: #fff !important;

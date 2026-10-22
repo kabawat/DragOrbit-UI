@@ -1184,9 +1184,9 @@ const BrainPanel = ({
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className="brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white dark:bg-[#0f1422] border-l border-slate-200/90 dark:border-slate-800 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] w-full sm:w-[72vw] md:w-[65vw] lg:w-[60vw] xl:w-[58vw] min-w-[540px] max-w-[1040px]"
+        className="brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white border-l border-slate-200 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] w-full sm:w-[72vw] md:w-[65vw] lg:w-[60vw] xl:w-[58vw] min-w-[540px] max-w-[1040px]"
       >
-        <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200/90 dark:border-slate-800 px-4 py-3 bg-white dark:bg-[#0f1422]">
+        <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200 px-4 py-3 bg-white">
           <button
             onClick={closePanel}
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
