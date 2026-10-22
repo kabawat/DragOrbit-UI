@@ -49,31 +49,76 @@ function greetingForLocale(locale, name, t) {
   return `${t("voice.greet.evening")}${who}`;
 }
 
+const TOOL_TITLE_MAP = {
+  // Sales & Invoices
+  today_sale: "Fetching today's sales & revenue records…",
+  sales_summary: "Fetching sales summary & performance…",
+  list_invoices: "Fetching sales & invoice records…",
+  get_invoice_detail: "Fetching invoice details…",
+  sales_pareto: "Calculating sales Pareto & profit analysis…",
+  dead_stock: "Analyzing slow-moving & dead stock…",
+  sales_order_summary: "Fetching sales orders summary…",
+  list_sales_orders: "Fetching sales order records…",
+  get_sales_order_detail: "Fetching sales order details…",
+  create_invoice_draft: "Preparing invoice draft…",
+  release_invoice: "Finalizing and releasing invoice…",
+
+  // Inventory & Stock
+  stock_summary: "Checking current stock & inventory levels…",
+  search_product: "Searching product catalog…",
+  list_products: "Fetching product details & catalog…",
+  get_product_detail: "Fetching product details…",
+  low_stock_alerts: "Checking low stock alerts…",
+  stock_movement: "Checking stock movement history…",
+  category_list: "Fetching product categories…",
+  add_stock: "Preparing stock update…",
+  create_product: "Preparing product details…",
+  update_product: "Updating product details…",
+
+  // Customers & Khata
+  customer_summary: "Fetching customer accounts & dues…",
+  search_customer: "Searching customer directory…",
+  list_customer_accounts: "Fetching customer account details…",
+  get_customer_ledger: "Preparing customer ledger & statement…",
+  customer_dossier: "Compiling customer profile & history…",
+  overdue_customers: "Checking overdue customer balances…",
+  payment_reminders: "Checking payment reminders…",
+  customer_stats: "Analyzing customer statistics…",
+  create_customer: "Preparing customer details…",
+  ledger_debit: "Preparing customer debit entry…",
+  ledger_credit: "Preparing customer payment credit…",
+
+  // Suppliers & Procurement
+  supplier_summary: "Checking supplier and purchase records…",
+  search_supplier: "Searching supplier directory…",
+  list_suppliers: "Fetching supplier list…",
+  get_supplier_detail: "Fetching supplier details…",
+  purchase_order_summary: "Checking purchase order summary…",
+  list_purchase_orders: "Fetching purchase order records…",
+  get_purchase_order_detail: "Fetching purchase order details…",
+  supplier_bills: "Checking supplier bills & dues…",
+  create_supplier: "Preparing supplier details…",
+  create_purchase_order: "Preparing purchase order…",
+
+  // Expenses & Finance
+  expense_summary: "Fetching expense records…",
+  list_expenses: "Fetching expense records…",
+  cashbook_summary: "Checking cashbook & cashflow records…",
+  gst_summary: "Calculating GST & tax summary…",
+  create_expense: "Preparing expense details…",
+  update_expense: "Updating expense details…",
+
+  // General & Analytics
+  store_brief: "Fetching store overview & performance…",
+  detailed_analytics: "Compiling store analytics & metrics…",
+  list_staff: "Fetching staff directory…",
+  export_report: "Preparing report export…",
+};
+
 function formatToolTitle(toolName) {
-  if (!toolName) return "Querying store database";
-  switch (toolName) {
-    case "today_sale":
-      return "Querying today's sales & revenue records";
-    case "search_product":
-      return "Searching product catalog";
-    case "stock_summary":
-      return "Checking inventory & stock levels";
-    case "customer_summary":
-    case "search_customer":
-    case "list_customer_accounts":
-    case "get_customer_ledger":
-    case "customer_dossier":
-      return "Fetching customer records & dues ledger";
-    case "supplier_summary":
-    case "search_supplier":
-      return "Searching supplier database & history";
-    case "create_invoice_draft":
-      return "Preparing draft invoice";
-    case "create_purchase_order":
-      return "Staging purchase order";
-    default:
-      return `Executing ${String(toolName).replace(/_/g, " ")}`;
-  }
+  if (!toolName) return "Querying store database…";
+  if (TOOL_TITLE_MAP[toolName]) return TOOL_TITLE_MAP[toolName];
+  return `Processing ${String(toolName).replace(/_/g, " ")}…`;
 }
 
 export function DragAiAvatar({ isThinking = false, size = "md" }) {
@@ -99,7 +144,7 @@ export function DragAiAvatar({ isThinking = false, size = "md" }) {
   );
 }
 
-function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
+function AgentActivityCard({ activeTool, progress, isConfirming }) {
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -110,85 +155,21 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
     return () => clearInterval(interval);
   }, []);
 
-  const intent = useMemo(() => {
-    const text = String(lastUserMessage || "").toLowerCase();
-    if (
-      /sale|profit|revenue|dhandha|kamai|bikri|turnover|earning|income|total/.test(
-        text
-      )
-    ) {
-      return {
-        badge: "Sales & Revenue Intelligence",
-        steps: [
-          "Analyzing sales query & time filters",
-          "Fetching sales, revenue & receipt records",
-          "Calculating profit margins & compiling report",
-        ],
-      };
-    }
-    if (
-      /stock|inventory|product|item|maal|godown|quantity|qty|price|rate|amul|cheese/.test(
-        text
-      )
-    ) {
-      return {
-        badge: "Inventory & Stock Intelligence",
-        steps: [
-          "Searching catalog & SKU matching",
-          "Checking warehouse & shelf stock levels",
-          "Compiling pricing, units & availability",
-        ],
-      };
-    }
-    if (
-      /customer|khata|credit|udhar|due|balance|ledger|grahak|payment/.test(text)
-    ) {
-      return {
-        badge: "Khata & Customer Ledger",
-        steps: [
-          "Locating customer ledger & accounts",
-          "Calculating outstanding dues & credit balance",
-          "Preparing statement & summary",
-        ],
-      };
-    }
-    if (/supplier|vendor|purchase|order|party/.test(text)) {
-      return {
-        badge: "Supplier & Purchase Orders",
-        steps: [
-          "Accessing supplier database & purchase history",
-          "Checking vendor invoices & due amounts",
-          "Compiling supplier report",
-        ],
-      };
-    }
-    if (/invoice|bill|draft|create|add|banao|banani/.test(text)) {
-      return {
-        badge: "Smart Billing & Drafts",
-        steps: [
-          "Parsing items, quantities & customer details",
-          "Generating draft invoice & computing taxes",
-          "Verifying totals & preparing review card",
-        ],
-      };
-    }
-    return {
-      badge: "Store Intelligence Agent",
-      steps: [
-        "Analyzing your request & context",
-        "Consulting store database & records",
-        "Synthesizing response & insights",
-      ],
-    };
-  }, [lastUserMessage]);
+  let statusText = "Thinking…";
+  let isDataOp = false;
 
-  const stepIndex = activeTool ? 1 : Math.min(elapsed, 2);
-
-  let activeStatusText = intent.steps[stepIndex] || intent.steps[0];
   if (isConfirming) {
-    activeStatusText = "Executing approved action and updating store…";
+    statusText = "Executing approved action and updating store…";
+    isDataOp = true;
+  } else if (progress?.label) {
+    statusText = progress.label;
+    isDataOp = progress.stage === "tool_executing";
   } else if (activeTool) {
-    activeStatusText = formatToolTitle(activeTool);
+    statusText = formatToolTitle(activeTool);
+    isDataOp = true;
+  } else if (elapsed >= 1) {
+    statusText = "Understanding your request…";
+    isDataOp = false;
   }
 
   return (
@@ -203,28 +184,18 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
         </span>
       </div>
 
-      <div className="w-full space-y-2">
+      <div className="w-full">
         <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
-              <Sliders className="h-4 w-4" />
+              {isDataOp ? (
+                <Sliders className="h-4 w-4" />
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
             </div>
             <span className="truncate text-[13.5px] font-medium text-slate-800">
-              Loaded store intelligence & skills
-            </span>
-          </div>
-          <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xs">
-            <Check className="h-3 w-3 stroke-[3]" />
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
-              <Sparkles className="h-4 w-4" />
-            </div>
-            <span className="truncate text-[13.5px] font-medium text-slate-800">
-              {activeStatusText}
+              {statusText}
             </span>
           </div>
           <div className="flex h-5 w-5 shrink-0 items-center justify-center">
@@ -646,6 +617,7 @@ const BrainPanel = ({
     isSending,
     isConfirming,
     activeTool,
+    progress,
     chatError,
     sendChat,
     confirmPending,
@@ -1091,18 +1063,11 @@ const BrainPanel = ({
           return null;
         }
 
-        const lastUser = messages
-          .slice()
-          .reverse()
-          .find((m) => m.role === "user");
-        const lastUserMessage =
-          typeof lastUser?.content === "string" ? lastUser.content : "";
-
         return (
           <AgentActivityCard
             activeTool={activeTool}
+            progress={progress}
             isConfirming={isConfirming}
-            lastUserMessage={lastUserMessage}
           />
         );
       })()}
