@@ -253,14 +253,14 @@ export function ChatWorkspace({
               {/* Heading & Subtitle */}
               <div className="space-y-1.5">
                 <h3 className="text-[20px] font-bold tracking-tight text-slate-900">
-                  Hi, {userName || "Vikram Jangid"} 👋 How can OpsAI help you?
+                  Hi, {userName || "Vikram Jangid"} 👋 How can DragAI help you?
                 </h3>
                 <p className="text-[13px] leading-relaxed text-slate-500 max-w-md mx-auto">
-                  Ready to help you with anything from finding a bug to solving issues. Let&apos;s get started!
+                  Ready to help you analyze sales, manage inventory, track khata and grow your business!
                 </p>
               </div>
 
-              {/* Big Centered Composer Card (Screenshot 2) */}
+              {/* Big Centered Composer Card */}
               <div className="w-full text-left">
                 {centerComposer || composer}
               </div>
@@ -278,7 +278,7 @@ export function ChatWorkspace({
                 </button>
               </div>
 
-              {/* 2x2 Grid of Prompt Cards (Screenshot 2 exact style) */}
+              {/* 2x2 Grid of Prompt Cards */}
               <div className="grid w-full grid-cols-1 sm:grid-cols-2 gap-3 text-left">
                 <button
                   onClick={() => onQuickPrompt?.("Show today's sales and profit")}
@@ -286,16 +286,16 @@ export function ChatWorkspace({
                   className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-rose-500">
-                      <FileText className="h-4 w-4" />
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <IndianRupee className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
-                        Investigate logs
+                        Today&apos;s sales & profit
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
-                    Identify error logs impacting service performance
+                    Check today&apos;s revenue, profit margin, and top selling products
                   </span>
                 </button>
 
@@ -305,16 +305,16 @@ export function ChatWorkspace({
                   className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-purple-500">
+                    <div className="flex items-center gap-2 text-purple-600">
                       <Package className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
-                        Find slow endpoint
+                        Stock & low inventory
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
-                    Show me list of endpoints which has high latency
+                    Find products with low stock, zero inventory, or reorder alerts
                   </span>
                 </button>
 
@@ -324,16 +324,16 @@ export function ChatWorkspace({
                   className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-blue-500">
+                    <div className="flex items-center gap-2 text-blue-600">
                       <Users className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
-                        Build a dashboard
+                        Customer khata & dues
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
-                    Create dashboard for key Kubernetes metrics
+                    Check outstanding credit balances, pending dues & ledger summary
                   </span>
                 </button>
 
@@ -343,16 +343,16 @@ export function ChatWorkspace({
                   className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-cyan-500">
+                    <div className="flex items-center gap-2 text-indigo-600">
                       <Sparkles className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
-                        Create an alert
+                        Draft an invoice or bill
                       </span>
                     </div>
                     <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
-                    Create alert to monitor Kubernetes cluster health
+                    Create a quick sales invoice, GST bill, or customer receipt
                   </span>
                 </button>
               </div>

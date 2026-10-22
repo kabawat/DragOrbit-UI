@@ -1106,14 +1106,14 @@ const BrainPanel = ({
         disabled={isSending || isConfirming || !storeId}
         onChange={(event) => setDraftText(event.target.value)}
         onKeyDown={handleDraftKeyDown}
-        placeholder="Describe issues, get insights, or request a fix across logs, metrics, traces, and Kubernetes."
+        placeholder="Ask anything about today's sales, stock levels, customer khata, or draft an invoice..."
         rows={2}
         value={draftText}
       />
       <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5">
         <div className="flex items-center gap-1.5 text-[11.5px] text-slate-400">
           <Sliders className="h-3.5 w-3.5 text-slate-400" />
-          <span>Type / to add a skill</span>
+          <span>Type / for quick actions</span>
         </div>
         <div className="flex items-center gap-2">
           <button
