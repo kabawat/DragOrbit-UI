@@ -36,6 +36,7 @@ export {
 	CardTitle,
 	default as Card,
 } from "./components/common/Card";
+export { default as DragBizzLogoIcon } from "./components/common/DragBizzLogoIcon";
 export {
 	CheckboxGroup,
 	default as Checkbox,

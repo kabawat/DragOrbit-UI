@@ -129,17 +129,12 @@ export function DragAiAvatar({ isThinking = false, size = "md" }) {
         isSm ? "h-6 w-6" : "h-7 w-7"
       } shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-[#187CC5] via-[#208ddb] to-[#4bb2f9] text-white shadow-[0_2px_8px_rgba(24,124,197,0.35)] ring-2 ring-[#187CC5]/25 select-none`}
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="currentColor"
+      <DragBizzLogoIcon
+        color="white"
         className={`${isSm ? "h-3.5 w-3.5" : "h-4 w-4"} drop-shadow-xs ${
           isThinking ? "animate-spin [animation-duration:2.5s]" : ""
         }`}
-      >
-        <path d="M12 2L14.2 8.2L20.4 10.4L14.2 12.6L12 18.8L9.8 12.6L3.6 10.4L9.8 8.2L12 2Z" />
-        <circle cx="18.5" cy="5.5" r="1.8" />
-        <circle cx="5.5" cy="18.5" r="1.3" />
-      </svg>
+      />
     </div>
   );
 }
@@ -191,7 +186,7 @@ function AgentActivityCard({ activeTool, progress, isConfirming }) {
               {isDataOp ? (
                 <Sliders className="h-4 w-4" />
               ) : (
-                <Sparkles className="h-4 w-4" />
+                <DragBizzLogoIcon className="h-4 w-4" color="currentColor" />
               )}
             </div>
             <span className="truncate text-[13.5px] font-medium text-slate-800 dark:text-slate-100">

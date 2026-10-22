@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { AiLottieIcon } from "./AiLottieIcon.jsx";
+import { DragBizzLogoIcon } from "./DragBizzLogoIcon.jsx";
 import styles from "./chat-panel.module.css";
 
 function HistoryGroup({
@@ -222,9 +223,9 @@ export function ChatWorkspace({
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           {!hasThread ? (
             <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center pt-8 pb-10 text-center space-y-6">
-              {/* Centered Sparkle Icon */}
+              {/* Centered DragBizz Logo Icon */}
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf4fb] dark:bg-[#187CC5]/20 text-[#187CC5] dark:text-[#38bdf8] border border-[#187CC5]/25 shadow-xs">
-                <Sparkles className="h-6 w-6 stroke-[2.2]" />
+                <DragBizzLogoIcon className="h-6 w-6" color="currentColor" />
               </div>
 
               {/* Heading & Subtitle */}
@@ -321,7 +322,7 @@ export function ChatWorkspace({
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-[#187CC5] dark:text-[#38bdf8]">
-                      <Sparkles className="h-4 w-4" />
+                      <DragBizzLogoIcon className="h-4 w-4" color="currentColor" />
                       <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
                         Draft an invoice or bill
                       </span>
