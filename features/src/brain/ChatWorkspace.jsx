@@ -139,7 +139,10 @@ export function ChatWorkspace({
   aiStatus: _aiStatus,
   onQuickPrompt,
   isExpanded = false,
+  showHistory,
 }) {
+  const shouldShowHistory = showHistory !== undefined ? showHistory : isExpanded;
+
   const hasHistory =
     (historyGrouped?.today?.length || 0) > 0 ||
     (historyGrouped?.yesterday?.length || 0) > 0 ||
@@ -154,8 +157,8 @@ export function ChatWorkspace({
 
   return (
     <div className="flex h-full w-full min-h-0 flex-1 overflow-hidden">
-      {/* Left History Sidebar (Visible when maximized) */}
-      {isExpanded && (
+      {/* Left History Sidebar (Visible when >= 50% screen width or maximized) */}
+      {shouldShowHistory && (
         <aside className="flex w-72 shrink-0 flex-col border-r border-slate-200 bg-slate-50/70 h-full animate-[chatFadeUp_0.2s_ease-out]">
           <div className="shrink-0 p-3.5 border-b border-slate-200">
             <button

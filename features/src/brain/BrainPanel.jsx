@@ -560,9 +560,35 @@ function AssistantMessageBubble({
 
 const NoDownloads = () => null;
 
+const MIN_PANEL_WIDTH = 480;
+
+function getSidebarRightBoundary() {
+  if (typeof window === "undefined") return 256;
+  try {
+    const aside = document.querySelector(
+      'aside[aria-label*="sidebar" i], aside.relative, aside'
+    );
+    if (aside) {
+      const rect = aside.getBoundingClientRect();
+      if (rect.left < 50 && rect.right > 0 && rect.right < window.innerWidth * 0.45) {
+        return Math.round(rect.right);
+      }
+    }
+  } catch (_e) {
+    // fallback below
+  }
+  return window.innerWidth > 1024 ? 256 : 0;
+}
+
+function getMaxPanelWidth() {
+  if (typeof window === "undefined") return 980;
+  const sidebarRight = getSidebarRightBoundary();
+  return Math.max(window.innerWidth - sidebarRight, MIN_PANEL_WIDTH);
+}
+
 function getDefaultPanelWidth() {
-  if (typeof window === "undefined") return 820;
-  return Math.min(Math.max(window.innerWidth * 0.60, 560), 980);
+  if (typeof window === "undefined") return MIN_PANEL_WIDTH;
+  return Math.min(MIN_PANEL_WIDTH, window.innerWidth);
 }
 
 const BrainPanel = ({
@@ -582,10 +608,11 @@ const BrainPanel = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [panelWidth, setPanelWidth] = useState(820);
+  const [panelWidth, setPanelWidth] = useState(MIN_PANEL_WIDTH);
+  const [maxPanelWidth, setMaxPanelWidth] = useState(1200);
   const [isDragging, setIsDragging] = useState(false);
   const panelRef = useRef(null);
-  const dragStartRef = useRef({ startX: 0, startWidth: 820, hasDragged: false });
+  const dragStartRef = useRef({ startX: 0, startWidth: MIN_PANEL_WIDTH, hasDragged: false });
   const [draftText, setDraftText] = useState("");
   const [slashIndex, setSlashIndex] = useState(0);
   const [portalReady, setPortalReady] = useState(false);
@@ -597,13 +624,23 @@ const BrainPanel = ({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setPanelWidth(getDefaultPanelWidth());
+      const updateDimensions = () => {
+        const maxW = getMaxPanelWidth();
+        setMaxPanelWidth(maxW);
+        setPanelWidth((curr) => Math.min(Math.max(curr, MIN_PANEL_WIDTH), maxW));
+      };
+      updateDimensions();
+      window.addEventListener("resize", updateDimensions);
+      return () => window.removeEventListener("resize", updateDimensions);
     }
   }, []);
 
   useEffect(() => {
     if (isOpen) {
       setHasAnimatedIn(false);
+      setPanelWidth(getDefaultPanelWidth());
+      setIsExpanded(false);
+      setMaxPanelWidth(getMaxPanelWidth());
       const timer = setTimeout(() => {
         setHasAnimatedIn(true);
       }, 350);
@@ -728,6 +765,8 @@ const BrainPanel = ({
 
   const openPanel = useCallback(() => {
     setIsExpanded(false);
+    setPanelWidth(getDefaultPanelWidth());
+    setMaxPanelWidth(getMaxPanelWidth());
     setIsOpen(true);
   }, []);
 
@@ -755,6 +794,8 @@ const BrainPanel = ({
     e.stopPropagation();
     const startX = e.clientX;
     const currentWidth = panelRef.current?.offsetWidth || panelWidth;
+    const maxAllowed = getMaxPanelWidth();
+    setMaxPanelWidth(maxAllowed);
     dragStartRef.current = { startX, startWidth: currentWidth, hasDragged: false };
     setIsDragging(true);
 
@@ -767,8 +808,8 @@ const BrainPanel = ({
         }
       }
       const newWidth = Math.min(
-        Math.max(dragStartRef.current.startWidth + delta, 420),
-        window.innerWidth
+        Math.max(dragStartRef.current.startWidth + delta, MIN_PANEL_WIDTH),
+        maxAllowed
       );
       setPanelWidth(newWidth);
     };
@@ -791,6 +832,8 @@ const BrainPanel = ({
     if (!touch) return;
     const startX = touch.clientX;
     const currentWidth = panelRef.current?.offsetWidth || panelWidth;
+    const maxAllowed = getMaxPanelWidth();
+    setMaxPanelWidth(maxAllowed);
     dragStartRef.current = { startX, startWidth: currentWidth, hasDragged: false };
     setIsDragging(true);
 
@@ -805,8 +848,8 @@ const BrainPanel = ({
         }
       }
       const newWidth = Math.min(
-        Math.max(dragStartRef.current.startWidth + delta, 420),
-        window.innerWidth
+        Math.max(dragStartRef.current.startWidth + delta, MIN_PANEL_WIDTH),
+        maxAllowed
       );
       setPanelWidth(newWidth);
     };
@@ -832,6 +875,8 @@ const BrainPanel = ({
         return false;
       }
       setIsExpanded(false);
+      setPanelWidth(getDefaultPanelWidth());
+      setMaxPanelWidth(getMaxPanelWidth());
       return true;
     });
   }, [abortListening]);
@@ -1305,9 +1350,9 @@ const BrainPanel = ({
             : `transition-[width] duration-200 ease-out ${!hasAnimatedIn ? "animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)]" : ""}`
         }`}
         style={{
-          width: isExpanded ? "100vw" : `${panelWidth}px`,
-          maxWidth: "100vw",
-          minWidth: isExpanded ? "100vw" : "480px",
+          width: isExpanded ? `${maxPanelWidth}px` : `${panelWidth}px`,
+          maxWidth: `${maxPanelWidth}px`,
+          minWidth: `${Math.min(MIN_PANEL_WIDTH, typeof window !== "undefined" ? window.innerWidth : MIN_PANEL_WIDTH)}px`,
         }}
       >
         {/* Left Border Draggable Pill Handle */}
@@ -1336,6 +1381,11 @@ const BrainPanel = ({
         </header>
         <ChatWorkspace
           isExpanded={isExpanded}
+          showHistory={
+            isExpanded ||
+            (typeof window !== "undefined" &&
+              panelWidth >= window.innerWidth * 0.5)
+          }
           activeSessionId={activeSessionId}
           aiStatus={aiStatus}
           centerComposer={centerComposer}
