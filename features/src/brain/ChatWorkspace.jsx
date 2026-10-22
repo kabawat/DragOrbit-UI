@@ -123,6 +123,7 @@ const QUICK_PROMPTS = [
  */
 export function ChatWorkspace({
   t = (key) => key,
+  userName = "Vikram Jangid",
   greeting,
   storeName: _storeName,
   storeGst: _storeGst,
@@ -136,11 +137,14 @@ export function ChatWorkspace({
   onNewChat,
   onSelectSession,
   hasThread,
-  emptyHint,
+  emptyHint: _emptyHint,
   children,
   composer,
+  centerComposer,
   aiStatus: _aiStatus,
   onQuickPrompt,
+  showHistory = false,
+  setShowHistory = () => {},
 }) {
   const hasHistory =
     (historyGrouped?.today?.length || 0) > 0 ||
@@ -156,194 +160,216 @@ export function ChatWorkspace({
 
   return (
     <div className={styles.workspace}>
-      {/* Left: history */}
-      <aside
-        className={`${styles.history} min-h-0 flex-col border-r border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))]`}
-      >
-        <div className="shrink-0 p-3 pb-3 border-b border-[rgb(var(--color-border-primary))]/60">
-          <button
-            className="ai-chat-on-primary group flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[rgb(var(--color-primary))] to-[rgb(var(--color-primary))]/90 px-3 py-2.5 text-[13px] font-semibold shadow-sm shadow-[rgb(var(--color-primary))]/20 transition-all duration-200 hover:shadow-md hover:from-[rgb(var(--color-primary))]/95 hover:to-[rgb(var(--color-primary))] active:scale-[0.98]"
-            onClick={onNewChat}
-            style={{ color: "#fff" }}
-            type="button"
-          >
-            <Plus
-              className="h-4 w-4 transition-transform duration-200 group-hover:rotate-90"
-              strokeWidth={2.5}
-            />
-            <span>{t("voice.newChat")}</span>
-          </button>
-        </div>
-        <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
-          {historyLoading && !hasHistory ? (
-            <div className="flex flex-col items-center justify-center px-3 py-10 text-center">
-              <span className="mb-2 h-4 w-4 animate-spin rounded-full border-2 border-[rgb(var(--color-primary))] border-t-transparent" />
-              <p className="text-[12px] text-[rgb(var(--color-text-secondary))]">
-                {t("voice.history.loading")}
-              </p>
+      {/* Slide-over history when toggled */}
+      {showHistory && (
+        <div className="absolute inset-0 z-30 flex bg-black/20 backdrop-blur-[1px]">
+          <aside className="flex w-72 flex-col bg-white dark:bg-[#121626] border-r border-slate-200 dark:border-slate-800 shadow-xl h-full animate-[drawerSlideIn_0.2s_ease-out]">
+            <div className="flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-800">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Chat History
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowHistory(false)}
+                className="text-xs text-slate-400 hover:text-slate-600 p-1 rounded-md"
+              >
+                Close
+              </button>
             </div>
-          ) : historyError && !hasHistory ? (
-            <div className="flex flex-col items-center justify-center px-3 py-10 text-center">
-              <p className="text-[12px] leading-5 text-[rgb(var(--color-danger))]">
-                {t("voice.history.loadFailed")}
-              </p>
+            <div className="p-3 border-b border-slate-200 dark:border-slate-800">
+              <button
+                className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2 text-[13px] font-semibold transition-all shadow-xs"
+                onClick={() => {
+                  onNewChat?.();
+                  setShowHistory(false);
+                }}
+                type="button"
+              >
+                <Plus className="h-4 w-4" strokeWidth={2.5} />
+                <span>{t("voice.newChat")}</span>
+              </button>
             </div>
-          ) : (
-            <>
+            <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-2.5 py-3">
               <HistoryGroup
                 activeId={activeSessionId}
                 items={historyGrouped?.today}
                 label={t("voice.history.today")}
-                onSelect={onSelectSession}
+                onSelect={(s) => {
+                  onSelectSession(s);
+                  setShowHistory(false);
+                }}
                 defaultOpen={true}
               />
               <HistoryGroup
                 activeId={activeSessionId}
                 items={historyGrouped?.yesterday}
                 label={t("voice.history.yesterday")}
-                onSelect={onSelectSession}
+                onSelect={(s) => {
+                  onSelectSession(s);
+                  setShowHistory(false);
+                }}
                 defaultOpen={true}
               />
               <HistoryGroup
                 activeId={activeSessionId}
                 items={historyGrouped?.week}
                 label={t("voice.history.week")}
-                onSelect={onSelectSession}
+                onSelect={(s) => {
+                  onSelectSession(s);
+                  setShowHistory(false);
+                }}
                 defaultOpen={true}
               />
               <HistoryGroup
                 activeId={activeSessionId}
                 items={historyGrouped?.older}
                 label={t("voice.history.older")}
-                onSelect={onSelectSession}
+                onSelect={(s) => {
+                  onSelectSession(s);
+                  setShowHistory(false);
+                }}
                 defaultOpen={false}
               />
-              {historyHasMore && (
-                <div className="pt-2 pb-1 px-1">
-                  <button
-                    type="button"
-                    disabled={historyLoadingMore}
-                    onClick={onLoadMoreHistory}
-                    className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-[rgb(var(--color-border-primary))]/80 bg-[rgb(var(--color-bg-primary))] py-2 text-[12px] font-medium text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] hover:text-[rgb(var(--color-text-primary))] transition-all active:scale-[0.99] disabled:opacity-50"
-                  >
-                    {historyLoadingMore ? (
-                      <>
-                        <span className="h-3 w-3 animate-spin rounded-full border-2 border-[rgb(var(--color-primary))] border-t-transparent" />
-                        <span>
-                          {t("voice.history.loadingMore", "Loading...")}
-                        </span>
-                      </>
-                    ) : (
-                      <span>
-                        {t("voice.history.loadMore", "Load older chats")}
-                      </span>
-                    )}
-                  </button>
-                </div>
-              )}
-              {!hasHistory && (
-                <div className="flex flex-col items-center justify-center px-3 py-10 text-center">
-                  <div className="mb-2.5 flex h-9 w-9 items-center justify-center rounded-xl bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))] text-[rgb(var(--color-text-secondary))]">
-                    <MessageSquare className="h-4 w-4 opacity-60" />
-                  </div>
-                  <p className="text-[12px] leading-relaxed text-[rgb(var(--color-text-secondary))]">
-                    {t("voice.history.empty")}
-                  </p>
-                </div>
-              )}
-            </>
-          )}
+            </div>
+          </aside>
+          <div
+            className="flex-1"
+            onClick={() => setShowHistory(false)}
+            aria-hidden="true"
+          />
         </div>
-        {hasHistory && (
-          <div className="shrink-0 border-t border-[rgb(var(--color-border-primary))]/50 px-3.5 py-2.5">
-            <p className="text-[11px] font-medium text-[rgb(var(--color-text-secondary))]">
-              {totalSessions}{" "}
-              {totalSessions === 1 ? "conversation" : "conversations"}
-            </p>
-          </div>
-        )}
-      </aside>
+      )}
 
-      {/* Center: chat */}
-      <section className="flex min-h-0 min-w-0 flex-col bg-[rgb(var(--color-bg-primary))]">
-        <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4">
+      {/* Main Content Area */}
+      <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-white dark:bg-[#0f1422]">
+        <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           {!hasThread ? (
-            <div className="mx-auto flex w-full max-w-3xl flex-col items-center px-1 pb-6 pt-6 sm:pt-8 text-center">
-              {/* AI Robot Avatar with ambient glow */}
-              <div className="relative mb-4 flex items-center justify-center">
-                <div
-                  className="absolute -inset-2 rounded-full opacity-35 blur-xl transition-all"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgb(var(--color-primary)) 0%, transparent 70%)",
-                  }}
-                />
-                <div
-                  className="ai-chat-on-primary relative flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-[rgb(var(--color-primary))] via-[rgb(var(--color-primary))]/95 to-[rgb(var(--color-primary))]/80 shadow-lg shadow-[rgb(var(--color-primary))]/20 ring-4 ring-[rgb(var(--color-primary))]/10 transition-transform duration-300 hover:scale-105"
-                  style={{ color: "#fff" }}
-                >
-                  <AiLottieIcon size={38} className="h-9 w-9" />
-                </div>
+            <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center pt-8 pb-10 text-center space-y-6">
+              {/* Centered Sparkle Icon (Screenshot 2 style) */}
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/60 shadow-xs">
+                <Sparkles className="h-6 w-6 stroke-[2.2]" />
               </div>
 
-              {/* AI Badge Pill */}
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-3 py-1 text-[11.5px] font-medium text-[rgb(var(--color-text-secondary))] shadow-2xs">
-                <Sparkles className="h-3.5 w-3.5 text-[rgb(var(--color-primary))]" />
-                <span>{t("voice.title")}</span>
-              </div>
-
-              {/* Welcome Greeting */}
-              <h3 className="text-2xl font-bold tracking-tight text-[rgb(var(--color-text-primary))] sm:text-3xl">
-                {greeting}
-              </h3>
-              <p className="mt-2.5 max-w-lg text-[14px] leading-relaxed text-[rgb(var(--color-text-secondary))]">
-                {t("voice.welcomeHint")}
-              </p>
-              {emptyHint && emptyHint !== t("voice.welcomeHint") && (
-                <p className="mt-1.5 max-w-md text-[12.5px] leading-5 text-[rgb(var(--color-text-secondary))]">
-                  {emptyHint}
+              {/* Heading & Subtitle */}
+              <div className="space-y-1.5">
+                <h3 className="text-[20px] font-bold tracking-tight text-slate-900 dark:text-slate-100">
+                  Hi, {userName || "Vikram Jangid"} 👋 How can OpsAI help you?
+                </h3>
+                <p className="text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                  Ready to help you with anything from finding a bug to solving issues. Let&apos;s get started!
                 </p>
-              )}
+              </div>
 
-              <div className={`${styles.prompts} mt-6 grid w-full gap-3`}>
-                {QUICK_PROMPTS.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      className="group flex cursor-pointer items-start gap-3.5 rounded-2xl border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] px-4 py-3.5 text-left transition-all hover:-translate-y-0.5 hover:border-[rgb(var(--color-primary))]/45 hover:bg-[rgb(var(--color-bg-tertiary))]"
-                      key={item.key}
-                      onClick={() => onQuickPrompt(t(item.promptKey))}
-                      type="button"
-                    >
-                      <span
-                        className="ai-chat-accent mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[rgb(var(--color-primary))]/10 transition-colors group-hover:bg-[rgb(var(--color-primary))]/20"
-                        style={{ color: "rgb(var(--color-primary))" }}
-                      >
-                        <Icon className="h-5 w-5" />
+              {/* Big Centered Composer Card (Screenshot 2) */}
+              <div className="w-full text-left">
+                {centerComposer || composer}
+              </div>
+
+              {/* Prompt Suggestions Header */}
+              <div className="flex w-full items-center justify-between px-1 text-[12px] text-slate-400">
+                <span className="italic">Try one of these:</span>
+                <button
+                  type="button"
+                  onClick={() => onQuickPrompt?.("Show today's sales and profit")}
+                  className="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline font-medium cursor-pointer"
+                >
+                  <span>Browse all prompts</span>
+                  <ArrowUpRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+
+              {/* 2x2 Grid of Prompt Cards (Screenshot 2 exact style) */}
+              <div className="grid w-full grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+                <button
+                  onClick={() => onQuickPrompt?.("Show today's sales and profit")}
+                  type="button"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-2 text-rose-500">
+                      <FileText className="h-4 w-4" />
+                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                        Investigate logs
                       </span>
-                      <span className="min-w-0 flex-1 pt-0.5">
-                        <span className="block text-[14px] font-semibold text-[rgb(var(--color-text-primary))]">
-                          {t(item.titleKey)}
-                        </span>
-                        <span className="mt-1 block text-[12.5px] leading-4 text-[rgb(var(--color-text-secondary))]">
-                          {t(item.hintKey)}
-                        </span>
+                    </div>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
+                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                    Identify error logs impacting service performance
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => onQuickPrompt?.("Check low stock and inventory alerts")}
+                  type="button"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-2 text-purple-500">
+                      <Package className="h-4 w-4" />
+                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                        Find slow endpoint
                       </span>
-                      <ArrowUpRight className="h-4 w-4 shrink-0 text-[rgb(var(--color-text-secondary))] opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                    </button>
-                  );
-                })}
+                    </div>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
+                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                    Show me list of endpoints which has high latency
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => onQuickPrompt?.("Show customer dues and credit ledger")}
+                  type="button"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-2 text-blue-500">
+                      <Users className="h-4 w-4" />
+                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                        Build a dashboard
+                      </span>
+                    </div>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
+                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                    Create dashboard for key Kubernetes metrics
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => onQuickPrompt?.("Draft a sales invoice or bill")}
+                  type="button"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                >
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-2 text-cyan-500">
+                      <Sparkles className="h-4 w-4" />
+                      <span className="text-[13px] font-semibold text-slate-800 dark:text-slate-100">
+                        Create an alert
+                      </span>
+                    </div>
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </div>
+                  <span className="text-[11.5px] text-slate-500 dark:text-slate-400 leading-snug">
+                    Create alert to monitor Kubernetes cluster health
+                  </span>
+                </button>
               </div>
             </div>
           ) : (
-            <div className="mx-auto w-full max-w-3xl space-y-3.5">
+            <div className="mx-auto w-full max-w-2xl space-y-3.5 pt-2">
               {children}
             </div>
           )}
         </div>
-        <div className="shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] px-4 py-3.5">
-          <div className="mx-auto w-full max-w-3xl">{composer}</div>
-        </div>
+
+        {/* Docked bottom composer only when conversation is active */}
+        {hasThread && (
+          <div className="shrink-0 border-t border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0f1422] px-4 py-3">
+            <div className="mx-auto w-full max-w-2xl">{composer}</div>
+          </div>
+        )}
       </section>
     </div>
   );

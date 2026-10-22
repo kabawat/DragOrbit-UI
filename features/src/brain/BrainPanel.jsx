@@ -933,12 +933,12 @@ const BrainPanel = ({
             className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-end gap-1.5 my-2"
             key={item.id}
           >
-            <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-[rgb(var(--color-text-secondary))] uppercase select-none">
+            <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-400 uppercase select-none">
               <User className="h-3 w-3" />
               <span>{userName || "VIKRAM JANGID"}</span>
             </div>
-            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-indigo-50/90 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/80 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed text-indigo-950 dark:text-indigo-100 shadow-xs">
-              <span className="block whitespace-pre-wrap">{item.content}</span>
+            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-[#181e34] dark:bg-[#1e2746] text-white border border-slate-700/60 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-xs">
+              <span className="block whitespace-pre-wrap text-white">{item.content}</span>
             </div>
           </div>
         ) : (
@@ -1049,7 +1049,7 @@ const BrainPanel = ({
           ))}
         </div>
       )}
-      <div className="flex items-end gap-2 rounded-[26px] border border-slate-200/90 dark:border-slate-800 bg-[rgb(var(--color-bg-secondary))] px-3 py-1.5 shadow-xs transition-all focus-within:border-indigo-500/70 focus-within:ring-2 focus-within:ring-indigo-500/15">
+      <div className="flex items-end gap-2 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] px-3 py-1.5 shadow-xs transition-all focus-within:border-indigo-500/70 focus-within:ring-2 focus-within:ring-indigo-500/15">
         <button
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
@@ -1057,7 +1057,7 @@ const BrainPanel = ({
           className={`flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
             isListening
               ? "bg-rose-500 text-white animate-pulse"
-              : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] hover:text-[rgb(var(--color-text-primary))]"
+              : "text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
           }`}
           disabled={!isSupported || isSending || isConfirming || !storeId}
           onClick={handleMicrophoneClick}
@@ -1072,7 +1072,7 @@ const BrainPanel = ({
         <textarea
           aria-autocomplete="list"
           aria-label={t("voice.message")}
-          className="max-h-28 min-h-8 w-full resize-none !border-0 bg-transparent px-1 py-1.5 text-[13px] leading-5 text-[rgb(var(--color-text-primary))] !shadow-none outline-none ring-0 placeholder:text-[rgb(var(--color-text-secondary))] focus:!border-0 focus:!shadow-none focus:outline-none focus:ring-0"
+          className="max-h-28 min-h-8 w-full resize-none !border-0 bg-transparent px-1 py-1.5 text-[13.5px] leading-5 text-slate-800 dark:text-slate-100 !shadow-none outline-none ring-0 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:!border-0 focus:!shadow-none focus:outline-none focus:ring-0"
           disabled={isSending || isConfirming || !storeId}
           onChange={(event) => setDraftText(event.target.value)}
           onKeyDown={handleDraftKeyDown}
@@ -1091,10 +1091,62 @@ const BrainPanel = ({
           <ArrowUp className="h-4 w-4 stroke-[2.5]" />
         </button>
       </div>
-      <p className="mt-1.5 px-1 text-center text-[10px] text-[rgb(var(--color-text-secondary))]">
+      <p className="mt-1.5 px-1 text-center text-[10px] text-slate-400">
         {t("voice.sendHint")} · {t("voice.shortcut")}
       </p>
     </>
+  );
+
+  const centerComposer = (
+    <div className="w-full rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#1a1f33] p-4 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/15">
+      <textarea
+        aria-autocomplete="list"
+        aria-label={t("voice.message")}
+        className="w-full resize-none border-0 bg-transparent px-1 py-1 text-[13.5px] leading-relaxed text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none min-h-[64px]"
+        disabled={isSending || isConfirming || !storeId}
+        onChange={(event) => setDraftText(event.target.value)}
+        onKeyDown={handleDraftKeyDown}
+        placeholder="Describe issues, get insights, or request a fix across logs, metrics, traces, and Kubernetes."
+        rows={2}
+        value={draftText}
+      />
+      <div className="mt-3 flex items-center justify-between border-t border-slate-100 dark:border-slate-800/80 pt-2.5">
+        <div className="flex items-center gap-1.5 text-[11.5px] text-slate-400">
+          <Sliders className="h-3.5 w-3.5 text-slate-400" />
+          <span>Type / to add a skill</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            aria-label={
+              isListening ? t("voice.stopListening") : t("voice.startListening")
+            }
+            className={`flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full transition-colors ${
+              isListening
+                ? "bg-rose-500 text-white animate-pulse"
+                : "text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200"
+            }`}
+            disabled={!isSupported || isSending || isConfirming || !storeId}
+            onClick={handleMicrophoneClick}
+            type="button"
+          >
+            {isListening ? (
+              <MicOff className="h-3.5 w-3.5" />
+            ) : (
+              <Mic className="h-3.5 w-3.5" />
+            )}
+          </button>
+          <button
+            aria-label={t("voice.send")}
+            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:bg-indigo-600 hover:text-white transition-all disabled:opacity-40"
+            disabled={!canSend}
+            onClick={handleSend}
+            type="button"
+          >
+            <ArrowUp className="h-3.5 w-3.5 stroke-[2.5]" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 
   const headerActions = (
@@ -1102,7 +1154,7 @@ const BrainPanel = ({
       {hasThread && (
         <button
           aria-label={t("voice.clear")}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--color-text-secondary))] transition-colors hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]"
+          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
           onClick={handleNewChat}
           title={t("voice.clear")}
           type="button"
@@ -1110,34 +1162,13 @@ const BrainPanel = ({
           <RotateCcw className="h-3.5 w-3.5" />
         </button>
       )}
-      {isExpanded ? (
-        <button
-          aria-label={t("voice.collapse")}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--color-text-secondary))] transition-colors hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]"
-          onClick={collapsePanel}
-          title={t("voice.collapse")}
-          type="button"
-        >
-          <Minimize2 className="h-3.5 w-3.5" />
-        </button>
-      ) : (
-        <button
-          aria-label={t("voice.expand")}
-          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--color-text-secondary))] transition-colors hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]"
-          onClick={expandPanel}
-          title={t("voice.expand")}
-          type="button"
-        >
-          <Maximize2 className="h-3.5 w-3.5" />
-        </button>
-      )}
       <button
         aria-label={t("common.close")}
-        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--color-text-secondary))] transition-colors hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgb(var(--color-primary))]"
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
         onClick={closePanel}
         type="button"
       >
-        <X className="h-4 w-4" />
+        <X className="h-4 w-4 stroke-[2]" />
       </button>
     </div>
   );
@@ -1145,7 +1176,7 @@ const BrainPanel = ({
   const chatPanel = (
     <>
       <div
-        className="fixed inset-0 z-[399] bg-black/20 backdrop-blur-[1px] transition-opacity duration-300 sm:bg-black/15"
+        className="fixed inset-0 z-[399] bg-black/[0.03] transition-opacity duration-300"
         onClick={closePanel}
         aria-hidden="true"
       />
@@ -1153,53 +1184,31 @@ const BrainPanel = ({
         aria-label={t("voice.title")}
         aria-modal="true"
         role="dialog"
-        className={`brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-[rgb(var(--color-bg-primary))] border-l border-[rgb(var(--color-border-primary))] shadow-[-20px_0_50px_rgba(0,0,0,0.18)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] ${
-          isExpanded
-            ? "w-full sm:w-[85vw] md:w-[80vw] lg:w-[75vw] max-w-[1400px]"
-            : "w-full sm:w-[62vw] md:w-[56vw] lg:w-[50vw] xl:w-[48vw] min-w-[540px] max-w-[960px]"
-        }`}
+        className="brain-panel no-print fixed top-0 right-0 bottom-0 z-[400] flex flex-col h-full bg-white dark:bg-[#0f1422] border-l border-slate-200/90 dark:border-slate-800 shadow-[-16px_0_40px_rgba(0,0,0,0.08)] transition-[width] duration-300 ease-out animate-[drawerSlideIn_0.28s_cubic-bezier(0.16,1,0.3,1)] w-full sm:w-[72vw] md:w-[65vw] lg:w-[60vw] xl:w-[58vw] min-w-[540px] max-w-[1040px]"
       >
-        <header className="flex shrink-0 select-none items-center justify-between gap-3 border-b border-[rgb(var(--color-border-primary))] px-4 py-3 bg-[rgb(var(--color-bg-primary))]">
-          <div className="flex min-w-0 items-center gap-2.5">
-            <button
-              onClick={closePanel}
-              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))] transition-colors"
-              title="Close"
-              type="button"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <div className="relative flex h-5 w-5 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400">
-                  <Sparkles className="h-3 w-3" />
-                </div>
-                <span className="text-[13px] font-bold tracking-wide uppercase text-indigo-600 dark:text-indigo-400">
-                  DRAGBIZZ AI
-                </span>
-                <span className="flex items-center gap-1 text-[10.5px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200/50 dark:border-emerald-800/40">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  Active
-                </span>
-              </div>
-              <p className="truncate text-[11px] text-[rgb(var(--color-text-secondary))] pl-7">
-                {headerStatus}
-              </p>
-            </div>
-          </div>
+        <header className="flex shrink-0 select-none items-center justify-between border-b border-slate-200/90 dark:border-slate-800 px-4 py-3 bg-white dark:bg-[#0f1422]">
+          <button
+            onClick={closePanel}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-800 dark:hover:text-slate-100 transition-colors"
+            title="Back / Close"
+            type="button"
+          >
+            <ArrowLeft className="h-4 w-4 stroke-[2]" />
+          </button>
           {headerActions}
         </header>
         <ChatWorkspace
           activeSessionId={activeSessionId}
           aiStatus={aiStatus}
+          centerComposer={centerComposer}
           composer={composer}
           emptyHint={emptyHint}
           greeting={greeting}
           hasThread={hasThread}
           historyError={historyError}
           historyGrouped={grouped}
-          historyLoading={historyLoading}
           historyHasMore={historyHasMore}
+          historyLoading={historyLoading}
           historyLoadingMore={historyLoadingMore}
           onLoadMoreHistory={historyLoadMore}
           onNewChat={handleNewChat}
@@ -1208,6 +1217,7 @@ const BrainPanel = ({
           storeGst={storeGst}
           storeName={storeName}
           t={t}
+          userName={userName}
         >
           {messageList}
         </ChatWorkspace>
