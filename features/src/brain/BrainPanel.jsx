@@ -60,7 +60,10 @@ function formatToolTitle(toolName) {
       return "Checking inventory & stock levels";
     case "customer_summary":
     case "search_customer":
-      return "Fetching customer records & ledger";
+    case "list_customer_accounts":
+    case "get_customer_ledger":
+    case "customer_dossier":
+      return "Fetching customer records & dues ledger";
     case "supplier_summary":
     case "search_supplier":
       return "Searching supplier database & history";
