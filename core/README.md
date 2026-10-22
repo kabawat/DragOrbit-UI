@@ -5,7 +5,7 @@
 ```js
 import { themes, getThemeTokens, hexToRgbSpace } from '@dragorbit/core/themes';
 const { themeName, variant, colors, variables } = getThemeTokens('ocean', 'dark');
-// variables contains RGB channel strings such as '--color-primary': '59 130 246'.
+// variables contains RGB channel strings such as '--color-primary': '24 124 197'.
 ```
 
 ```css

@@ -15,7 +15,7 @@ class WarmThemes {
 			"Default",
 			"Clean and professional",
 			{
-				primary: "#3b82f6",
+				primary: "#187CC5",
 				secondary: "#6b7280",
 				background: "#ffffff",
 				surface: "#f9fafb",
@@ -24,7 +24,7 @@ class WarmThemes {
 				border: "#e5e7eb",
 			},
 			{
-				primary: "#3b82f6",
+				primary: "#187CC5",
 				secondary: "#6b7280",
 				background: "#09090b",
 				surface: "#121212",

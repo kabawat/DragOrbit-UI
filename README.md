@@ -85,7 +85,7 @@ That preserves existing imports while sharing the package implementation.
 
 ## Theme requirements
 
-The Button intentionally preserves the existing store-fe theme variables. Other apps must define RGB channel values (e.g. --color-primary: 59 130 246) for:
+The Button intentionally preserves the existing store-fe theme variables. Other apps must define RGB channel values (e.g. --color-primary: 24 124 197) for:
 
 - --color-primary
 - --color-secondary
