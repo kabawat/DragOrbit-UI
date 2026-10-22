@@ -50,7 +50,7 @@
 
 .brain-panel .ai-chat-accent,
 .brain-panel .ai-chat-accent * {
-  color: rgb(var(--color-primary)) !important;
+  color: #187CC5 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

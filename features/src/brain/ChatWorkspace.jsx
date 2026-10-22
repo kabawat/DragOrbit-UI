@@ -43,9 +43,8 @@ function HistoryGroup({
       >
         <div className="flex items-center gap-2 min-w-0">
           <ChevronDown
-            className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-200 ${
-              isOpen ? "rotate-0" : "-rotate-90"
-            }`}
+            className={`h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-200 ${isOpen ? "rotate-0" : "-rotate-90"
+              }`}
           />
           <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 group-hover/header:text-slate-800 transition-colors">
             {label}
@@ -62,11 +61,10 @@ function HistoryGroup({
             return (
               <li key={session.id}>
                 <button
-                  className={`group relative flex w-full cursor-pointer items-center rounded-xl px-2.5 py-2 text-left text-[13px] leading-5 transition-all duration-150 ${
-                    active
-                      ? "bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200/70 shadow-2xs"
+                  className={`group relative flex w-full cursor-pointer items-center rounded-xl px-2.5 py-2 text-left text-[13px] leading-5 transition-all duration-150 ${active
+                      ? "bg-[#eaf4fb] text-[#187CC5] font-semibold border border-[#187CC5]/30 shadow-2xs"
                       : "text-slate-700 hover:bg-slate-200/50 hover:text-slate-900"
-                  }`}
+                    }`}
                   onClick={() => onSelect(session)}
                   title={session.title}
                   type="button"
@@ -161,7 +159,7 @@ export function ChatWorkspace({
         <aside className="flex w-72 shrink-0 flex-col border-r border-slate-200 bg-slate-50/70 h-full animate-[chatFadeUp_0.2s_ease-out]">
           <div className="shrink-0 p-3.5 border-b border-slate-200">
             <button
-              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-2.5 text-[13px] font-semibold transition-all shadow-xs"
+              className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#187CC5] hover:bg-[#13649f] text-white px-3 py-2.5 text-[13px] font-semibold transition-all shadow-xs"
               onClick={onNewChat}
               type="button"
             >
@@ -221,8 +219,8 @@ export function ChatWorkspace({
         <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
           {!hasThread ? (
             <div className="mx-auto flex w-full max-w-xl flex-col items-center justify-center pt-8 pb-10 text-center space-y-6">
-              {/* Centered Sparkle Icon (Screenshot 2 style) */}
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 border border-indigo-100 shadow-xs">
+              {/* Centered Sparkle Icon */}
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#eaf4fb] text-[#187CC5] border border-[#187CC5]/25 shadow-xs">
                 <Sparkles className="h-6 w-6 stroke-[2.2]" />
               </div>
 
@@ -247,7 +245,7 @@ export function ChatWorkspace({
                 <button
                   type="button"
                   onClick={() => onQuickPrompt?.("Show today's sales and profit")}
-                  className="flex items-center gap-1 text-indigo-600 hover:underline font-medium cursor-pointer"
+                  className="flex items-center gap-1 text-[#187CC5] hover:underline font-medium cursor-pointer"
                 >
                   <span>Browse all prompts</span>
                   <ArrowUpRight className="h-3.5 w-3.5" />
@@ -259,7 +257,7 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Show today's sales and profit")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-[#187CC5] hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center gap-2 text-emerald-600">
@@ -268,7 +266,7 @@ export function ChatWorkspace({
                         Today&apos;s sales & profit
                       </span>
                     </div>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#187CC5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
                     Check today&apos;s revenue, profit margin, and top selling products
@@ -278,16 +276,16 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Check low stock and inventory alerts")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-[#187CC5] hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-purple-600">
+                    <div className="flex items-center gap-2 text-blue-600">
                       <Package className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
                         Stock & low inventory
                       </span>
                     </div>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#187CC5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
                     Find products with low stock, zero inventory, or reorder alerts
@@ -297,16 +295,16 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Show customer dues and credit ledger")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-[#187CC5] hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-blue-600">
+                    <div className="flex items-center gap-2 text-[#187CC5]">
                       <Users className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
                         Customer khata & dues
                       </span>
                     </div>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#187CC5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
                     Check outstanding credit balances, pending dues & ledger summary
@@ -316,16 +314,16 @@ export function ChatWorkspace({
                 <button
                   onClick={() => onQuickPrompt?.("Draft a sales invoice or bill")}
                   type="button"
-                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-indigo-400 hover:shadow-xs transition-all cursor-pointer"
+                  className="group flex flex-col items-start gap-1 rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-[#187CC5] hover:shadow-xs transition-all cursor-pointer"
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-2 text-indigo-600">
+                    <div className="flex items-center gap-2 text-[#187CC5]">
                       <Sparkles className="h-4 w-4" />
                       <span className="text-[13px] font-semibold text-slate-800">
                         Draft an invoice or bill
                       </span>
                     </div>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#187CC5] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </div>
                   <span className="text-[11.5px] text-slate-500 leading-snug">
                     Create a quick sales invoice, GST bill, or customer receipt

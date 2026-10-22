@@ -73,6 +73,29 @@ function formatToolTitle(toolName) {
   }
 }
 
+export function DragAiAvatar({ isThinking = false, size = "md" }) {
+  const isSm = size === "sm";
+  return (
+    <div
+      className={`relative flex ${
+        isSm ? "h-6 w-6" : "h-7 w-7"
+      } shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-[#187CC5] via-[#208ddb] to-[#4bb2f9] text-white shadow-[0_2px_8px_rgba(24,124,197,0.35)] ring-2 ring-[#187CC5]/25 select-none`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className={`${isSm ? "h-3.5 w-3.5" : "h-4 w-4"} drop-shadow-xs ${
+          isThinking ? "animate-spin [animation-duration:2.5s]" : ""
+        }`}
+      >
+        <path d="M12 2L14.2 8.2L20.4 10.4L14.2 12.6L12 18.8L9.8 12.6L3.6 10.4L9.8 8.2L12 2Z" />
+        <circle cx="18.5" cy="5.5" r="1.8" />
+        <circle cx="5.5" cy="18.5" r="1.3" />
+      </svg>
+    </div>
+  );
+}
+
 function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
   const [elapsed, setElapsed] = useState(0);
 
@@ -168,13 +191,11 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
   return (
     <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-start gap-2.5 w-full my-2">
       <div className="flex items-center gap-2 select-none">
-        <div className="relative flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 shadow-2xs">
-          <Sparkles className="h-3.5 w-3.5 animate-spin [animation-duration:3s]" />
-        </div>
-        <span className="text-[12px] font-bold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
-          DRAGBIZZ AI
+        <DragAiAvatar isThinking={true} />
+        <span className="text-[13px] font-bold tracking-tight text-[#187CC5]">
+          DragAI
         </span>
-        <span className="text-[11px] font-medium text-[rgb(var(--color-text-secondary))] ml-0.5">
+        <span className="text-[11px] font-medium text-slate-400 ml-0.5">
           {elapsed}s
         </span>
       </div>
@@ -182,7 +203,7 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
       <div className="w-full space-y-2">
         <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
               <Sliders className="h-4 w-4" />
             </div>
             <span className="truncate text-[13.5px] font-medium text-slate-800">
@@ -196,7 +217,7 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
 
         <div className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
               <Sparkles className="h-4 w-4" />
             </div>
             <span className="truncate text-[13.5px] font-medium text-slate-800">
@@ -204,7 +225,7 @@ function AgentActivityCard({ activeTool, isConfirming, lastUserMessage }) {
             </span>
           </div>
           <div className="flex h-5 w-5 shrink-0 items-center justify-center">
-            <span className="h-5 w-5 rounded-full border-2 border-indigo-600 border-t-transparent animate-spin" />
+            <span className="h-5 w-5 rounded-full border-2 border-[#187CC5] border-t-transparent animate-spin" />
           </div>
         </div>
       </div>
@@ -439,11 +460,9 @@ function AssistantMessageBubble({
     <div className="flex animate-[chatFadeUp_0.25s_ease-out_both] flex-col items-start gap-2 w-full my-2">
       {/* Brand Header */}
       <div className="flex items-center gap-2 select-none">
-        <div className="relative flex h-6 w-6 items-center justify-center rounded-full bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 shadow-2xs">
-          <Sparkles className="h-3.5 w-3.5" />
-        </div>
-        <span className="text-[12px] font-bold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
-          DRAGBIZZ AI
+        <DragAiAvatar />
+        <span className="text-[13px] font-bold tracking-tight text-[#187CC5]">
+          DragAI
         </span>
       </div>
 
@@ -456,7 +475,7 @@ function AssistantMessageBubble({
               className="flex items-center justify-between rounded-xl bg-white border border-slate-200 px-4 py-2.5 shadow-2xs transition-all"
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#eaf4fb] text-[#187CC5]">
                   <Sliders className="h-4 w-4" />
                 </div>
                 <span className="truncate text-[13.5px] font-medium text-slate-800">
@@ -475,7 +494,7 @@ function AssistantMessageBubble({
       <div className="w-full text-[13.5px] leading-relaxed text-[rgb(var(--color-text-primary))]">
         <ChatAssistantMessage message={assistantText} />
         {item.streaming && (
-          <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-indigo-600 animate-pulse" />
+          <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-[#187CC5] animate-pulse" />
         )}
         <ChatCustomerResultCard toolResults={item.toolResults} />
         <DownloadButtons storeId={storeId} toolResults={item.toolResults} />
@@ -1040,8 +1059,8 @@ const BrainPanel = ({
               <User className="h-3 w-3" />
               <span>{userName || "VIKRAM JANGID"}</span>
             </div>
-            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-indigo-50/90 border border-indigo-200/90 text-indigo-950 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
-              <span className="block whitespace-pre-wrap text-indigo-950">{item.content}</span>
+            <div className="max-w-[85%] rounded-2xl rounded-tr-xs bg-[#eaf4fb] border border-[#187CC5]/25 text-slate-800 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
+              <span className="block whitespace-pre-wrap text-slate-800">{item.content}</span>
             </div>
           </div>
         ) : (
@@ -1152,7 +1171,7 @@ const BrainPanel = ({
           ))}
         </div>
       )}
-      <div className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-1.5 shadow-xs transition-all focus-within:border-indigo-500/70 focus-within:ring-2 focus-within:ring-indigo-500/15">
+      <div className="flex items-end gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-1.5 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-2 focus-within:ring-[#187CC5]/20">
         <button
           aria-label={
             isListening ? t("voice.stopListening") : t("voice.startListening")
@@ -1185,7 +1204,7 @@ const BrainPanel = ({
         />
         <button
           aria-label={t("voice.send")}
-          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
+          className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#187CC5] hover:bg-[#13649f] text-white shadow-xs transition-all hover:scale-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
           disabled={!canSend}
           onClick={handleSend}
           type="button"
@@ -1200,7 +1219,7 @@ const BrainPanel = ({
   );
 
   const centerComposer = (
-    <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xs transition-all focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/15">
+    <div className="w-full rounded-2xl border border-slate-200 bg-white p-4 shadow-xs transition-all focus-within:border-[#187CC5] focus-within:ring-2 focus-within:ring-[#187CC5]/20">
       <textarea
         aria-autocomplete="list"
         aria-label={t("voice.message")}
@@ -1238,7 +1257,7 @@ const BrainPanel = ({
           </button>
           <button
             aria-label={t("voice.send")}
-            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-indigo-600 hover:text-white transition-all disabled:opacity-40"
+            className="flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:bg-[#187CC5] hover:text-white transition-all disabled:opacity-40"
             disabled={!canSend}
             onClick={handleSend}
             type="button"
@@ -1320,12 +1339,12 @@ const BrainPanel = ({
           title={isExpanded ? "Click to restore or drag to resize" : "Click to maximize or drag to resize"}
           onMouseDown={handlePillMouseDown}
           onTouchStart={handlePillTouchStart}
-          className="group absolute -left-3.5 top-1/2 -translate-y-1/2 z-50 flex h-14 w-7 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] hover:border-indigo-500 hover:shadow-[0_6px_20px_rgba(99,102,241,0.25)] transition-all active:scale-95 select-none"
+          className="group absolute -left-3.5 top-1/2 -translate-y-1/2 z-50 flex h-14 w-7 cursor-col-resize items-center justify-center rounded-full bg-white border border-slate-300 shadow-[0_4px_14px_rgba(0,0,0,0.12)] hover:border-[#187CC5] hover:shadow-[0_6px_20px_rgba(24,124,197,0.3)] transition-all active:scale-95 select-none"
         >
           <div className="flex flex-col items-center justify-center gap-1">
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
-            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-indigo-600 transition-colors" />
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
+            <span className="h-1 w-1 rounded-full bg-slate-400 group-hover:bg-[#187CC5] transition-colors" />
           </div>
         </div>
 
