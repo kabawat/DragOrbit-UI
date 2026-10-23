@@ -15,6 +15,7 @@ export const StoresSummaryTable = ({
 	data = [],
 	loading = false,
 	t = (key) => key,
+	fitContainer = false,
 }) => {
 	data = normalizeStoreSummary(data);
 	const columns = [
@@ -66,7 +67,10 @@ export const StoresSummaryTable = ({
 
 	return (
 		<>
-			<section className="space-y-3 md:hidden" aria-busy={loading}>
+			<section
+				className={fitContainer ? "space-y-3 xl:hidden" : "space-y-3 md:hidden"}
+				aria-busy={loading}
+			>
 				<h2 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
 					{t("dashboard.storesSummary")}
 				</h2>
@@ -129,7 +133,7 @@ export const StoresSummaryTable = ({
 					))
 				)}
 			</section>
-			<div className="hidden md:block">
+			<div className={fitContainer ? "hidden xl:block" : "hidden md:block"}>
 				<DataTable
 					rows={data ?? []}
 					columns={columns}
@@ -146,9 +150,12 @@ export const StoresSummaryTable = ({
 					emptyContent={
 						<EmptyState icon={Building2} title={t("dashboard.noData")} />
 					}
-					minWidth={960}
+					showNumOfData={!fitContainer}
+					layout={fitContainer ? "fixed" : "content"}
+					minWidth={fitContainer ? 0 : 960}
 					maxHeight={480}
-					className="rounded-2xl! shadow-none!"
+					density={fitContainer ? "compact" : "comfortable"}
+					className={`rounded-2xl! shadow-none! ${fitContainer ? "store-summary-fit" : ""}`}
 					toolbar={
 						<div className="flex items-center gap-3 mt-5 mb-3">
 							<LayoutDashboard className="h-5 w-5" aria-hidden="true" />

@@ -8,7 +8,6 @@ import {
   MessageSquare,
   Package,
   Plus,
-  Sparkles,
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";

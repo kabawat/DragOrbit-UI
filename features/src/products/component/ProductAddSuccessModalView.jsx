@@ -1,6 +1,6 @@
 "use client";
-import { ArrowRight, CheckCircle, Plus, Sparkles } from "lucide-react";
-import { Button } from "@dragorbit/ui";
+import { ArrowRight, CheckCircle, Plus } from "lucide-react";
+import { Button, DragAiIcon } from "@dragorbit/ui";
 export function ProductAddSuccessModalPresentation({ model }) {
   const {
     isVisible,
@@ -47,7 +47,7 @@ export function ProductAddSuccessModalPresentation({ model }) {
                 <CheckCircle className="w-10 h-10 text-white animate-bounce" />
               </div>
               <div className="absolute -top-2 -right-2">
-                <Sparkles className="w-6 h-6 text-yellow-400 animate-spin" />
+                <DragAiIcon className="w-6 h-6 text-yellow-400" aria-hidden="true" />
               </div>
               <div className="absolute -bottom-1 -left-1">
                 <div className="w-4 h-4 bg-green-300 rounded-full animate-ping"></div>

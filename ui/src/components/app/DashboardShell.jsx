@@ -17,11 +17,11 @@ export function DashboardShell({
 		);
 	return (
 		<>
-			<div className="flex h-screen bg-[rgb(var(--color-bg-secondary))] overflow-hidden">
-				<div className="no-print shrink-0">{sidebar}</div>
-				<div className="flex-1 min-w-0 flex flex-col min-h-screen overflow-hidden">
+			<div className="dashboard-viewport-shell flex h-dvh bg-[rgb(var(--color-bg-secondary))] overflow-hidden">
+				<div className="dashboard-sidebar no-print relative z-[150] h-full shrink-0 overflow-visible">{sidebar}</div>
+				<div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
 					<div className="no-print">{header}</div>
-					<main className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+					<main className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto custom-scrollbar">
 						{children}
 					</main>
 				</div>

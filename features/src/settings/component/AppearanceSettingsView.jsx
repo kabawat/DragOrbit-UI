@@ -6,9 +6,9 @@ import {
   RotateCcw,
   Layout,
   Palette,
-  Sparkles,
   Monitor,
 } from "lucide-react";
+import { DragAiIcon } from "@dragorbit/ui";
 export function AppearanceSettingsView({ model }) {
   const {
     t,
@@ -142,7 +142,7 @@ export function AppearanceSettingsView({ model }) {
           <section className="bg-[rgb(var(--color-bg-primary))]/30 backdrop-blur-md rounded-2xl border border-[rgb(var(--color-border-primary))]/50 p-6 overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
+                <DragAiIcon className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" aria-hidden="true" />
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-[rgb(var(--color-text-secondary))]">
                   {t("settings.accentThemes")}
                 </h3>

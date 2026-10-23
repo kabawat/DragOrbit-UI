@@ -63,7 +63,7 @@ export const SidebarMenu = ({
 	return (
 		<aside
 			aria-label={navigationLabel}
-			className={`bg-[rgb(var(--color-bg-primary))] border-r border-[rgb(var(--color-border-primary))]/40 h-screen flex flex-col relative z-[150] flex-shrink-0 ${className}`}
+			className={`bg-[rgb(var(--color-bg-primary))] border-r border-[rgb(var(--color-border-primary))]/40 h-full flex flex-col relative z-[150] flex-shrink-0 ${className}`}
 			onKeyDown={(e) => {
 				if (e.key === "Escape") setHoveredItem(null);
 			}}

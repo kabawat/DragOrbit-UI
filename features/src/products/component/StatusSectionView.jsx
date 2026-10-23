@@ -1,5 +1,6 @@
 "use client";
-import { Award, Sparkles, Star } from "lucide-react";
+import { Award, Star } from "lucide-react";
+import { DragAiIcon } from "@dragorbit/ui";
 export function StatusSectionPresentation({ model }) {
   const { Toggle, t, formData, handleFieldChange } = model;
   return (
@@ -96,7 +97,7 @@ export function StatusSectionPresentation({ model }) {
                   )}
                   {formData.newArrival && (
                     <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                      <Sparkles className="w-3 h-3 mr-1" />
+                      <DragAiIcon className="w-3 h-3 mr-1" aria-hidden="true" />
                       {t("products.newArrival")}
                     </span>
                   )}

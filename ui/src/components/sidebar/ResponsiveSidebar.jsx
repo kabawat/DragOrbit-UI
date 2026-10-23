@@ -33,7 +33,7 @@ export function ResponsiveSidebar({
 		<aside
 			ref={behavior.sidebarRef}
 			aria-label={t("sidebar.behaviorTitle")}
-			className="relative h-screen shrink-0"
+			className="relative h-full shrink-0"
 			style={{
 				width: behavior.overlay ? 64 : behavior.isCollapsed ? 64 : 256,
 				transition: "width 120ms ease-out",
@@ -57,6 +57,7 @@ export function ResponsiveSidebar({
 			}}
 		>
 			<div
+				className="h-full"
 				style={{
 					position: behavior.overlay ? "absolute" : "relative",
 					top: 0,

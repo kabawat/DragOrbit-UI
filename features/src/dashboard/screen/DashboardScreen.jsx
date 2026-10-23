@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@dragorbit/ui";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { CashbookSummaryCard } from "../component/CashbookSummaryCard";
 import { DashboardSections } from "../component/DashboardSections";
 import { DashboardStats } from "../component/DashboardStats";
@@ -34,14 +34,28 @@ export function DashboardScreen({
 	sectionOrder,
 	onSaveSections,
 	layoutVariant = "overview",
+	storeOverview: StoreOverview,
+	intelligencePanel: IntelligencePanel,
+	salesTrendPanel: SalesTrendPanel,
 }) {
-	const { summary, loading, today, error, retry } = useDashboardData({
+	const [salesTrendDays, setSalesTrendDays] = useState(7);
+	const {
+		summary,
+		loading,
+		today,
+		salesTrend,
+		salesTrendLoading,
+		salesTrendError,
+		error,
+		retry,
+	} = useDashboardData({
 		repository,
 		storeId,
 		ready,
 		isStaff,
 		initialSummary,
 		onSummary,
+		salesTrendDays,
 	});
 	const metrics = useMemo(
 		() => buildDashboardMetrics(summary, t),
@@ -89,7 +103,14 @@ export function DashboardScreen({
 			scope={scope}
 		/>
 	);
-	const stores = <StoresSummaryTable data={summary} loading={loading} t={t} />;
+	const stores = (
+		<StoresSummaryTable
+			data={summary}
+			loading={loading}
+			t={t}
+			fitContainer={layoutVariant === "store"}
+		/>
+	);
 	const cashbook = storeId && (
 		<CashbookSummaryCard
 			today={today}
@@ -104,6 +125,42 @@ export function DashboardScreen({
 			onClick={() => onNavigate?.(routes["stock/alerts"])}
 		/>
 	);
+	if (layoutVariant === "store" && StoreOverview) {
+		return (
+			<div className="store-dashboard-screen">
+				<div className="store-dashboard-grid">
+					<StoreOverview
+						summary={summary}
+						metrics={metrics}
+						loading={loading}
+						t={t}
+					/>
+					{IntelligencePanel && (
+						<aside aria-label="Proactive retail intelligence">
+							<IntelligencePanel summary={summary} />
+						</aside>
+					)}
+				</div>
+				{SalesTrendPanel && (
+					<SalesTrendPanel
+						data={salesTrend}
+						loading={salesTrendLoading}
+						error={salesTrendError}
+						selectedDays={salesTrendDays}
+						onRangeChange={setSalesTrendDays}
+						onNavigate={onNavigate}
+					/>
+				)}
+				<div className="store-dashboard-secondary-grid">
+					{cashbook && (
+						<div className="store-dashboard-cashbook">{cashbook}</div>
+					)}
+					<section className="store-dashboard-quick-actions">{actions}</section>
+				</div>
+				<div className="store-dashboard-table">{stores}</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="p-4 sm:p-6 lg:p-8 space-y-6">

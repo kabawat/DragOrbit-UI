@@ -8,6 +8,7 @@ export function useDashboardData({
 	isStaff,
 	initialSummary,
 	onSummary,
+	salesTrendDays = 7,
 }) {
 	const [summary, setSummary] = useState(normalizeStoreSummary(initialSummary));
 	const [loading, setLoading] = useState(
@@ -18,6 +19,9 @@ export function useDashboardData({
 	const hasLoaded = useRef(Array.isArray(initialSummary));
 	const retry = useCallback(() => setRetryCount((value) => value + 1), []);
 	const [today, setToday] = useState(null);
+	const [salesTrend, setSalesTrend] = useState([]);
+	const [salesTrendLoading, setSalesTrendLoading] = useState(false);
+	const [salesTrendError, setSalesTrendError] = useState(null);
 	const cached = useRef(summary);
 	useEffect(() => {
 		if (Array.isArray(initialSummary)) {
@@ -72,5 +76,43 @@ export function useDashboardData({
 			cancelled = true;
 		};
 	}, [repository, storeId, ready, isStaff]);
-	return { summary, loading, today, error, retry };
+	useEffect(() => {
+		setSalesTrend([]);
+		setSalesTrendError(null);
+		if (!ready || !storeId || isStaff || !repository.getSalesTrend) {
+			setSalesTrendLoading(false);
+			return;
+		}
+		let cancelled = false;
+		setSalesTrendLoading(true);
+		Promise.resolve()
+			.then(() => repository.getSalesTrend({ storeId, days: salesTrendDays }))
+			.then((value) => {
+				if (!Array.isArray(value)) {
+					throw new Error("Sales trend data is unavailable.");
+				}
+				if (!cancelled) setSalesTrend(value);
+			})
+			.catch((error) => {
+				if (!cancelled) {
+					setSalesTrendError(error?.message || "Sales trend is unavailable.");
+				}
+			})
+			.finally(() => {
+				if (!cancelled) setSalesTrendLoading(false);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, [repository, storeId, ready, isStaff, salesTrendDays]);
+	return {
+		summary,
+		loading,
+		today,
+		salesTrend,
+		salesTrendLoading,
+		salesTrendError,
+		error,
+		retry,
+	};
 }

@@ -12,7 +12,6 @@ import {
   Minimize2,
   RotateCcw,
   Sliders,
-  Sparkles,
   User,
   X,
 } from "lucide-react";

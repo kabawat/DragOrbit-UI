@@ -1,4 +1,5 @@
 import type { GridLayout } from "@dragorbit/ui";
+import type { ComponentType } from "react";
 export interface StoreSummary {
 	_id?: string;
 	id?: string;
@@ -14,9 +15,17 @@ export interface StoreSummary {
 }
 export interface DashboardRepository {
 	getSummary(params: { storeId: string }): Promise<StoreSummary[] | null>;
+	getSalesTrend?(params: { storeId: string; days: number }): Promise<DashboardSalesTrendPoint[]>;
 	getCashbook?(params: { storeId: string }): Promise<{
 		today?: { cashIn?: number; cashOut?: number; closingBalance?: number };
 	} | null>;
+}
+export interface DashboardSalesTrendPoint {
+	date: string;
+	dateLabel: string;
+	label: string;
+	revenue: number;
+	sales: number;
 }
 export interface DashboardScreenProps {
 	t: (key: string, params?: Record<string, unknown>) => string;
@@ -35,7 +44,22 @@ export interface DashboardScreenProps {
 	initialSummary?: StoreSummary[] | null;
 	onSummary?: (rows: StoreSummary[]) => void;
 	lowStockCount?: number;
-	layoutVariant?: "overview" | "sectioned";
+	layoutVariant?: "overview" | "sectioned" | "store";
+	storeOverview?: ComponentType<{
+		summary: StoreSummary[];
+		metrics: Array<{ id: string; title: string; value: string }>;
+		loading: boolean;
+		t: (key: string) => string;
+	}>;
+	intelligencePanel?: ComponentType<{ summary: StoreSummary[] }>;
+	salesTrendPanel?: ComponentType<{
+		data: DashboardSalesTrendPoint[];
+		loading: boolean;
+		error?: string | null;
+		selectedDays: number;
+		onRangeChange: (days: number) => void;
+		onNavigate?: (path: string) => void;
+	}>;
 	sectionOrder?: Array<string | { id: string; visible?: boolean }>;
 	onSaveSections?: (order: string[]) => void;
 }
