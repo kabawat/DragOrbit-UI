@@ -107,7 +107,7 @@ export function ProductPanelView({ model }) {
 							}
 							description={
 								search
-									? t("pos.noProductsSearchHint") ||
+							? t("pos.noProductsSearchHint", { search }) ||
 										`No products matching "${search}".`
 									: t("pos.noProductsCategoryHint") ||
 										"Try another category or sync products."
