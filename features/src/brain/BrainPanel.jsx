@@ -1041,13 +1041,15 @@ const BrainPanel = ({
       ? t("voice.status.typeOnly")
       : t("voice.emptyHint");
 
+  const userFirst = (user?.firstName || user?.first_name || "").trim();
+  const userLast = (user?.lastName || user?.last_name || "").trim();
+  const combinedUserName = [userFirst, userLast].filter(Boolean).join(" ");
   const userName =
-    (user?.firstName && user?.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : null) ||
+    combinedUserName ||
     user?.name ||
     user?.fullName ||
-    user?.firstName ||
+    user?.displayName ||
+    userFirst ||
     "";
 
   const greeting = greetingForLocale(locale, userName, t);
@@ -1080,7 +1082,7 @@ const BrainPanel = ({
           >
             <div className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wider text-slate-400 uppercase select-none">
               <User className="h-3 w-3" />
-              <span>{userName || "VIKRAM JANGID"}</span>
+              <span>{userName || t("voice.userFallback", "STORE OWNER")}</span>
             </div>
             <div className="brain-user-bubble max-w-[85%] rounded-2xl rounded-tr-xs bg-[#eaf4fb] dark:bg-[#187CC5]/20 border border-[#187CC5]/25 dark:border-[#187CC5]/40 text-slate-800 dark:text-slate-100 px-4 py-2.5 text-[13.5px] font-medium leading-relaxed shadow-2xs">
               <span className="block whitespace-pre-wrap text-slate-800 dark:text-slate-100">{item.content}</span>

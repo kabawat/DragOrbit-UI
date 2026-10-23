@@ -119,7 +119,7 @@ const QUICK_PROMPTS = [
  */
 export function ChatWorkspace({
   t = (key) => key,
-  userName = "Vikram Jangid",
+  userName = "",
   greeting,
   storeName: _storeName,
   storeGst: _storeGst,
@@ -231,7 +231,7 @@ export function ChatWorkspace({
               {/* Heading & Subtitle */}
               <div className="space-y-1.5">
                 <h3 className="brain-greeting-heading text-[20px] font-bold tracking-tight text-slate-900 dark:text-slate-100">
-                  Hi, {userName || "Vikram Jangid"} 👋 How can DragAI help you?
+                  Hi, {userName || t("voice.userFallback", "Store Owner")} 👋 How can DragAI help you?
                 </h3>
                 <p className="brain-greeting-sub text-[13px] leading-relaxed text-slate-500 dark:text-slate-400 max-w-md mx-auto">
                   Ready to help you analyze sales, manage inventory, track khata and grow your business!
