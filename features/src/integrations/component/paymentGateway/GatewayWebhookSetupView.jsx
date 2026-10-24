@@ -1,4 +1,5 @@
 "use client";
+
 export function GatewayWebhookSetupView({ model }) {
   const {
     compact,
@@ -10,17 +11,33 @@ export function GatewayWebhookSetupView({ model }) {
     secretConfigured,
     onRegenerateSecret,
     isRegenerating,
+    gatewayType,
+    isLiveSetup,
+    events = [],
+    instructions,
+    secretNote,
   } = model;
+
+  const gatewayName = gatewayType
+    ? t(`settings.paymentGateway.types.${gatewayType}`, gatewayType)
+    : "";
+
+  const title = gatewayName
+    ? `${gatewayName} ${t("settings.paymentGateway.webhookSetupTitle")}`
+    : t("settings.paymentGateway.webhookSetupTitle");
+
   return (
     <div
-      className={`rounded-lg border border-[rgb(var(--color-border-primary))]/60 bg-[rgb(var(--color-bg-secondary))]/20 ${compact ? "p-3 space-y-3" : "p-4 space-y-4"}`}
+      className={`rounded-lg border border-[rgb(var(--color-border-primary))]/60 bg-[rgb(var(--color-bg-secondary))]/20 ${
+        compact ? "p-3.5 space-y-3" : "p-4 space-y-4"
+      }`}
     >
       <div>
         <h4 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
-          {t("settings.paymentGateway.webhookSetupTitle")}
+          {title}
         </h4>
-        <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1">
-          {t("settings.paymentGateway.webhookSetupDescription")}
+        <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1 leading-relaxed">
+          {instructions || t("settings.paymentGateway.webhookSetupDescription")}
         </p>
       </div>
 
@@ -28,6 +45,24 @@ export function GatewayWebhookSetupView({ model }) {
         label={t("settings.paymentGateway.webhookUrl")}
         value={webhookSetup.url}
       />
+
+      {events && events.length > 0 && (
+        <div className="space-y-1.5">
+          <p className="text-xs font-medium text-[rgb(var(--color-text-secondary))]">
+            {t("settings.paymentGateway.recommendedEvents", "Recommended Webhook Events")}
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {events.map((event) => (
+              <span
+                key={event}
+                className="inline-flex items-center rounded-md bg-[rgb(var(--color-bg-secondary))] px-2 py-0.5 text-xs font-mono text-[rgb(var(--color-text-secondary))] border border-[rgb(var(--color-border-primary))]/50"
+              >
+                {event}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {showSecret && hasSecret ? (
         <CopyField
@@ -57,13 +92,19 @@ export function GatewayWebhookSetupView({ model }) {
             </>
           ) : null}
         </div>
+      ) : secretNote ? (
+        <p className="text-xs text-[rgb(var(--color-text-tertiary))]">
+          {secretNote}
+        </p>
       ) : null}
 
-      <p className="text-xs text-[rgb(var(--color-text-tertiary))]">
-        {showSecret && hasSecret
-          ? t("settings.paymentGateway.webhookSetupInstructions")
-          : t("settings.paymentGateway.webhookSetupInstructionsExisting")}
-      </p>
+      {!isLiveSetup && (
+        <p className="text-xs text-[rgb(var(--color-text-tertiary))]">
+          {showSecret && hasSecret
+            ? t("settings.paymentGateway.webhookSetupInstructions")
+            : t("settings.paymentGateway.webhookSetupInstructionsExisting")}
+        </p>
+      )}
     </div>
   );
 }

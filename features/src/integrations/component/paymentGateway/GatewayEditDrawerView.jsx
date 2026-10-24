@@ -1,6 +1,7 @@
 "use client";
 import { Input, MultiSelect, Select, Toggle } from "@dragorbit/ui";
 import { CreditCard, Save } from "lucide-react";
+
 export function GatewayEditDrawerView({ model }) {
   const {
     FormDrawer,
@@ -21,6 +22,7 @@ export function GatewayEditDrawerView({ model }) {
     handleRegenerateWebhookSecret,
     isRegeneratingSecret,
   } = model;
+
   return (
     <FormDrawer
       isOpen={isOpen}
@@ -28,7 +30,7 @@ export function GatewayEditDrawerView({ model }) {
       title={t("settings.paymentGateway.editGateway")}
       icon={CreditCard}
       description={t("settings.paymentGateway.manageDescription")}
-      width="w-full md:w-[420px]"
+      width="w-full md:w-[480px] lg:w-[520px]"
       onSave={handleSave}
       onCancel={handleCancel}
       saveLabel={isSaving ? "Saving..." : t("common.save")}
@@ -81,6 +83,7 @@ export function GatewayEditDrawerView({ model }) {
         {webhookSetupView && (
           <GatewayWebhookSetup
             webhookSetup={webhookSetupView}
+            gatewayType={gatewayType}
             showSecret={Boolean(webhookSetupView.webhookSecret)}
             compact
             onRegenerateSecret={

@@ -1,6 +1,7 @@
 "use client";
 import { Plus, Save } from "lucide-react";
 import { Input, MultiSelect, Select, Toggle } from "@dragorbit/ui";
+
 export function GatewayAddDrawerView({ model }) {
   const {
     FormDrawer,
@@ -12,6 +13,7 @@ export function GatewayAddDrawerView({ model }) {
     isCreating,
     GatewayWebhookSetup,
     createdWebhookSetup,
+    liveWebhookSetup,
     gatewayTypeOptions,
     form,
     handleGatewayTypeChange,
@@ -22,6 +24,7 @@ export function GatewayAddDrawerView({ model }) {
     GatewayCredentialFields,
     gatewaySupportsWebhookSetup,
   } = model;
+
   return (
     <FormDrawer
       isOpen={isOpen}
@@ -37,7 +40,7 @@ export function GatewayAddDrawerView({ model }) {
           ? t("settings.paymentGateway.webhookSetupDescription")
           : t("settings.paymentGateway.manageDescription")
       }
-      width="w-full md:w-[420px]"
+      width="w-full md:w-[480px] lg:w-[520px]"
       onSave={handleSave}
       onCancel={handleCancel}
       saveLabel={
@@ -54,7 +57,11 @@ export function GatewayAddDrawerView({ model }) {
     >
       <div className="space-y-4">
         {showingWebhookSetup ? (
-          <GatewayWebhookSetup webhookSetup={createdWebhookSetup} showSecret />
+          <GatewayWebhookSetup
+            webhookSetup={createdWebhookSetup}
+            gatewayType={form.gatewayType}
+            showSecret
+          />
         ) : (
           <>
             <Select
@@ -104,10 +111,13 @@ export function GatewayAddDrawerView({ model }) {
                 setForm((p) => ({ ...p, credentials }))
               }
             />
-            {gatewaySupportsWebhookSetup(form.gatewayType) && (
-              <p className="text-xs text-[rgb(var(--color-text-tertiary))]">
-                {t("settings.paymentGateway.webhookSecretAutoGenerateHint")}
-              </p>
+            {liveWebhookSetup && (
+              <GatewayWebhookSetup
+                webhookSetup={liveWebhookSetup}
+                gatewayType={form.gatewayType}
+                isLiveSetup
+                compact
+              />
             )}
           </>
         )}
