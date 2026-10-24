@@ -3,6 +3,11 @@ import styles from "./StartupLoader.module.css";
 
 /** App/session bootstrap only. Data-loading placeholders belong inside the page. */
 export function StartupLoader({ title, description }) {
+	const logoBase =
+		typeof window !== "undefined" && window.location.protocol === "file:"
+			? "./DragBizz-Logos/"
+			: "/DragBizz-Logos/";
+
 	return (
 		<section
 			className={styles.screen}
@@ -15,14 +20,14 @@ export function StartupLoader({ title, description }) {
 					<span className={styles.ring} />
 					<img
 						className={styles.light}
-						src="/DragBizz-Logos/Dragbizz-black.svg"
+						src={`${logoBase}Dragbizz-black.svg`}
 						alt=""
 						width="112"
 						height="36"
 					/>
 					<img
 						className={styles.dark}
-						src="/DragBizz-Logos/Dragbizz-white.svg"
+						src={`${logoBase}Dragbizz-white.svg`}
 						alt=""
 						width="112"
 						height="36"

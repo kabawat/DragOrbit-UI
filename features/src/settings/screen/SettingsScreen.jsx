@@ -36,7 +36,7 @@ export function SettingsScreen({
       <div className="flex-1 min-h-0 overflow-hidden p-4 sm:p-6">
         <div
           ref={contentRef}
-          className={`w-full h-full mx-auto custom-scrollbar ${activeTab === "invoiceNumber" ? "overflow-y-auto lg:overflow-hidden" : "overflow-y-auto"}`}
+          className={`w-full h-full mx-auto custom-scrollbar ${activeTab === "invoiceNumber" ? "overflow-hidden" : "overflow-y-auto"}`}
         >
           {children}
         </div>
