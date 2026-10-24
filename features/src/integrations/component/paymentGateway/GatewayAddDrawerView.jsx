@@ -1,5 +1,5 @@
 "use client";
-import { Plus, Save } from "lucide-react";
+import { Check, CheckCircle2, Plus, Save } from "lucide-react";
 import { Input, MultiSelect, Select, Toggle } from "@dragorbit/ui";
 
 export function GatewayAddDrawerView({ model }) {
@@ -13,7 +13,6 @@ export function GatewayAddDrawerView({ model }) {
     isCreating,
     GatewayWebhookSetup,
     createdWebhookSetup,
-    liveWebhookSetup,
     gatewayTypeOptions,
     form,
     handleGatewayTypeChange,
@@ -25,16 +24,21 @@ export function GatewayAddDrawerView({ model }) {
     gatewaySupportsWebhookSetup,
   } = model;
 
+  const currentGatewayName = t(
+    `settings.paymentGateway.types.${form.gatewayType}`,
+    form.gatewayType,
+  );
+
   return (
     <FormDrawer
       isOpen={isOpen}
       onClose={handleCancel}
       title={
         showingWebhookSetup
-          ? t("settings.paymentGateway.webhookSetupTitle")
+          ? `${currentGatewayName} ${t("settings.paymentGateway.webhookSetupTitle")}`
           : t("settings.paymentGateway.addGateway")
       }
-      icon={Plus}
+      icon={showingWebhookSetup ? CheckCircle2 : Plus}
       description={
         showingWebhookSetup
           ? t("settings.paymentGateway.webhookSetupDescription")
@@ -52,16 +56,33 @@ export function GatewayAddDrawerView({ model }) {
       }
       cancelLabel={showingWebhookSetup ? undefined : t("common.cancel")}
       isSaving={isCreating}
-      saveIcon={Save}
+      saveIcon={showingWebhookSetup ? Check : Save}
       saveVariant="primary"
     >
       <div className="space-y-4">
         {showingWebhookSetup ? (
-          <GatewayWebhookSetup
-            webhookSetup={createdWebhookSetup}
-            gatewayType={form.gatewayType}
-            showSecret
-          />
+          <div className="space-y-4">
+            <div className="rounded-lg bg-green-500/10 border border-green-500/20 p-3 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-medium text-[rgb(var(--color-text-primary))]">
+                  {t("settings.paymentGateway.addedSuccess")}
+                </h4>
+                <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-0.5">
+                  {t("settings.paymentGateway.webhookSetupPrompt")}
+                </p>
+              </div>
+            </div>
+
+            <GatewayWebhookSetup
+              webhookSetup={createdWebhookSetup}
+              gatewayType={form.gatewayType}
+              showSecret
+              hideInnerTitle
+            />
+          </div>
         ) : (
           <>
             <Select
@@ -111,13 +132,10 @@ export function GatewayAddDrawerView({ model }) {
                 setForm((p) => ({ ...p, credentials }))
               }
             />
-            {liveWebhookSetup && (
-              <GatewayWebhookSetup
-                webhookSetup={liveWebhookSetup}
-                gatewayType={form.gatewayType}
-                isLiveSetup
-                compact
-              />
+            {gatewaySupportsWebhookSetup(form.gatewayType) && (
+              <p className="text-xs text-[rgb(var(--color-text-tertiary))]">
+                {t("settings.paymentGateway.webhookSecretAutoGenerateHint")}
+              </p>
             )}
           </>
         )}
