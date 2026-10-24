@@ -1,4 +1,6 @@
 export { InvoicesScreen, default } from "./screen/InvoicesScreen.jsx";
+export { AddedItemsList } from "./component/AddedItemsList.jsx";
+export { getInStockProductIds } from "./utils/getInStockProductIds.js";
 export { InvoiceListHeaderView } from "./component/InvoiceListHeaderView.jsx";
 export { InvoiceListContentView } from "./component/InvoiceListContentView.jsx";
 export { InvoiceDeleteConfirmModalPresentation } from "./component/InvoiceDeleteConfirmModalView.jsx";
