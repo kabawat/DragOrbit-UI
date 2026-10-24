@@ -1,6 +1,7 @@
 export function resolvePaymentLinkUrl(link) {
   if (!link) return "";
   return (
+    link.checkoutUrl ||
     link.gatewayShortUrl ||
     link.paymentLinkUrl ||
     link.shortUrl ||
