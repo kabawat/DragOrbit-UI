@@ -269,6 +269,7 @@ const Select = ({
                     />
                     <input
                       ref={searchRef}
+                      data-ignore-barcode-scanner="true"
                       type="text"
                       placeholder="Search options..."
                       value={searchTerm}
