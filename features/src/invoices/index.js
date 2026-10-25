@@ -10,6 +10,7 @@ export { UpdatePaymentStatusModalPresentation } from "./component/UpdatePaymentS
 export { ViewCancelInvoiceModalPresentation } from "./component/view/CancelInvoiceModalView.jsx";
 export { ViewDeleteInvoiceModalPresentation } from "./component/view/DeleteInvoiceModalView.jsx";
 export { ViewInvoiceSummaryCardPresentation } from "./component/view/InvoiceSummaryCardView.jsx";
+export { ResponsiveInvoiceDocument } from "./component/view/ResponsiveInvoiceDocument.jsx";
 export * from "./template/index.js";
 export { getTemplateComponent } from "./template/registry.js";
 export { InvoiceTemplateSettingsView } from "./template/InvoiceTemplateSettingsView.jsx";

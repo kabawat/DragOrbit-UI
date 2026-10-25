@@ -1,4 +1,5 @@
 import { PaperDocument } from "@dragorbit/ui";
+import { ResponsiveInvoiceDocument } from "../component/view/ResponsiveInvoiceDocument.jsx";
 import styles from "./style.module.scss";
 
 const InvoiceContainer = ({ children, className = "", style = {} }) => {
@@ -20,13 +21,15 @@ const InvoiceContainer = ({ children, className = "", style = {} }) => {
           }
         }
       `}</style>
-			<PaperDocument
-				id="invoice-container"
-				className={`${styles.invoicePage} ${className}`}
-				style={style}
-			>
-				{children}
-			</PaperDocument>
+			<ResponsiveInvoiceDocument pageWidth={794}>
+				<PaperDocument
+					id="invoice-container"
+					className={`${styles.invoicePage} ${className}`}
+					style={style}
+				>
+					{children}
+				</PaperDocument>
+			</ResponsiveInvoiceDocument>
 		</>
 	);
 };
