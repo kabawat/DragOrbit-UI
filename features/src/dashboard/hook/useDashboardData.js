@@ -1,118 +1,162 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { normalizeStoreSummary } from "../model/summary";
+import { normalizeStoreSummary } from "../model/summary.js";
+
 export function useDashboardData({
 	repository,
 	storeId,
 	ready = true,
-	isStaff,
+	isStaff = false,
 	initialSummary,
 	onSummary,
 	salesTrendDays = 7,
 }) {
-	const [summary, setSummary] = useState(normalizeStoreSummary(initialSummary));
-	const [loading, setLoading] = useState(
-		!isStaff && !Array.isArray(initialSummary),
-	);
-	const [error, setError] = useState(null);
+	const initialRows = Array.isArray(initialSummary)
+		? normalizeStoreSummary(initialSummary)
+		: [];
+	const hasInitial = initialRows.length > 0;
+
+	// Core store dashboard state (atomic to minimize re-render passes)
+	const [mainState, setMainState] = useState(() => ({
+		summary: initialRows,
+		today: null,
+		loading: !isStaff && !hasInitial,
+		error: null,
+	}));
+
+	// Sales trend state
+	const [trendState, setTrendState] = useState(() => ({
+		data: [],
+		loading: false,
+		error: null,
+	}));
+
 	const [retryCount, setRetryCount] = useState(0);
-	const hasLoaded = useRef(Array.isArray(initialSummary));
-	const retry = useCallback(() => setRetryCount((value) => value + 1), []);
-	const [today, setToday] = useState(null);
-	const [salesTrend, setSalesTrend] = useState([]);
-	const [salesTrendLoading, setSalesTrendLoading] = useState(false);
-	const [salesTrendError, setSalesTrendError] = useState(null);
-	const cached = useRef(summary);
+	const retry = useCallback(() => setRetryCount((v) => v + 1), []);
+
+	// Stable refs to eliminate unneeded effect re-executions & race conditions
+	const onSummaryRef = useRef(onSummary);
+	onSummaryRef.current = onSummary;
+
+	const loadedStoreIdRef = useRef(hasInitial ? storeId : null);
+	const mainRequestIdRef = useRef(0);
+	const trendRequestIdRef = useRef(0);
+
+	// Sync initialSummary updates from parent
 	useEffect(() => {
 		if (Array.isArray(initialSummary)) {
-			hasLoaded.current = true;
-			cached.current = normalizeStoreSummary(initialSummary);
-			setSummary(cached.current);
+			const normalized = normalizeStoreSummary(initialSummary);
+			loadedStoreIdRef.current = storeId;
+			setMainState((prev) => ({
+				...prev,
+				summary: normalized,
+				loading: false,
+			}));
 		}
-	}, [initialSummary]);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: retryCount explicitly retries the current repository query.
+	}, [initialSummary, storeId]);
+
+	// Fetch Summary & Cashbook concurrently (O(1) request sequence tracking)
 	useEffect(() => {
 		if (!ready || !storeId || isStaff) return;
-		let cancelled = false;
-		setLoading(!hasLoaded.current);
-		setError(null);
-		Promise.resolve()
-			.then(() => repository.getSummary({ storeId }))
-			.then((rows) => {
-				if (cancelled) return;
-				if (!Array.isArray(rows))
-					throw new Error("Unable to load dashboard data. Please try again.");
-				hasLoaded.current = true;
-				cached.current = normalizeStoreSummary(rows);
-				setSummary(cached.current);
-				onSummary?.(cached.current);
-			})
-			.catch((error) => {
-				if (!cancelled) {
-					setError(error?.message || "Unable to load dashboard data.");
-					setSummary(cached.current);
+
+		const requestId = ++mainRequestIdRef.current;
+		const isInitialForStore = loadedStoreIdRef.current !== storeId;
+
+		setMainState((prev) => ({
+			...prev,
+			loading: isInitialForStore ? true : prev.loading,
+			error: null,
+		}));
+
+		const summaryPromise = repository.getSummary({ storeId });
+		const cashbookPromise = repository.getCashbook
+			? repository.getCashbook({ storeId })
+			: Promise.resolve(null);
+
+		Promise.allSettled([summaryPromise, cashbookPromise]).then(
+			([summaryRes, cashbookRes]) => {
+				if (requestId !== mainRequestIdRef.current) return;
+
+				let newSummary;
+				let summaryError = null;
+
+				if (summaryRes.status === "fulfilled") {
+					if (!Array.isArray(summaryRes.value)) {
+						summaryError = "Unable to load dashboard data. Please try again.";
+					} else {
+						newSummary = normalizeStoreSummary(summaryRes.value);
+						loadedStoreIdRef.current = storeId;
+						onSummaryRef.current?.(newSummary);
+					}
+				} else {
+					summaryError =
+						summaryRes.reason?.message || "Unable to load dashboard data.";
 				}
-			})
-			.finally(() => {
-				if (!cancelled) setLoading(false);
-			});
+
+				const newToday =
+					cashbookRes.status === "fulfilled"
+						? (cashbookRes.value?.today ?? null)
+						: null;
+
+				setMainState((prev) => ({
+					summary: newSummary !== undefined ? newSummary : prev.summary,
+					today: newToday,
+					loading: false,
+					error: summaryError,
+				}));
+			},
+		);
+
 		return () => {
-			cancelled = true;
+			if (mainRequestIdRef.current === requestId) {
+				mainRequestIdRef.current++;
+			}
 		};
-	}, [repository, storeId, ready, isStaff, onSummary, retryCount]);
+	}, [repository, storeId, ready, isStaff, retryCount]);
+
+	// Fetch Sales Trend (isolated to avoid re-fetching summary when trend days change)
 	useEffect(() => {
-		setToday(null);
-		if (!ready || !storeId || isStaff || !repository.getCashbook) return;
-		let cancelled = false;
-		Promise.resolve()
-			.then(() => repository.getCashbook({ storeId }))
-			.then((value) => {
-				if (!cancelled) setToday(value?.today ?? null);
-			})
-			.catch(() => {
-				if (!cancelled) setToday(null);
-			});
-		return () => {
-			cancelled = true;
-		};
-	}, [repository, storeId, ready, isStaff]);
-	useEffect(() => {
-		setSalesTrend([]);
-		setSalesTrendError(null);
 		if (!ready || !storeId || isStaff || !repository.getSalesTrend) {
-			setSalesTrendLoading(false);
+			setTrendState({ data: [], loading: false, error: null });
 			return;
 		}
-		let cancelled = false;
-		setSalesTrendLoading(true);
-		Promise.resolve()
-			.then(() => repository.getSalesTrend({ storeId, days: salesTrendDays }))
+
+		const requestId = ++trendRequestIdRef.current;
+		setTrendState((prev) => ({ ...prev, loading: true, error: null }));
+
+		repository
+			.getSalesTrend({ storeId, days: salesTrendDays })
 			.then((value) => {
+				if (requestId !== trendRequestIdRef.current) return;
 				if (!Array.isArray(value)) {
 					throw new Error("Sales trend data is unavailable.");
 				}
-				if (!cancelled) setSalesTrend(value);
+				setTrendState({ data: value, loading: false, error: null });
 			})
-			.catch((error) => {
-				if (!cancelled) {
-					setSalesTrendError(error?.message || "Sales trend is unavailable.");
-				}
-			})
-			.finally(() => {
-				if (!cancelled) setSalesTrendLoading(false);
+			.catch((err) => {
+				if (requestId !== trendRequestIdRef.current) return;
+				setTrendState({
+					data: [],
+					loading: false,
+					error: err?.message || "Sales trend is unavailable.",
+				});
 			});
+
 		return () => {
-			cancelled = true;
+			if (trendRequestIdRef.current === requestId) {
+				trendRequestIdRef.current++;
+			}
 		};
-	}, [repository, storeId, ready, isStaff, salesTrendDays]);
+	}, [repository, storeId, ready, isStaff, salesTrendDays, retryCount]);
+
 	return {
-		summary,
-		loading,
-		today,
-		salesTrend,
-		salesTrendLoading,
-		salesTrendError,
-		error,
+		summary: mainState.summary,
+		loading: mainState.loading,
+		today: mainState.today,
+		salesTrend: trendState.data,
+		salesTrendLoading: trendState.loading,
+		salesTrendError: trendState.error,
+		error: mainState.error,
 		retry,
 	};
 }
