@@ -24,6 +24,7 @@ import ChatCustomerResultCard, {
   collectCustomerWrites,
   stripCustomerOpenLinks,
 } from "./ChatCustomerResultCard.jsx";
+import ChatInvoiceResults from "./ChatInvoiceResults.jsx";
 import ChatSlashMenu from "./ChatSlashMenu.jsx";
 import ChatWorkspace from "./ChatWorkspace.jsx";
 import DragBizzLogoIcon from "./DragBizzLogoIcon.jsx";
@@ -461,6 +462,7 @@ function AssistantMessageBubble({
       {/* Clean response layout */}
       <div className="w-full text-[13.5px] leading-relaxed text-[rgb(var(--color-text-primary))]">
         <ChatAssistantMessage message={assistantText} />
+        <ChatInvoiceResults toolResults={item.toolResults} />
         {item.streaming && (
           <span className="inline-block h-3.5 w-1.5 ml-1 translate-y-0.5 rounded-xs bg-[#187CC5] animate-pulse" />
         )}
