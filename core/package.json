@@ -28,6 +28,10 @@
       "default": "./src/forms/phone.js"
     },
     "./utils/*": "./src/utils/*.js",
+    "./domain": {
+      "types": "./src/utils/domain.js",
+      "default": "./src/utils/domain.js"
+    },
     "./auth": "./src/auth/index.js"
   },
   "scripts": {
