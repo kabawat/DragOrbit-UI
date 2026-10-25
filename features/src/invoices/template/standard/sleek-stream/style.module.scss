@@ -1,0 +1,224 @@
+.sleekInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+}
+
+.splitHeader {
+    display: flex !important;
+    min-height: 150px !important;
+}
+
+.metaSidebar {
+    flex: 0 0 30% !important;
+    background-color: #2980b9 !important;
+    color: white !important;
+    padding: 25px 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+
+    h1 {
+        font-size: 32px !important;
+        font-weight: 900 !important;
+        margin: 0 0 5px 0 !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.3) !important;
+        padding-bottom: 5px !important;
+        color: white !important;
+    }
+}
+
+.metaDetail {
+    font-size: 10px !important;
+    text-transform: uppercase !important;
+    margin-top: 15px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.metaValue {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin-top: 2px !important;
+    color: white !important;
+}
+
+.storeCustomerInfo {
+    flex: 0 0 70% !important;
+    padding: 30px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.infoBlock {
+    width: 48% !important;
+
+    .title {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #2980b9 !important;
+        font-weight: 700 !important;
+        margin-bottom: 5px !important;
+        border-bottom: 1px dashed #ccc !important;
+        padding-bottom: 3px !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        font-size: 13px !important;
+    }
+}
+
+.valueBold {
+    font-weight: 600 !important;
+    color: #34495e !important;
+}
+
+.storeName {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    color: #34495e !important;
+    margin-bottom: 5px !important;
+}
+
+.storeAddress {
+    font-size: 12px !important;
+    color: #777 !important;
+}
+
+.tableArea {
+    padding: 20px 0px !important;
+}
+
+.sleekTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-bottom: 30px !important;
+
+    .tableHeader {
+        background-color: #f4f6f9 !important;
+        color: #34495e !important;
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        padding: 12px 15px !important;
+        border-bottom: 2px solid #2980b9 !important;
+        font-weight: 700 !important;
+    }
+
+    td {
+        padding: 12px 15px !important;
+        border-bottom: 1px solid #eee !important;
+        font-size: 13px !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+}
+
+.productSku {
+    font-size: 10px !important;
+    color: #95a5a6 !important;
+    margin-top: 2px !important;
+}
+
+.totalsArea {
+    display: flex !important;
+    justify-content: flex-end !important;
+    padding: 0 0px 40px 30px !important;
+}
+
+.totalsTable {
+    width: 320px !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+}
+
+.totalLabel {
+    color: #7f8c8d !important;
+}
+
+.amount {
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+}
+
+.finalRow {
+    background-color: #f4f6f9 !important;
+    padding: 15px !important;
+    margin-top: 10px !important;
+    border: 1px solid #ddd !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 800 !important;
+        color: #2980b9 !important;
+        font-size: 20px !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    background-color: #34495e !important;
+    color: white !important;
+    padding: 20px 0 !important;
+    font-size: 12px !important;
+
+    p {
+        margin: 0 !important;
+        line-height: 1.5 !important;
+    }
+}
+
+@media print {
+    .metaSidebar {
+        background-color: #2980b9 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .tableHeader {
+        background-color: #f4f6f9 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .finalRow {
+        background-color: #f4f6f9 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .footer {
+        background-color: #34495e !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

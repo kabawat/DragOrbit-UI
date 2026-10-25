@@ -1,0 +1,189 @@
+.elegantInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 40px !important;
+    background: #ffffff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    font-family: var(--font-primary) !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 40px !important;
+}
+
+.storeDetails {
+    .storeName {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #3498db !important;
+        margin-bottom: 5px !important;
+    }
+
+    .storeAddress {
+        font-size: 13px !important;
+        color: #666 !important;
+        line-height: 1.5 !important;
+    }
+}
+
+.invoiceDetails {
+    text-align: right !important;
+
+    .title {
+        font-size: 36px !important;
+        font-weight: 700 !important;
+        color: #2c3e50 !important;
+        margin-bottom: 5px !important;
+    }
+
+    p {
+        margin: 4px 0 !important;
+        font-size: 13px !important;
+        color: #555 !important;
+    }
+}
+
+.infoSection {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 25px !important;
+    margin-bottom: 40px !important;
+}
+
+.infoBox {
+    padding: 20px !important;
+    background: #fdfdfd !important;
+    border: 1px solid #eaeaea !important;
+    border-radius: 6px !important;
+
+    h3 {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #3498db !important;
+        margin-bottom: 12px !important;
+        margin-top: 0 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        padding-bottom: 8px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        margin-bottom: 5px !important;
+        line-height: 1.6 !important;
+        color: #333 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.elegantTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        background: #f8f9fa !important;
+        color: #555 !important;
+        padding: 12px 15px !important;
+        text-align: left !important;
+        font-size: 13px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 2px solid #3498db !important;
+    }
+
+    :global(td) {
+        padding: 12px 15px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        font-size: 14px !important;
+        color: #333 !important;
+    }
+}
+
+.alignRight {
+    text-align: right !important;
+}
+
+.alignCenter {
+    text-align: center !important;
+}
+
+.totalsSection {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-top: 20px !important;
+}
+
+.totalsBox {
+    width: 300px !important;
+    background: #fdfdfd !important;
+    border: 1px solid #eaeaea !important;
+    border-radius: 6px !important;
+    padding: 20px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 8px !important;
+    font-size: 14px !important;
+
+    span:first-child {
+        color: #555 !important;
+    }
+}
+
+.grandTotal {
+    margin-top: 10px !important;
+    padding-top: 10px !important;
+    border-top: 2px solid #3498db !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    color: #3498db !important;
+}
+
+.footer {
+    text-align: center !important;
+    font-size: 12px !important;
+    color: #888 !important;
+    margin-top: 40px !important;
+    border-top: 1px solid #f0f0f0 !important;
+    padding-top: 20px !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    :global(td) {
+        border-top: 2px solid #3498db !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #f8f9fa !important;
+        font-size: 13px !important;
+    }
+}
+
+@media print {
+    .elegantInvoice {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 20px !important;
+    }
+}

@@ -1,0 +1,206 @@
+.cosmicInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 30px !important;
+    background: #1c1c1c !important;
+    border: 1px solid #00e676 !important;
+    font-family: var(--font-primary) !important;
+    color: white !important;
+}
+
+.header {
+    text-align: center !important;
+    margin-bottom: 30px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 1px solid #00e676 !important;
+
+    h1 {
+        color: #00e676 !important;
+        font-size: 28px !important;
+        font-weight: 700 !important;
+        margin-bottom: 5px !important;
+        margin-top: 0 !important;
+        letter-spacing: 4px !important;
+        text-transform: uppercase !important;
+    }
+
+    .storeInfo p {
+        margin: 3px 0 !important;
+        font-size: 11px !important;
+        color: #ccc !important;
+    }
+
+    .storeName {
+        font-weight: 600 !important;
+        color: white !important;
+        font-size: 13px !important;
+    }
+}
+
+.infoSection {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 25px !important;
+    padding: 10px 0 !important;
+    border-top: 1px dashed #555 !important;
+    border-bottom: 1px dashed #555 !important;
+}
+
+.infoBlock {
+    width: 48% !important;
+
+    .label {
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        color: #00e676 !important;
+        margin-bottom: 5px !important;
+        font-weight: 600 !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        font-size: 13px !important;
+    }
+}
+
+.valueBold {
+    font-weight: 700 !important;
+    color: white !important;
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.cosmicTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        border-bottom: 1px solid #00e676 !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        padding: 8px 0 !important;
+        color: #00e676 !important;
+    }
+
+    td {
+        padding: 10px 0 !important;
+        border-bottom: 1px dashed #333 !important;
+        font-size: 13px !important;
+        color: white !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+    color: white !important;
+}
+
+.productSku {
+    font-size: 10px !important;
+    color: #777 !important;
+}
+
+.totalsSection {
+    width: 100% !important;
+    margin-top: 20px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+
+    .rowLabel {
+        color: #ccc !important;
+    }
+
+    .amount {
+        font-weight: 600 !important;
+        color: white !important;
+    }
+}
+
+.finalRow {
+    border-top: 2px solid #00e676 !important;
+    padding: 15px 10px !important;
+    margin-top: 10px !important;
+    font-size: 22px !important;
+    background-color: #2c2c2c !important;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 800 !important;
+        color: #00e676 !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 30px !important;
+    padding-top: 15px !important;
+    border-top: 1px dashed #555 !important;
+    font-size: 10px !important;
+    color: #777 !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px !important;
+    color: #777 !important;
+    margin-top: 6px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    background-color: #2c2c2c !important;
+    border-top: 2px solid #00e676 !important;
+
+    :global(td) {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 10px 0 !important;
+        color: #00e676 !important;
+        border-bottom: none !important;
+    }
+}
+
+@media print {
+    .cosmicInvoice {
+        background: white !important;
+        color: black !important;
+        border: 1px solid black !important;
+    }
+
+    .header h1,
+    .infoBlock .label,
+    .cosmicTable th,
+    .finalRow .finalLabel,
+    .finalRow .finalAmount {
+        color: black !important;
+    }
+
+    .header,
+    .infoSection,
+    .cosmicTable thead tr,
+    .finalRow {
+        border-color: black !important;
+    }
+
+    .finalRow {
+        background: white !important;
+    }
+}

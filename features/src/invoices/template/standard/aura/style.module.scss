@@ -1,0 +1,213 @@
+/* Aura Template Specific Styles */
+.auraInvoice {
+    width: 100%;
+    height: 100%;
+    background: white;
+    font-family: var(--font-primary) !important;
+    color: #2c3e50;
+    font-size: 14px;
+    box-sizing: border-box;
+    padding: 40px;
+    border: 1px solid #e0e0e0;
+}
+
+.topBar {
+    background-color: #f5f8fa;
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #7f8c8d;
+    margin: -40px -40px 30px -40px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.topBar strong {
+    color: #2c3e50;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    font-size: 38px;
+    font-weight: 200;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.storeInfo {
+    text-align: right;
+}
+
+.storeInfo h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.storeInfo p {
+    font-size: 13px;
+    margin: 2px 0;
+    color: #7f8c8d;
+}
+
+.infoSection {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.infoBlock {
+    width: 45%;
+}
+
+.infoBlock .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #95a5a6;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.infoBlock .value {
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.infoBlock p {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+    margin: 2px 0;
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+
+.table thead tr {
+    border-bottom: 2px solid #ddd;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    padding: 10px 0;
+}
+
+.table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f8fa;
+    font-size: 14px;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.productName {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.productSku {
+    font-size: 11px;
+    color: #95a5a6;
+}
+
+.totalsContainer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.totals {
+    width: auto;
+    /* Changed to auto for elastic width */
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 14px;
+}
+
+.totalLabel {
+    color: #555;
+    padding-right: 30px;
+    font-weight: 500;
+}
+
+.totalAmount {
+    font-weight: 500;
+    text-align: right;
+}
+
+.finalRow {
+    border-top: 2px solid #2c3e50;
+    padding-top: 8px;
+    margin-top: 10px;
+}
+
+.finalLabel {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.finalAmount {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2c3e50;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 11px;
+    color: #95a5a6;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px;
+    color: #95a5a6;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.tableFooterRow {
+    background-color: #f5f8fa;
+    border-top: 2px solid #2c3e50;
+
+    :global(td) {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 0;
+        color: #2c3e50;
+        border-bottom: none;
+    }
+}

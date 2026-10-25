@@ -1,0 +1,207 @@
+/* Aether Template Specific Styles */
+.aetherInvoice {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    background: white;
+    font-family: var(--font-primary) !important;
+    color: #2c3e50;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.leftPanel {
+    width: 35%;
+    background: #2c3e50;
+    color: white;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.storeName {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.storeInfo p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #dfe6e9;
+    margin: 2px 0;
+}
+
+.rightPanel {
+    width: 65%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.date {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.invoiceNumber {
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.infoSection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.infoBlock {
+    width: 48%;
+}
+
+.label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #95a5a6;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 25px;
+}
+
+.table th {
+    text-align: left;
+    font-size: 11px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e8ea;
+}
+
+.table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f2f6;
+    font-size: 13px;
+    vertical-align: top;
+}
+
+.productName {
+    font-weight: 500;
+    color: #2d3436;
+}
+
+.productSku {
+    font-size: 11px;
+    color: #95a5a6;
+    display: block;
+    margin-top: 2px;
+}
+
+.totals {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    width: 250px;
+    margin-bottom: 6px;
+}
+
+.totalLabel {
+    flex: 1;
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: right;
+    margin-right: 15px;
+}
+
+.totalAmount {
+    width: 100px;
+    font-size: 13px;
+    text-align: right;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.finalTotal {
+    border-top: 1px solid #bdc3c7;
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+.finalTotal .totalLabel,
+.finalTotal .totalAmount {
+    font-weight: 700;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+.footer {
+    text-align: center;
+    margin-top: auto;
+    padding-top: 30px;
+    font-size: 10px;
+    color: #95a5a6;
+    border-top: 1px solid #f1f2f6;
+}
+
+.footer p {
+    margin: 3px 0;
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px;
+    color: #95a5a6;
+    margin-top: 6px;
+    font-style: italic;
+    text-align: right;
+}
+
+.tableFooterRow {
+    background-color: #f8f9fa;
+    border-top: 2px solid #2c3e50;
+
+    :global(td) {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 0;
+        color: #2c3e50;
+        border-bottom: none;
+    }
+}

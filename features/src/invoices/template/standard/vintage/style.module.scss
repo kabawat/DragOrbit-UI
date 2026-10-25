@@ -1,0 +1,195 @@
+.vintageInvoice {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    background: #ffffff !important;
+    font-family: var(--font-primary) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #4e342e !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    border-bottom: 2px solid #a1887f !important;
+    padding-bottom: 20px !important;
+    margin-bottom: 30px !important;
+}
+
+.storeDetails {
+    .storeName {
+        font-size: 26px !important;
+        font-weight: 600 !important;
+        color: #4e342e !important;
+        font-variant: small-caps !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        color: #6d4c41 !important;
+        margin-top: 5px !important;
+    }
+}
+
+.invoiceTitleBox {
+    text-align: right !important;
+
+    h1 {
+        font-size: 32px !important;
+        font-weight: 700 !important;
+        color: #79867c !important;
+        /* Muted green */
+        margin: 0 !important;
+        letter-spacing: 1px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        color: #6d4c41 !important;
+        margin: 3px 0 !important;
+    }
+}
+
+.infoGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 30px !important;
+    margin-bottom: 30px !important;
+}
+
+.infoBox {
+    padding: 15px !important;
+    background: #fdfcfb !important;
+    border: 1px dashed #c7b2a3 !important;
+    border-radius: 4px !important;
+
+    h3 {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #79867c !important;
+        margin-bottom: 10px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+        padding-bottom: 5px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        color: #5d4037 !important;
+        margin-bottom: 3px !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.vintageTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #a1887f !important;
+
+    th {
+        background: #79867c !important;
+        color: #ffffff !important;
+        padding: 12px 10px !important;
+        text-align: left !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-right: 1px solid #a1887f !important;
+
+        &:last-child {
+            border-right: none !important;
+        }
+    }
+
+    td {
+        padding: 10px !important;
+        border-bottom: 1px solid #d7ccc8 !important;
+        font-size: 14px !important;
+        color: #4e342e !important;
+        border-right: 1px solid #d7ccc8 !important;
+
+        &:last-child {
+            border-right: none !important;
+        }
+    }
+
+    tr:nth-child(even) {
+        background-color: #fdfcfb !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+}
+
+.totalsArea {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-top: 20px !important;
+}
+
+.totalsBox {
+    width: 300px !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 6px 0 !important;
+    font-size: 14px !important;
+
+    span:first-child {
+        color: #6d4c41 !important;
+        font-weight: 600 !important;
+    }
+
+    span:last-child {
+        font-weight: 600 !important;
+    }
+}
+
+.grandTotalRow {
+    border-top: 2px solid #795548 !important;
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+    font-size: 16px !important;
+    color: #79867c !important;
+    font-weight: 700 !important;
+}
+
+.footer {
+    margin-top: 40px !important;
+    text-align: center !important;
+    padding-top: 20px !important;
+    border-top: 1px dotted #a1887f !important;
+    font-style: italic !important;
+    font-size: 12px !important;
+    color: #6d4c41 !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

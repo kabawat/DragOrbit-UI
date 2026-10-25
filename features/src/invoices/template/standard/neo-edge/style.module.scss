@@ -1,0 +1,170 @@
+.neoedgeInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    font-family: var(--font-primary) !important;
+    color: #0f172a !important;
+}
+
+.header {
+    background: linear-gradient(135deg, #004aad, #0284c7) !important;
+    color: white !important;
+    padding: 25px 35px !important;
+    border-bottom: 4px solid #93c5fd !important;
+
+    h1 {
+        font-size: 30px !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+        color: white !important;
+    }
+}
+
+.storeInfo {
+    margin-top: 8px !important;
+    font-size: 12px !important;
+    opacity: 0.9 !important;
+
+    strong {
+        font-size: 14px !important;
+    }
+}
+
+.infoSection {
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 15px !important;
+    margin: 30px 0px !important;
+}
+
+.card {
+    flex: 1 !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    background: #f9fafb !important;
+
+    .title {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        font-weight: 600 !important;
+        color: #004aad !important;
+        border-bottom: 1px dashed #004aad !important;
+        margin-bottom: 6px !important;
+        padding-bottom: 4px !important;
+    }
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin: 0 0px 30px !important;
+}
+
+.neoedgeTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        background: linear-gradient(135deg, #004aad, #0284c7) !important;
+        color: white !important;
+    }
+
+    th {
+        font-size: 11px !important;
+        padding: 10px !important;
+        text-transform: uppercase !important;
+        color: white !important;
+    }
+
+    td {
+        padding: 10px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        font-size: 13px !important;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #f1f5f9 !important;
+    }
+}
+
+.totalsSection {
+    margin: 0 0px 30px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totalCard {
+    background: #f8fafc !important;
+    padding: 15px 25px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e2e8f0 !important;
+    width: 300px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin: 6px 0 !important;
+    font-size: 14px !important;
+
+    .totalLabel {
+        color: #555 !important;
+    }
+
+    .amount {
+        font-weight: 600 !important;
+        color: #0f172a !important;
+    }
+}
+
+.finalRow {
+    border-top: 2px solid #004aad !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 700 !important;
+        color: #004aad !important;
+        font-size: 18px !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    background: #0f172a !important;
+    color: #cbd5e1 !important;
+    font-size: 12px !important;
+    padding: 15px 0 !important;
+    position: relative !important;
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

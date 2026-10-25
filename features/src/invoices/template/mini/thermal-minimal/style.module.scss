@@ -1,0 +1,62 @@
+.thermalInvoice {
+    width: 80mm;
+    margin: 0 auto;
+    font-family: var(--font-primary) !important;
+    color: #000;
+    padding: 5mm;
+    background: white;
+
+    .top {
+        margin-bottom: 5mm;
+
+        h1 {
+            margin: 0;
+            font-size: 16pt;
+            font-weight: 300;
+        }
+
+        p {
+            margin: 0;
+            font-size: 9pt;
+            color: #666;
+        }
+    }
+
+    .items {
+        border-top: 1px solid #000;
+        padding: 3mm 0;
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2mm;
+            font-size: 10pt;
+        }
+    }
+
+    .totalSection {
+        border-top: 1px solid #000;
+        padding-top: 3mm;
+
+        .totalRow {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12pt;
+            font-weight: bold;
+        }
+    }
+
+    .footer {
+        margin-top: 10mm;
+        text-align: right;
+        font-size: 8pt;
+        color: #999;
+    }
+}
+
+@media print {
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+}

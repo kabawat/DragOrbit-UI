@@ -1,0 +1,192 @@
+.cleanInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 40px !important;
+    background: white !important;
+    border: 1px solid #eeeeee !important;
+    font-family: var(--font-primary) !important;
+    color: #333333 !important;
+}
+
+.header {
+    text-align: center !important;
+    margin-bottom: 30px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 2px solid #ffc107 !important;
+
+    h1 {
+        color: #333333 !important;
+        font-size: 30px !important;
+        font-weight: 900 !important;
+        margin-bottom: 5px !important;
+        margin-top: 0 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+    }
+
+    .storeName {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #ffc107 !important;
+        margin-bottom: 5px !important;
+    }
+
+    .storeInfo p {
+        margin: 2px 0 !important;
+        font-size: 11px !important;
+        color: #777 !important;
+    }
+}
+
+.infoSection {
+    margin-bottom: 30px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    gap: 30px !important;
+}
+
+.infoBlock {
+    width: 45% !important;
+
+    .label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #333333 !important;
+        font-weight: 700 !important;
+        margin-bottom: 8px !important;
+        border-bottom: 1px solid #eeeeee !important;
+        padding-bottom: 5px !important;
+    }
+
+    p {
+        margin: 4px 0 !important;
+        font-size: 13px !important;
+    }
+}
+
+.invoiceNumber {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #ffc107 !important;
+}
+
+.valueBold {
+    font-weight: 600 !important;
+    color: #333333 !important;
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.cleanTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        border-bottom: 2px solid #333333 !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        padding: 10px 0 !important;
+    }
+
+    td {
+        padding: 10px 0 !important;
+        border-bottom: 1px dashed #eeeeee !important;
+        font-size: 13px !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+}
+
+.productSku {
+    font-size: 10px !important;
+    color: #999 !important;
+}
+
+.totalsSection {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totalsTable {
+    width: 250px !important;
+    border-top: 1px solid #eeeeee !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 5px 0 !important;
+    font-size: 14px !important;
+
+    .rowLabel {
+        color: #555 !important;
+    }
+
+    .amount {
+        font-weight: 600 !important;
+        color: #333333 !important;
+    }
+}
+
+.finalRow {
+    border-top: 3px double #333333 !important;
+    padding-top: 10px !important;
+    margin-top: 5px !important;
+    font-size: 20px !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 800 !important;
+        color: #ffc107 !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 30px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid #eeeeee !important;
+    font-size: 12px !important;
+    color: #999 !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px !important;
+    color: #999 !important;
+    margin-top: 6px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    background-color: #fff9e6 !important;
+    border-top: 2px solid #ffc107 !important;
+
+    :global(td) {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 10px 0 !important;
+        color: #333 !important;
+        border-bottom: none !important;
+    }
+}
+
+@media print {
+    .cleanInvoice {
+        padding: 20px !important;
+        border: none !important;
+    }
+}

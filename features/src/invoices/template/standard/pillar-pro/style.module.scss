@@ -1,0 +1,178 @@
+.pillarInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 25px !important;
+
+    h1 {
+        color: #0f4c75 !important;
+        font-size: 40px !important;
+        font-weight: 800 !important;
+        margin: 0 !important;
+        line-height: 1 !important;
+    }
+}
+
+.storeInfo {
+    text-align: right !important;
+    font-size: 12px !important;
+    color: #555 !important;
+
+    .storeName {
+        font-weight: 700 !important;
+        color: #0f4c75 !important;
+        font-size: 14px !important;
+        margin-bottom: 5px !important;
+        display: block !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+    }
+}
+
+.detailColumns {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 20px !important;
+    padding: 15px 0 !important;
+    border-top: 3px solid #0f4c75 !important;
+    border-bottom: 1px solid #f8f9fa !important;
+    margin-bottom: 30px !important;
+}
+
+.metaBlock {
+    .title {
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        color: #3498db !important;
+        font-weight: 700 !important;
+        margin-bottom: 5px !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        font-size: 14px !important;
+    }
+}
+
+.valueBold {
+    font-weight: 700 !important;
+    color: #0f4c75 !important;
+}
+
+.customerName {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.pillarTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        background-color: #f8f9fa !important;
+        color: #0f4c75 !important;
+        border-bottom: 2px solid #3498db !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        padding: 10px 15px !important;
+        color: #0f4c75 !important;
+    }
+
+    td {
+        padding: 12px 15px !important;
+        border-bottom: 1px solid #f8f9fa !important;
+        font-size: 13px !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+}
+
+.totalsArea {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totalsTable {
+    width: 300px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+
+    .label {
+        color: #555 !important;
+    }
+
+    .amount {
+        font-weight: 600 !important;
+        color: #0f4c75 !important;
+    }
+}
+
+.finalGrandRow {
+    border-top: 3px solid #0f4c75 !important;
+    padding: 15px 10px !important;
+    margin-top: 10px !important;
+    font-size: 22px !important;
+    background-color: #f8f9fa !important;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 700 !important;
+        color: #0f4c75 !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 30px !important;
+    border-top: 1px dashed #ccc !important;
+    padding-top: 15px !important;
+    font-size: 11px !important;
+    color: #777 !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

@@ -1,0 +1,204 @@
+.geometricInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #36454F !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 25px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 4px solid #800020 !important;
+
+    h1 {
+        color: #800020 !important;
+        font-size: 36px !important;
+        font-weight: 900 !important;
+        margin: 0 !important;
+        letter-spacing: 2px !important;
+        text-transform: uppercase !important;
+    }
+}
+
+.metaInfo {
+    text-align: right !important;
+
+    p {
+        margin: 3px 0 !important;
+        font-size: 13px !important;
+    }
+}
+
+.infoSection {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 20px !important;
+    margin-bottom: 30px !important;
+}
+
+.infoBox {
+    border: 1px solid #e0e0e0 !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+
+    .label {
+        font-size: 10px !important;
+        text-transform: uppercase !important;
+        color: #800020 !important;
+        font-weight: 700 !important;
+        margin-bottom: 8px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+        padding-bottom: 4px !important;
+    }
+
+    p {
+        margin: 3px 0 !important;
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+    }
+}
+
+.valueBold {
+    font-weight: 700 !important;
+    color: #36454F !important;
+}
+
+.storeName {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #36454F !important;
+    display: block !important;
+    margin-bottom: 5px !important;
+}
+
+.storeInfoText {
+    font-size: 12px !important;
+    color: #777 !important;
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.geometricTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #e0e0e0 !important;
+
+    thead tr {
+        background-color: #f7f7f7 !important;
+        border-bottom: 2px solid #e0e0e0 !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        padding: 10px 15px !important;
+        color: #36454F !important;
+    }
+
+    td {
+        padding: 12px 15px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+        font-size: 13px !important;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+}
+
+.totalsSection {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-bottom: 30px !important;
+}
+
+.totalsTable {
+    width: 300px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+    border-bottom: 1px dashed #e0e0e0 !important;
+
+    .totalLabel {
+        color: #555 !important;
+    }
+
+    .amount {
+        font-weight: 600 !important;
+        color: #36454F !important;
+    }
+}
+
+.finalRow {
+    background-color: #800020 !important;
+    color: white !important;
+    padding: 15px 10px !important;
+    margin-top: 10px !important;
+    font-size: 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    border-bottom: none !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 800 !important;
+        color: white !important;
+    }
+}
+
+.footer {
+    border-top: 1px solid #e0e0e0 !important;
+    padding-top: 20px !important;
+    margin-top: 30px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 12px !important;
+    color: #36454F !important;
+
+    p {
+        margin: 0 !important;
+    }
+}
+
+.signatureLine {
+    border-top: 1px solid #36454F !important;
+    width: 150px !important;
+    margin-top: 30px !important;
+    text-align: center !important;
+    font-size: 10px !important;
+    color: #777 !important;
+}
+
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #36454F !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #f7f7f7 !important;
+        font-size: 13px !important;
+        color: #36454F !important;
+    }
+}

@@ -1,0 +1,201 @@
+.blueInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #34495e !important;
+}
+
+.headerGrid {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 30px !important;
+    border-bottom: 4px solid #2980b9 !important;
+    padding-bottom: 10px !important;
+}
+
+.storeInfo {
+    flex-basis: 50% !important;
+
+    h2 {
+        color: #2980b9 !important;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        margin: 0 0 5px 0 !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+    }
+}
+
+.invoiceDetails {
+    flex-basis: 40% !important;
+    text-align: right !important;
+
+    h1 {
+        color: #34495e !important;
+        font-size: 36px !important;
+        font-weight: 300 !important;
+        margin: 0 0 10px 0 !important;
+    }
+}
+
+.detailRow {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-bottom: 3px !important;
+}
+
+.detailLabel {
+    font-weight: 600 !important;
+    width: 100px !important;
+    text-align: left !important;
+    padding-right: 10px !important;
+}
+
+.invoiceNumberValue {
+    font-weight: 800 !important;
+    color: #2980b9 !important;
+    font-size: 18px !important;
+}
+
+.billTo {
+    margin-bottom: 30px !important;
+    padding: 15px !important;
+    background: #f7f9fb !important;
+    border-left: 5px solid #2980b9 !important;
+}
+
+.billToTitle {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+    color: #2980b9 !important;
+    margin-bottom: 5px !important;
+}
+
+.billToName {
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    margin: 0 !important;
+}
+
+.billTo p {
+    margin: 2px 0 !important;
+    font-size: 13px !important;
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.blueTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #bdc3c7 !important;
+
+    th,
+    td {
+        border: 1px solid #ecf0f1 !important;
+        padding: 10px !important;
+        text-align: left !important;
+    }
+
+    thead th {
+        background-color: #2980b9 !important;
+        color: white !important;
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+    }
+
+    td {
+        font-size: 14px !important;
+    }
+}
+
+.productName {
+    font-weight: 500 !important;
+    color: #333 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #95a5a6 !important;
+    margin-top: 2px !important;
+}
+
+.tableTotalCell {
+    font-weight: 700 !important;
+    color: #2980b9 !important;
+    text-align: right !important;
+}
+
+.totalsArea {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totalsTable {
+    width: 300px !important;
+    border-top: 2px solid #34495e !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+}
+
+.totalLabel {
+    font-weight: 500 !important;
+}
+
+.amount {
+    font-weight: 600 !important;
+}
+
+.finalRow {
+    border-top: 1px solid #bdc3c7 !important;
+    padding-top: 10px !important;
+    margin-top: 5px !important;
+    font-size: 18px !important;
+
+    .finalAmount {
+        color: #2980b9 !important;
+        font-weight: 900 !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 30px !important;
+    border-top: 1px solid #ecf0f1 !important;
+    padding-top: 15px !important;
+    font-size: 12px !important;
+    color: #7f8c8d !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

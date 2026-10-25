@@ -1,0 +1,194 @@
+/* Apex Template Specific Styles */
+.apexInvoice {
+    width: 100%;
+    height: 100%;
+    background: white;
+    font-family: var(--font-primary) !important;
+    color: #34495e;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 40px;
+    background-color: #34495e;
+    color: white;
+}
+
+.header h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 3px;
+    border-bottom: 2px solid #e74c3c;
+    padding-bottom: 5px;
+}
+
+.dateText {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #bdc3c7;
+}
+
+.storeInfo {
+    text-align: right;
+}
+
+.storeInfo h2 {
+    font-size: 20px;
+    margin: 0;
+    color: #e74c3c;
+}
+
+.storeInfo p {
+    font-size: 12px;
+    margin: 2px 0;
+    color: #bdc3c7;
+}
+
+.detailsSection {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 40px 30px;
+}
+
+.infoBlock {
+    width: 45%;
+}
+
+.infoBlock .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #95a5a6;
+    margin-bottom: 5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.infoBlock .value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #34495e;
+    margin-bottom: 10px;
+}
+
+.infoBlock p {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #555;
+    margin: 2px 0;
+}
+
+.rightAlign {
+    text-align: right;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #ecf0f1;
+}
+
+.table th {
+    text-align: left;
+    font-size: 12px;
+    color: white;
+    background: #34495e;
+    text-transform: uppercase;
+    padding: 12px 40px;
+}
+
+.table td {
+    padding: 12px 40px;
+    font-size: 13px;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.productName {
+    font-weight: 600;
+    color: #34495e;
+}
+
+.productSku {
+    font-size: 11px;
+    color: #95a5a6;
+    display: block;
+    margin-top: 2px;
+}
+
+.totalsSection {
+    padding: 20px 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.totals {
+    width: auto;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+.totalLabel {
+    color: #555;
+    padding-right: 30px;
+    font-weight: 500;
+}
+
+.totalAmount {
+    font-weight: 500;
+    text-align: right;
+}
+
+.finalBar {
+    background: #e74c3c;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.footer {
+    text-align: center;
+    padding: 30px 40px;
+    border-top: 1px solid #ecf0f1;
+    font-size: 11px;
+    color: #95a5a6;
+}
+
+.footer p {
+    margin: 5px 0;
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px;
+    color: #95a5a6;
+    margin-top: 6px;
+    font-style: italic;
+}
+
+.tableFooterRow {
+    background-color: #fdf2f2;
+    border-top: 2px solid #e74c3c;
+
+    :global(td) {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px;
+        color: #34495e;
+        border-bottom: none;
+    }
+}

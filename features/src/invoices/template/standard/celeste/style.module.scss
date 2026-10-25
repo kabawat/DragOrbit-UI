@@ -1,0 +1,196 @@
+.celesteInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 40px !important;
+    background: white !important;
+    border-radius: 8px !important;
+    border-top: 5px solid #007bff !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+}
+
+.header {
+    text-align: center !important;
+    margin-bottom: 30px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 2px solid #e0e0e0 !important;
+
+    h1 {
+        font-size: 32px !important;
+        font-weight: 700 !important;
+        color: #007bff !important;
+        margin: 0 !important;
+        letter-spacing: 1px !important;
+    }
+
+    p {
+        font-size: 14px !important;
+        color: #666 !important;
+        margin: 5px 0 0 !important;
+    }
+}
+
+.infoGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 30px !important;
+    margin-bottom: 30px !important;
+}
+
+.infoBlock {
+    padding: 15px !important;
+    border-left: 3px solid #007bff !important;
+    background: #f8f9fa !important;
+
+    .label {
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        color: #007bff !important;
+        margin-bottom: 5px !important;
+        font-weight: 500 !important;
+    }
+
+    .value {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        color: #555 !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.celesteTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(.table-header) {
+        background: #007bff !important;
+        color: white !important;
+        text-transform: uppercase !important;
+        font-size: 12px !important;
+    }
+
+    :global(th) {
+        padding: 12px 10px !important;
+        text-align: left !important;
+    }
+
+    :global(td) {
+        padding: 12px 10px !important;
+        border-bottom: 1px dashed #e0e0e0 !important;
+        font-size: 13px !important;
+    }
+
+    :global(tr:last-child td) {
+        border-bottom: none !important;
+    }
+}
+
+.productName {
+    font-weight: 500 !important;
+    color: #333 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #888 !important;
+}
+
+.totalsContainer {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totals {
+    width: 300px !important;
+    padding-top: 10px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 5px 0 !important;
+    font-size: 14px !important;
+
+    .totalLabel {
+        color: #555 !important;
+    }
+
+    .amount {
+        font-weight: 500 !important;
+    }
+}
+
+.finalRow {
+    margin-top: 15px !important;
+    padding: 10px 15px !important;
+    background: #007bff !important;
+    color: white !important;
+    border-radius: 4px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .finalLabel {
+        font-weight: 700 !important;
+        font-size: 16px !important;
+        color: white !important;
+    }
+
+    .finalAmount {
+        font-weight: 700 !important;
+        font-size: 16px !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 40px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid #e0e0e0 !important;
+    font-size: 11px !important;
+    color: #777 !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px !important;
+    color: #999 !important;
+    margin-top: 6px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    background-color: #e8f0fe !important;
+    border-top: 2px solid #007bff !important;
+
+    :global(td) {
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 10px !important;
+        color: #333 !important;
+        border-bottom: none !important;
+    }
+}
+
+@media print {
+    .celesteInvoice {
+        padding: 20px !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+}

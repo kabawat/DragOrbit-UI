@@ -1,0 +1,43 @@
+.invoicePage {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    padding: 0cm;
+    background: white;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: white !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .invoicePage {
+        width: 100%;
+        max-width: 210mm;
+        height: auto;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 0.5cm;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        page-break-after: always;
+        box-sizing: border-box;
+    }
+
+    :global(.no-print) {
+        display: none !important;
+    }
+}

@@ -1,0 +1,192 @@
+.orionInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    overflow: hidden !important;
+    font-family: var(--font-primary) !important;
+    color: #2f3640 !important;
+}
+
+.header {
+    background: #3a86ff !important;
+    color: white !important;
+    text-align: center !important;
+    padding: 25px 20px !important;
+    position: relative !important;
+
+    &::after {
+        content: "" !important;
+        position: absolute !important;
+        bottom: -10px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 120px !important;
+        height: 4px !important;
+        border-radius: 4px !important;
+        background: #ffbe0b !important;
+    }
+
+    h1 {
+        margin: 0 !important;
+        font-size: 28px !important;
+        letter-spacing: 1px !important;
+        font-weight: 700 !important;
+        color: white !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        margin-top: 6px !important;
+        opacity: 0.9 !important;
+        color: white !important;
+    }
+}
+
+.content {
+    padding: 40px 5px !important;
+}
+
+.storeInfo {
+    text-align: center !important;
+    margin-bottom: 25px !important;
+    color: #555 !important;
+
+    h2 {
+        margin: 0 !important;
+        font-size: 20px !important;
+        color: #2f3640 !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        margin: 2px 0 !important;
+        color: #7f8c8d !important;
+    }
+}
+
+.details {
+    display: flex !important;
+    justify-content: space-between !important;
+    background: #f9fafc !important;
+    border-radius: 10px !important;
+    padding: 20px 25px !important;
+    margin-bottom: 30px !important;
+    border: 1px solid #e6e9ec !important;
+
+    .block {
+        width: 48% !important;
+    }
+
+    .label {
+        font-size: 11px !important;
+        color: #7f8c8d !important;
+        text-transform: uppercase !important;
+        margin-bottom: 4px !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .value {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #2f3640 !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        font-size: 13px !important;
+        color: #555 !important;
+    }
+}
+
+.table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 10px !important;
+
+    thead th {
+        text-align: left !important;
+        font-size: 11px !important;
+        color: #7f8c8d !important;
+        text-transform: uppercase !important;
+        border-bottom: 2px solid #e6e9ec !important;
+        padding: 10px 0 !important;
+    }
+
+    td {
+        padding: 10px 0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        font-size: 13px !important;
+        color: #2f3640 !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+}
+
+.totals {
+    margin-top: 25px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 260px !important;
+    margin-bottom: 6px !important;
+
+    .totalLabel {
+        width: 140px !important;
+        text-align: right !important;
+        color: #7f8c8d !important;
+        font-size: 12px !important;
+        margin-right: 10px !important;
+    }
+
+    .amount {
+        width: 100px !important;
+        text-align: right !important;
+        font-weight: 500 !important;
+    }
+}
+
+.finalRow {
+    border-top: 2px solid #dcdde1 !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    font-size: 16px !important;
+}
+
+.footer {
+    background: #f9fafc !important;
+    border-top: 1px solid #e0e0e0 !important;
+    text-align: center !important;
+    padding: 20px !important;
+    font-size: 11px !important;
+    color: #7f8c8d !important;
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

@@ -1,0 +1,207 @@
+.eclipseInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    background: #1f1f1f !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    border: 1px solid #2c2c2c !important;
+    font-family: var(--font-primary) !important;
+    color: #e5e7eb !important;
+}
+
+.header {
+    background: linear-gradient(90deg, #0f172a, #1e3a8a, #0ea5e9) !important;
+    color: white !important;
+    padding: 40px !important;
+    text-align: center !important;
+
+    h1 {
+        font-size: 30px !important;
+        letter-spacing: 2px !important;
+        margin-bottom: 6px !important;
+        margin-top: 0 !important;
+        text-transform: uppercase !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        opacity: 0.9 !important;
+        margin: 3px 0 !important;
+    }
+}
+
+.detailsSection {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 30px 40px !important;
+    border-bottom: 1px solid #2e2e2e !important;
+}
+
+.block {
+    width: 48% !important;
+
+    .label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #9ca3af !important;
+        margin-bottom: 4px !important;
+    }
+
+    .value {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        color: #f3f4f6 !important;
+    }
+
+    p {
+        margin: 3px 0 !important;
+        font-size: 13px !important;
+    }
+}
+
+.tableContainer {
+    padding: 0 40px !important;
+    margin-top: 20px !important;
+}
+
+.invoiceTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    th {
+        background: #2c2c2c !important;
+        color: #9ca3af !important;
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        padding: 12px 10px !important;
+        text-align: left !important;
+    }
+
+    td {
+        padding: 14px 10px !important;
+        border-bottom: 1px solid #2c2c2c !important;
+        font-size: 13px !important;
+        color: #f3f4f6 !important;
+    }
+}
+
+.productName {
+    font-weight: 500 !important;
+    color: #ffffff !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    display: block !important;
+}
+
+.totals {
+    background: #111827 !important;
+    margin: 30px 40px !important;
+    border-radius: 10px !important;
+    padding: 20px !important;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.05) !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 8px !important;
+
+    .totalLabel {
+        color: #9ca3af !important;
+        font-size: 12px !important;
+    }
+
+    .totalValue {
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        color: #f3f4f6 !important;
+    }
+}
+
+.finalTotal {
+    border-top: 1px solid #374151 !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+
+    .totalLabel {
+        color: #e5e7eb !important;
+    }
+
+    .totalValue {
+        color: #10b981 !important;
+        font-size: 18px !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    padding: 20px !important;
+    border-top: 1px solid #2c2c2c !important;
+    background: #181818 !important;
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+
+.gstNote {
+    font-size: 11px !important;
+    color: #9ca3af !important;
+    margin: 4px 40px 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #374151 !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #2c2c2c !important;
+        font-size: 13px !important;
+        color: #f3f4f6 !important;
+    }
+}
+
+@media print {
+    .eclipseInvoice {
+        background: white !important;
+        color: black !important;
+        border: 1px solid #ccc !important;
+    }
+
+    .header {
+        background: #1e3a8a !important;
+    }
+
+    .detailsSection,
+    .footer {
+        border-color: #eee !important;
+    }
+
+    .block .value,
+    .tableContainer td,
+    .productName {
+        color: black !important;
+    }
+
+    .totals {
+        background: #f9fafb !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+
+    .totalRow .totalValue {
+        color: black !important;
+    }
+
+    .finalTotal .totalValue {
+        color: #059669 !important;
+    }
+}
