@@ -82,56 +82,44 @@ export function ChatInvoiceResults({ toolResults }) {
           {invoices.length} shown
         </span>
       </div>
-      <div className="max-w-full overflow-x-auto">
-        <table className="w-full border-collapse text-left text-[11px]">
-          <thead className="text-[rgb(var(--color-text-secondary))]">
-            <tr>
-              <th className="px-3 py-2 font-medium">Invoice</th>
-              <th className="px-3 py-2 font-medium">Customer</th>
-              <th className="px-3 py-2 font-medium">Date</th>
-              <th className="px-3 py-2 text-right font-medium">Amount</th>
-              <th className="px-3 py-2 font-medium">Payment</th>
-              <th className="px-3 py-2 font-medium">Invoice status</th>
-              <th className="px-3 py-2 text-right font-medium">Items</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.map((invoice, index) => {
-              const key =
-                invoice.id || invoice.invoiceNumber || `invoice-${index}`;
-              return (
-                <tr
-                  className="border-t border-[rgb(var(--color-border-primary))] text-[rgb(var(--color-text-primary))]"
-                  key={key}
-                >
-                  <td className="max-w-40 break-all px-3 py-2 font-medium">
-                    {invoice.invoiceNumber || "—"}
-                  </td>
-                  <td className="max-w-36 break-words px-3 py-2">
-                    {invoice.customer?.name || "Walk-in Customer"}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-2">
-                    {invoice.invoiceDate || "—"}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-2 text-right">
-                    {formatAmount(invoice.totalAmount)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-2">
-                    {displayStatus(invoice.paymentStatus)}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-2">
-                    {displayStatus(invoice.invoiceStatus)}
-                  </td>
-                  <td className="px-3 py-2 text-right">
-                    {Number.isInteger(invoice.itemCount)
-                      ? invoice.itemCount
-                      : "—"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="divide-y divide-[rgb(var(--color-border-primary))]">
+        {invoices.map((invoice, index) => {
+          const invoiceNumber = invoice.invoiceNumber || "—";
+          const key = invoice.id || invoiceNumber || `invoice-${index}`;
+          const fields = [
+            ["Customer", invoice.customer?.name || "Walk-in Customer"],
+            ["Date", invoice.invoiceDate || "—"],
+            ["Amount", formatAmount(invoice.totalAmount)],
+            ["Payment", displayStatus(invoice.paymentStatus)],
+            ["Invoice status", displayStatus(invoice.invoiceStatus)],
+            [
+              "Items",
+              Number.isInteger(invoice.itemCount) ? invoice.itemCount : "—",
+            ],
+          ];
+
+          return (
+            <article
+              aria-label={`Invoice ${invoiceNumber}`}
+              className="px-3 py-2.5 text-[rgb(var(--color-text-primary))]"
+              key={key}
+            >
+              <h5 className="break-all text-[11px] font-semibold">
+                {invoiceNumber}
+              </h5>
+              <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px]">
+                {fields.map(([label, value]) => (
+                  <div className="min-w-0" key={label}>
+                    <dt className="text-[rgb(var(--color-text-secondary))]">
+                      {label}
+                    </dt>
+                    <dd className="break-words font-medium">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </article>
+          );
+        })}
       </div>
       {hasMore && (
         <p className="border-t border-[rgb(var(--color-border-primary))] px-3 py-2 text-[11px] text-[rgb(var(--color-text-secondary))]">
