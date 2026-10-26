@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useId } from "react";
+import { useId } from "react";
 
 export function DragBizzLogoIcon({
   className = "w-4 h-4",

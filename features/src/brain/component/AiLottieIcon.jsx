@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import aiAnimationData from "./ai.json";
-import { DragAiIcon } from "./DragBizzLogoIcon";
+import aiAnimationData from "../assets/ai.json";
+import { DragAiIcon } from "./DragBizzLogoIcon.jsx";
 
 export function AiLottieIcon({
   className = "w-6 h-6",
@@ -108,7 +108,7 @@ export function AiLottieIcon({
       />
       {!isLoaded && (
         <div className="absolute inset-0 flex items-center justify-center p-0.5">
-          <DragAiIcon className="w-full h-full text-[#187CC5] animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
+          <DragAiIcon className="w-full h-full text-[rgb(var(--color-primary))] animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]" />
         </div>
       )}
     </div>

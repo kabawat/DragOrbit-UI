@@ -71,9 +71,7 @@ function normalizeShortcut(label) {
     .replace(/\+/g, "+");
 }
 
-/**
- * Validates that step numbers are strictly sequential positive integers starting at 1.
- */
+// Validates that step numbers are strictly sequential positive integers starting at 1.
 export function areValidSequentialSteps(steps) {
   if (!Array.isArray(steps) || steps.length < 2) return false;
   for (let i = 0; i < steps.length; i++) {
@@ -82,11 +80,7 @@ export function areValidSequentialSteps(steps) {
   return true;
 }
 
-/**
- * Parse one "1. …" chunk into title/body.
- * Title only when the model used **Title** or a short "Label: rest" form —
- * never peel the first letter off a plain sentence (e.g. "Agar …").
- */
+// Parse one "1. …" chunk into title/body.
 function parseStepChunk(chunk) {
   const trimmed = String(chunk || "").trim();
   const numbered = trimmed.match(/^(\d+)\.\s+([\s\S]+)$/);
@@ -117,9 +111,7 @@ function parseStepChunk(chunk) {
   return { number, title: "", body: rest };
 }
 
-/**
- * Split assistant text into intro + numbered steps + outro.
- */
+// Split assistant text into intro + numbered steps + outro.
 export function parseStepGuide(text) {
   const trimmed = normalizeMessage(text);
   if (!trimmed) {

@@ -12,7 +12,7 @@
 			"types": "./src/*/exports.ts",
 			"default": "./src/*/index.js"
 		},
-		"./brain/history": "./src/brain/chatHistory.js"
+		"./brain/history": "./src/brain/utils/chatHistory.js"
 	},
 	"scripts": {
 		"typecheck": "tsc --noEmit -p tsconfig.json"
