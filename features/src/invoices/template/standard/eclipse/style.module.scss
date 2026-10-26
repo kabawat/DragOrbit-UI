@@ -205,3 +205,16 @@
         color: #059669 !important;
     }
 }
+/* Avoid a dark full-page canvas in the editor and in print preview. */
+.eclipseInvoice {
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+    color: #111827 !important;
+}
+.header { background: #f3f4f6 !important; color: #111827 !important; }
+.header h1, .header p, .block .value, .invoiceTable td, .productName,
+.totalRow .totalValue, .finalTotal .totalLabel, .finalTotal .totalValue { color: #111827 !important; }
+.detailsSection, .invoiceTable td, .footer { border-color: #d1d5db !important; }
+.invoiceTable th, .totals, .tableFooterRow td { background: #f3f4f6 !important; color: #111827 !important; }
+.totals { box-shadow: none !important; }
+.footer { background: #ffffff !important; color: #4b5563 !important; }

@@ -10,25 +10,28 @@ const AeroTemplate = ({ invoiceData, selectedStore }) => {
         tableTotalQty, tableTotalDiscount, tableTotalAmount,
         hasAnyGst, allInclusive,
     } = computeB2CTotals(invoiceData);
+    const logo = selectedStore?.logo || selectedStore?.logoUrl;
+    const logoSrc = typeof logo === "string" ? logo : logo?.url || logo?.secure_url;
 
     return (
-        <InvoiceContainer>
+        <InvoiceContainer className={styles.aeroDocument}>
             <div className={styles.aeroInvoice}>
                 {/* Header */}
-                <div className={styles.aeroHeader}>
-                    <div>
-                        <div className={styles.storeName}>
-                            {selectedStore?.storeName || "Your Store"}
+                <div className={`${styles.aeroTop} ${logoSrc ? styles.aeroTopWithLogo : styles.aeroTopCentered}`}>
+                    {logoSrc && <img className={styles.storeLogo} src={logoSrc} alt={`${selectedStore?.storeName || "Store"} logo`} />}
+                    <div className={styles.contentRow}>
+                        <div className={styles.identityRow}>
+                            <div className={styles.storeBlock}>
+                                <h1 className={styles.invoiceTitle}>INVOICE</h1>
+                                <div className={styles.merchantName}>{selectedStore?.storeName || "Your Store"}</div>
+                                <div className={styles.storeDetails}>
+                                    {selectedStore?.address && <p>{selectedStore.address}</p>}
+                                    {selectedStore?.email && <p>Email: {selectedStore.email}</p>}
+                                    {selectedStore?.phone && <p>Phone: {selectedStore.phone}</p>}
+                                    {(selectedStore?.gstin || selectedStore?.gst) && <p>GSTIN: {selectedStore.gstin || selectedStore.gst}</p>}
+                                </div>
+                            </div>
                         </div>
-                        <div className={styles.storeDetails}>
-                            <p>{selectedStore?.address || ""}</p>
-                            {selectedStore?.phone && <p>Phone: {selectedStore.phone}</p>}
-                            {selectedStore?.email && <p>Email: {selectedStore.email}</p>}
-                            {selectedStore?.gst && <p>GSTIN: {selectedStore.gst}</p>}
-                        </div>
-                    </div>
-                    <div className={styles.invoiceTitleBox}>
-                        <h1 className={styles.invoiceTitle}>INVOICE</h1>
                         <div className={styles.invoiceMeta}>
                             <p>#{invoiceData.invoiceNumber}</p>
                             <p>{formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</p>
@@ -39,7 +42,7 @@ const AeroTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Bill To */}
                 <div className={styles.infoSection}>
                     <div className={styles.infoCard}>
-                        <h3>Bill To</h3>
+                        <h3 className={styles.sectionTitle}>Bill To</h3>
                         <p><strong>{invoiceData.customer?.name || "Walk-in Customer"}</strong></p>
                         {invoiceData.customer?.phone && <p>{invoiceData.customer.phone}</p>}
                         {invoiceData.customer?.email && <p>{invoiceData.customer.email}</p>}

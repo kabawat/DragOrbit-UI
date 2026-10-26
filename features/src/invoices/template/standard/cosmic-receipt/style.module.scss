@@ -204,3 +204,20 @@
         background: white !important;
     }
 }
+/* Keep the receipt readable on screen, preview, and paper. */
+.cosmicInvoice {
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+    color: #111827 !important;
+}
+.header { border-color: #d1d5db !important; }
+.header h1, .header .storeName, .infoBlock .label, .cosmicTable th,
+.finalRow .finalLabel, .finalRow .finalAmount, .tableFooterRow :global(td) {
+    color: #111827 !important;
+}
+.header .storeInfo p, .infoBlock p, .valueBold, .cosmicTable td,
+.productName, .totalRow .amount, .footer, .gstNote { color: #374151 !important; }
+.infoSection, .cosmicTable thead tr, .cosmicTable td, .finalRow, .footer {
+    border-color: #d1d5db !important;
+}
+.finalRow, .tableFooterRow { background: #f3f4f6 !important; }

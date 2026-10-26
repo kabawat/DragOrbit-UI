@@ -1,0 +1,104 @@
+.extras {
+  display: grid;
+  gap: 10px;
+  margin: 16px 24px 20px;
+  padding-top: 12px;
+  border-top: 1px solid #d1d5db;
+  color: #111827;
+  font-size: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 18px;
+}
+
+.thermalGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.row {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.row strong {
+  text-align: right;
+}
+
+.block p {
+  margin: 4px 0 0;
+}
+
+.taxTable {
+  display: grid;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.taxRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+}
+
+.taxRow span {
+  text-align: right;
+}
+
+.acknowledgement {
+  margin-top: 2px;
+  padding-top: 7px;
+  border-top: 1px dashed #6b7280;
+  text-align: center;
+  font-size: 11px;
+}
+
+.acknowledgement p {
+  margin: 0;
+}
+
+:global(.invoice-common-total-quantity td) {
+  border-top: 1px solid var(--invoice-primary-border, #d1d5db) !important;
+  background: var(--invoice-primary-tint, #f9fafb) !important;
+  color: var(--invoice-primary-color, #111827) !important;
+  font-weight: 700 !important;
+  padding: 6px 8px !important;
+}
+
+:global(.invoice-common-total-quantity-value) {
+  text-align: right !important;
+}
+
+.signatureBlock {
+  display: flex;
+  min-height: 56px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.savedSignature {
+  max-width: 150px;
+  max-height: 42px;
+  object-fit: contain;
+}
+
+.typedSignature {
+  max-width: 180px;
+  overflow: hidden;
+  color: #111827;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.signatureLine {
+  min-width: 150px;
+  padding-top: 5px;
+  border-top: 1px solid #6b7280;
+  text-align: center;
+}

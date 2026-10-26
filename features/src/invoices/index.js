@@ -14,3 +14,4 @@ export { ResponsiveInvoiceDocument } from "./component/view/ResponsiveInvoiceDoc
 export * from "./template/index.js";
 export { getTemplateComponent } from "./template/registry.js";
 export { InvoiceTemplateSettingsView } from "./template/InvoiceTemplateSettingsView.jsx";
+export { ConfiguredInvoiceTemplate } from "./template/ConfiguredInvoiceTemplate.jsx";
