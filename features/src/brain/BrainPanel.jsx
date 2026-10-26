@@ -601,8 +601,24 @@ const BrainPanel = ({
   triggerButton = null,
   customTrigger = null,
   triggerClassName = "",
+  isOpen: controlledIsOpen,
+  onOpenChange,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const isControlled = controlledIsOpen !== undefined;
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+  const setIsOpen = useCallback(
+    (action) => {
+      const nextOpen =
+        typeof action === "function" ? action(isOpen) : Boolean(action);
+      if (!isControlled) {
+        setInternalIsOpen(nextOpen);
+      }
+      onOpenChange?.(nextOpen);
+    },
+    [isControlled, isOpen, onOpenChange]
+  );
   const [isExpanded, setIsExpanded] = useState(false);
   const [panelWidth, setPanelWidth] = useState(MIN_PANEL_WIDTH);
   const [maxPanelWidth, setMaxPanelWidth] = useState(1200);
@@ -754,17 +770,17 @@ const BrainPanel = ({
   }, [isOpen, isExpanded]);
 
   const closePanel = useCallback(() => {
-    abortListening();
+    abortListening?.();
     setIsExpanded(false);
     setIsOpen(false);
-  }, [abortListening]);
+  }, [abortListening, setIsOpen]);
 
   const openPanel = useCallback(() => {
     setIsExpanded(false);
     setPanelWidth(getDefaultPanelWidth());
     setMaxPanelWidth(getMaxPanelWidth());
     setIsOpen(true);
-  }, []);
+  }, [setIsOpen]);
 
   const expandPanel = useCallback(() => {
     setIsExpanded(true);
@@ -864,18 +880,12 @@ const BrainPanel = ({
   }, [panelWidth, isExpanded, toggleMaximize]);
 
   const togglePanel = useCallback(() => {
-    setIsOpen((current) => {
-      if (current) {
-        abortListening();
-        setIsExpanded(false);
-        return false;
-      }
-      setIsExpanded(false);
-      setPanelWidth(getDefaultPanelWidth());
-      setMaxPanelWidth(getMaxPanelWidth());
-      return true;
-    });
-  }, [abortListening]);
+    if (isOpen) {
+      closePanel();
+    } else {
+      openPanel();
+    }
+  }, [isOpen, closePanel, openPanel]);
 
   useHotkeys({
     "alt+v": (event) => {
