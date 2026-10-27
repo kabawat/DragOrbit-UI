@@ -122,7 +122,7 @@ export function DashboardScreen({
 		<LowStockCard
 			count={lowStockCount}
 			t={t}
-			onClick={() => onNavigate?.(routes["stock/alerts"])}
+			onClick={() => onNavigate?.(routes.products)}
 		/>
 	);
 	if (layoutVariant === "store" && StoreOverview) {

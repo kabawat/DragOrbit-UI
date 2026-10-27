@@ -497,7 +497,7 @@ function parseActionTokens(cell) {
     }
 
     if (/^Stock\b/i.test(token)) {
-      pushLink("/dashboard/stock", "Stock");
+      pushLink("/dashboard/products", "Stock");
       const shortcutMatch = token.match(SHORTCUT_RE);
       if (shortcutMatch) pushShortcut(shortcutMatch[0]);
       continue;
