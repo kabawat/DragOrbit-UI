@@ -41,9 +41,9 @@ export function SignatureSettingsView({ model }) {
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {signaturesLoading && signatures.length === 0 ? (
-          [1, 2, 3].map((i) => (
+          [1, 2, 3, 4].map((i) => (
             <div
               key={i}
               className="h-40 rounded-xl bg-slate-100 dark:bg-slate-800 animate-pulse"
