@@ -25,7 +25,7 @@ export function ShortcutsTabView({ model }) {
             </h4>
             <p className="text-[rgb(var(--color-text-secondary))] text-sm leading-relaxed max-w-3xl">
               {t("suggestions.shortcuts.ui.workflowDescription") ||
-                "DragBizz Pro supports deep keyboard integration. Every shortcut is designed to keep your hands on the keyboard and your business moving faster. Start with Shift+N for new entries or Alt+H to go home."}
+                "DragBizz Pro supports deep keyboard integration. Every shortcut is designed to keep your hands on the keyboard and your business moving faster. Use Alt+N for a new entry on supported pages. Shortcuts apply to the current page and available actions."}
             </p>
           </div>
         </div>
