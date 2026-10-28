@@ -120,13 +120,13 @@ export function sessionDecision(
 				};
 	}
 	let destination;
-	if (!profile.authProfile.agencyId) destination = "/onboarding/agency";
-	else {
-		if (!profile.retailerInitialized) return { state: "loading" };
-		if (!profile.agency) destination = "/onboarding/agency";
-		else if (!profile.stores?.length) destination = "/onboarding/store";
-		else if (guest || pathname.startsWith("/onboarding"))
-			destination = "/dashboard";
+	if (profile.authProfile.agencyId && !profile.retailerInitialized) {
+		return { state: "loading" };
+	}
+	if (!profile.stores?.length) {
+		destination = "/onboarding/store";
+	} else if (guest || pathname.startsWith("/onboarding")) {
+		destination = "/dashboard";
 	}
 	if (
 		destination &&
