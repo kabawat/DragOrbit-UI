@@ -1,4 +1,5 @@
 import { useInvoicePrintContext } from "./InvoicePrintSettingsContext.jsx";
+import { signatureToImage } from "./signatureToImage.js";
 import styles from "./InvoicePrintExtras.module.scss";
 
 const ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
@@ -27,7 +28,7 @@ function wholeNumberInWords(value) {
   return words.join(" ");
 }
 
-function amountInWords(value) {
+export function amountInWords(value) {
   const amount = Math.max(0, Number(value) || 0);
   const rupees = Math.floor(amount);
   const paise = Math.round((amount - rupees) * 100);
@@ -43,14 +44,14 @@ function formatAmount(value, decimals) {
   })}`;
 }
 
-export function InvoicePrintExtras({ quantityInTable = false }) {
+export function InvoicePrintExtras({ includeSignature = true, includeSummaryFields = true, includeItemDescriptions = true, includeTerms = true }) {
   const context = useInvoicePrintContext();
   if (!context) return null;
 
   const { settings, invoiceData, signature } = context;
+  const signatureSrc = signatureToImage(signature);
   const rows = [];
   const items = invoiceData?.items || [];
-  const totalQuantity = items.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0);
   const breakdown = invoiceData?.gst?.breakdown || {};
   const payments = Array.isArray(invoiceData?.payments)
     ? invoiceData.payments
@@ -68,17 +69,18 @@ export function InvoicePrintExtras({ quantityInTable = false }) {
     }
   };
 
-  add(settings.showTotalQuantity && !quantityInTable, "Total item quantity", totalQuantity);
-  add(settings.showReceivedAmount, "Amount received", formatAmount(paidAmount, settings.showAmountDecimals));
-  add(settings.showBalanceAmount, "Balance amount", formatAmount(balanceAmount, settings.showAmountDecimals));
-  add(settings.showCustomerBalance, "Customer current balance", formatAmount(customerBalance, settings.showAmountDecimals));
-  add(settings.showTaxDetails && Number(breakdown.cgst) > 0, "CGST", formatAmount(breakdown.cgst, settings.showAmountDecimals));
-  add(settings.showTaxDetails && Number(breakdown.sgst) > 0, "SGST", formatAmount(breakdown.sgst, settings.showAmountDecimals));
-  add(settings.showTaxDetails && Number(breakdown.igst) > 0, "IGST", formatAmount(breakdown.igst, settings.showAmountDecimals));
-  add(settings.showAmountInWords, "Amount in words", amountInWords(invoiceData?.totalAmount));
-  add(settings.showPaymentMode, "Payment mode", invoiceData?.paymentMode || invoiceData?.paymentMethod);
+  if (includeSummaryFields) {
+    add(settings.showReceivedAmount, "Amount received", formatAmount(paidAmount, settings.showAmountDecimals));
+    add(settings.showBalanceAmount, "Balance amount", formatAmount(balanceAmount, settings.showAmountDecimals));
+    add(settings.showCustomerBalance, "Customer current balance", formatAmount(customerBalance, settings.showAmountDecimals));
+    add(settings.showTaxDetails && Number(breakdown.cgst) > 0, "CGST", formatAmount(breakdown.cgst, settings.showAmountDecimals));
+    add(settings.showTaxDetails && Number(breakdown.sgst) > 0, "SGST", formatAmount(breakdown.sgst, settings.showAmountDecimals));
+    add(settings.showTaxDetails && Number(breakdown.igst) > 0, "IGST", formatAmount(breakdown.igst, settings.showAmountDecimals));
+    add(settings.showAmountInWords, "Amount in words", amountInWords(invoiceData?.totalAmount));
+  }
+  if (includeSummaryFields) add(settings.showPaymentMode, "Payment mode", invoiceData?.paymentMode || invoiceData?.paymentMethod);
 
-  const taxLines = settings.showTaxDetails ? items.flatMap((item, index) => {
+  const taxLines = includeSummaryFields && settings.showTaxDetails ? items.flatMap((item, index) => {
     const gst = item.gst || {};
     const rate = Number(gst.rate ?? item.gstRate ?? 0);
     if (!rate) return [];
@@ -105,28 +107,76 @@ export function InvoicePrintExtras({ quantityInTable = false }) {
       igstAmount,
     }];
   }) : [];
-  const describedItems = settings.showDescription ? items.filter((item) => item.description || item.product?.description) : [];
+  const describedItems = includeItemDescriptions && settings.showDescription ? items.filter((item) => item.description || item.product?.description) : [];
   const rawTerms = invoiceData?.termsAndConditions || invoiceData?.notes;
   const terms = typeof rawTerms === "string" ? rawTerms : rawTerms?.text || rawTerms?.content || "";
-  const showFooter = rows.length || taxLines.length || describedItems.length || (settings.showReceivedDetails && payments.length) || (settings.showTerms && terms) || settings.showSignature || settings.showAcknowledgement;
+  const showSignature = includeSignature && settings.showSignature;
+  const acknowledgementDetails = [
+    invoiceData?.invoiceNumber && `Invoice ${invoiceData.invoiceNumber}`,
+    invoiceData?.customer?.name && invoiceData.customer.name,
+    invoiceData?.createdAt && new Date(invoiceData.createdAt).toLocaleDateString(),
+  ].filter(Boolean).join(" · ");
+  const showFooter = rows.length || taxLines.length || describedItems.length || (includeTerms && settings.showTerms && terms) || showSignature || settings.showAcknowledgement;
   if (!showFooter) return null;
 
   return (
     <section className={styles.extras}>
       {rows.length > 0 && <div className={`${styles.grid} ${context.group === "thermal" ? styles.thermalGrid : ""}`}>{rows}</div>}
-      {taxLines.length > 0 && <div className={styles.block}><strong>Tax details by item</strong><div className={styles.taxTable}>{taxLines.map((line) => <div key={line.id} className={styles.taxRow}><strong>{line.name}</strong><span>{line.cgstRate > 0 && `CGST ${line.cgstRate}%${line.cgstAmount > 0 ? ` · ${formatAmount(line.cgstAmount, settings.showAmountDecimals)}` : ""}`}{line.sgstRate > 0 && `  SGST ${line.sgstRate}%${line.sgstAmount > 0 ? ` · ${formatAmount(line.sgstAmount, settings.showAmountDecimals)}` : ""}`}{line.igstRate > 0 && `IGST ${line.igstRate}%${line.igstAmount > 0 ? ` · ${formatAmount(line.igstAmount, settings.showAmountDecimals)}` : ""}`}</span></div>)}</div></div>}
-      {describedItems.length > 0 && <div className={styles.block}><strong>Item descriptions</strong>{describedItems.map((item, index) => <p key={item.id || item._id || index}><b>{item.product?.name || item.productName || item.name || `Item ${index + 1}`}:</b> {item.description || item.product?.description}</p>)}</div>}
-      {settings.showReceivedDetails && payments.length > 0 && (
-        <div className={styles.block}><strong>Received details</strong>{payments.map((payment, index) => <p key={payment.id || payment._id || index}>{payment.mode || payment.paymentMode || payment.method || "Payment"}: {formatAmount(payment.amount ?? payment.receivedAmount, settings.showAmountDecimals)} {payment.createdAt || payment.date ? `· ${new Date(payment.createdAt || payment.date).toLocaleDateString()}` : ""}</p>)}</div>
+      {taxLines.length > 0 && (
+        <div className={styles.block}>
+          <strong>Tax details by item</strong>
+          <div className={styles.taxTable}>
+            {taxLines.map((line, index) => (
+              <div key={index} className={styles.taxRow}>
+                <strong>{line.name}</strong>
+                <span>
+                  {line.cgstRate > 0 && `CGST ${line.cgstRate}% · ${formatAmount(line.cgstAmount, settings.showAmountDecimals)}`}
+                  {line.sgstRate > 0 && ` SGST ${line.sgstRate}% · ${formatAmount(line.sgstAmount, settings.showAmountDecimals)}`}
+                  {line.igstRate > 0 && ` IGST ${line.igstRate}% · ${formatAmount(line.igstAmount, settings.showAmountDecimals)}`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
-      {settings.showTerms && terms && <div className={styles.block}><strong>Terms and conditions</strong><p>{terms}</p></div>}
-      {settings.showAcknowledgement && <div className={styles.acknowledgement}><p>{settings.acknowledgementText}</p></div>}
-      {settings.showSignature && <div className={styles.signatureBlock}>
-        {signature?.content && (signature.method === "upload" || signature.method === "draw"
-          ? <img className={styles.savedSignature} src={signature.content} alt="Saved signature" />
-          : <span className={styles.typedSignature} style={{ fontFamily: signature.config?.fontFamily || "cursive", fontWeight: signature.config?.bold ? 700 : 400, fontStyle: signature.config?.italic ? "italic" : "normal" }}>{signature.content}</span>)}
+      {describedItems.length > 0 && (
+        <div className={styles.block}>
+          <strong>Item descriptions</strong>
+          {describedItems.map((item, index) => (
+            <p key={index}>
+              <b>{item.product?.name || item.productName || item.name || `Item ${index + 1}`}:</b>{" "}
+              {item.description || item.product?.description}
+            </p>
+          ))}
+        </div>
+      )}
+      {includeTerms && settings.showTerms && terms && <div className={styles.block}><strong>Terms and conditions</strong><p>{terms}</p></div>}
+      {showSignature && <div className={styles.signatureBlock}>
+        {signatureSrc && <img className={styles.savedSignature} src={signatureSrc} alt="Saved signature" />}
         <span className={styles.signatureLine}>Authorized signature</span>
       </div>}
+      {settings.showAcknowledgement && (
+        <div className={`${styles.acknowledgement} ${context.group === "thermal" ? styles.thermalAcknowledgement : ""}`}>
+          <div className={styles.acknowledgementLayout}>
+            <div className={styles.acknowledgementCopy}>
+              <strong>Payment acknowledgement</strong>
+              {acknowledgementDetails && <span>{acknowledgementDetails}</span>}
+              <div className={styles.acknowledgementAmounts}>
+                <span><b>Items</b> {items.length}</span>
+                <span><b>Total</b> {formatAmount(invoiceData?.totalAmount, settings.showAmountDecimals)}</span>
+                {settings.showReceivedAmount && <span><b>Received</b> {formatAmount(paidAmount, settings.showAmountDecimals)}</span>}
+                {settings.showBalanceAmount && <span><b>Balance</b> {formatAmount(balanceAmount, settings.showAmountDecimals)}</span>}
+              </div>
+              <p>{settings.acknowledgementText}</p>
+            </div>
+            <div className={styles.acknowledgementSign}>
+              <span>Received by</span>
+              <span className={styles.acknowledgementSignLine} />
+              <span>Date: ______________</span>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

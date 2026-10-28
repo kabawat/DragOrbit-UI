@@ -18,7 +18,7 @@ const FlexviewTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.flexviewInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.storeInfo}>
                         <p style={{ fontWeight: "600" }}>
                             {selectedStore?.storeName || "Flexview Builders"}

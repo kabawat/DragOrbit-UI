@@ -18,7 +18,7 @@ const ModernStackedTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.modernInvoice} >
                 {/* Header Section */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.storeInfo}>
                         <span className={styles.storeName}>
                             {selectedStore?.storeName || "Redline Solutions"}

@@ -1,5 +1,5 @@
 "use client";
-import { Check, ChevronDown, Search } from "lucide-react";
+import { Check, ChevronDown, LoaderCircle, Search } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -18,6 +18,12 @@ const Select = ({
   searchable = false,
   multiple = false,
   clearable = false,
+  serverSearch = false,
+  onSearchChange,
+  onListEnd,
+  loading = false,
+  loadingMore = false,
+  hasMore = false,
   className = "",
   size = "sm",
 }) => {
@@ -28,7 +34,7 @@ const Select = ({
   const searchRef = useRef(null);
 
   // Filter options based on search term
-  const filteredOptions = searchable
+  const filteredOptions = searchable && !serverSearch
     ? options.filter(
         (option) =>
           option.isAddOption ||
@@ -59,7 +65,7 @@ const Select = ({
     } else {
       onChange?.(option.value);
       setIsOpen(false);
-      setSearchTerm("");
+      if (!serverSearch) setSearchTerm("");
     }
   };
 
@@ -102,7 +108,7 @@ const Select = ({
       case "Escape":
         if (isOpen) { e.preventDefault(); e.stopPropagation(); }
         setIsOpen(false);
-        setSearchTerm("");
+        if (!serverSearch) setSearchTerm("");
         setHighlightedIndex(-1);
         break;
     }
@@ -124,7 +130,7 @@ const Select = ({
 
       if (!isClickInsideSelect && !isClickInsideDropdown) {
         setIsOpen(false);
-        setSearchTerm("");
+        if (!serverSearch) setSearchTerm("");
         setHighlightedIndex(-1);
       }
     };
@@ -273,13 +279,16 @@ const Select = ({
                       type="text"
                       placeholder="Search options..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        onSearchChange?.(e.target.value);
+                      }}
                       onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Escape") {
                           setIsOpen(false);
-                          setSearchTerm("");
+                          if (!serverSearch) setSearchTerm("");
                           setHighlightedIndex(-1);
                         }
                       }}
@@ -294,6 +303,18 @@ const Select = ({
                 {/* Scrollable Regular Options */}
                 <div
                   className="flex-1 overflow-y-auto min-h-0"
+                  onScroll={(event) => {
+                    if (
+                      hasMore &&
+                      !loading &&
+                      !loadingMore &&
+                      event.currentTarget.scrollHeight -
+                        event.currentTarget.scrollTop -
+                        event.currentTarget.clientHeight < 32
+                    ) {
+                      onListEnd?.();
+                    }
+                  }}
                   onClick={(e) => e.stopPropagation()}
                 >
                   {regularOptions.length > 0 ? (
@@ -326,9 +347,20 @@ const Select = ({
                         </div>
                       );
                     })
+                  ) : loading ? (
+                    <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                      Loading items...
+                    </div>
                   ) : (
                     <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] text-center">
                       No options found
+                    </div>
+                  )}
+                  {loadingMore && (
+                    <div className="px-4 py-2 text-xs text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                      <LoaderCircle className="w-4 h-4 animate-spin" />
+                      Loading more...
                     </div>
                   )}
                 </div>

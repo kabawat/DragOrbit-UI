@@ -19,7 +19,7 @@ const SpectrumTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div className={styles.branding}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <div className={styles.storeInfo}>
                             <p style={{ fontWeight: 700, color: "#34495e" }}>
                                 {selectedStore?.storeName || "Spectrum Solutions"}

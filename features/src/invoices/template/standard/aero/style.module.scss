@@ -1,227 +1,433 @@
 .aeroInvoice {
-    width: 100%;
-    max-width: 100%;
-    height: 100%;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  color: #1e293b;
 }
 
 .aeroTop {
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    gap: 20px !important;
-    border-bottom: 2px solid var(--invoice-primary-border, #e2e8f0) !important;
-    padding: 20px 24px !important;
-    margin-bottom: 30px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  border-bottom: 1px solid var(--invoice-primary-border, #cbd5e1) !important;
+  padding: 10px 14px !important;
+  margin: 0 0 10px !important;
 }
 
 .aeroTopCentered {
-    justify-content: center !important;
-    text-align: center !important;
+  justify-content: center !important;
 }
 
 .storeLogo {
-    display: block !important;
-    flex: 0 0 72px !important;
-    width: 72px !important;
-    height: 72px !important;
-    object-fit: contain !important;
+  display: block !important;
+  flex: 0 0 52px !important;
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: contain !important;
 }
 
 .contentRow {
-    display: flex !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    align-items: flex-start !important;
-    justify-content: space-between !important;
-    gap: 20px !important;
+  display: flex !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.identityRow,
+.storeBlock {
+  min-width: 0 !important;
 }
 
 .identityRow {
-    display: flex !important;
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
+  flex: 1 1 auto !important;
 }
 
-.storeBlock {
-    min-width: 0 !important;
-}
-
-.aeroTopCentered .contentRow {
-    flex: 0 1 auto !important;
-    flex-direction: column !important;
-    align-items: center !important;
-}
-
-.aeroTopCentered .storeBlock,
-.aeroTopCentered .invoiceMeta,
-.aeroTopCentered .invoiceMeta p {
-    text-align: center !important;
+.aeroTopCentered .storeBlock {
+  text-align: center !important;
 }
 
 .merchantName {
-    font-size: 18px !important;
-    font-weight: 700 !important;
-    color: #0f172a !important;
+  margin: 0 0 2px !important;
+  color: #0f172a !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
 }
 
-.storeDetails p {
-    margin: 4px 0 !important;
-    color: #475569 !important;
-    font-size: 13px !important;
+.storeDetails {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: baseline !important;
+  gap: 1px 10px !important;
+  color: #475569 !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
 }
 
-.invoiceTitleBox {
-    text-align: right !important;
+.storeDetails span {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.storeAddress {
+  flex: 0 0 100% !important;
+}
+
+.storeContacts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 1px 10px !important;
+}
+
+.invoiceMeta {
+  flex: 0 0 auto !important;
+  min-width: 138px !important;
+  text-align: right !important;
+  white-space: nowrap !important;
 }
 
 .invoiceTitle {
-    font-size: 18px !important;
-    font-weight: 700 !important;
-    margin-bottom: 5px !important;
+  display: inline-block !important;
+  margin: 0 0 2px !important;
+  color: var(--invoice-primary-color, #2563eb) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
 }
 
 .invoiceMeta p {
-    margin: 2px 0 !important;
-    font-size: 13px !important;
-    color: #64748b !important;
-    text-align: right !important;
+  margin: 0 !important;
+  color: #475569 !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+  text-align: right !important;
+}
+
+.invoiceMeta p span {
+  padding: 0 2px;
+  color: #94a3b8;
+}
+
+.invoiceMeta .storeGstin {
+  color: #64748b !important;
 }
 
 .infoSection {
-    display: flex !important;
-    justify-content: space-between !important;
-    margin-bottom: 30px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) !important;
+  gap: 16px !important;
+  align-items: start !important;
+  margin: 0 14px 8px !important;
 }
 
 .infoCard {
-    width: 48% !important;
-    background: var(--invoice-primary-tint, #f9fafb) !important;
-    border: 1px solid var(--invoice-primary-border, #e2e8f0) !important;
-    border-radius: 8px !important;
-    padding: 15px !important;
+  width: auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
 
-    h3 {
-        color: var(--invoice-primary-color, #2563eb) !important;
-        font-size: 14px !important;
-        font-weight: 600 !important;
-        text-transform: uppercase !important;
-        border-bottom: 1px solid var(--invoice-primary-border, #e2e8f0) !important;
-        padding-bottom: 5px !important;
-        margin-bottom: 8px !important;
-    }
+  h3 {
+    margin: 0 0 3px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: var(--invoice-primary-color, #2563eb) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1.3 !important;
+    text-transform: uppercase !important;
+  }
 
-    p {
-        font-size: 13px !important;
-        color: #334155 !important;
-        margin: 3px 0 !important;
-    }
+  p {
+    margin: 1px 0 !important;
+    color: #475569 !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+    overflow-wrap: anywhere;
+  }
+}
+
+.customerMeta {
+  display: flex !important;
+  min-width: 0 !important;
+  flex-wrap: wrap !important;
+  gap: 2px 6px !important;
+  align-content: start !important;
+  color: #475569 !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.customerMeta strong {
+  flex: 0 0 auto !important;
+  color: #64748b !important;
 }
 
 .invoiceTable {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    margin-bottom: 30px !important;
+  width: calc(100% - 28px) !important;
+  margin: 0 14px 8px !important;
+  border-collapse: collapse !important;
 
-    th {
-        background-color: #2563eb !important;
-        color: #ffffff !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.5px !important;
-        font-size: 13px !important;
-        padding: 12px 10px !important;
-        text-align: left !important;
-    }
+  th,
+  thead td {
+    padding: 6px 7px !important;
+    border: 0 !important;
+    background: var(--invoice-primary-color, #2563eb) !important;
+    color: var(--invoice-primary-text, #fff) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    text-align: left;
+    text-transform: uppercase !important;
+  }
 
-    td {
-        border-bottom: 1px solid #e2e8f0 !important;
-        padding: 10px !important;
-        font-size: 14px !important;
-        color: #1e293b !important;
-    }
+  td {
+    padding: 5px 7px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    color: #1e293b !important;
+    font-size: 10px !important;
+    line-height: 1.3 !important;
+  }
 
-    tr:nth-child(even) {
-        background-color: #f9fafb !important;
-    }
+  tr:nth-child(even) {
+    background: transparent !important;
+  }
 }
 
 .productName {
-    font-weight: 600 !important;
+  font-weight: 600 !important;
+  overflow-wrap: anywhere;
 }
 
-.totals {
-    display: flex !important;
-    justify-content: flex-end !important;
-    margin-top: 20px !important;
-}
-
-.totalsBox {
-    width: 280px !important;
-    background: var(--invoice-primary-tint, #f8fafc) !important;
-    border-radius: 8px !important;
-    padding: 15px !important;
-    border: 1px solid var(--invoice-primary-border, #e2e8f0) !important;
-}
-
-.totalRow {
-    display: flex !important;
-    justify-content: space-between !important;
-    margin: 5px 0 !important;
-
-    span:first-child {
-        color: #475569 !important;
-    }
-}
-
-.grandTotal {
-    border-top: 2px solid var(--invoice-primary-color, #2563eb) !important;
-    margin-top: 10px !important;
-    padding-top: 8px !important;
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    color: var(--invoice-primary-color, #2563eb) !important;
-}
-
-.footer {
-    text-align: center !important;
-    margin-top: 40px !important;
-    font-size: 12px !important;
-    color: #64748b !important;
-}
-
-// ── B2C shared ────────────────────────────────────────────────────────────────
-.gstNote {
-    font-size: 10px !important;
-    color: #94a3b8 !important;
-    margin-top: 6px !important;
-    font-style: italic !important;
+.itemDescription {
+  display: block !important;
+  margin-top: 2px !important;
+  color: #64748b !important;
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  line-height: 1.25 !important;
+  overflow-wrap: anywhere;
 }
 
 .tableFooterRow {
-    background-color: #eff6ff !important;
-    border-top: 2px solid #2563eb !important;
+  background: transparent !important;
+  border: 0 !important;
 
-    :global(td) {
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        padding: 10px !important;
-        color: #1e293b !important;
-        border-bottom: none !important;
-    }
+  :global(td) {
+    padding: 5px 7px !important;
+    border-top: 1px solid #64748b !important;
+    border-bottom: 1px solid #64748b !important;
+    background: transparent !important;
+    color: #1e293b !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+  }
+}
+
+.totals {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.8fr) !important;
+  align-items: start !important;
+  gap: 16px !important;
+  margin: 4px 14px 0 !important;
+}
+
+.totalNotes {
+  min-width: 0 !important;
+  color: #475569 !important;
+  font-size: 10px !important;
+  line-height: 1.35 !important;
+}
+
+.totalNotes > div {
+  display: grid !important;
+  gap: 2px !important;
+}
+
+.taxBreakdown > div {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  line-height: 1.3 !important;
+}
+
+.terms {
+  display: grid !important;
+  gap: 2px !important;
+  margin-top: 5px !important;
+  color: #475569 !important;
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+}
+
+.terms strong {
+  color: #64748b !important;
+  font-size: 9px !important;
+  text-transform: uppercase !important;
+}
+
+.terms span {
+  overflow-wrap: anywhere !important;
+}
+
+.totalNotes strong {
+  color: #64748b !important;
+  font-size: 9px !important;
+  text-transform: uppercase;
+}
+
+.totalNotes span {
+  overflow-wrap: anywhere;
+}
+
+.totalsBox {
+  width: 100% !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  font-size: 10px !important;
+}
+
+.totalRow {
+  display: flex !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  margin: 2px 0 !important;
+  background: transparent !important;
+  line-height: 1.35 !important;
+
+  span:first-child {
+    color: #475569 !important;
+  }
+}
+
+.grandTotal {
+  margin-top: 4px !important;
+  padding-top: 4px !important;
+  border-top: 1px solid var(--invoice-primary-border, #94a3b8) !important;
+  background: transparent !important;
+  color: var(--invoice-primary-color, #2563eb) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+.amountWords {
+  display: grid !important;
+  gap: 2px !important;
+  margin-top: 3px !important;
+  padding-top: 3px !important;
+  border-top: 1px solid #e2e8f0 !important;
+  color: #475569 !important;
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+}
+
+.amountWords strong {
+  color: #64748b !important;
+  font-size: 9px !important;
+}
+
+.amountWords span {
+  text-align: right;
+}
+
+.gstNote {
+  margin: 4px 0 0 !important;
+  color: #64748b !important;
+  font-size: 9px !important;
+  font-style: italic !important;
+}
+
+.aeroSignature {
+  display: flex !important;
+  min-height: 42px !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: flex-end !important;
+  margin: 8px 14px 0 !important;
+  color: #475569 !important;
+  font-size: 9px !important;
+  text-align: center !important;
+}
+
+.aeroSignature img {
+  max-width: 125px !important;
+  max-height: 34px !important;
+  object-fit: contain !important;
+}
+
+.aeroSignature span {
+  min-width: 125px !important;
+  padding-top: 3px !important;
+  border-top: 1px solid #94a3b8 !important;
+}
+
+.aeroClosing {
+  margin: 8px 14px 0 !important;
+  padding-top: 5px !important;
+  border-top: 1px solid #e2e8f0 !important;
+  color: #64748b !important;
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+  text-align: center !important;
+}
+
+.aeroClosing p {
+  margin: 1px 0 !important;
 }
 
 @media (max-width: 640px) {
-    .aeroTop {
-        gap: 12px !important;
-        padding: 16px !important;
-    }
+  .aeroTop {
+    gap: 8px !important;
+    padding: 8px !important;
+  }
 
-    .storeLogo {
-        flex-basis: 56px !important;
-        width: 56px !important;
-        height: 56px !important;
-    }
+  .storeLogo {
+    flex-basis: 40px !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
 
-    .contentRow {
-        gap: 10px !important;
-    }
+  .contentRow {
+    gap: 6px !important;
+  }
+
+  .invoiceMeta {
+    min-width: 112px !important;
+  }
+
+  .storeDetails {
+    column-gap: 6px !important;
+  }
+
+  .infoSection,
+  .totals {
+    margin-right: 8px !important;
+    margin-left: 8px !important;
+    gap: 8px !important;
+  }
+
+  .invoiceTable {
+    width: calc(100% - 16px) !important;
+    margin-right: 8px !important;
+    margin-left: 8px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .infoSection {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) !important;
+  }
+
+  .totals {
+    grid-template-columns: minmax(0, 1fr) minmax(155px, 0.9fr) !important;
+  }
+
+  .invoiceMeta {
+    min-width: 96px !important;
+  }
 }

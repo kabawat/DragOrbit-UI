@@ -28,7 +28,7 @@ export default function CrystalTemplate({ invoiceData, selectedStore }) {
                         </div>
                     </div>
                     <div className={styles.invoiceTitleBox}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p>Ref: {invoiceData.invoiceNumber}</p>
                         <p>Date: {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</p>
                     </div>

@@ -18,7 +18,7 @@ const LuminousLedgerTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.luminousInvoice} >
                 {/* Top Header Bar */}
                 <div className={styles.headerTop}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.invoiceTag}>
                         #<span>{invoiceData.invoiceNumber}</span>
                     </div>

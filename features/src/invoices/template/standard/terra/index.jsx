@@ -27,7 +27,7 @@ const TerraTemplate = ({ invoiceData, selectedStore }) => {
                         </p>
                     </div>
                     <div className={styles.titleBlock}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p>
                             Date: <strong>{formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}</strong>
                         </p>

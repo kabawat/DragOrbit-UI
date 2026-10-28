@@ -15,7 +15,7 @@ const CelesteTemplate = ({ invoiceData, selectedStore }) => {
         <InvoiceContainer>
             <div className={styles.celesteInvoice}>
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <p>
                         Invoice No: <strong>{invoiceData.invoiceNumber}</strong> | Date:{" "}
                         {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}

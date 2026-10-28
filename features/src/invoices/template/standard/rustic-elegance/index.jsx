@@ -19,7 +19,7 @@ const RusticEleganceTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div className={styles.headerLeft}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p style={{ fontSize: 13, color: "#a1887f" }}>
                             {selectedStore?.storeName || "The Artisan Collective"}
                         </p>

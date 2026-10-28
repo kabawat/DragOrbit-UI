@@ -18,7 +18,7 @@ const OrionTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.orionInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <p>
                         Invoice No: <strong>{invoiceData.invoiceNumber}</strong>
                     </p>

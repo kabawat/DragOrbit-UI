@@ -18,7 +18,7 @@ const ProfessionalTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.professionalInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.subtitle}>Professional Business Document</div>
                     <div className={styles.invoiceNumberLabel}>{invoiceData.invoiceNumber}</div>
                     <div className={styles.date}>

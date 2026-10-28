@@ -7,6 +7,12 @@ const TEMPLATE_COMPONENTS = {
   professional: Templates.ProfessionalTemplate,
   elegant: Templates.ElegantTemplate,
   vintage: Templates.VintageTemplate,
+  "tax-invoice": Templates.TaxInvoiceTemplate,
+  sale: Templates.SaleInvoiceTemplate,
+  "sale-tax-summary": Templates.SaleTaxSummaryTemplate,
+  "sale-tax-breakdown": Templates.SaleTaxBreakdownTemplate,
+  "transport-sale": Templates.TransportSaleTemplate,
+  "transport-tax-invoice": Templates.TransportTaxInvoiceTemplate,
   aero: Templates.AeroTemplate,
   crystal: Templates.CrystalTemplate,
   structed: Templates.StructedTemplate,
@@ -47,6 +53,7 @@ const TEMPLATE_COMPONENTS = {
   "thermal-compact": Templates.ThermalCompactTemplate,
   "thermal-minimal": Templates.ThermalMinimalTemplate,
   "thermal-bold": Templates.ThermalBoldTemplate,
+  "thermal-tax-invoice": Templates.ThermalTaxInvoiceTemplate,
 };
 
 export function getTemplateComponent(templateKey) {

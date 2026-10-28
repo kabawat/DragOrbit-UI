@@ -3,11 +3,12 @@ import { PaperDocument } from "@dragorbit/ui";
 import { ResponsiveInvoiceDocument } from "../component/view/ResponsiveInvoiceDocument.jsx";
 import { InvoicePrintSettingsContext, getDefaultPrintSettings } from "./InvoicePrintSettingsContext.jsx";
 import { InvoicePrintExtras } from "./InvoicePrintExtras.jsx";
-import { appendTotalQuantityRow, placeInvoiceExtrasBeforeFooter } from "./appendTotalQuantityRow.jsx";
+import { placeInvoiceExtrasBeforeFooter } from "./placeInvoiceExtras.jsx";
 import styles from "./style.module.scss";
 
-const InvoiceContainer = ({ children, className = "", style = {} }) => {
+const InvoiceContainer = ({ children, className = "", style = {}, includeSignature = true, includeExtras = true, includeSummaryFields = true, includeItemDescriptions = true, includeTerms = true }) => {
 	const printContext = useContext(InvoicePrintSettingsContext);
+	const fitPreview = Boolean(printContext?.fitPreview);
 	const settings = printContext?.settings || getDefaultPrintSettings("regular");
 	const isA5 = settings.paperSize === "A5";
 	const paperWidth = isA5 ? "148mm" : "210mm";
@@ -27,15 +28,12 @@ const InvoiceContainer = ({ children, className = "", style = {} }) => {
 		"--invoice-text-size": fontSizes[settings.textSize] || fontSizes.medium,
 		"--invoice-company-size": companyFontSizes[settings.companyNameSize] || companyFontSizes.medium,
 	};
-	const totalQuantity = (printContext?.invoiceData?.items || []).reduce(
-		(total, item) => total + (Number(item.quantity) || 0),
-		0,
-	);
-	const quantityResult = settings.showTotalQuantity
-		? appendTotalQuantityRow(children, totalQuantity)
-		: { children, inserted: false };
-	const extras = createElement(InvoicePrintExtras, { quantityInTable: quantityResult.inserted });
-	const invoiceContent = placeInvoiceExtrasBeforeFooter(quantityResult.children, extras).children;
+	const extras = includeExtras
+		? createElement(InvoicePrintExtras, { includeSignature, includeSummaryFields, includeItemDescriptions, includeTerms })
+		: null;
+	const invoiceContent = extras
+		? placeInvoiceExtrasBeforeFooter(children, extras).children
+		: children;
 
 	return (
 		<>
@@ -48,10 +46,6 @@ const InvoiceContainer = ({ children, className = "", style = {} }) => {
           body {
             margin: 0 !important;
             padding: 0 !important;
-          }
-          /* Hide default browser headers/footers just in case */
-          header, footer {
-            display: none !important; 
           }
         }
 				.invoice-print-document #invoice-container table thead th,
@@ -103,24 +97,49 @@ const InvoiceContainer = ({ children, className = "", style = {} }) => {
 				.invoice-print-document #invoice-container p,
 				.invoice-print-document #invoice-container td,
 				.invoice-print-document #invoice-container th,
-				.invoice-print-document #invoice-container li {
+				.invoice-print-document #invoice-container li,
+				.invoice-print-document #invoice-container small,
+				.invoice-print-document #invoice-container span {
 					font-size: var(--invoice-text-size) !important;
 				}
 				.invoice-print-document #invoice-container[class*="aeroDocument"] p,
 				.invoice-print-document #invoice-container[class*="aeroDocument"] td,
 				.invoice-print-document #invoice-container[class*="aeroDocument"] th,
-				.invoice-print-document #invoice-container[class*="aeroDocument"] li {
+				.invoice-print-document #invoice-container[class*="aeroDocument"] li,
+				.invoice-print-document #invoice-container[class*="aeroDocument"] span {
 					font-size: min(var(--invoice-text-size), 18px) !important;
 				}
-				.invoice-print-document[data-show-header="false"] #invoice-container h1 { display: none !important; }
-				.invoice-print-document[data-show-logo="false"] #invoice-container img { display: none !important; }
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="merchantName"] { font-size: min(var(--invoice-company-size), 18px) !important; }
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="invoiceTitle"] { font-size: 14px !important; }
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="itemDescription"] { display: block !important; margin-top: 2px !important; color: #64748b !important; font-size: 9px !important; font-weight: 400 !important; line-height: 1.25 !important; }
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="totalsBox"],
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="totalRow"],
+				.invoice-print-document #invoice-container[class*="aeroDocument"] [class*="grandTotal"] {
+					background: transparent !important;
+					background-color: transparent !important;
+					box-shadow: none !important;
+				}
+				.invoice-print-document #invoice-container [data-invoice-plain-bg] {
+					background: transparent !important;
+					background-color: transparent !important;
+					box-shadow: none !important;
+				}
+				.invoice-print-document[data-show-header="false"] #invoice-container [data-invoice-header] { display: none !important; }
+				.invoice-print-document[data-show-logo="false"] #invoice-container [data-invoice-logo] { display: none !important; }
+				.invoice-print-document[data-show-total-values="false"] #invoice-container table tfoot { display: none !important; }
 				.invoice-print-document[data-paper-size="A5"] #invoice-container { width: 148mm !important; min-height: 210mm !important; }
+				@media print {
+					.invoice-print-document[data-fit-preview="true"] { display: block !important; width: auto !important; height: auto !important; overflow: visible !important; }
+					.invoice-print-document[data-fit-preview="true"] .invoice-responsive-viewport { display: block !important; height: auto !important; overflow: visible !important; }
+				}
       `}</style>
 			<div
-				className="invoice-print-document"
+				className={`invoice-print-document ${fitPreview ? "flex h-full w-full items-center justify-center overflow-hidden" : ""}`}
 				data-show-header={settings.showHeader}
 				data-show-logo={settings.showLogo}
+				data-show-total-values={settings.showTotalValues}
 				data-paper-size={settings.paperSize}
+				data-fit-preview={fitPreview}
 				style={{
 					"--invoice-primary-color": primaryColor,
 					"--invoice-primary-text": primaryText,
@@ -128,7 +147,7 @@ const InvoiceContainer = ({ children, className = "", style = {} }) => {
 					"--invoice-primary-border": `color-mix(in srgb, ${primaryColor} 45%, white)`,
 				}}
 			>
-				<ResponsiveInvoiceDocument pageWidth={pageWidth}>
+					<ResponsiveInvoiceDocument pageWidth={pageWidth} fitHeight={fitPreview}>
 					<PaperDocument id="invoice-container" className={`${styles.invoicePage} ${className}`} style={documentStyle}>
 						{invoiceContent}
 					</PaperDocument>

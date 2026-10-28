@@ -17,7 +17,7 @@ const AuroraTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header */}
                 <div className={styles.header}>
                     <div>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p>{selectedStore?.storeName || "Your Store"}</p>
                         {selectedStore?.gst && <p style={{ fontSize: "11px" }}>GSTIN: {selectedStore.gst}</p>}
                     </div>

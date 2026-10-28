@@ -16,7 +16,7 @@ const CleanDataSheet = ({ invoiceData, selectedStore }) => {
             <div className={styles.cleanInvoice}>
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.storeName}>{selectedStore?.storeName || "Your Store"}</div>
                     <div className={styles.storeInfo}>
                         {selectedStore?.address && <p>{selectedStore.address}</p>}

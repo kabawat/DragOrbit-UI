@@ -35,7 +35,7 @@ const AetherTemplate = ({ invoiceData, selectedStore }) => {
                     {/* Header */}
                     <div className={styles.header}>
                         <div>
-                            <h1 className={styles.title}>INVOICE</h1>
+                            <h1 data-invoice-header className={styles.title}>INVOICE</h1>
                             <div className={styles.date}>{formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</div>
                         </div>
                         <div style={{ textAlign: "right" }}>

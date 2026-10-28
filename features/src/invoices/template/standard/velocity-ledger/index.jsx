@@ -18,7 +18,7 @@ const VelocityLedgerTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.velocityInvoice} >
                 {/* Header Band */}
                 <div className={styles.headerBand}>
-                    <h1>TAX INVOICE</h1>
+                    <h1 data-invoice-header>TAX INVOICE</h1>
                     <div className={styles.invoiceNumberBadge}>
                         INVOICE # {invoiceData.invoiceNumber}
                     </div>

@@ -19,7 +19,7 @@ const PrismTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                     </div>
                     <div className={styles.storeDetails}>
                         <h2>{selectedStore?.storeName || "PRISM TECHNOLOGIES"}</h2>

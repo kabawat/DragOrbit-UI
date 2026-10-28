@@ -19,7 +19,7 @@ const ApexTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header */}
                 <div className={styles.header}>
                     <div>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p className={styles.dateText}>Date: {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</p>
                     </div>
                     <div className={styles.storeInfo}>

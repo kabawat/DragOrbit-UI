@@ -18,7 +18,7 @@ const NeoEdgeTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.neoedgeInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.storeInfo}>
                         <strong>{selectedStore?.storeName || "NeoEdge Solutions"}</strong>{" "}
                         | {selectedStore?.address || "G-45, Business Park, New Delhi"}

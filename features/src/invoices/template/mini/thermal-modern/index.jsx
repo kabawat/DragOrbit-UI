@@ -13,7 +13,7 @@ const ThermalModernTemplate = ({ invoiceData, selectedStore }) => {
         <MiniInvoiceContainer>
             <div className={styles.thermalInvoice}>
                 <div className={styles.header}>
-                    <div className={styles.logoContainer}>DB</div>
+                    <div data-invoice-logo className={styles.logoContainer}>DB</div>
                     <div className={styles.storeName}>{selectedStore?.storeName || "MODERN STORE"}</div>
                     <p style={{ fontSize: '8pt' }}>{selectedStore?.address}</p>
                 </div>

@@ -19,7 +19,7 @@ const NeoGeometricTemplate = ({ invoiceData = {}, selectedStore = {} }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div className={styles.brand}>
-                        <div className={styles.logo}>N</div>
+                        <div data-invoice-logo className={styles.logo}>N</div>
                         <div>
                             <div className={styles.storeTitle}>
                                 {selectedStore?.storeName || "NeoGeometric"}

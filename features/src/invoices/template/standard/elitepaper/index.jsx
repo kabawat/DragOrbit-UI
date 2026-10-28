@@ -18,7 +18,7 @@ const ElitePaperTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.elitepaperInvoice} >
                 {/* Header Section */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.tagline}>
                         ElitePaper Billing Solutions
                     </div>

@@ -29,7 +29,7 @@ const VintageTemplate = ({ invoiceData, selectedStore }) => {
                         </p>
                     </div>
                     <div className={styles.invoiceTitleBox}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p>{invoiceData.invoiceNumber}</p>
                         <p>{formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}</p>
                     </div>

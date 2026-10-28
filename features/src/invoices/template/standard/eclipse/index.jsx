@@ -18,7 +18,7 @@ const EclipseTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.eclipseInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <p>{selectedStore?.storeName || "Your Store"}</p>
                     <p>Invoice No: {invoiceData.invoiceNumber}</p>
                     <p>{formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}</p>

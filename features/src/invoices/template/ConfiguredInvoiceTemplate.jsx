@@ -12,6 +12,8 @@ export function ConfiguredInvoiceTemplate({
   signatures = [],
   settings: providedSettings,
   signatureSettingsUrl,
+  fitPreview = false,
+  preview = false,
 }) {
   const group = getPrinterGroup(templateKey);
   const [storedSettings, setStoredSettings] = useState(() => getDefaultPrintSettings(group));
@@ -26,13 +28,13 @@ export function ConfiguredInvoiceTemplate({
   const store = {
     ...selectedStore,
     storeName: companyName || selectedStore?.storeName || selectedStore?.name || companyDetails?.companyName,
-    address: settings.showAddress ? selectedStore?.address || selectedStore?.storeAddress || selectedStore?.companyAddress || companyDetails?.address : "",
-    email: settings.showEmail ? selectedStore?.email || selectedStore?.storeEmail || selectedStore?.companyEmail || companyDetails?.email : "",
-    storeEmail: settings.showEmail ? selectedStore?.storeEmail || selectedStore?.email || companyDetails?.email : "",
-    phone: settings.showPhone ? selectedStore?.phone || selectedStore?.mobile || selectedStore?.storePhone || companyDetails?.phone : "",
-    gst: settings.showGstin ? selectedStore?.gst || selectedStore?.gstin || selectedStore?.gstNumber || companyDetails?.gstin : "",
-    gstin: settings.showGstin ? selectedStore?.gstin || selectedStore?.gst || selectedStore?.gstNumber || companyDetails?.gstin : "",
-    gstNumber: settings.showGstin ? selectedStore?.gstNumber || selectedStore?.gstin || selectedStore?.gst || companyDetails?.gstin : "",
+    address: settings.showAddress ? settings.addressOverride || selectedStore?.address || selectedStore?.storeAddress || selectedStore?.companyAddress || companyDetails?.address : "",
+    email: settings.showEmail ? settings.emailOverride || selectedStore?.email || selectedStore?.storeEmail || selectedStore?.companyEmail || companyDetails?.email : "",
+    storeEmail: settings.showEmail ? settings.emailOverride || selectedStore?.storeEmail || selectedStore?.email || companyDetails?.email : "",
+    phone: settings.showPhone ? settings.phoneOverride || selectedStore?.phone || selectedStore?.mobile || selectedStore?.storePhone || companyDetails?.phone : "",
+    gst: settings.showGstin ? settings.gstinOverride || selectedStore?.gst || selectedStore?.gstin || selectedStore?.gstNumber || companyDetails?.gstin : "",
+    gstin: settings.showGstin ? settings.gstinOverride || selectedStore?.gstin || selectedStore?.gst || selectedStore?.gstNumber || companyDetails?.gstin : "",
+    gstNumber: settings.showGstin ? settings.gstinOverride || selectedStore?.gstNumber || selectedStore?.gstin || selectedStore?.gst || companyDetails?.gstin : "",
     logo: settings.showLogo ? selectedStore?.logo || selectedStore?.logoUrl || companyDetails?.logo : "",
     logoUrl: settings.showLogo ? selectedStore?.logoUrl || selectedStore?.logo || companyDetails?.logo : "",
   };
@@ -84,7 +86,7 @@ export function ConfiguredInvoiceTemplate({
 
   return (
     <InvoicePrintSettingsContext.Provider
-      value={{ settings, invoiceData: configuredInvoice, selectedStore: store, group, signature, signatureSettingsUrl }}
+      value={{ settings, invoiceData: configuredInvoice, selectedStore: store, group, signature, signatureSettingsUrl, fitPreview, preview }}
     >
       <Template invoiceData={configuredInvoice} selectedStore={store} />
     </InvoicePrintSettingsContext.Provider>

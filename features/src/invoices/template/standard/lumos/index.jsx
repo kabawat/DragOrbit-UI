@@ -19,7 +19,7 @@ const LumosTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p style={{ fontSize: "12px", marginTop: "5px" }}>
                             Invoice No: <strong>{invoiceData.invoiceNumber}</strong>
                         </p>

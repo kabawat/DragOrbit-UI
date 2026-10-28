@@ -51,27 +51,90 @@
 }
 
 .acknowledgement {
-  margin-top: 2px;
-  padding-top: 7px;
+  margin: 4px 0 0;
+  padding-top: 5px;
   border-top: 1px dashed #6b7280;
-  text-align: center;
-  font-size: 11px;
+  color: #111827;
+  font-size: 9px;
 }
 
-.acknowledgement p {
+.acknowledgementCopy {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  line-height: 1.25;
+}
+
+.acknowledgementCopy strong {
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.acknowledgementCopy span {
+  overflow-wrap: anywhere;
+}
+
+.acknowledgementCopy p {
   margin: 0;
 }
 
-:global(.invoice-common-total-quantity td) {
-  border-top: 1px solid var(--invoice-primary-border, #d1d5db) !important;
-  background: var(--invoice-primary-tint, #f9fafb) !important;
-  color: var(--invoice-primary-color, #111827) !important;
-  font-weight: 700 !important;
-  padding: 6px 8px !important;
+.acknowledgementAmounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 14px;
 }
 
-:global(.invoice-common-total-quantity-value) {
-  text-align: right !important;
+.acknowledgementAmounts b {
+  color: #374151;
+  font-weight: 600;
+}
+
+.acknowledgementLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 0.32fr);
+  align-items: end;
+  gap: 16px;
+}
+
+.acknowledgementSign {
+  display: grid;
+  gap: 4px;
+  color: #4b5563;
+  font-size: 8px;
+}
+
+.acknowledgementSignLine {
+  display: block;
+  height: 16px;
+  border-bottom: 1px solid #9ca3af;
+}
+
+.thermalAcknowledgement .acknowledgementLayout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.thermalAcknowledgement .acknowledgementSign {
+  max-width: 150px;
+}
+
+@media (max-width: 480px) {
+  .acknowledgementLayout {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 0.4fr);
+    gap: 8px;
+  }
+}
+
+/* The dashed top edge acts as the tear-off line for the receipt copy. */
+.acknowledgement::before {
+  content: "✂  Cut here";
+  display: block;
+  margin: -9px 0 3px;
+  padding-right: 4px;
+  color: #6b7280;
+  background: white;
+  font-size: 8px;
+  text-align: right;
 }
 
 .signatureBlock {

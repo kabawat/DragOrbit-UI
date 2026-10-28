@@ -1,0 +1,142 @@
+.document { color: #111827; }
+.invoice { width: 100%; padding: 8px; color: #111827; font-size: 10px; line-height: 1.4; }
+.sale, .taxSummaryDesign, .transportTaxDesign { width: 100%; }
+.invoice p { margin: 3px 0; }
+.brandBlock { display: flex; min-height: 58px; align-items: center; justify-content: space-between; gap: 12px; padding: 4px 5px 8px; border-bottom: 1px solid #9491d9; }
+.brandCentered { border: 0; }
+.logo { order: 2; width: 58px; height: 58px; object-fit: contain; }
+.storeDetails { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 2px; }
+.storeName { font-size: 13px; }
+.brandCentered .logo { order: 0; }
+.brandCentered .storeDetails { margin-left: auto; align-items: flex-end; text-align: right; }
+.brandLogoLeft .logo { order: 0; }
+.saleTitle, .centerTitle { margin: 5px 0 12px; color: #7774c9; font-size: 15px; font-weight: 700; text-align: center; }
+.centerTitle { color: #111827; }
+.saleParties { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: start; margin: 0 0 10px; }
+.partyColumns { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.party { display: flex; min-width: 0; flex-direction: column; gap: 4px; }
+.party strong { margin-top: 2px; }
+.meta { display: flex; min-width: 150px; flex-direction: column; align-items: flex-end; gap: 3px; text-align: right; }
+.meta > b { margin-bottom: 2px; }
+.transportMeta { display: grid; grid-template-columns: 1fr 1fr; border-left: 1px solid #888; }
+.transportMeta > b { display: none; }
+.transportMeta > span { display: flex; min-height: 30px; flex-direction: column; justify-content: center; padding: 3px 5px; border-bottom: 1px solid #aaa; border-right: 1px solid #aaa; }
+.transportMeta small { font-size: 9px; }
+.shipLabel { margin: 8px 0 5px; }
+.framed { border: 1px solid #888; }
+.framed > .brandBlock { border-bottom: 1px solid #888; padding: 5px; }
+.threeParties { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .72fr) minmax(150px, .68fr); border-bottom: 1px solid #999; }
+.threeParties > * { min-height: 78px; padding: 6px; }
+.threeParties > * + * { border-left: 1px solid #999; }
+.threeParties .partyColumns { display: contents; }
+.threeParties .partyColumns .party { padding: 0; }
+.threeParties .meta { min-width: 0; align-items: stretch; text-align: right; }
+.itemTable { width: 100%; margin: 0; border-collapse: collapse; table-layout: auto; }
+.itemTable th, .itemTable td { padding: 4px 5px; border-bottom: 1px solid #999; text-align: right; vertical-align: top; white-space: normal; }
+.itemTable th { color: white; background: var(--invoice-primary-color, #8985d4); font-size: 9px; }
+.itemTable th:nth-child(2), .itemTable td:nth-child(2) { min-width: 90px; text-align: left; }
+.itemTable td small { display: block; margin-top: 2px; color: #475569; }
+.itemTable tfoot td { border-bottom: 1px solid #777; }
+.splitTaxTable th:nth-child(2), .splitTaxTable td:nth-child(2) { min-width: 90px; }
+.saleLower, .transportAmounts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, .98fr); gap: 14px; margin: 10px 0; }
+.textBlock { margin: 0 0 12px; }
+.textBlock > b { display: block; margin-bottom: 5px; text-transform: uppercase; }
+.textBlock p { margin: 0; }
+.totals { min-width: 0; align-self: start; }
+.totalsHeading { padding: 4px 5px; border-bottom: 1px solid #999; font-weight: 700; }
+.totalsCompact .totalsHeading { display: none; }
+.summaryRow { display: flex; justify-content: space-between; gap: 8px; min-height: 20px; padding: 3px 5px; border-bottom: 1px solid #d1d5db; }
+.summaryEmphasis { color: white; background: var(--invoice-primary-color, #8985d4); }
+.summaryEmphasis strong { color: white; }
+.taxAndTotals { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1fr); }
+.taxTable { width: 100%; border-collapse: collapse; }
+.taxTable th, .taxTable td { padding: 4px; border-bottom: 1px solid #d1d5db; text-align: right; }
+.taxTable th:first-child, .taxTable td:first-child { text-align: left; }
+.taxTable th { color: white; background: var(--invoice-primary-color, #8985d4); }
+.bandPair { display: grid; grid-template-columns: 1fr 1fr; }
+.bandPair > div { display: flex; min-height: 38px; flex-direction: column; border-top: 1px solid #888; }
+.bandPair > div + div { border-left: 1px solid #888; }
+.bandPair b { padding: 4px; color: white; background: var(--invoice-primary-color, #8985d4); text-align: center; }
+.bandPair span { padding: 4px; text-align: center; }
+.bottomDetails { display: grid; grid-template-columns: 1fr 1fr 1fr; min-height: 98px; border-top: 1px solid #888; }
+.bottomDetails > div, .bottomDetails > .signature { padding: 5px; }
+.bottomDetails > * + * { border-left: 1px solid #888; }
+.bankDetails, .termsBlock { display: flex; flex-direction: column; gap: 4px; }
+.bankDetails > b, .termsBlock > b { margin: -5px -5px 2px; padding: 4px 5px; background: var(--invoice-primary-color, #8985d4); color: white; }
+.bankDetails img { width: 42px; height: 42px; object-fit: contain; }
+.signature { display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; }
+.signatureImage { display: flex; min-height: 45px; align-items: center; justify-content: center; }
+.signatureImage img { max-width: 125px; max-height: 40px; object-fit: contain; }
+.signature > b { margin-top: 2px; }
+.saleFooter { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.payDetails { display: flex; align-items: center; gap: 10px; }
+.payDetails > img { width: 54px; height: 54px; object-fit: contain; }
+.payDetails > div { display: flex; flex-direction: column; gap: 4px; }
+.saleFooter .signature { min-height: 100px; }
+.transportTop { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #888; }
+.transportTop .brandBlock { border: 0; }
+.transportBill { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #888; }
+.transportBill > * { min-height: 58px; padding: 5px; }
+.transportBill > * + * { border-left: 1px solid #888; }
+.shipTo { display: flex; flex-direction: column; gap: 5px; }
+.transportDesign .itemTable th, .transportDesign .itemTable td, .taxSummaryDesign .itemTable th, .taxSummaryDesign .itemTable td { border: 1px solid #888; }
+.transportDesign .transportAmounts { margin: 0; }
+.transportDesign .taxTable { margin-top: 5px; }
+.breakdownTop, .breakdownBottom { display: grid; grid-template-columns: 1fr 1fr; }
+.breakdownTop > div, .breakdownBottom > div { min-height: 54px; border-top: 1px solid #888; }
+.breakdownTop > div + div, .breakdownBottom > div + div { border-left: 1px solid #888; }
+.breakdownTop > div:first-child, .descriptionCell { display: flex; flex-direction: column; }
+.breakdownTop > div:first-child > b, .descriptionCell > b { padding: 4px; background: var(--invoice-primary-color, #8985d4); color: #fff; text-align: center; }
+.breakdownTop > div:first-child > span, .descriptionCell > span { padding: 5px; }
+.breakdownTop .totalsHeading { color: #fff; background: var(--invoice-primary-color, #8985d4); text-align: center; }
+.breakdownBottom .taxTable { align-self: stretch; }
+.breakdownBottom .taxTable th, .breakdownBottom .taxTable td { border-right: 1px solid #999; }
+.taxHeadingRow { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 32px 0 12px; }
+.taxHeadingRow h1 { width: 50%; margin: 0; padding: 12px 15px; color: #fff; background: var(--invoice-primary-color, #8985d4); font-size: 24px; text-align: center; }
+.taxHeadingRow img { width: 62px; height: 62px; object-fit: contain; }
+.sellerDetails { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; min-height: 72px; padding: 5px; }
+.sellerDetails > div { display: flex; flex-direction: column; gap: 4px; }
+.sellerDetails > div + div { padding-top: 15px; }
+.sellerDetails b, .sellerDetails span { color: #6d69bc; }
+.sellerDetails span { color: #111827; }
+.transportInvoiceGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 7px; border-top: 1px solid #999; border-bottom: 1px solid #999; }
+.transportInvoiceGrid > section { display: flex; min-width: 0; flex-direction: column; gap: 5px; padding: 6px; }
+.transportInvoiceGrid > section + section { border-left: 1px solid #999; }
+.transportInvoiceGrid h2 { margin: 0 0 2px; color: #7774c9; font-size: 13px; }
+.transportInvoiceGrid section > b { margin: 0 0 2px; }
+.infoPair { display: flex; justify-content: space-between; gap: 5px; }
+.infoPair b { text-align: right; }
+.transportTaxLower { display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, .75fr); gap: 12px; margin-top: 7px; }
+.payWordsTerms { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 8px; align-content: start; }
+.taxQr { grid-row: span 2; width: 48px; height: 48px; object-fit: contain; }
+.payTo { display: flex; flex-direction: column; gap: 3px; }
+.payWordsTerms .textBlock, .payWordsTerms .signature { grid-column: 1 / -1; }
+.payWordsTerms .signature { min-height: 82px; align-items: flex-start; }
+.transportTaxTotals { border: 1px solid #999; }
+.transportTaxTotals > .summaryRow { border-bottom: 1px solid #999; }
+.transportTaxTotals > .summaryEmphasis { border-color: var(--invoice-primary-color, #8985d4); }
+
+@media (max-width: 640px) {
+  .invoice { padding: 5px; font-size: 9px; }
+  .saleParties, .taxAndTotals, .transportTop, .transportBill { grid-template-columns: 1fr; }
+  .saleParties .meta { align-items: flex-start; text-align: left; }
+  .threeParties { grid-template-columns: 1fr 1fr; }
+  .threeParties > :last-child { grid-column: 1 / -1; border-left: 0; border-top: 1px solid #999; }
+  .partyColumns { gap: 8px; }
+  .itemTable th, .itemTable td { padding: 3px 2px; font-size: 8px; }
+  .itemTable th:nth-child(2), .itemTable td:nth-child(2) { min-width: 58px; }
+  .saleLower, .transportAmounts { grid-template-columns: 1fr; }
+  .bottomDetails { grid-template-columns: 1fr 1fr; }
+  .bottomDetails > .signature { grid-column: 1 / -1; min-height: 75px; border-top: 1px solid #888; border-left: 0; }
+  .transportInvoiceGrid { grid-template-columns: 1fr; }
+  .transportInvoiceGrid > section + section { border-top: 1px solid #999; border-left: 0; }
+  .transportTaxLower { grid-template-columns: 1fr; }
+  .taxHeadingRow h1 { width: 65%; font-size: 18px; }
+  .breakdownTop, .breakdownBottom { grid-template-columns: 1fr; }
+  .breakdownTop > div + div, .breakdownBottom > div + div { border-left: 0; }
+}
+
+@media print {
+  .invoice { padding: 0; }
+  .saleLower, .transportAmounts { break-inside: avoid; }
+}

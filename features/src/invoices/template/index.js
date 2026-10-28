@@ -38,6 +38,8 @@ export { default as SleekStreamTemplate } from "./standard/sleek-stream";
 export { default as SpectrumTemplate } from "./standard/spectrum";
 export { default as StructedTemplate } from "./standard/structed";
 export { default as TerraTemplate } from "./standard/terra";
+export { default as TaxInvoiceTemplate } from "./standard/tax-invoice";
+export { SaleInvoiceTemplate, SaleTaxSummaryTemplate, SaleTaxBreakdownTemplate, TransportSaleTemplate, TransportTaxInvoiceTemplate } from "./standard/sales";
 export { default as VelocityLedgerTemplate } from "./standard/velocity-ledger";
 export { default as VintageTemplate } from "./standard/vintage";
 export { default as ZenithTemplate } from "./standard/zenith";
@@ -48,6 +50,7 @@ export { default as ThermalModernTemplate } from "./mini/thermal-modern";
 export { default as ThermalCompactTemplate } from "./mini/thermal-compact";
 export { default as ThermalMinimalTemplate } from "./mini/thermal-minimal";
 export { default as ThermalBoldTemplate } from "./mini/thermal-bold";
+export { default as ThermalTaxInvoiceTemplate } from "./mini/thermal-tax-invoice";
 
 // Template selector options (sorted alphabetically by label)
 export const TEMPLATE_OPTIONS = [
@@ -250,6 +253,24 @@ export const TEMPLATE_OPTIONS = [
     preview: "/images/templates/rustic-elegance-preview.png",
   },
   {
+    value: "sale",
+    label: "Sale",
+    description: "Clean sales invoice with compact payment summary",
+    preview: "/images/templates/sale-preview.svg",
+  },
+  {
+    value: "sale-tax-breakdown",
+    label: "Sale Tax Breakdown",
+    description: "Sales invoice with amounts, tax breakdown and description sections",
+    preview: "/images/templates/sale-tax-breakdown-preview.svg",
+  },
+  {
+    value: "sale-tax-summary",
+    label: "Sale Tax Summary",
+    description: "Sales invoice with split CGST and SGST summary",
+    preview: "/images/templates/sale-tax-summary-preview.svg",
+  },
+  {
     value: "sleek-stream",
     label: "Sleek Stream",
     description: "Modern design with fluid elements",
@@ -268,10 +289,28 @@ export const TEMPLATE_OPTIONS = [
     preview: "/images/templates/structed-preview.png",
   },
   {
+    value: "tax-invoice",
+    label: "Tax Invoice",
+    description: "Detailed bordered tax invoice with signature",
+    preview: "/images/templates/tax-invoice-preview.svg",
+  },
+  {
     value: "terra",
     label: "Terra",
     description: "Earthy and natural tones",
     preview: "/images/templates/terra-preview.png",
+  },
+  {
+    value: "transport-sale",
+    label: "Transport Sale",
+    description: "Sales invoice with transport and delivery details",
+    preview: "/images/templates/transport-sale-preview.svg",
+  },
+  {
+    value: "transport-tax-invoice",
+    label: "Transport Tax Invoice",
+    description: "Tax invoice with customer, transport and payment details",
+    preview: "/images/templates/transport-tax-invoice-preview.svg",
   },
   {
     value: "velocity-ledger",
@@ -320,5 +359,11 @@ export const TEMPLATE_OPTIONS = [
     label: "Thermal Bold",
     description: "Bold 80mm thermal receipt",
     preview: "/images/templates/thermal-bold-preview.png",
+  },
+  {
+    value: "thermal-tax-invoice",
+    label: "Thermal Tax Invoice",
+    description: "Compact thermal invoice with item tax and balance summary",
+    preview: "/images/templates/thermal-tax-invoice-preview.svg",
   },
 ];

@@ -25,7 +25,7 @@ const FusionTemplate = ({ invoiceData, selectedStore }) => {
                         {selectedStore?.email && <p>{selectedStore.email}</p>}
                     </div>
                     <div className={styles.invoiceInfo}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <div>
                             <span style={{ color: "#bdc3c7" }}>No:</span>
                             <span className={styles.tag}>{invoiceData.invoiceNumber}</span>

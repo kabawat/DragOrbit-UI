@@ -36,7 +36,7 @@ const ZenithTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Right Main */}
                 <div className={styles.main}>
                     <div className={styles.header}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <div className={styles.headerRight}>
                             <p>
                                 Invoice No: <strong>{invoiceData.invoiceNumber}</strong>

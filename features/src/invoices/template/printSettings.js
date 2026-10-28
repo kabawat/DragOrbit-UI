@@ -8,7 +8,7 @@ export const PRINT_SETTING_OPTIONS = [
   ["showEmail", "Email"],
   ["showPhone", "Phone number"],
   ["showGstin", "GSTIN"],
-  ["showTotalQuantity", "Total item quantity"],
+  ["showTotalValues", "Total Values"],
   ["showAmountDecimals", "Amount with decimals"],
   ["showReceivedAmount", "Received amount"],
   ["showBalanceAmount", "Balance amount"],
@@ -17,7 +17,6 @@ export const PRINT_SETTING_OPTIONS = [
   ["showAmountInWords", "Amount in words"],
   ["showDescription", "Item description"],
   ["showTerms", "Terms and conditions"],
-  ["showReceivedDetails", "Received details"],
   ["showSignature", "Signature"],
   ["showPaymentMode", "Payment mode"],
   ["showAcknowledgement", "Print acknowledgement"],
@@ -38,7 +37,7 @@ export const DEFAULT_PRINT_SETTINGS = {
     showEmail: true,
     showPhone: true,
     showGstin: true,
-    showTotalQuantity: false,
+    showTotalValues: true,
     showAmountDecimals: true,
     showReceivedAmount: false,
     showBalanceAmount: false,
@@ -47,7 +46,6 @@ export const DEFAULT_PRINT_SETTINGS = {
     showAmountInWords: false,
     showDescription: true,
     showTerms: false,
-    showReceivedDetails: false,
     showSignature: false,
     showPaymentMode: false,
     showAcknowledgement: false,
@@ -65,7 +63,7 @@ export const DEFAULT_PRINT_SETTINGS = {
     showEmail: true,
     showPhone: true,
     showGstin: true,
-    showTotalQuantity: false,
+    showTotalValues: true,
     showAmountDecimals: true,
     showReceivedAmount: false,
     showBalanceAmount: false,
@@ -74,7 +72,6 @@ export const DEFAULT_PRINT_SETTINGS = {
     showAmountInWords: false,
     showDescription: true,
     showTerms: false,
-    showReceivedDetails: false,
     showSignature: false,
     showPaymentMode: false,
     showAcknowledgement: false,
@@ -87,10 +84,16 @@ export function readPrintSettings() {
     const stored = JSON.parse(
       window.localStorage.getItem(PRINT_SETTINGS_STORAGE_KEY) || "{}",
     );
-    return {
-      regular: { ...DEFAULT_PRINT_SETTINGS.regular, ...stored.regular },
-      thermal: { ...DEFAULT_PRINT_SETTINGS.thermal, ...stored.thermal },
+    const mergeSettings = (group) => {
+      const saved = { ...(stored[group] || {}) };
+      if (saved.showTotalValues === undefined && saved.showTotalQuantity !== undefined) {
+        saved.showTotalValues = saved.showTotalQuantity;
+      }
+      delete saved.showTotalQuantity;
+      delete saved.showReceivedDetails;
+      return { ...DEFAULT_PRINT_SETTINGS[group], ...saved };
     };
+    return { regular: mergeSettings("regular"), thermal: mergeSettings("thermal") };
   } catch {
     return DEFAULT_PRINT_SETTINGS;
   }

@@ -16,7 +16,7 @@ const ClassicTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.classicInvoice}>
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.invoiceNumber}>{invoiceData.invoiceNumber}</div>
                     <p>Date: {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</p>
                 </div>

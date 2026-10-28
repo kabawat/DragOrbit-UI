@@ -22,7 +22,7 @@ const AuraTemplate = ({ invoiceData, selectedStore }) => {
 
                 {/* Header */}
                 <div className={styles.header}>
-                    <div><h1>INVOICE</h1></div>
+                    <div><h1 data-invoice-header>INVOICE</h1></div>
                     <div className={styles.storeInfo}>
                         <h2>{selectedStore?.storeName || "Your Store"}</h2>
                         <p>{selectedStore?.address || ""}</p>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function ResponsiveInvoiceDocument({ children, pageWidth = 794 }) {
+export function ResponsiveInvoiceDocument({ children, pageWidth = 794, fitHeight = false }) {
   const viewportRef = useRef(null);
   const pageRef = useRef(null);
   const [pageSize, setPageSize] = useState({ scale: 1, height: 0 });
@@ -13,8 +13,13 @@ export function ResponsiveInvoiceDocument({ children, pageWidth = 794 }) {
     if (!viewport || !page) return undefined;
 
     const updateSize = () => {
-      const scale = Math.min(viewport.clientWidth / pageWidth, 1);
-      setPageSize({ scale, height: page.scrollHeight });
+      const pageHeight = page.scrollHeight;
+      const widthScale = viewport.clientWidth / pageWidth;
+      const heightScale = fitHeight && viewport.clientHeight > 0 && pageHeight > 0
+        ? viewport.clientHeight / pageHeight
+        : 1;
+      const scale = Math.min(widthScale, heightScale, 1);
+      setPageSize({ scale, height: pageHeight });
     };
 
     updateSize();
@@ -22,12 +27,12 @@ export function ResponsiveInvoiceDocument({ children, pageWidth = 794 }) {
     observer.observe(viewport);
     observer.observe(page);
     return () => observer.disconnect();
-  }, [pageWidth]);
+  }, [pageWidth, fitHeight]);
 
   const scaledWidth = pageWidth * pageSize.scale;
 
   return (
-    <div ref={viewportRef} className="invoice-responsive-viewport min-w-0 overflow-x-hidden">
+    <div ref={viewportRef} className={`invoice-responsive-viewport min-w-0 overflow-x-hidden ${fitHeight ? "flex h-full items-center justify-center overflow-y-hidden" : ""}`}>
       <div
         className="invoice-responsive-frame mx-auto"
         style={{ width: `${scaledWidth}px`, height: `${pageSize.height * pageSize.scale}px` }}
@@ -45,7 +50,7 @@ export function ResponsiveInvoiceDocument({ children, pageWidth = 794 }) {
         </div>
       </div>
       <style>{`@media print {
-        .invoice-responsive-viewport { width: auto !important; overflow: visible !important; }
+        .invoice-responsive-viewport { display: block !important; width: auto !important; height: auto !important; overflow: visible !important; }
         .invoice-responsive-frame { width: auto !important; height: auto !important; margin: 0 !important; }
         .invoice-responsive-page { width: auto !important; transform: none !important; }
       }`}</style>

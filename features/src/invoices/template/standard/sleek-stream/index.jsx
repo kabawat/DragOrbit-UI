@@ -18,7 +18,7 @@ export default function SleekStreamTemplate({ invoiceData, selectedStore }) {
             <div className={styles.sleekInvoice} id="invoice">
                 <div className={styles.splitHeader}>
                     <div className={styles.metaSidebar}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <div className={styles.metaDetail}>Invoice Number:</div>
                         <div className={styles.metaValue}>{invoiceData.invoiceNumber}</div>
                         <div className={styles.metaDetail}>Date Issued:</div>

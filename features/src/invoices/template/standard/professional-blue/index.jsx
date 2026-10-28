@@ -30,7 +30,7 @@ const ProfessionalBlueTemplate = ({ invoiceData, selectedStore }) => {
 
                     {/* Invoice Details - Right */}
                     <div className={styles.invoiceDetails}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <div className={styles.detailRow}>
                             {/* <div className={styles.detailLabel}>Invoice #</div> */}
                             <div className={styles.invoiceNumberValue}>

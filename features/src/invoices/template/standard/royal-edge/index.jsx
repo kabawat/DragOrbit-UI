@@ -19,7 +19,7 @@ const RoyalEdgeTemplate = ({ invoiceData = {}, selectedStore = {} }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div className={styles.brand}>
-                        <div className={styles.logo}>R</div>
+                        <div data-invoice-logo className={styles.logo}>R</div>
                         <div>
                             <div className={styles.storeTitle}>
                                 {selectedStore?.storeName || "RoyalEdge"}

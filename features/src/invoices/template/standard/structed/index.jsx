@@ -19,7 +19,7 @@ const StructuredTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header - Invoice Title and Number/Date */}
                 <div className={styles.header}>
                     <div className={styles.headerLeft}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                     </div>
                     <div className={styles.headerRight}>
                         <div className={styles.invoiceDetail}>

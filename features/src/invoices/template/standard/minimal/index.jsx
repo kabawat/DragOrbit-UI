@@ -18,7 +18,7 @@ const MinimalTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.minimalInvoice} >
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.invoiceNumber}>{invoiceData.invoiceNumber}</div>
                     <div className={styles.date}>
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}

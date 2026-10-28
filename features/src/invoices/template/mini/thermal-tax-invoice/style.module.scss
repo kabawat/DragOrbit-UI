@@ -1,0 +1,44 @@
+.page { color: #111; }
+.receipt { width: 100%; padding: 2mm 1.5mm; color: #111; background: #fff; font-family: Arial, sans-serif; font-size: 9px; line-height: 1.28; overflow-wrap: anywhere; }
+.storeHeader { display: flex; align-items: center; flex-direction: column; gap: 1px; padding: 1mm 0 2mm; text-align: center; }
+.storeHeader span { max-width: 100%; }
+.logo { display: block; width: 30px; height: 28px; margin-bottom: 1px; object-fit: contain; }
+.storeName { font-size: 11px; }
+.title { margin: 0; padding: 2mm 0 1.5mm; border-top: 1px dashed #111; text-align: center; font-size: 10px; font-weight: 700; }
+.invoiceInfo { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 5px; padding: 1mm 0 2mm; border-bottom: 1px dashed #111; }
+.customerInfo, .invoiceMeta { display: flex; min-width: 0; flex-direction: column; gap: 1px; }
+.customerInfo b:nth-of-type(2) { margin-top: 2px; }
+.invoiceMeta { align-items: flex-end; text-align: right; }
+.itemsTable { width: 100%; margin: 1.5mm 0 0; border-collapse: collapse; table-layout: fixed; }
+.itemsTable th, .itemsTable td { padding: 1mm .4mm; text-align: right; vertical-align: top; }
+.itemsTable th { border-bottom: 1px dashed #111; font-weight: 700; }
+.itemsTable th:first-child, .itemsTable td:first-child { width: 5%; text-align: left; }
+.itemsTable th:nth-child(2), .itemsTable td:nth-child(2) { width: 38%; text-align: left; }
+.itemsTable th:nth-child(3), .itemsTable td:nth-child(3) { width: 18%; }
+.itemsTable th:nth-child(4), .itemsTable td:nth-child(4) { width: 16%; }
+.itemsTable th:last-child, .itemsTable td:last-child { width: 23%; }
+.itemsTable tbody tr + tr td { padding-top: 1.5mm; }
+.itemName b, .itemName i, .itemName small { display: block; text-align: left; }
+.itemName i { margin-top: 1px; font-size: .92em; }
+.itemName small { margin-top: 1px; font-size: .88em; font-style: normal; }
+.discountHint { display: block; }
+.itemsTable tfoot td { padding-top: 1.5mm; border-top: 1px dashed #111; border-bottom: 1px dashed #111; font-weight: 700; }
+.totals { padding: 1.5mm 0; border-bottom: 1px dashed #111; }
+.totalRow { display: grid; grid-template-columns: minmax(0, 1fr) 5px auto; gap: 3px; padding: .35mm 0; }
+.totalRow > span { grid-column: 1; }
+.totalRow::after { content: ":"; grid-column: 2; }
+.totalRow > b { grid-column: 3; min-width: 58px; text-align: right; font-weight: 400; }
+.grandTotal { font-weight: 700; }
+.grandTotal > strong:first-child { grid-column: 1; }
+.grandTotal > strong:last-child { grid-column: 3; min-width: 58px; text-align: right; }
+.footer { display: flex; flex-direction: column; gap: 1mm; padding: 2mm 0 1mm; }
+.footer p { margin: 0; }
+.signature { align-self: flex-end; max-width: 80px; max-height: 24px; object-fit: contain; }
+
+:global(.invoice-print-document[data-paper-size="58mm"]) .receipt { font-size: 8px; padding-right: .7mm; padding-left: .7mm; }
+:global(.invoice-print-document[data-paper-size="58mm"]) .itemsTable th, :global(.invoice-print-document[data-paper-size="58mm"]) .itemsTable td { padding-right: .2mm; padding-left: .2mm; }
+
+@media print {
+  .receipt { padding-top: 1mm; padding-bottom: 1mm; }
+  .itemsTable tr, .totalRow, .footer { break-inside: avoid; }
+}

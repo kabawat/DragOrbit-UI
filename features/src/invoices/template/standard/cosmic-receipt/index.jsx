@@ -16,7 +16,7 @@ const CosmicReceiptTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.cosmicInvoice}>
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>RECEIPT</h1>
+                    <h1 data-invoice-header>RECEIPT</h1>
                     <div className={styles.storeInfo}>
                         <p><span className={styles.storeName}>{selectedStore?.storeName || "Cosmic Systems Ltd."}</span></p>
                         <p>

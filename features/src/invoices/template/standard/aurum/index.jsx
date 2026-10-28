@@ -16,7 +16,7 @@ const AurumTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.aurumInvoice}>
                 {/* Header */}
                 <div className={styles.header}>
-                    <h1>INVOICE</h1>
+                    <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.subtitle}>{selectedStore?.storeName || "Your Store Name"}</div>
                     <div className={styles.contactInfo}>
                         {selectedStore?.address && <span>{selectedStore.address} | </span>}

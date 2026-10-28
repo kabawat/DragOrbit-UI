@@ -9,7 +9,7 @@ const ThermalMinimalTemplate = ({ invoiceData, selectedStore }) => {
         <MiniInvoiceContainer>
             <div className={styles.thermalInvoice}>
                 <div className={styles.top}>
-                    <h1>{selectedStore?.storeName}</h1>
+                    <h1 data-invoice-company-name>{selectedStore?.storeName}</h1>
                     <p>{formatInvoiceDate(invoiceData.createdAt, "DD/MM/YY")}</p>
                 </div>
 

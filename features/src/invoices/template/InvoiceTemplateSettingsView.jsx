@@ -1,5 +1,6 @@
 import { Settings2, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Input } from "@dragorbit/ui";
 import { ConfiguredInvoiceTemplate } from "./ConfiguredInvoiceTemplate.jsx";
 import { TEMPLATE_OPTIONS } from "./index.js";
 import { PRINT_SETTING_OPTIONS, readPrintSettings, writePrintSettings } from "./printSettings.js";
@@ -24,6 +25,9 @@ const PRIMARY_COLORS = ["#2563eb", "#0f766e", "#059669", "#65a30d", "#ca8a04", "
 const controlClass = "mt-1 w-full rounded-md border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] px-2 py-2 text-sm text-[rgb(var(--color-text-primary))]";
 const getGroup = (key) => key?.startsWith("thermal-") ? "thermal" : "regular";
 const getDefault = (group) => TEMPLATE_OPTIONS.find(({ value }) => value === (group === "thermal" ? "thermal-classic" : "modern"))?.value || GROUPS.find(({ id }) => id === group)?.templates[0]?.value;
+const addressText = (value) => typeof value === "string" ? value : value && typeof value === "object"
+  ? [value.line1, value.line2, value.city, value.state, value.pincode, value.country].filter(Boolean).join(", ")
+  : "";
 function readSelections(selected) {
   const result = { regular: getDefault("regular"), thermal: getDefault("thermal") };
   if (typeof window !== "undefined") try {
@@ -45,10 +49,19 @@ export function InvoiceTemplateSettingsView({ selectedTemplate, onSelect, select
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [customColor, setCustomColor] = useState(() => readPrintSettings().regular.primaryColor);
   const [customColorPending, setCustomColorPending] = useState(false);
+  const [editingField, setEditingField] = useState(null);
   const [groupSelections, setGroupSelections] = useState(() => readSelections(selectedTemplate));
   const [activeGroup, setActiveGroup] = useState(getGroup(selectedTemplate) || "regular");
   const isThermal = activeGroup === "thermal";
   const activeSettings = settingsByPrinter[activeGroup];
+  const companyDetails = selectedStore?.companyDetails || {};
+  const editableFields = {
+    showCompanyName: { setting: "companyName", label: "Company name", type: "text", value: selectedStore?.storeName || selectedStore?.name || companyDetails.companyName, placeholder: "Enter company name" },
+    showAddress: { setting: "addressOverride", label: "Address", type: "text", value: addressText(selectedStore?.address || selectedStore?.storeAddress || selectedStore?.companyAddress || companyDetails.address), placeholder: "Enter invoice address" },
+    showEmail: { setting: "emailOverride", label: "Email", type: "email", value: selectedStore?.email || selectedStore?.storeEmail || selectedStore?.companyEmail || companyDetails.email, placeholder: "Enter invoice email" },
+    showPhone: { setting: "phoneOverride", label: "Phone number", type: "tel", value: selectedStore?.phone || selectedStore?.mobile || selectedStore?.storePhone || companyDetails.phone, placeholder: "Enter invoice phone number" },
+    showGstin: { setting: "gstinOverride", label: "GSTIN", type: "text", value: selectedStore?.gstin || selectedStore?.gst || selectedStore?.gstNumber || companyDetails.gstin, placeholder: "Enter GSTIN" },
+  };
 
   useEffect(() => {
     if (previousTemplate.current === selectedTemplate) return;
@@ -81,7 +94,7 @@ export function InvoiceTemplateSettingsView({ selectedTemplate, onSelect, select
     setCustomColor(color);
     updateSetting("primaryColor", color);
   };
-  const settingsPanel = settingsOpen ? <div className="absolute inset-0 z-20 overflow-y-auto rounded-lg border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] p-3 shadow-xl sm:p-4">
+  const settingsPanel = settingsOpen ? <div className="absolute inset-0 z-20 overflow-y-auto rounded-lg border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] p-3 shadow-xl sm:p-4 max-md:fixed max-md:inset-x-2 max-md:top-20 max-md:bottom-4 max-md:z-50">
     <div className="mb-4 flex items-center justify-between"><div><h2 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">Printer Settings</h2><p className="text-xs text-[rgb(var(--color-text-secondary))]">{isThermal ? "Thermal" : "Regular"}</p></div><button type="button" onClick={() => setSettingsOpen(false)} aria-label={t("common.close") || "Close"} className="rounded-md p-2 hover:bg-[rgb(var(--color-bg-tertiary))]"><X className="h-4 w-4"/></button></div>
     {!isThermal && <div className="mb-4">
       <p className="mb-2 text-xs font-medium text-[rgb(var(--color-text-secondary))]">Primary color</p>
@@ -95,22 +108,53 @@ export function InvoiceTemplateSettingsView({ selectedTemplate, onSelect, select
       <p className="mt-2 text-[11px] text-[rgb(var(--color-text-secondary))]">{activeSettings.primaryColor.toUpperCase()} · Custom color preview updates when you pause.</p>
     </div>}
     <div className="mb-4 grid grid-cols-2 gap-2"><label className="text-xs font-medium text-[rgb(var(--color-text-secondary))]">Paper size<select className={controlClass} value={activeSettings.paperSize} onChange={(e) => updateSetting("paperSize", e.target.value)}>{(isThermal ? ["80mm", "58mm"] : ["A4", "A5"]).map((size) => <option key={size}>{size}</option>)}</select></label><label className="text-xs font-medium text-[rgb(var(--color-text-secondary))]">Text size<select className={controlClass} value={activeSettings.textSize} onChange={(e) => updateSetting("textSize", e.target.value)}>{SIZE_OPTIONS.map((size) => <option key={size} value={size}>{size.replace("-", " ").replace(/^./, (c) => c.toUpperCase())}</option>)}</select></label></div>
-    <label className="mb-4 block text-xs font-medium text-[rgb(var(--color-text-secondary))]">Company name override<input className={controlClass} value={activeSettings.companyName} onChange={(e) => updateSetting("companyName", e.target.value)} placeholder={selectedStore?.storeName || "Use store name"}/></label>
     <label className="mb-4 block text-xs font-medium text-[rgb(var(--color-text-secondary))]">Company name size<select className={controlClass} value={activeSettings.companyNameSize} onChange={(e) => updateSetting("companyNameSize", e.target.value)}>{SIZE_OPTIONS.map((size) => <option key={size} value={size}>{size.replace("-", " ").replace(/^./, (c) => c.toUpperCase())}</option>)}</select></label>
-    <div className="space-y-1 border-t border-[rgb(var(--color-border-primary))] pt-3">{PRINT_SETTING_OPTIONS.map(([key, label]) => <div key={key} className="flex items-center justify-between gap-2 rounded-md px-1 py-1.5 text-xs hover:bg-[rgb(var(--color-bg-secondary))]"><label className="flex min-w-0 cursor-pointer items-center gap-2 text-[rgb(var(--color-text-primary))]"><input type="checkbox" checked={Boolean(activeSettings[key])} onChange={(e) => updateSetting(key, e.target.checked)} className="accent-[rgb(var(--color-primary))]"/>{label}</label>{key === "showSignature" && signatureSettingsUrl && <a href={signatureSettingsUrl} className="shrink-0 text-[rgb(var(--color-primary))] underline underline-offset-2">Change signature</a>}</div>)}</div>
+    <div className="space-y-1 border-t border-[rgb(var(--color-border-primary))] pt-3">{PRINT_SETTING_OPTIONS.map(([key, label]) => {
+      const field = editableFields[key];
+      const canEdit = field && (key === "showCompanyName" || !String(field.value || "").trim());
+      const isEditing = editingField === key;
+      return <div key={key} className="rounded-md px-1 py-1.5 text-xs hover:bg-[rgb(var(--color-bg-secondary))]">
+        <div className="flex items-center justify-between gap-2">
+          <label className="flex min-w-0 cursor-pointer items-center gap-2 text-[rgb(var(--color-text-primary))]"><input type="checkbox" checked={Boolean(activeSettings[key])} onChange={(e) => updateSetting(key, e.target.checked)} className="accent-[rgb(var(--color-primary))]"/>{label}</label>
+          <div className="flex shrink-0 items-center gap-2">
+            {canEdit && <button type="button" onClick={() => setEditingField(isEditing ? null : key)} className="text-[rgb(var(--color-primary))] underline underline-offset-2">{isEditing ? "Hide" : "Edit"}</button>}
+            {key === "showSignature" && signatureSettingsUrl && <a href={signatureSettingsUrl} className="text-[rgb(var(--color-primary))] underline underline-offset-2">Change signature</a>}
+          </div>
+        </div>
+        {field && isEditing && <div className="mt-2 pl-6"><Input type={field.type} label={field.label} placeholder={field.placeholder} value={activeSettings[field.setting] || ""} onChange={(value) => updateSetting(field.setting, value)} size="sm" /></div>}
+      </div>;
+    })}</div>
     {activeSettings.showAcknowledgement && <label className="mt-3 block text-xs font-medium text-[rgb(var(--color-text-secondary))]">Acknowledgement text<textarea className={controlClass} rows={2} value={activeSettings.acknowledgementText} onChange={(e) => updateSetting("acknowledgementText", e.target.value)}/></label>}
   </div> : null;
 
   return <div className="flex h-full min-h-0 flex-col overflow-hidden">
+    <style>{`.invoice-template-preview #invoice-container, .invoice-template-preview #mini-invoice-container { border: 1px solid #d1d5db; box-shadow: 0 6px 24px rgba(15, 23, 42, .14); }`}</style>
     <div className="mb-3 flex shrink-0 items-center gap-2 border-b border-[rgb(var(--color-border-primary))]">
       <div className="flex items-center gap-1">
         {GROUPS.map((group) => <button key={group.id} type="button" aria-pressed={activeGroup === group.id} onClick={() => { setActiveGroup(group.id); const key = groupSelections[group.id] || getDefault(group.id); if (key !== selectedTemplate) onSelect(key); }} className={`border-b-2 px-3 py-2 text-sm font-medium transition-colors ${activeGroup === group.id ? "border-[rgb(var(--color-primary))] text-[rgb(var(--color-primary))]" : "border-transparent text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))]"}`}>{group.label}</button>)}
       </div>
       <button type="button" onClick={() => setSettingsOpen((open) => !open)} aria-pressed={settingsOpen} aria-label="Printer settings" title="Printer settings" className={`ml-auto mb-1 rounded-lg p-2 ${settingsOpen ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))]"}`}><Settings2 className="h-4 w-4"/></button>
     </div>
-    <div className="grid min-h-0 flex-1 grid-cols-1 gap-3 md:grid-cols-[minmax(15rem,0.75fr)_minmax(0,1.5fr)]">
-      <aside className="relative flex min-h-0 min-w-0 flex-col"><div className="min-h-0 flex-1 overflow-y-auto pr-1"><div className="grid grid-cols-1 gap-2 sm:grid-cols-2">{(GROUPS.find(({ id }) => id === activeGroup)?.templates || []).map((template) => { const selected = selectedTemplate === template.value; return <button key={template.value} type="button" aria-pressed={selected} onClick={() => onSelect(template.value)} className={`group min-w-0 overflow-hidden rounded-lg border text-left ${selected ? "border-[rgb(var(--color-primary))] ring-2 ring-[rgb(var(--color-primary))]/30" : "border-[rgb(var(--color-border-primary))]/70 hover:border-[rgb(var(--color-primary))]/50"}`}><span className="relative block aspect-[2/1] overflow-hidden bg-[rgb(var(--color-bg-tertiary))]">{template.value.startsWith("thermal-") ? <ThermalTemplateThumbnail template={template}/> : <img src={template.preview} alt="" aria-hidden="true" loading="lazy" className="h-full w-full object-cover" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}/>}</span><span className="block truncate px-2 py-1.5 text-xs font-medium text-[rgb(var(--color-text-primary))]">{template.label}</span></button>; })}</div></div>{settingsPanel}</aside>
-      <section className="min-h-0 min-w-0 overflow-auto bg-white p-0"><div className="mx-auto w-fit max-w-full"><ConfiguredInvoiceTemplate templateKey={selectedTemplate} invoiceData={PREVIEW_INVOICE} selectedStore={selectedStore} signatures={signatures} settings={activeSettings} signatureSettingsUrl={signatureSettingsUrl}/></div></section>
+    <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] gap-2 md:grid-cols-[minmax(15rem,0.75fr)_minmax(0,1.5fr)] md:grid-rows-1 md:gap-3">
+      <aside className="relative flex h-[82px] min-h-0 min-w-0 flex-col overflow-hidden md:h-full">
+        <div className="min-h-0 flex-1 touch-pan-x overscroll-x-contain overflow-x-auto overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:overflow-x-hidden md:overflow-y-auto md:pr-1">
+          <div className="flex w-max gap-2 md:grid md:w-full md:grid-cols-2">
+            {(GROUPS.find(({ id }) => id === activeGroup)?.templates || []).map((template) => {
+              const selected = selectedTemplate === template.value;
+              return <button key={template.value} type="button" aria-pressed={selected} onClick={() => onSelect(template.value)} className={`group w-[92px] shrink-0 overflow-hidden rounded-lg border text-left md:w-auto ${selected ? "border-[rgb(var(--color-primary))] ring-2 ring-[rgb(var(--color-primary))]/30" : "border-[rgb(var(--color-border-primary))]/70 hover:border-[rgb(var(--color-primary))]/50"}`}>
+                <span className="relative block aspect-[2/1] overflow-hidden bg-[rgb(var(--color-bg-tertiary))]">{template.value.startsWith("thermal-") ? <ThermalTemplateThumbnail template={template}/> : <img src={template.preview} alt="" aria-hidden="true" loading="lazy" className="h-full w-full object-cover" onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}/>}</span>
+                <span className="block truncate px-1.5 py-1 text-[10px] font-medium leading-tight text-[rgb(var(--color-text-primary))] md:px-2 md:py-1.5 md:text-xs">{template.label}</span>
+              </button>;
+            })}
+          </div>
+        </div>
+        {settingsPanel}
+      </aside>
+      <section className="invoice-template-preview flex min-h-0 min-w-0 items-center justify-center overflow-hidden bg-[#f3f4f6] p-2 sm:p-3">
+        <div className="h-full w-full min-h-0 min-w-0 overflow-hidden">
+          <ConfiguredInvoiceTemplate templateKey={selectedTemplate} invoiceData={PREVIEW_INVOICE} selectedStore={selectedStore} signatures={signatures} settings={activeSettings} signatureSettingsUrl={signatureSettingsUrl} fitPreview preview />
+        </div>
+      </section>
     </div>
   </div>;
 }

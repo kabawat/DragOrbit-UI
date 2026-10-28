@@ -18,7 +18,7 @@ const MatrixLedgerTemplate = ({ invoiceData, selectedStore }) => {
             <div className={styles.matrixInvoice} >
                 {/* Header Section */}
                 <div className={styles.header}>
-                    <h1>TAX INVOICE / RECEIPT</h1>
+                    <h1 data-invoice-header>TAX INVOICE / RECEIPT</h1>
                     <div className={styles.storeInfo}>
                         <p>
                             {selectedStore?.storeName || "Matrix Ledger Systems"} |{" "}

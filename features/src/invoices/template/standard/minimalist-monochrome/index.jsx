@@ -19,7 +19,7 @@ const MinimalistMonochromeTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Header Section */}
                 <div className={styles.header}>
                     <div className={styles.headerLeft}>
-                        <h1>INVOICE</h1>
+                        <h1 data-invoice-header>INVOICE</h1>
                         <p>{selectedStore?.storeName || "Minimalist Design Co."}</p>
                         <p>{selectedStore?.address || "789 White Space, Zen City"}</p>
                         {selectedStore?.phone && <p>{selectedStore.phone}</p>}
