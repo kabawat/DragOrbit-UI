@@ -124,8 +124,8 @@ export function sessionDecision(
 		return { state: "loading" };
 	}
 	if (!profile.stores?.length) {
-		destination = "/onboarding/store";
-	} else if (guest || pathname.startsWith("/onboarding")) {
+		destination = "/setup";
+	} else if (guest || pathname.startsWith("/setup")) {
 		destination = "/dashboard";
 	}
 	if (
