@@ -1,6 +1,6 @@
 "use client";
-import { Plus, Trash2, PenTool, Fingerprint } from "lucide-react";
-import { Button } from "@dragorbit/ui";
+import { Button, Tooltip as SharedTooltip } from "@dragorbit/ui";
+import { Fingerprint, PenTool, Plus, Trash2 } from "lucide-react";
 export function SignatureSettingsView({ model }) {
   const {
     t,
@@ -63,13 +63,13 @@ export function SignatureSettingsView({ model }) {
                       <span className="w-2 h-2 rounded-full bg-green-500"></span>
                       {new Date(sig.createdAt).toLocaleDateString()}
                     </div>
-                    <button
+                    <SharedTooltip content={t("common.delete")}><button aria-label={t("common.delete")}
                       onClick={() => setSignatureToDelete(sig)}
                       className="w-8 h-8 flex items-center justify-center bg-[rgb(var(--color-bg-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded-lg transition-colors cursor-pointer"
-                      title={t("common.delete")}
+
                     >
                       <Trash2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
-                    </button>
+                    </button></SharedTooltip>
                   </div>
 
                   <div className="flex-1 flex items-center justify-center min-h-[100px] bg-[rgb(var(--color-bg-secondary))]/30 rounded-lg p-4 mb-2">

@@ -1,3 +1,4 @@
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { Trash2 } from "lucide-react";
 
 const money = (value) => `₹${(Number(value) || 0).toFixed(2)}`;
@@ -64,15 +65,15 @@ export function AddedItemsList({ items = [], products = [], t, onRemove }) {
                     {money(item.total)}
                   </td>
                   <td className="px-1 py-2 text-center">
-                    <button
+                    <SharedTooltip content={t("invoice.removeItem")}><button
                       type="button"
                       onClick={() => onRemove(index)}
                       className="inline-flex h-8 w-8 items-center justify-center rounded-md text-[rgb(var(--color-danger))] opacity-0 transition-opacity hover:bg-[rgb(var(--color-danger))]/10 group-hover:opacity-100 focus-visible:opacity-100"
-                      title={t("invoice.removeItem")}
+
                       aria-label={t("invoice.removeItem")}
                     >
                       <Trash2 className="h-4 w-4" />
-                    </button>
+                    </button></SharedTooltip>
                   </td>
                 </tr>
               );

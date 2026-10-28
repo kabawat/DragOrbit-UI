@@ -132,3 +132,6 @@ export { StatCard } from "./components/stats/StatCard";
 export type { StatCardsProps, StatItem } from "./components/stats/StatCards";
 export { StatCardRow, StatCards } from "./components/stats/StatCards";
 export * from "./table";
+
+export { Tooltip } from "./components/tooltip/Tooltip";
+export type { TooltipProps } from "./components/tooltip/Tooltip";

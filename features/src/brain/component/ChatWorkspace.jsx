@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 import {
   ArrowUpRight,
   ChevronDown,
@@ -58,20 +59,20 @@ function HistoryGroup({
             const active = session.id === activeId;
             return (
               <li key={session.id}>
-                <button
+                <SharedTooltip content={session.title}><button aria-label={session.title}
                   className={`group relative flex w-full cursor-pointer items-center rounded-xl px-2.5 py-2 text-left text-[13px] leading-5 transition-all duration-150 ${
                     active
                       ? "bg-[rgb(var(--color-primary))]/15 text-[rgb(var(--color-primary))] font-semibold border border-[rgb(var(--color-primary))]/30 shadow-2xs"
                       : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))]"
                   }`}
                   onClick={() => onSelect(session)}
-                  title={session.title}
+
                   type="button"
                 >
                   <span className="min-w-0 flex-1 truncate">
                     {session.title}
                   </span>
-                </button>
+                </button></SharedTooltip>
               </li>
             );
           })}

@@ -1,4 +1,5 @@
 "use client";
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { CreditCard, Edit2, Plus, Trash2 } from "lucide-react";
 export function GatewayListView({ model }) {
   const {
@@ -51,22 +52,22 @@ export function GatewayListView({ model }) {
               </div>
               <div className="flex gap-2 flex-shrink-0">
                 {canEdit && (
-                  <button
+                  <SharedTooltip content={t("settings.paymentGateway.edit")}><button aria-label={t("settings.paymentGateway.edit")}
                     onClick={() => onEditGateway?.(gateway)}
                     className="w-8 h-8 flex items-center justify-center bg-[rgb(var(--color-bg-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded-lg transition-colors cursor-pointer"
-                    title={t("settings.paymentGateway.edit")}
+
                   >
                     <Edit2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
-                  </button>
+                  </button></SharedTooltip>
                 )}
                 {canDelete && (
-                  <button
+                  <SharedTooltip content={t("settings.paymentGateway.delete")}><button aria-label={t("settings.paymentGateway.delete")}
                     onClick={() => onDeleteGateway?.(gateway)}
                     className="w-8 h-8 flex items-center justify-center bg-[rgb(var(--color-bg-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded-lg transition-colors cursor-pointer"
-                    title={t("settings.paymentGateway.delete")}
+
                   >
                     <Trash2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
-                  </button>
+                  </button></SharedTooltip>
                 )}
               </div>
             </div>

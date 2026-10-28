@@ -14,6 +14,7 @@ import {
 	Underline,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 
 const RichTextEditor = ({
 	value = "",
@@ -187,39 +188,39 @@ const RichTextEditor = ({
 					<div className="flex flex-wrap items-center gap-1 p-2 border-b border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))]">
 						{/* Format Buttons */}
 						{toolbarButtons.map((button) => (
-							<button
-								key={button.command}
+							<SharedTooltip key={button.command} content={button.label}><button aria-label={button.label}
+
 								type="button"
 								onClick={() => formatText(button.command, button.value)}
 								className="p-2 text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded transition-colors duration-200"
-								title={button.label}
+
 							>
 								<button.icon className="w-4 h-4" />
-							</button>
+							</button></SharedTooltip>
 						))}
 
 						{/* Separator */}
 						<div className="w-px h-6 bg-[rgb(var(--color-border-primary))] mx-1" />
 
 						{/* Link Button */}
-						<button
+						<SharedTooltip content={"Insert Link"}><button aria-label={"Insert Link"}
 							type="button"
 							onClick={insertLink}
 							className="p-2 text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded transition-colors duration-200"
-							title="Insert Link"
+
 						>
 							<Link className="w-4 h-4" />
-						</button>
+						</button></SharedTooltip>
 
 						{/* Image Button */}
-						<button
+						<SharedTooltip content={"Insert Image"}><button aria-label={"Insert Image"}
 							type="button"
 							onClick={insertImage}
 							className="p-2 text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded transition-colors duration-200"
-							title="Insert Image"
+
 						>
 							<Image className="w-4 h-4" />
-						</button>
+						</button></SharedTooltip>
 					</div>
 				)}
 

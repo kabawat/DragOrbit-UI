@@ -1,6 +1,6 @@
 "use client";
-import type { ComponentType, ReactNode } from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
+import type { ComponentType, ReactNode } from "react";
 export type StatCardData = {
 	title: ReactNode;
 	logo?: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
@@ -8,7 +8,7 @@ export type StatCardData = {
 	onClick?: () => void;
 	onclick?: () => void;
 	iconColor?: string;
-	iconTone?: "subtle" | "solid";
+	iconTone?: "subtle" | "solid" | "custom";
 	change?: string;
 	changeType?: "up" | "down";
 };
@@ -17,21 +17,27 @@ export function StatCard({
 	loading = false,
 	className = "",
 	disabled = false,
+	density = "comfortable",
 }: {
 	data: StatCardData;
 	loading?: boolean;
 	className?: string;
 	disabled?: boolean;
+	density?: "comfortable" | "compact";
 }) {
 	const Icon = data.logo,
 		Trend = data.changeType === "down" ? TrendingDown : TrendingUp;
 	const content = (
 		<>
 			<div className="min-w-0">
-				<div className="text-sm font-medium text-[rgb(var(--color-text-secondary))] mb-1">
+				<div
+					className={`${density === "compact" ? "text-xs leading-5" : "text-sm"} font-medium text-[rgb(var(--color-text-secondary))] mb-1`}
+				>
 					{data.title}
 				</div>
-				<div className="break-words text-xl sm:text-2xl font-semibold tracking-tight tabular-nums text-[rgb(var(--color-text-primary))]">
+				<div
+					className={`break-words ${density === "compact" ? "text-xl leading-7" : "text-xl sm:text-2xl"} font-semibold tracking-tight tabular-nums text-[rgb(var(--color-text-primary))]`}
+				>
 					{loading ? (
 						<span
 							aria-hidden="true"
@@ -52,17 +58,17 @@ export function StatCard({
 			</div>
 			{Icon && (
 				<span
-					className={`w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${data.iconTone === "subtle" ? "bg-[rgb(var(--color-primary))]/5 text-[rgb(var(--color-primary))]" : data.iconColor || "bg-[rgb(var(--color-primary))]"}`}
+					className={`${density === "compact" ? "order-first" : ""} w-10 h-10 shrink-0 rounded-xl flex items-center justify-center ${data.iconTone === "subtle" ? "bg-[rgb(var(--color-primary))]/5 text-[rgb(var(--color-primary))]" : data.iconColor || "bg-[rgb(var(--color-primary))]"}`}
 				>
 					<Icon
-						className={`w-5 h-5 ${data.iconTone === "subtle" ? "" : "text-white"}`}
+						className={`w-5 h-5 ${data.iconTone === "subtle" || data.iconTone === "custom" ? "text-current" : "text-white"}`}
 						aria-hidden
 					/>
 				</span>
 			)}
 		</>
 	);
-	const classes = `flex w-full h-full items-start justify-between gap-3 text-left min-w-0 bg-[rgb(var(--color-bg-primary))] rounded-2xl border border-[rgb(var(--color-border-primary))] p-4 sm:p-5 ${className}`;
+	const classes = `flex w-full h-full ${density === "compact" ? "min-h-22 items-center justify-start p-4" : "items-start justify-between p-4 sm:p-5"} gap-3 text-left min-w-0 bg-[rgb(var(--color-bg-primary))] ${density === "compact" ? "rounded-xl" : "rounded-2xl"} border border-[rgb(var(--color-border-primary))] ${className}`;
 	const click = data.onClick ?? data.onclick;
 	return click ? (
 		<button

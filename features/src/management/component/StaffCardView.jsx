@@ -1,4 +1,5 @@
 "use client";
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 import {
   ChevronDown,
   ChevronUp,
@@ -107,15 +108,15 @@ export function StaffCardView({ model }) {
               menuRefs.current[rowId] = el;
             }}
           >
-            <button
+            <SharedTooltip content={!isOnline ? "Internet required" : undefined}><button aria-label={!isOnline ? "Internet required" : undefined}
               type="button"
               onClick={() => isOnline && toggleDropdown(rowId)}
               disabled={!isOnline}
               className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-secondary))] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              title={!isOnline ? "Internet required" : undefined}
+
             >
               <MoreVertical size={16} />
-            </button>
+            </button></SharedTooltip>
 
             {menu?.rowId === rowId && menu.mode === "dropdown" ? (
               <RowActionsMenu

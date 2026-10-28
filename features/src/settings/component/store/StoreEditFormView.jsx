@@ -1,4 +1,5 @@
 "use client";
+import { Input, Select, Tooltip as SharedTooltip, Toggle } from "@dragorbit/ui";
 import {
   Building2,
   CheckCircle,
@@ -9,7 +10,6 @@ import {
   ShieldCheck,
   Store,
 } from "lucide-react";
-import { Input, Select, Toggle } from "@dragorbit/ui";
 export function StoreEditFormView({ model }) {
   const {
     t,
@@ -60,7 +60,7 @@ export function StoreEditFormView({ model }) {
             errorMessage={errors.gst}
             rightElement={
               form.gst?.length >= 15 && (
-                <button
+                <SharedTooltip content={isGstVerified ? "Verified" : "Verify GST"}><button
                   type="button"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={onVerifyGst}
@@ -70,7 +70,7 @@ export function StoreEditFormView({ model }) {
                       ? "bg-green-500 text-white shadow-sm"
                       : "bg-[rgb(var(--color-primary))] text-white hover:brightness-110"
                   }`}
-                  title={isGstVerified ? "Verified" : "Verify GST"}
+
                 >
                   {isVerifyingGst ? (
                     <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -79,7 +79,7 @@ export function StoreEditFormView({ model }) {
                   ) : (
                     <ShieldCheck className="w-4 h-4" />
                   )}
-                </button>
+                </button></SharedTooltip>
               )
             }
           />

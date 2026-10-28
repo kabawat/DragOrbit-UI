@@ -1,5 +1,5 @@
 "use client";
-import { RowNumberCell } from "@dragorbit/ui";
+import { RowNumberCell, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { Building2, MoreVertical } from "lucide-react";
 export function PaymentTableRowView({ model }) {
 	const {
@@ -94,14 +94,14 @@ export function PaymentTableRowView({ model }) {
 						menuRefs.current[paymentId] = el;
 					}}
 				>
-					<button
+					<SharedTooltip content={"More Actions"}><button aria-label={"More Actions"}
 						type="button"
 						onClick={() => toggleDropdown(paymentId)}
 						className="p-2 hover:bg-[rgb(var(--color-bg-secondary))] rounded-lg transition-colors duration-200 group/btn cursor-pointer"
-						title="More Actions"
+
 					>
 						<MoreVertical className="w-4 h-4 text-[rgb(var(--color-text-secondary))] group-hover/btn:text-[rgb(var(--color-primary))]" />
-					</button>
+					</button></SharedTooltip>
 
 					{menu?.rowId === paymentId && menu.mode === "dropdown" ? (
 						<RowActionsMenu items={buildMenuItems(paymentId)} mode="dropdown" />

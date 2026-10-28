@@ -1,14 +1,14 @@
 "use client";
+import { Button, Modal, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import {
   ArrowLeft,
-  ThumbsUp,
   Calendar,
-  User,
-  MessageSquare,
   Lightbulb,
+  MessageSquare,
+  ThumbsUp,
   Trash2,
+  User,
 } from "lucide-react";
-import { Button, Modal } from "@dragorbit/ui";
 export function SuggestionDetailScreen({ model }) {
   const {
     Link,
@@ -117,13 +117,13 @@ export function SuggestionDetailScreen({ model }) {
                       {getStatusBadge(suggestion.status)}
                       {getCategoryBadge(suggestion.category)}
                     </div>
-                    <button
+                    <SharedTooltip content={"Delete Suggestion"}><button aria-label={"Delete Suggestion"}
                       onClick={() => setShowDeleteModal(true)}
                       className="p-2 text-[rgb(var(--color-text-tertiary))] hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200"
-                      title="Delete Suggestion"
+
                     >
                       <Trash2 className="w-4 h-4" />
-                    </button>
+                    </button></SharedTooltip>
                   </div>
 
                   <h4 className="text-sm font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-wider mb-4 border-b border-[rgb(var(--color-border-primary))] pb-2">

@@ -1,5 +1,6 @@
 "use client";
 import { Plus } from "lucide-react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 
 const AddActionButton = ({
 	onClick,
@@ -36,10 +37,10 @@ const AddActionButton = ({
 	};
 	const colors = colorMap[variant] || colorMap.success;
 	return (
-		<button
+		<SharedTooltip content={title}><button
 			type="button"
 			onClick={onClick}
-			title={title}
+
 			disabled={disabled}
 			className={`flex items-center justify-center gap-2 cursor-pointer rounded-lg transition-colors duration-200 ${sizeClasses} ${widthClasses} ${className}`}
 			style={{ color: colors.text, backgroundColor: "transparent" }}
@@ -52,7 +53,7 @@ const AddActionButton = ({
 		>
 			{Icon && <Icon className={`w-4 h-4 ${iconClassName}`} />}
 			{label ? <span className="font-medium">{label}</span> : null}
-		</button>
+		</button></SharedTooltip>
 	);
 };
 

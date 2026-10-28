@@ -1,7 +1,7 @@
 "use client";
 
+import { Tooltip as SharedTooltip, TableSkeleton } from "@dragorbit/ui";
 import { DataTable } from "@dragorbit/ui/table";
-import { TableSkeleton } from "@dragorbit/ui";
 import { Building, MoreVertical } from "lucide-react";
 export function SupplierTableView({ model }) {
 	const {
@@ -173,13 +173,13 @@ export function SupplierTableView({ model }) {
 											className="relative inline-block"
 											ref={(el) => (menuRefs.current[rowId] = el)}
 										>
-											<button
+											<SharedTooltip content={t("common.moreActions")}><button aria-label={t("common.moreActions")}
 												onClick={() => toggleDropdown(rowId)}
 												className="p-2 hover:bg-[rgb(var(--color-bg-secondary))] rounded-lg transition-colors duration-200 group/btn cursor-pointer"
-												title={t("common.moreActions")}
+
 											>
 												<MoreVertical className="w-4 h-4 text-[rgb(var(--color-text-secondary))] group-hover/btn:text-[rgb(var(--color-primary))]" />
-											</button>
+											</button></SharedTooltip>
 
 											{menu?.rowId === rowId && menu.mode === "dropdown" ? (
 												<RowActionsMenu

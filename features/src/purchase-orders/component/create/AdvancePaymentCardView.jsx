@@ -1,6 +1,6 @@
 "use client";
+import { Button, Card, Input, Select, Tooltip as SharedTooltip, Toggle } from "@dragorbit/ui";
 import { IndianRupee, Plus, Trash2 } from "lucide-react";
-import { Button, Card, Input, Select, Toggle } from "@dragorbit/ui";
 export function CreateAdvancePaymentCardPresentation({ model }) {
   const {
     t,
@@ -311,14 +311,14 @@ export function CreateAdvancePaymentCardPresentation({ model }) {
                               {payment.reference}
                             </span>
                           </div>
-                          <button
+                          <SharedTooltip content={t("purchaseOrders.removePayment")}><button aria-label={t("purchaseOrders.removePayment")}
                             type="button"
                             onClick={() => removePayment(index)}
                             className="flex-shrink-0 p-1.5 cursor-pointer text-[rgb(var(--color-danger))] hover:text-[rgb(var(--color-danger))] hover:bg-[rgba(var(--color-danger),0.1)] rounded-md transition-colors duration-200 opacity-0 group-hover:opacity-100"
-                            title={t("purchaseOrders.removePayment")}
+
                           >
                             <Trash2 className="w-3 h-3" />
-                          </button>
+                          </button></SharedTooltip>
                         </div>
                       </div>
                     ))}

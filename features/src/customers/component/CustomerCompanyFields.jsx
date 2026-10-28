@@ -1,14 +1,14 @@
 "use client";
+import { Button, Input, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import {
 	Building2,
+	CheckCircle,
 	FileText,
 	Plus,
-	Trash2,
-	CheckCircle,
 	ShieldCheck,
+	Trash2,
 } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Button, Input } from "@dragorbit/ui";
+import { useEffect, useState } from "react";
 
 const CompanyDetails = ({
 	formData,
@@ -135,7 +135,7 @@ const CompanyDetails = ({
 							size="sm"
 							rightElement={
 								formData.companyDetails?.gstin?.length >= 15 && (
-									<button
+									<SharedTooltip content={isGstVerified ? "Verified" : "Verify GST"}><button
 										type="button"
 										onMouseDown={(event) => event.preventDefault()}
 										onClick={() =>
@@ -147,7 +147,7 @@ const CompanyDetails = ({
 												? "bg-green-500 text-white shadow-sm"
 												: "bg-[rgb(var(--color-primary))] text-white hover:brightness-110"
 										}`}
-										title={isGstVerified ? "Verified" : "Verify GST"}
+
 									>
 										{isVerifyingGst ? (
 											<div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -156,7 +156,7 @@ const CompanyDetails = ({
 										) : (
 											<ShieldCheck className="w-3.5 h-3.5" />
 										)}
-									</button>
+									</button></SharedTooltip>
 								)
 							}
 						/>

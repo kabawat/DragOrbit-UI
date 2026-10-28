@@ -1,5 +1,6 @@
 "use client";
 import { MoreVertical } from "lucide-react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 
 const IconButton = ({
 	icon: Icon = MoreVertical,
@@ -23,17 +24,17 @@ const IconButton = ({
 	};
 
 	return (
-		<button
+		<SharedTooltip content={title}><button
 			onClick={onClick}
 			className={`inline-flex min-h-10 min-w-10 shrink-0 items-center justify-center rounded-lg p-2 text-[rgb(var(--color-text-secondary))] transition-colors duration-100 cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--color-primary))] disabled:opacity-40 disabled:cursor-not-allowed ${variants[variant] || variants.ghost} ${className}`}
-			title={title}
+
 			aria-label={ariaLabel ?? title}
 			disabled={disabled}
 			type="button"
 			{...props}
 		>
 			<Icon className={iconClassName} aria-hidden="true" />
-		</button>
+		</button></SharedTooltip>
 	);
 };
 

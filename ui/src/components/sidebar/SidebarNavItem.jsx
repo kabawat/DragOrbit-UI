@@ -1,5 +1,6 @@
 "use client";
 import { ChevronDown, Crown } from "lucide-react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 export const SidebarNavItem = ({
 	item,
 	isCollapsed,
@@ -28,7 +29,7 @@ export const SidebarNavItem = ({
 
 		return (
 			<div className="relative">
-				<button
+				<SharedTooltip content={isCollapsed ? item.name : ""}><button
 					type="button"
 					aria-expanded={isCollapsed ? undefined : !!isExpanded}
 					onClick={(e) =>
@@ -46,7 +47,7 @@ export const SidebarNavItem = ({
 							? "bg-[rgb(var(--color-primary))]/10"
 							: "hover:bg-[rgb(var(--color-bg-secondary))]"
 					} ${isExpanded && !isCollapsed ? "bg-[rgb(var(--color-bg-secondary))]" : ""}`}
-					title={isCollapsed ? item.name : ""}
+
 				>
 					{!isCollapsed ? (
 						<div className="flex min-w-0 items-center gap-3 text-[rgb(var(--color-text-secondary))]">
@@ -70,7 +71,7 @@ export const SidebarNavItem = ({
 							className={`h-4 w-4 shrink-0 text-[rgb(var(--color-text-tertiary))] transition-all duration-100 ${isExpanded ? "rotate-180 opacity-100 text-[rgb(var(--color-primary))]" : "opacity-50 group-hover:opacity-100"}`}
 						/>
 					)}
-				</button>
+				</button></SharedTooltip>
 
 				<div
 					inert={!(isExpanded && !isCollapsed) ? true : undefined}
@@ -105,7 +106,11 @@ export const SidebarNavItem = ({
 											{subItem.group}
 										</div>
 									)}
-									<a
+									<SharedTooltip content={
+											subItem.shortcut
+												? `Alt+${subItem.shortcut.toUpperCase()}`
+												: ""
+										}><a
 										aria-current={isSubActive ? "page" : undefined}
 										href={subItem.href}
 										onClick={(e) => {
@@ -118,11 +123,7 @@ export const SidebarNavItem = ({
 												? "bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))]"
 												: "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))]"
 										} ${locked ? "opacity-75" : ""}`}
-										title={
-											subItem.shortcut
-												? `Alt+${subItem.shortcut.toUpperCase()}`
-												: ""
-										}
+
 									>
 										{!isSubActive && (
 											<span
@@ -150,7 +151,7 @@ export const SidebarNavItem = ({
 												className="pointer-events-none absolute top-1/2 -left-2.5 h-4/5 w-1 -translate-y-1/2 rounded-full bg-[rgb(var(--color-primary))]"
 											/>
 										)}
-									</a>
+									</a></SharedTooltip>
 								</div>
 							);
 						})}
@@ -177,7 +178,13 @@ export const SidebarNavItem = ({
 
 	return (
 		<div>
-			<a
+			<SharedTooltip content={
+					isCollapsed && item.shortcut
+						? `${item.name}  ⌥${item.shortcut.toUpperCase()}`
+						: isCollapsed
+							? item.name
+							: ""
+				}><a
 				aria-current={isActive ? "page" : undefined}
 				href={item.href}
 				onMouseEnter={(e) => onMouseEnterItem(item, e, isBottomItem)}
@@ -192,13 +199,7 @@ export const SidebarNavItem = ({
 						? "bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))]"
 						: "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))] hover:text-[rgb(var(--color-text-primary))]"
 				} ${locked ? "opacity-75" : ""}`}
-				title={
-					isCollapsed && item.shortcut
-						? `${item.name}  ⌥${item.shortcut.toUpperCase()}`
-						: isCollapsed
-							? item.name
-							: ""
-				}
+
 			>
 				<div className="relative shrink-0">
 					<Icon className={`transition-all duration-300 ${iconClasses}`} />
@@ -227,7 +228,7 @@ export const SidebarNavItem = ({
 						className="pointer-events-none absolute top-1/2 left-0 h-4/5 w-1 -translate-y-1/2 rounded-r-full bg-[rgb(var(--color-primary))]"
 					/>
 				)}
-			</a>
+			</a></SharedTooltip>
 		</div>
 	);
 };

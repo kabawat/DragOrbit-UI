@@ -1,4 +1,5 @@
 "use client";
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 export function CustomerSourceBadgePresentation({ model }) {
   const {
     config,
@@ -10,9 +11,9 @@ export function CustomerSourceBadgePresentation({ model }) {
     showLabel,
   } = model;
   return (
-    <span
+    <SharedTooltip content={getCustomerSourceLabel(normalizedSource, t)}><span
       className={`inline-flex items-center gap-1 max-w-full px-2 py-0.5 rounded-full text-xs font-medium border ${config.badgeStyle} ${className}`}
-      title={getCustomerSourceLabel(normalizedSource, t)}
+
     >
       <Icon className="w-3 h-3 shrink-0" aria-hidden="true" />
       {showLabel && (
@@ -20,6 +21,6 @@ export function CustomerSourceBadgePresentation({ model }) {
           {getCustomerSourceLabel(normalizedSource, t)}
         </span>
       )}
-    </span>
+    </span></SharedTooltip>
   );
 }

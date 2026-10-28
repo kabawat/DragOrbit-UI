@@ -1,12 +1,11 @@
 "use client";
-import { GripVertical, Info } from "lucide-react";
 import {
   Card,
   CardBody,
   CardDescription,
   CardHeader,
-  CardTitle,
-} from "@dragorbit/ui";
+  CardTitle,Tooltip as SharedTooltip, } from "@dragorbit/ui";
+import { GripVertical, Info } from "lucide-react";
 export function SortableSectionPresentation({ model }) {
   const {
     setNodeRef,
@@ -52,13 +51,13 @@ export function SortableSectionPresentation({ model }) {
                 <CardTitle className={`text-lg ${glassStyles.title}`}>
                   {title}
                 </CardTitle>
-                <button
+                <SharedTooltip content={t("products.sectionInformation")}><button aria-label={t("products.sectionInformation")}
                   onClick={() => onInfoClick(id)}
                   className="p-1 hover:bg-[rgb(var(--color-bg-secondary))] rounded-full transition-colors duration-200 group/info cursor-pointer"
-                  title={t("products.sectionInformation")}
+
                 >
                   <Info className="w-4 h-4 text-[rgb(var(--color-text-tertiary))] group-hover/info:text-[rgb(var(--color-primary))]" />
-                </button>
+                </button></SharedTooltip>
               </div>
               <CardDescription className={glassStyles.description}>
                 {subtitle}

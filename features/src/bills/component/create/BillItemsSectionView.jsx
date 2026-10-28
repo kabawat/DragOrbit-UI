@@ -1,6 +1,6 @@
 "use client";
+import { Button, Card, EmptyState, Input, Select, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { Package, Plus, Trash2 } from "lucide-react";
-import { Button, Card, EmptyState, Input, Select } from "@dragorbit/ui";
 export function CreateBillItemsSectionPresentation({ model }) {
   const {
     t,
@@ -167,14 +167,14 @@ export function CreateBillItemsSectionPresentation({ model }) {
                         </div>
                       </div>
 
-                      <button
+                      <SharedTooltip content={t("common.remove")}><button aria-label={t("common.remove")}
                         type="button"
                         onClick={() => handleRemoveItem(index)}
                         className="ml-4 opacity-0 group-hover:opacity-100 flex items-center justify-center w-8 h-8 cursor-pointer text-[rgb(var(--color-danger))] hover:bg-[rgb(var(--color-danger))]/10 rounded-lg transition-all duration-200"
-                        title={t("common.remove")}
+
                       >
                         <Trash2 className="w-4 h-4" />
-                      </button>
+                      </button></SharedTooltip>
                     </div>
                   </div>
                 );

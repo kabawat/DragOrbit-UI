@@ -1,5 +1,5 @@
 "use client";
-import { TableSkeleton } from "@dragorbit/ui";
+import { Tooltip as SharedTooltip, TableSkeleton } from "@dragorbit/ui";
 import {
   Calendar,
   CreditCard,
@@ -71,13 +71,13 @@ export function PaymentGridView({ model }) {
                     className="relative"
                     ref={(el) => (menuRefs.current[paymentId] = el)}
                   >
-                    <button
+                    <SharedTooltip content={"More Actions"}><button aria-label={"More Actions"}
                       onClick={() => handleMenuToggle(paymentId)}
                       className="p-2 bg-white/90 hover:bg-white dark:bg-black/50 dark:hover:bg-black/70 rounded-lg transition-colors duration-200 group/btn cursor-pointer shadow-sm"
-                      title="More Actions"
+
                     >
                       <MoreVertical className="w-4 h-4 text-[rgb(var(--color-text-secondary))] group-hover/btn:text-[rgb(var(--color-primary))]" />
-                    </button>
+                    </button></SharedTooltip>
 
                     {/* Popup Menu */}
                     {openMenuId === paymentId && (

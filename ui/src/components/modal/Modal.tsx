@@ -1,15 +1,16 @@
 "use client";
+import { X } from "lucide-react";
 import {
+	type CSSProperties,
+	type PointerEvent,
+	type ReactNode,
 	useEffect,
 	useId,
 	useRef,
 	useState,
-	type ReactNode,
-	type PointerEvent,
-	type CSSProperties,
 } from "react";
-import { X } from "lucide-react";
 import { createPortal } from "react-dom";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 import "./modal.css";
 const modalStack: HTMLDivElement[] = [];
 // Legacy dialogs use 9999. Shared dialogs sit above them, in opening order.
@@ -364,18 +365,18 @@ export function Modal({
 				{footer && <div className="dragorbit-modal-footer">{footer}</div>}
 				{resizable && (
 					<>
-						<div
+						<SharedTooltip content={"Drag to resize width"}><div
 							className="dragorbit-resize-width"
-							title="Drag to resize width"
+
 							onPointerDown={(event) => begin(event, "width")}
 							{...handlers}
-						/>
-						<div
+						/></SharedTooltip>
+						<SharedTooltip content={"Drag to resize height"}><div
 							className="dragorbit-resize-height"
-							title="Drag to resize height"
+
 							onPointerDown={(event) => begin(event, "height")}
 							{...handlers}
-						/>
+						/></SharedTooltip>
 					</>
 				)}
 			</div>

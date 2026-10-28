@@ -1,6 +1,6 @@
+import { Input, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { Settings2, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Input } from "@dragorbit/ui";
 import { ConfiguredInvoiceTemplate } from "./ConfiguredInvoiceTemplate.jsx";
 import { TEMPLATE_OPTIONS } from "./index.js";
 import { PRINT_SETTING_OPTIONS, readPrintSettings, writePrintSettings } from "./printSettings.js";
@@ -100,10 +100,10 @@ export function InvoiceTemplateSettingsView({ selectedTemplate, onSelect, select
       <p className="mb-2 text-xs font-medium text-[rgb(var(--color-text-secondary))]">Primary color</p>
       <div className="grid grid-cols-6 gap-2">
         {PRIMARY_COLORS.map((color) => <button key={color} type="button" onClick={() => selectPrimaryColor(color)} aria-label={`Select ${color} primary color`} aria-pressed={activeSettings.primaryColor.toLowerCase() === color} className={`h-7 w-7 rounded-full border border-black/10 transition-transform hover:scale-110 ${activeSettings.primaryColor.toLowerCase() === color ? "ring-2 ring-[rgb(var(--color-primary))] ring-offset-2" : ""}`} style={{ backgroundColor: color }} />)}
-        <label title="Custom color" className={`relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-[rgb(var(--color-border-primary))] text-sm font-semibold text-white ring-offset-2 ${!PRIMARY_COLORS.includes(activeSettings.primaryColor.toLowerCase()) ? "ring-2 ring-[rgb(var(--color-primary))] ring-offset-2" : ""}`} style={{ backgroundColor: customColor }}>
+        <SharedTooltip content={"Custom color"}><label  className={`relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-[rgb(var(--color-border-primary))] text-sm font-semibold text-white ring-offset-2 ${!PRIMARY_COLORS.includes(activeSettings.primaryColor.toLowerCase()) ? "ring-2 ring-[rgb(var(--color-primary))] ring-offset-2" : ""}`} style={{ backgroundColor: customColor }}>
           <span aria-hidden="true" className="drop-shadow">+</span><span className="sr-only">Custom</span>
           <input type="color" value={customColor} aria-label="Choose custom primary color" onChange={(e) => { setCustomColor(e.target.value); setCustomColorPending(true); }} className="absolute inset-0 h-full w-full cursor-pointer opacity-0" />
-        </label>
+        </label></SharedTooltip>
       </div>
       <p className="mt-2 text-[11px] text-[rgb(var(--color-text-secondary))]">{activeSettings.primaryColor.toUpperCase()} · Custom color preview updates when you pause.</p>
     </div>}
@@ -133,7 +133,7 @@ export function InvoiceTemplateSettingsView({ selectedTemplate, onSelect, select
       <div className="flex items-center gap-1">
         {GROUPS.map((group) => <button key={group.id} type="button" aria-pressed={activeGroup === group.id} onClick={() => { setActiveGroup(group.id); const key = groupSelections[group.id] || getDefault(group.id); if (key !== selectedTemplate) onSelect(key); }} className={`border-b-2 px-3 py-2 text-sm font-medium transition-colors ${activeGroup === group.id ? "border-[rgb(var(--color-primary))] text-[rgb(var(--color-primary))]" : "border-transparent text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-text-primary))]"}`}>{group.label}</button>)}
       </div>
-      <button type="button" onClick={() => setSettingsOpen((open) => !open)} aria-pressed={settingsOpen} aria-label="Printer settings" title="Printer settings" className={`ml-auto mb-1 rounded-lg p-2 ${settingsOpen ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))]"}`}><Settings2 className="h-4 w-4"/></button>
+      <SharedTooltip content={"Printer settings"}><button type="button" onClick={() => setSettingsOpen((open) => !open)} aria-pressed={settingsOpen} aria-label="Printer settings"  className={`ml-auto mb-1 rounded-lg p-2 ${settingsOpen ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))]"}`}><Settings2 className="h-4 w-4"/></button></SharedTooltip>
     </div>
     <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] gap-2 md:grid-cols-[minmax(15rem,0.75fr)_minmax(0,1.5fr)] md:grid-rows-1 md:gap-3">
       <aside className="relative flex h-[82px] min-h-0 min-w-0 flex-col overflow-hidden md:h-full">

@@ -1,6 +1,6 @@
 "use client";
+import { Button, Tooltip as SharedTooltip, SideDrawer } from "@dragorbit/ui";
 import { Upload, X } from "lucide-react";
-import { Button, SideDrawer } from "@dragorbit/ui";
 export function CustomerBulkUploadDrawerIndexPresentation({ model }) {
   const {
     BulkTemplateDownloadButton,
@@ -138,14 +138,14 @@ export function CustomerBulkUploadDrawerIndexPresentation({ model }) {
                       </div>
                     </div>
 
-                    <button
+                    <SharedTooltip content={"Remove file"}><button aria-label={"Remove file"}
                       type="button"
                       onClick={removeFile}
                       className="p-2 cursor-pointer text-gray-500 hover:text-red-500 rounded-lg transition-colors duration-200 hover:bg-red-500/10"
-                      title="Remove file"
+
                     >
                       <X className="w-5 h-5" />
-                    </button>
+                    </button></SharedTooltip>
                   </div>
                 </div>
               )}

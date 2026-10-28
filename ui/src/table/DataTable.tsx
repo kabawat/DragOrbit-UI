@@ -11,6 +11,7 @@ import type {
 import { Fragment, useLayoutEffect, useRef, useState } from "react";
 import EmptyState from "../components/feedback/EmptyState";
 import { TableSkeleton } from "../components/feedback/TableSkeleton";
+import { Tooltip as SharedTooltip } from "../components/tooltip/Tooltip";
 import styles from "./DataTable.module.css";
 import { RowNumber } from "./NumberedTable";
 import type { MarkupRow } from "./normalizeTableMarkup";
@@ -382,11 +383,11 @@ function DataTableCore<T>({
 													{column.header}
 												</span>
 												{column.canPin && (
-													<button
+													<SharedTooltip content={column.pin ? "Unpin column" : "Pin column"}><button
 														type="button"
 														aria-pressed={Boolean(column.pin)}
 														aria-label={`${column.pin ? "Unpin" : "Pin"} ${column.pinLabel ?? (typeof column.header === "string" || typeof column.header === "number" ? String(column.header) : column.id)} column`}
-														title={column.pin ? "Unpin column" : "Pin column"}
+
 														onClick={(event) => {
 															event.stopPropagation();
 															toggleColumnPin(column);
@@ -398,7 +399,7 @@ function DataTableCore<T>({
 														) : (
 															<Pin className="h-3.5 w-3.5" aria-hidden />
 														)}
-													</button>
+													</button></SharedTooltip>
 												)}
 											</span>
 										</th>

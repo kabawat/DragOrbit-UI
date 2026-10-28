@@ -1,13 +1,12 @@
 "use client";
-import { FileText, IndianRupee, Plus, Save, Trash2 } from "lucide-react";
 import {
   AddActionButton,
   Button,
   Card,
   Input,
-  Select,
-  Textarea,
-} from "@dragorbit/ui";
+  Select,Tooltip as SharedTooltip,
+  Textarea,} from "@dragorbit/ui";
+import { FileText, IndianRupee, Plus, Save, Trash2 } from "lucide-react";
 export function AdvancePaymentDrawerPresentation({ model }) {
   const {
     SideDrawer,
@@ -130,13 +129,13 @@ export function AdvancePaymentDrawerPresentation({ model }) {
                       })}
                     </h4>
                     {formData.paymentMethods.length > 1 && (
-                      <button
+                      <SharedTooltip content={t("payments.removePaymentMethod")}><button aria-label={t("payments.removePaymentMethod")}
                         onClick={() => removePaymentMethod(index)}
                         className="opacity-0 group-hover:opacity-100 p-2 hover:bg-[rgba(var(--color-danger),0.1)] rounded-lg transition-all cursor-pointer"
-                        title={t("payments.removePaymentMethod")}
+
                       >
                         <Trash2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))] hover:text-[rgb(var(--color-danger))] transition-colors" />
-                      </button>
+                      </button></SharedTooltip>
                     )}
                   </div>
 

@@ -1,14 +1,14 @@
 "use client";
+import { Input, Tooltip as SharedTooltip } from "@dragorbit/ui";
 import {
   Building,
   Building2,
+  CheckCircle,
   Hash,
   Mail,
   Phone,
-  CheckCircle,
   ShieldCheck,
 } from "lucide-react";
-import { Input } from "@dragorbit/ui";
 export function SupplierFormPresentation({ model }) {
   const {
     mode,
@@ -76,7 +76,7 @@ export function SupplierFormPresentation({ model }) {
               leftIcon={Hash}
               rightElement={
                 formData.gstNumber?.length >= 15 && (
-                  <button
+                  <SharedTooltip content={isGstVerified ? "Verified" : "Verify GST"}><button
                     type="button"
                     onMouseDown={(event) => event.preventDefault()}
                     onClick={() => handleVerifyGst(formData.gstNumber)}
@@ -86,7 +86,7 @@ export function SupplierFormPresentation({ model }) {
                         ? "bg-green-500 text-white shadow-sm"
                         : "bg-[rgb(var(--color-primary))] text-white hover:brightness-110"
                     }`}
-                    title={isGstVerified ? "Verified" : "Verify GST"}
+
                   >
                     {isVerifyingGst ? (
                       <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -95,7 +95,7 @@ export function SupplierFormPresentation({ model }) {
                     ) : (
                       <ShieldCheck className="w-3.5 h-3.5" />
                     )}
-                  </button>
+                  </button></SharedTooltip>
                 )
               }
             />

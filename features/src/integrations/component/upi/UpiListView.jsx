@@ -1,4 +1,5 @@
 "use client";
+import { Tooltip as SharedTooltip } from "@dragorbit/ui";
 import { Copy, Edit2, Plus, QrCode, Trash2, Wallet } from "lucide-react";
 export function UpiListView({ model }) {
   const {
@@ -42,22 +43,22 @@ export function UpiListView({ model }) {
                   )}
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <button
+                  <SharedTooltip content={t("settings.upi.edit")}><button aria-label={t("settings.upi.edit")}
                     type="button"
                     onClick={() => onEditUpi?.(item)}
                     className="w-8 h-8 flex items-center justify-center bg-[rgb(var(--color-bg-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded-lg transition-colors cursor-pointer"
-                    title={t("settings.upi.edit")}
+
                   >
                     <Edit2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
-                  </button>
-                  <button
+                  </button></SharedTooltip>
+                  <SharedTooltip content={t("settings.upi.delete")}><button aria-label={t("settings.upi.delete")}
                     type="button"
                     onClick={() => onDeleteUpi?.(item)}
                     className="w-8 h-8 flex items-center justify-center bg-[rgb(var(--color-bg-secondary))] hover:bg-[rgb(var(--color-bg-tertiary))] rounded-lg transition-colors cursor-pointer"
-                    title={t("settings.upi.delete")}
+
                   >
                     <Trash2 className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />
-                  </button>
+                  </button></SharedTooltip>
                 </div>
               </div>
 

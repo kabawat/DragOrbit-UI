@@ -1,5 +1,6 @@
 "use client";
 import { Bell, Check } from "lucide-react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 import { translateLabel } from "./translateLabel";
 import { usePopover } from "./usePopover";
 export function NotificationBell({
@@ -55,18 +56,22 @@ export function NotificationBell({
                 )}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={onMarkAllRead}
-              className="p-1.5 hover:bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-text-tertiary))] hover:text-[rgb(var(--color-primary))] rounded-lg transition-colors cursor-pointer"
-              title={translateLabel(
+            <SharedTooltip content={translateLabel(
+                t,
+                "notifications.markAllRead",
+                "Mark all as read"
+              )}><button aria-label={translateLabel(
                 t,
                 "notifications.markAllRead",
                 "Mark all as read"
               )}
+              type="button"
+              onClick={onMarkAllRead}
+              className="p-1.5 hover:bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-text-tertiary))] hover:text-[rgb(var(--color-primary))] rounded-lg transition-colors cursor-pointer"
+
             >
               <Check className="w-4 h-4" />
-            </button>
+            </button></SharedTooltip>
           </div>
 
           <div className="max-h-[350px] overflow-y-auto scrollbar-hide py-1">
