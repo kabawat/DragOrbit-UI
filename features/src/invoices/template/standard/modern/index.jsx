@@ -76,26 +76,36 @@ const ModernTemplate = ({ invoiceData, selectedStore }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {rows.map(({ index, item, qty, unitPrice, lineDiscount, lineAmount }) => (
-                                <tr key={index}>
-                                    <td>
-                                        <div className={styles.productName}>
-                                            {item.product?.name || "Unknown Product"}
-                                        </div>
-                                        {item.product?.sku && (
-                                            <div className={styles.productSku} style={{ fontSize: "10px", color: "#999" }}>
-                                                SKU: {item.product.sku}
+                            {rows.map(({ index, item, qty, unitPrice, lineDiscount, lineAmount }) => {
+                                const rowKey =
+                                    item.id ||
+                                    item._id ||
+                                    item.variant?.id ||
+                                    item.variantId ||
+                                    item.product?.id ||
+                                    item.product?._id ||
+                                    "invoice-item";
+                                return (
+                                    <tr key={`${rowKey}-${index}`}>
+                                        <td>
+                                            <div className={styles.productName}>
+                                                {item.product?.name || "Unknown Product"}
                                             </div>
-                                        )}
-                                    </td>
-                                    <td style={{ textAlign: "center" }}>{qty}</td>
-                                    <td style={{ textAlign: "right" }}>{fmt(unitPrice)}</td>
-                                    <td style={{ textAlign: "right", color: "#e74c3c" }}>
-                                        {lineDiscount > 0 ? `-${fmt(lineDiscount)}` : "-"}
-                                    </td>
-                                    <td style={{ textAlign: "right" }}>{fmt(lineAmount)}</td>
-                                </tr>
-                            ))}
+                                            {item.product?.sku && (
+                                                <div className={styles.productSku} style={{ fontSize: "10px", color: "#999" }}>
+                                                    SKU: {item.product.sku}
+                                                </div>
+                                            )}
+                                        </td>
+                                        <td style={{ textAlign: "center" }}>{qty}</td>
+                                        <td style={{ textAlign: "right" }}>{fmt(unitPrice)}</td>
+                                        <td style={{ textAlign: "right", color: "#e74c3c" }}>
+                                            {lineDiscount > 0 ? `-${fmt(lineDiscount)}` : "-"}
+                                        </td>
+                                        <td style={{ textAlign: "right" }}>{fmt(lineAmount)}</td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                         <tfoot>
                             <tr className={styles.tableFooterRow}>

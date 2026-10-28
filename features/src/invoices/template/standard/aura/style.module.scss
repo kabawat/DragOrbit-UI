@@ -29,8 +29,36 @@
 .header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: center;
     margin-bottom: 30px;
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+:global(.invoice-print-document #invoice-container) .auraInvoice.auraInvoice .header,
+:global(.invoice-print-document #invoice-container) .auraInvoice.auraInvoice .header * {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #2c3e50 !important;
+    box-shadow: none !important;
+}
+
+:global(.invoice-print-document #invoice-container) .auraInvoice.auraInvoice .header h1 {
+    color: var(--invoice-primary-color, #2c3e50) !important;
+}
+
+.storeHeading {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.storeLogo {
+    display: block;
+    width: 76px;
+    height: 68px;
+    object-fit: contain;
 }
 
 .header h1 {
@@ -134,13 +162,34 @@
 }
 
 .totalsContainer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
+    align-items: start;
+    gap: 24px;
+}
+
+.taxBreakdown {
+    min-width: 0;
+    font-size: 11px;
+    color: #7f8c8d;
+}
+
+.taxBreakdown > strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #2c3e50;
+}
+
+.taxRow {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px solid #f1f2f6;
 }
 
 .totals {
-    width: auto;
-    /* Changed to auto for elastic width */
+    width: 100%;
 }
 
 .totalRow {
@@ -189,6 +238,16 @@
 
 .footer p {
     margin: 5px 0;
+}
+
+@media (max-width: 620px) {
+    .auraInvoice { padding: 20px 16px; }
+    .topBar { margin: -20px -16px 20px; padding: 8px 16px; }
+    .header { gap: 12px; margin-bottom: 20px; }
+    .header h1 { font-size: 28px; }
+    .storeHeading { gap: 8px; }
+    .storeLogo { width: 56px; height: 52px; }
+    .totalsContainer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 }
 
 // ── B2C shared ────────────────────────────────────────────────────────────────

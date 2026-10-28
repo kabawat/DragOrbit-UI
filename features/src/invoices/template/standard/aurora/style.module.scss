@@ -18,6 +18,20 @@
     align-items: center;
 }
 
+.headerIdentity {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 16px;
+}
+
+.storeLogo {
+    display: block;
+    width: 76px;
+    height: 68px;
+    object-fit: contain;
+}
+
 .header h1 {
     font-size: 26px;
     font-weight: 600;
@@ -103,12 +117,34 @@
 
 .totalsSection {
     width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
+    align-items: start;
+    gap: 24px;
+}
+
+.taxBreakdown {
+    min-width: 0;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.taxBreakdown > strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+.taxRow {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .totals {
-    width: auto;
+    width: 100%;
 }
 
 .totalRow {
@@ -130,6 +166,18 @@
     text-align: right;
     color: #111827;
 }
+
+.amountWords {
+    display: grid;
+    gap: 3px;
+    margin-top: 7px;
+    padding-top: 6px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.amountWords span { text-align: right; }
 
 .finalTotal {
     border-top: 2px solid #4f46e5;
@@ -179,4 +227,12 @@
         color: #1f2937;
         border-bottom: none;
     }
+}
+
+@media (max-width: 620px) {
+    .header { padding: 20px 16px; gap: 10px; }
+    .headerIdentity { gap: 8px; }
+    .storeLogo { width: 56px; height: 52px; }
+    .body { padding: 24px 10px; }
+    .totalsSection { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
 }

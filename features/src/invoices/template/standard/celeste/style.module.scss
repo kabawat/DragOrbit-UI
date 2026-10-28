@@ -15,6 +15,8 @@
     margin-bottom: 30px !important;
     padding-bottom: 20px !important;
     border-bottom: 2px solid #e0e0e0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
 
     h1 {
         font-size: 32px !important;
@@ -29,6 +31,18 @@
         color: #666 !important;
         margin: 5px 0 0 !important;
     }
+}
+
+:global(.invoice-print-document #invoice-container) .celesteInvoice .header,
+:global(.invoice-print-document #invoice-container) .celesteInvoice .header * {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #333 !important;
+    box-shadow: none !important;
+}
+
+:global(.invoice-print-document #invoice-container) .celesteInvoice .header h1 {
+    color: var(--invoice-primary-color, #007bff) !important;
 }
 
 .infoGrid {
@@ -63,6 +77,21 @@
         color: #555 !important;
         margin: 2px 0 !important;
     }
+}
+
+.issuerHeading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.storeLogo,
+.issuerLogo {
+    display: block;
+    width: 64px;
+    height: 56px;
+    object-fit: contain;
 }
 
 .tableContainer {
@@ -107,14 +136,48 @@
 }
 
 .totalsContainer {
-    display: flex !important;
-    justify-content: flex-end !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr) !important;
+    align-items: start !important;
+    gap: 24px !important;
+}
+
+.taxBreakdown {
+    min-width: 0;
+    font-size: 11px;
+    color: #6b7280;
+}
+
+.taxBreakdown > strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+.taxRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .totals {
-    width: 300px !important;
+    width: 100% !important;
     padding-top: 10px !important;
 }
+
+.amountWords {
+    display: grid;
+    gap: 3px;
+    margin-top: 7px;
+    padding-top: 6px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.amountWords span { text-align: right; }
 
 .totalRow {
     display: flex !important;
@@ -152,6 +215,11 @@
     }
 }
 
+.finalRow .finalLabel,
+.finalRow .finalAmount {
+    color: #1f2937 !important;
+}
+
 .footer {
     text-align: center !important;
     margin-top: 40px !important;
@@ -185,6 +253,13 @@
         color: #333 !important;
         border-bottom: none !important;
     }
+}
+
+@media (max-width: 620px) {
+    .celesteInvoice { padding: 20px !important; }
+    .infoGrid { gap: 12px !important; }
+    .totalsContainer { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; gap: 12px !important; }
+    .storeLogo, .issuerLogo { width: 48px; height: 44px; }
 }
 
 @media print {

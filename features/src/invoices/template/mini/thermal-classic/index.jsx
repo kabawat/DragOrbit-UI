@@ -2,9 +2,11 @@
 import React from 'react';
 import { formatInvoiceDate } from "../../formatInvoiceDate.js";
 import MiniInvoiceContainer from "../MiniInvoiceContainer";
+import { useInvoicePrintContext } from "../../InvoicePrintSettingsContext.jsx";
 import styles from "./style.module.scss";
 
 const ThermalClassicTemplate = ({ invoiceData, selectedStore }) => {
+    const showDescription = useInvoicePrintContext()?.settings?.showDescription !== false;
     const formatCurrency = (amount) => {
         return `₹${(amount || 0).toFixed(2)}`;
     };
@@ -41,6 +43,7 @@ const ThermalClassicTemplate = ({ invoiceData, selectedStore }) => {
                             <tr key={index} className={styles.itemRow}>
                                 <td>
                                     <div className={styles.productName}>{item.product?.name}</div>
+                                    {showDescription && (item.description || item.product?.description) && <small data-invoice-item-description>{item.description || item.product.description}</small>}
                                     <div className={styles.details}>@{formatCurrency(item.price)}</div>
                                 </td>
                                 <td style={{ textAlign: 'right' }}>{item.quantity}</td>

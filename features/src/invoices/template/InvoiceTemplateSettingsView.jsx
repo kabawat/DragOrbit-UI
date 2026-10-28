@@ -9,8 +9,8 @@ const PREVIEW_INVOICE = {
   invoiceNumber: "INV-2026-001", createdAt: "2026-10-26T10:30:00.000Z", status: "RELEASED", paymentStatus: "PAID",
   customer: { name: "Sample Customer", email: "customer@example.com", phone: "+91 98765 43210", address: "12 Market Road, Ahmedabad, Gujarat", currentBalance: 1250 },
   items: [
-    { product: { id: "preview-item-1", name: "Everyday Cotton Shirt", sku: "DB-101" }, productName: "Everyday Cotton Shirt", description: "Soft cotton, regular fit", quantity: 2, price: 850, discountedPrice: 850, discount: 0, gst: { rate: 5 } },
-    { product: { id: "preview-item-2", name: "Classic Denim Jeans", sku: "DB-205" }, productName: "Classic Denim Jeans", description: "Classic blue denim", quantity: 1, price: 1600, discountedPrice: 1600, discount: 0, gst: { rate: 12 } },
+    { product: { id: "preview-item-1", name: "Everyday Cotton Shirt", sku: "DB-101" }, productName: "Everyday Cotton Shirt", description: "Soft cotton, regular fit", quantity: 2, price: 850, mrp: 999, discountedPrice: 850, discount: 0, gst: { rate: 5 } },
+    { product: { id: "preview-item-2", name: "Classic Denim Jeans", sku: "DB-205" }, productName: "Classic Denim Jeans", description: "Classic blue denim", quantity: 1, price: 1600, mrp: 1899, discountedPrice: 1600, discount: 0, gst: { rate: 12 } },
   ], subtotal: 3300, gstAmount: 165, totalDiscount: 0, totalAmount: 3465, amountPaid: 2000, balanceDue: 1465,
   paymentMode: "UPI", payments: [{ id: "preview-payment-1", amount: 2000, mode: "UPI", createdAt: "2026-10-26T10:30:00.000Z" }],
   termsAndConditions: "Returns are accepted within 7 days with the original invoice.",

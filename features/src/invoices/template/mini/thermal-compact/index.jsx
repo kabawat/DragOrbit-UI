@@ -2,9 +2,12 @@
 import React from 'react';
 import { formatInvoiceDate } from "../../formatInvoiceDate.js";
 import MiniInvoiceContainer from "../MiniInvoiceContainer";
+import { useInvoicePrintContext } from "../../InvoicePrintSettingsContext.jsx";
 import styles from "./style.module.scss";
 
 const ThermalCompactTemplate = ({ invoiceData, selectedStore }) => {
+    const settings = useInvoicePrintContext()?.settings || {};
+    const showDescription = settings.showDescription !== false;
     const formatCurrency = (amount) => {
         return `₹${Math.round(amount)}`;
     };
@@ -29,6 +32,8 @@ const ThermalCompactTemplate = ({ invoiceData, selectedStore }) => {
                             <div className={styles.bottom}>
                                 {item.quantity} x {item.price}
                             </div>
+                            {showDescription && (item.description || item.product?.description) && <small data-invoice-item-description>{item.description || item.product.description}</small>}
+                            {settings.showMrp && item.mrp != null && <small data-invoice-item-mrp>MRP: {formatCurrency(item.mrp)}</small>}
                         </div>
                     ))}
                 </div>

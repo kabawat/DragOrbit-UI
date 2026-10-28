@@ -1,4 +1,5 @@
 import { useInvoicePrintContext } from "./InvoicePrintSettingsContext.jsx";
+import { formatInvoiceDate } from "./formatInvoiceDate.js";
 import { signatureToImage } from "./signatureToImage.js";
 import styles from "./InvoicePrintExtras.module.scss";
 
@@ -44,15 +45,90 @@ function formatAmount(value, decimals) {
   })}`;
 }
 
-export function InvoicePrintExtras({ includeSignature = true, includeSummaryFields = true, includeItemDescriptions = true, includeTerms = true }) {
+function getTaxBreakdown(items) {
+  const totals = new Map();
+  items.forEach((item, index) => {
+    const gst = item.gst || {};
+    const rate = Number(gst.rate ?? item.gstRate ?? item.taxRate ?? item.gstInfo?.rate ?? 0);
+    if (!rate) return;
+    const breakdown = gst.breakdown || {};
+    const amount = Number(breakdown.total ?? gst.amount ?? item.calculatedGst ?? item.gstAmount ?? (Number(item.price || 0) * Number(item.quantity || 0) * rate) / 100);
+    const isIgst = ["IGST", "INTERSTATE"].includes(String(gst.taxType || gst.type || item.taxType || "").toUpperCase());
+    const parts = isIgst
+      ? [["IGST", Number(gst.igstRate ?? rate), Number(breakdown.igst ?? amount)]]
+      : [["CGST", Number(gst.cgstRate ?? breakdown.cgstRate ?? rate / 2), Number(breakdown.cgst ?? amount / 2)], ["SGST", Number(gst.sgstRate ?? breakdown.sgstRate ?? rate / 2), Number(breakdown.sgst ?? amount / 2)]];
+    parts.forEach(([name, taxRate, taxAmount]) => {
+      const key = `${name}-${taxRate}`;
+      const current = totals.get(key) || { id: key, name, rate: taxRate, amount: 0 };
+      current.amount += taxAmount;
+      totals.set(key, current);
+    });
+  });
+  return [...totals.values()];
+}
+
+export function InvoicePrintExtras({ includeSignature = true, includeSummaryFields = true, includeTerms = true, includePaymentMode = true }) {
   const context = useInvoicePrintContext();
   if (!context) return null;
 
   const { settings, invoiceData, signature } = context;
   const signatureSrc = signatureToImage(signature);
-  const rows = [];
   const items = invoiceData?.items || [];
-  const breakdown = invoiceData?.gst?.breakdown || {};
+  const payments = Array.isArray(invoiceData?.payments) ? invoiceData.payments : Array.isArray(invoiceData?.paymentDetails) ? invoiceData.paymentDetails : Array.isArray(invoiceData?.receivedDetails) ? invoiceData.receivedDetails : [];
+  const paidAmount = invoiceData?.amountPaid ?? invoiceData?.receivedAmount ?? invoiceData?.paidAmount ?? invoiceData?.amountReceived ?? payments.reduce((sum, payment) => sum + Number(payment.amount ?? payment.receivedAmount ?? 0), 0);
+  const balanceAmount = invoiceData?.balanceDue ?? invoiceData?.balanceAmount ?? (Number(invoiceData?.totalAmount) - Number(paidAmount || 0));
+  const customerBalance = invoiceData?.customer?.currentBalance ?? invoiceData?.customer?.balance ?? invoiceData?.customerBalance;
+  const taxBreakdown = includeSummaryFields && settings.showTaxDetails ? getTaxBreakdown(items) : [];
+  const summaryRows = [];
+  const addSummaryRow = (enabled, label, value) => {
+    if (enabled && value !== undefined && value !== null && value !== "") summaryRows.push({ label, value });
+  };
+  if (includeSummaryFields) {
+    addSummaryRow(settings.showReceivedAmount, "Amount received", formatAmount(paidAmount, settings.showAmountDecimals));
+    addSummaryRow(settings.showBalanceAmount, "Balance amount", formatAmount(balanceAmount, settings.showAmountDecimals));
+    addSummaryRow(settings.showCustomerBalance, "Customer current balance", formatAmount(customerBalance, settings.showAmountDecimals));
+    addSummaryRow(settings.showAmountInWords, "Amount in words", amountInWords(invoiceData?.totalAmount));
+    addSummaryRow(includePaymentMode && settings.showPaymentMode, "Payment mode", invoiceData?.paymentMode || invoiceData?.paymentMethod);
+  }
+  const rawTerms = invoiceData?.termsAndConditions || invoiceData?.notes;
+  const terms = typeof rawTerms === "string" ? rawTerms : rawTerms?.text || rawTerms?.content || "";
+  const showSignature = includeSignature && settings.showSignature;
+  const showThankYou = settings.showThankYou !== false;
+  const generatedOn = formatInvoiceDate(invoiceData?.createdAt, "DD MMM YYYY [at] HH:mm");
+  const showGeneratedOn = true;
+  const showSummary = taxBreakdown.length > 0 || summaryRows.length > 0;
+  const showFooter = showSummary || (includeTerms && settings.showTerms && terms) || showSignature || showThankYou || showGeneratedOn;
+  if (!showFooter) return null;
+
+  return (
+    <section className={styles.extras} data-invoice-extras-root>
+      {showSummary && <div data-invoice-plain-bg className={`${styles.summaryLayout} ${context.group === "thermal" ? styles.thermalGrid : ""}`}>
+        <div className={styles.block}>
+          {taxBreakdown.length > 0 && <><strong>Tax details</strong><div className={styles.taxTable}>
+            {taxBreakdown.map((line) => <div key={line.id} className={styles.taxRow}><span>{line.name} @ {line.rate}%</span><strong>{formatAmount(line.amount, settings.showAmountDecimals)}</strong></div>)}
+          </div></>}
+        </div>
+        <div className={styles.grid}>
+          {summaryRows.map(({ label, value }) => <div key={label} className={styles.row}><span>{label}</span><strong>{value}</strong></div>)}
+        </div>
+      </div>}
+      {showSignature && <div className={styles.signatureBlock}>
+        {signatureSrc && <img className={styles.savedSignature} src={signatureSrc} alt="Saved signature" />}
+        <span className={styles.signatureLine}>Authorized signature</span>
+      </div>}
+      {includeTerms && settings.showTerms && terms && <div className={styles.block}><strong>Terms and conditions</strong><p>{terms}</p></div>}
+      {showThankYou && <p className={styles.thankYou}>Thank you for your business!</p>}
+      {showGeneratedOn && <p className={styles.generatedOn}>Generated on {generatedOn}</p>}
+    </section>
+  );
+}
+
+export function InvoiceAcknowledgement() {
+  const context = useInvoicePrintContext();
+  if (!context?.settings?.showAcknowledgement) return null;
+
+  const { settings, invoiceData } = context;
+  const items = invoiceData?.items || [];
   const payments = Array.isArray(invoiceData?.payments)
     ? invoiceData.payments
     : Array.isArray(invoiceData?.paymentDetails)
@@ -62,121 +138,32 @@ export function InvoicePrintExtras({ includeSignature = true, includeSummaryFiel
         : [];
   const paidAmount = invoiceData?.amountPaid ?? invoiceData?.receivedAmount ?? invoiceData?.paidAmount ?? invoiceData?.amountReceived ?? payments.reduce((sum, payment) => sum + Number(payment.amount ?? payment.receivedAmount ?? 0), 0);
   const balanceAmount = invoiceData?.balanceDue ?? invoiceData?.balanceAmount ?? (Number(invoiceData?.totalAmount) - Number(paidAmount || 0));
-  const customerBalance = invoiceData?.customer?.currentBalance ?? invoiceData?.customer?.balance ?? invoiceData?.customerBalance;
-  const add = (enabled, label, value) => {
-    if (enabled && value !== undefined && value !== null && value !== "") {
-      rows.push(<div key={label} className={styles.row}><span>{label}</span><strong>{value}</strong></div>);
-    }
-  };
-
-  if (includeSummaryFields) {
-    add(settings.showReceivedAmount, "Amount received", formatAmount(paidAmount, settings.showAmountDecimals));
-    add(settings.showBalanceAmount, "Balance amount", formatAmount(balanceAmount, settings.showAmountDecimals));
-    add(settings.showCustomerBalance, "Customer current balance", formatAmount(customerBalance, settings.showAmountDecimals));
-    add(settings.showTaxDetails && Number(breakdown.cgst) > 0, "CGST", formatAmount(breakdown.cgst, settings.showAmountDecimals));
-    add(settings.showTaxDetails && Number(breakdown.sgst) > 0, "SGST", formatAmount(breakdown.sgst, settings.showAmountDecimals));
-    add(settings.showTaxDetails && Number(breakdown.igst) > 0, "IGST", formatAmount(breakdown.igst, settings.showAmountDecimals));
-    add(settings.showAmountInWords, "Amount in words", amountInWords(invoiceData?.totalAmount));
-  }
-  if (includeSummaryFields) add(settings.showPaymentMode, "Payment mode", invoiceData?.paymentMode || invoiceData?.paymentMethod);
-
-  const taxLines = includeSummaryFields && settings.showTaxDetails ? items.flatMap((item, index) => {
-    const gst = item.gst || {};
-    const rate = Number(gst.rate ?? item.gstRate ?? 0);
-    if (!rate) return [];
-    const breakdown = gst.breakdown || {};
-    const inclusive = Boolean(gst.isInclusive ?? item.isInclusive);
-    const itemBase = Number(item.total ?? Number(item.price || 0) * Number(item.quantity || 0));
-    const kind = String(gst.taxType || gst.type || item.taxType || "").toUpperCase();
-    const isInterstate = kind === "IGST" || kind === "INTERSTATE";
-    const cgstRate = Number(gst.cgstRate ?? breakdown.cgstRate ?? (isInterstate ? 0 : rate / 2));
-    const sgstRate = Number(gst.sgstRate ?? breakdown.sgstRate ?? (isInterstate ? 0 : rate / 2));
-    const igstRate = Number(gst.igstRate ?? breakdown.igstRate ?? (isInterstate ? rate : 0));
-    const gstAmount = Number(breakdown.total ?? item.calculatedGst ?? (inclusive ? itemBase * rate / (100 + rate) : itemBase * rate / 100));
-    const cgstAmount = Number(breakdown.cgst ?? (cgstRate ? gstAmount / 2 : 0));
-    const sgstAmount = Number(breakdown.sgst ?? (sgstRate ? gstAmount / 2 : 0));
-    const igstAmount = Number(breakdown.igst ?? (igstRate ? gstAmount : 0));
-    return [{
-      id: item.id || item._id || index,
-      name: item.product?.name || item.productName || item.name || `Item ${index + 1}`,
-      cgstRate,
-      sgstRate,
-      igstRate,
-      cgstAmount,
-      sgstAmount,
-      igstAmount,
-    }];
-  }) : [];
-  const describedItems = includeItemDescriptions && settings.showDescription ? items.filter((item) => item.description || item.product?.description) : [];
-  const rawTerms = invoiceData?.termsAndConditions || invoiceData?.notes;
-  const terms = typeof rawTerms === "string" ? rawTerms : rawTerms?.text || rawTerms?.content || "";
-  const showSignature = includeSignature && settings.showSignature;
   const acknowledgementDetails = [
     invoiceData?.invoiceNumber && `Invoice ${invoiceData.invoiceNumber}`,
     invoiceData?.customer?.name && invoiceData.customer.name,
     invoiceData?.createdAt && new Date(invoiceData.createdAt).toLocaleDateString(),
   ].filter(Boolean).join(" · ");
-  const showFooter = rows.length || taxLines.length || describedItems.length || (includeTerms && settings.showTerms && terms) || showSignature || settings.showAcknowledgement;
-  if (!showFooter) return null;
 
   return (
-    <section className={styles.extras}>
-      {rows.length > 0 && <div className={`${styles.grid} ${context.group === "thermal" ? styles.thermalGrid : ""}`}>{rows}</div>}
-      {taxLines.length > 0 && (
-        <div className={styles.block}>
-          <strong>Tax details by item</strong>
-          <div className={styles.taxTable}>
-            {taxLines.map((line, index) => (
-              <div key={index} className={styles.taxRow}>
-                <strong>{line.name}</strong>
-                <span>
-                  {line.cgstRate > 0 && `CGST ${line.cgstRate}% · ${formatAmount(line.cgstAmount, settings.showAmountDecimals)}`}
-                  {line.sgstRate > 0 && ` SGST ${line.sgstRate}% · ${formatAmount(line.sgstAmount, settings.showAmountDecimals)}`}
-                  {line.igstRate > 0 && ` IGST ${line.igstRate}% · ${formatAmount(line.igstAmount, settings.showAmountDecimals)}`}
-                </span>
-              </div>
-            ))}
+    <div className={`${styles.acknowledgement} ${context.group === "thermal" ? styles.thermalAcknowledgement : ""}`}>
+      <div className={styles.acknowledgementLayout}>
+        <div className={styles.acknowledgementCopy}>
+          <strong>Payment acknowledgement</strong>
+          {acknowledgementDetails && <span>{acknowledgementDetails}</span>}
+          <div className={styles.acknowledgementAmounts}>
+            <span><b>Items</b> {items.length}</span>
+            <span><b>Total</b> {formatAmount(invoiceData?.totalAmount, settings.showAmountDecimals)}</span>
+            {settings.showReceivedAmount && <span><b>Received</b> {formatAmount(paidAmount, settings.showAmountDecimals)}</span>}
+            {settings.showBalanceAmount && <span><b>Balance</b> {formatAmount(balanceAmount, settings.showAmountDecimals)}</span>}
           </div>
+          <p>{settings.acknowledgementText}</p>
         </div>
-      )}
-      {describedItems.length > 0 && (
-        <div className={styles.block}>
-          <strong>Item descriptions</strong>
-          {describedItems.map((item, index) => (
-            <p key={index}>
-              <b>{item.product?.name || item.productName || item.name || `Item ${index + 1}`}:</b>{" "}
-              {item.description || item.product?.description}
-            </p>
-          ))}
+        <div className={styles.acknowledgementSign}>
+          <span>Received by</span>
+          <span className={styles.acknowledgementSignLine} />
+          <span>Date: ______________</span>
         </div>
-      )}
-      {includeTerms && settings.showTerms && terms && <div className={styles.block}><strong>Terms and conditions</strong><p>{terms}</p></div>}
-      {showSignature && <div className={styles.signatureBlock}>
-        {signatureSrc && <img className={styles.savedSignature} src={signatureSrc} alt="Saved signature" />}
-        <span className={styles.signatureLine}>Authorized signature</span>
-      </div>}
-      {settings.showAcknowledgement && (
-        <div className={`${styles.acknowledgement} ${context.group === "thermal" ? styles.thermalAcknowledgement : ""}`}>
-          <div className={styles.acknowledgementLayout}>
-            <div className={styles.acknowledgementCopy}>
-              <strong>Payment acknowledgement</strong>
-              {acknowledgementDetails && <span>{acknowledgementDetails}</span>}
-              <div className={styles.acknowledgementAmounts}>
-                <span><b>Items</b> {items.length}</span>
-                <span><b>Total</b> {formatAmount(invoiceData?.totalAmount, settings.showAmountDecimals)}</span>
-                {settings.showReceivedAmount && <span><b>Received</b> {formatAmount(paidAmount, settings.showAmountDecimals)}</span>}
-                {settings.showBalanceAmount && <span><b>Balance</b> {formatAmount(balanceAmount, settings.showAmountDecimals)}</span>}
-              </div>
-              <p>{settings.acknowledgementText}</p>
-            </div>
-            <div className={styles.acknowledgementSign}>
-              <span>Received by</span>
-              <span className={styles.acknowledgementSignLine} />
-              <span>Date: ______________</span>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+      </div>
+    </div>
   );
 }

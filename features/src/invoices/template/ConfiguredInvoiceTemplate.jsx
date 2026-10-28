@@ -25,18 +25,28 @@ export function ConfiguredInvoiceTemplate({
   const settings = providedSettings || storedSettings;
   const companyName = String(settings.companyName || "").trim();
   const companyDetails = selectedStore?.companyDetails || {};
+  const previewFallback = preview ? {
+    storeName: "DragBizz Store",
+    address: "12 Market Road, Jaipur, Rajasthan",
+    email: "hello@dragbizz.com",
+    phone: "+91 98765 43210",
+    gstin: "08ABCDE1234F1Z5",
+  } : {};
+  const fallbackLogo = preview
+    ? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 80'%3E%3Crect width='120' height='80' rx='12' fill='%232563eb'/%3E%3Cpath d='M25 58V22h12l23 22V22h12v36H60L37 36v22z' fill='white'/%3E%3Ctext x='80' y='49' font-size='12' font-family='Arial' font-weight='700' fill='white'%3EDB%3C/text%3E%3C/svg%3E"
+    : "";
   const store = {
     ...selectedStore,
-    storeName: companyName || selectedStore?.storeName || selectedStore?.name || companyDetails?.companyName,
-    address: settings.showAddress ? settings.addressOverride || selectedStore?.address || selectedStore?.storeAddress || selectedStore?.companyAddress || companyDetails?.address : "",
-    email: settings.showEmail ? settings.emailOverride || selectedStore?.email || selectedStore?.storeEmail || selectedStore?.companyEmail || companyDetails?.email : "",
-    storeEmail: settings.showEmail ? settings.emailOverride || selectedStore?.storeEmail || selectedStore?.email || companyDetails?.email : "",
-    phone: settings.showPhone ? settings.phoneOverride || selectedStore?.phone || selectedStore?.mobile || selectedStore?.storePhone || companyDetails?.phone : "",
-    gst: settings.showGstin ? settings.gstinOverride || selectedStore?.gst || selectedStore?.gstin || selectedStore?.gstNumber || companyDetails?.gstin : "",
-    gstin: settings.showGstin ? settings.gstinOverride || selectedStore?.gstin || selectedStore?.gst || selectedStore?.gstNumber || companyDetails?.gstin : "",
-    gstNumber: settings.showGstin ? settings.gstinOverride || selectedStore?.gstNumber || selectedStore?.gstin || selectedStore?.gst || companyDetails?.gstin : "",
-    logo: settings.showLogo ? selectedStore?.logo || selectedStore?.logoUrl || companyDetails?.logo : "",
-    logoUrl: settings.showLogo ? selectedStore?.logoUrl || selectedStore?.logo || companyDetails?.logo : "",
+    storeName: companyName || selectedStore?.storeName || selectedStore?.name || companyDetails?.companyName || previewFallback.storeName,
+    address: settings.showAddress ? settings.addressOverride || selectedStore?.address || selectedStore?.storeAddress || selectedStore?.companyAddress || companyDetails?.address || previewFallback.address : "",
+    email: settings.showEmail ? settings.emailOverride || selectedStore?.email || selectedStore?.storeEmail || selectedStore?.companyEmail || companyDetails?.email || previewFallback.email : "",
+    storeEmail: settings.showEmail ? settings.emailOverride || selectedStore?.storeEmail || selectedStore?.email || companyDetails?.email || previewFallback.email : "",
+    phone: settings.showPhone ? settings.phoneOverride || selectedStore?.phone || selectedStore?.mobile || selectedStore?.storePhone || companyDetails?.phone || previewFallback.phone : "",
+    gst: settings.showGstin ? settings.gstinOverride || selectedStore?.gst || selectedStore?.gstin || selectedStore?.gstNumber || companyDetails?.gstin || previewFallback.gstin : "",
+    gstin: settings.showGstin ? settings.gstinOverride || selectedStore?.gstin || selectedStore?.gst || selectedStore?.gstNumber || companyDetails?.gstin || previewFallback.gstin : "",
+    gstNumber: settings.showGstin ? settings.gstinOverride || selectedStore?.gstNumber || selectedStore?.gstin || selectedStore?.gst || companyDetails?.gstin || previewFallback.gstin : "",
+    logo: settings.showLogo ? selectedStore?.logo || selectedStore?.logoUrl || companyDetails?.logo || fallbackLogo : "",
+    logoUrl: settings.showLogo ? selectedStore?.logoUrl || selectedStore?.logo || companyDetails?.logo || fallbackLogo : "",
   };
   if (!settings.showCompanyName) store.storeName = " ";
 

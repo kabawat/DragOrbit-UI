@@ -86,8 +86,8 @@ function TaxInvoice({ invoiceData = {}, selectedStore = {} }) {
             <td>{index + 1}</td>
             <td className={styles.itemName}>
               <b>{item.product?.name || item.productName || item.name || "Item"}</b>
-              {settings.showDescription && description && <i>{description}</i>}
-              {(settings.showTaxDetails || hsn || item.mrp || item.expiryDate) && <small>{settings.showTaxDetails && hsn && `HSN: ${hsn}`}{settings.showTaxDetails && rate > 0 && `, GST: ${rate}%`}{item.mrp != null && `, MRP: ${money(item.mrp, settings)}`}{item.batchNo && `, Batch No.: ${item.batchNo}`}{item.modelNo && `, Model No.: ${item.modelNo}`}{item.expiryDate && `, Exp. Date: ${date(item.expiryDate, "M/D")}`}</small>}
+              {settings.showDescription && description && <i data-invoice-item-description>{description}</i>}
+              {(settings.showTaxDetails || hsn || (settings.showMrp && item.mrp != null) || item.expiryDate) && <small>{settings.showTaxDetails && hsn && `HSN: ${hsn}`}{settings.showTaxDetails && rate > 0 && `, GST: ${rate}%`}{settings.showMrp && item.mrp != null && `, MRP: ${money(item.mrp, settings)}`}{item.batchNo && `, Batch No.: ${item.batchNo}`}{item.modelNo && `, Model No.: ${item.modelNo}`}{item.expiryDate && `, Exp. Date: ${date(item.expiryDate, "M/D")}`}</small>}
             </td>
             <td>{quantity(item)}</td>
             <td>{money(unitPrice, settings)}</td>
@@ -110,11 +110,13 @@ function TaxInvoice({ invoiceData = {}, selectedStore = {} }) {
         {settings.showCustomerBalance && customer.currentBalance != null && <div className={styles.totalRow}><span>Customer Balance</span><b>{money(customer.currentBalance, settings)}</b></div>}
       </section>
 
-      {(settings.showSignature || settings.showTerms || settings.showAcknowledgement || balance > 0) && <footer className={styles.footer}>
-        {settings.showSignature && signatureSrc && <img className={styles.signature} src={signatureSrc} alt="Saved signature" />}
-        {settings.showTerms && invoiceData.termsAndConditions && <p>{typeof invoiceData.termsAndConditions === "string" ? invoiceData.termsAndConditions : invoiceData.termsAndConditions.text}</p>}
+      {(settings.showSignature || settings.showThankYou !== false || settings.showTerms || settings.showAcknowledgement || balance > 0) && <footer className={styles.footer}>
         {balance > 0 && <b>Balance to be paid{invoiceData.dueDate ? ` by ${date(invoiceData.dueDate)}` : " in 3 days"}</b>}
-        {settings.showAcknowledgement && <p>{settings.acknowledgementText}</p>}
+        {settings.showSignature && signatureSrc && <img className={styles.signature} src={signatureSrc} alt="Saved signature" />}
+        {settings.showTerms && invoiceData.termsAndConditions && <p><b>Terms and conditions:</b> {typeof invoiceData.termsAndConditions === "string" ? invoiceData.termsAndConditions : invoiceData.termsAndConditions.text}</p>}
+        {settings.showThankYou !== false && <p>Thank you for your business!</p>}
+        <p>Generated on {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY [at] HH:mm")}</p>
+        {settings.showAcknowledgement && <div className={styles.acknowledgement}><b>Payment acknowledgement</b><p>{settings.acknowledgementText}</p></div>}
       </footer>}
     </article>
   </MiniInvoiceContainer>;

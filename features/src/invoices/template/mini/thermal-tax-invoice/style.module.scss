@@ -33,6 +33,8 @@
 .grandTotal > strong:last-child { grid-column: 3; min-width: 58px; text-align: right; }
 .footer { display: flex; flex-direction: column; gap: 1mm; padding: 2mm 0 1mm; }
 .footer p { margin: 0; }
+.acknowledgement { margin-top: 1.5mm; padding-top: 2mm; border-top: 1px dashed #111; }
+.acknowledgement p { margin: 1mm 0 0; }
 .signature { align-self: flex-end; max-width: 80px; max-height: 24px; object-fit: contain; }
 
 :global(.invoice-print-document[data-paper-size="58mm"]) .receipt { font-size: 8px; padding-right: .7mm; padding-left: .7mm; }
