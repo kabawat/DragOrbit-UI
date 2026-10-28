@@ -162,11 +162,24 @@ const MultiSelect = ({
 			if (!rect) return;
 			const width = Math.min(rect.width, window.innerWidth - 16);
 			const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
-			const spaceBelow = window.innerHeight - rect.bottom - 8;
-			const top = spaceBelow < 160 && rect.top > spaceBelow
-				? Math.max(8, rect.top - Math.min(240, rect.top - 8))
-				: rect.bottom;
-			setDropdownPosition({ top, left, width, maxHeight: Math.max(120, Math.min(240, top === rect.bottom ? spaceBelow : rect.top - top - 8)) });
+			const gap = 4;
+			const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+			const spaceAbove = rect.top - gap - 8;
+			const maxDropdownHeight = 320;
+			const preferUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+
+			let top = 0;
+			let maxHeight = 0;
+
+			if (preferUp) {
+				maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceAbove));
+				top = Math.max(8, rect.top - maxHeight - gap);
+			} else {
+				maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceBelow));
+				top = rect.bottom + gap;
+			}
+
+			setDropdownPosition({ top, left, width, maxHeight });
 		};
 		updatePosition();
 		window.addEventListener("resize", updatePosition);
@@ -296,7 +309,7 @@ const MultiSelect = ({
 							{/* Search Input */}
 							{searchable && (
 								<div
-									className="p-2 border-b border-[rgb(var(--color-border-primary))]"
+									className="p-2 border-b border-[rgb(var(--color-border-primary))] flex-shrink-0"
 									onClick={(e) => e.stopPropagation()}
 								>
 									<div className="relative">
@@ -323,7 +336,7 @@ const MultiSelect = ({
 							)}
 
 							{/* Options List */}
-							<div className="max-h-48 overflow-y-auto">
+							<div className="flex-1 min-h-0 overflow-y-auto overscroll-contain py-1">
 								{filteredOptions.length > 0 ? (
 									filteredOptions.map((option, index) => {
 										const isSelected = value.includes(option.value);

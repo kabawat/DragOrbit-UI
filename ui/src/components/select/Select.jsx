@@ -161,11 +161,24 @@ const Select = ({
       if (!rect) return;
       const width = Math.min(rect.width, window.innerWidth - 16);
       const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
-      const spaceBelow = window.innerHeight - rect.bottom - 8;
-      const top = spaceBelow < 160 && rect.top > spaceBelow
-        ? Math.max(8, rect.top - Math.min(240, rect.top - 8))
-        : rect.bottom;
-      setDropdownPosition({ top, left, width, maxHeight: Math.max(120, Math.min(240, top === rect.bottom ? spaceBelow : rect.top - top - 8)) });
+      const gap = 4;
+      const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+      const spaceAbove = rect.top - gap - 8;
+      const maxDropdownHeight = 320;
+      const preferUp = spaceBelow < 180 && spaceAbove > spaceBelow;
+
+      let top = 0;
+      let maxHeight = 0;
+
+      if (preferUp) {
+        maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceAbove));
+        top = Math.max(8, rect.top - maxHeight - gap);
+      } else {
+        maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceBelow));
+        top = rect.bottom + gap;
+      }
+
+      setDropdownPosition({ top, left, width, maxHeight });
     };
     updatePosition();
     window.addEventListener("resize", updatePosition);
@@ -281,7 +294,7 @@ const Select = ({
               {/* Search Input */}
               {searchable && (
                 <div
-                  className="p-2 border-b border-[rgb(var(--color-border-primary))]"
+                  className="p-2 border-b border-[rgb(var(--color-border-primary))] flex-shrink-0 bg-[rgb(var(--color-bg-primary))]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="relative">
@@ -313,106 +326,104 @@ const Select = ({
                 </div>
               )}
 
-              {/* Options List */}
-              <div className="flex flex-col max-h-[240px]">
-                {/* Scrollable Regular Options */}
-                <div
-                  className="flex-1 overflow-y-auto min-h-0"
-                  onScroll={(event) => {
-                    if (
-                      hasMore &&
-                      !loading &&
-                      !loadingMore &&
-                      event.currentTarget.scrollHeight -
-                        event.currentTarget.scrollTop -
-                        event.currentTarget.clientHeight < 32
-                    ) {
-                      onListEnd?.();
-                    }
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {regularOptions.length > 0 ? (
-                    regularOptions.map((option, index) => {
-                      const isSelected = multiple
-                        ? value?.includes(option.value)
-                        : value === option.value;
-                      const isHighlighted = index === highlightedIndex;
+              {/* Scrollable Regular Options */}
+              <div
+                className="flex-1 min-h-0 overflow-y-auto overscroll-contain py-1"
+                onScroll={(event) => {
+                  if (
+                    hasMore &&
+                    !loading &&
+                    !loadingMore &&
+                    event.currentTarget.scrollHeight -
+                      event.currentTarget.scrollTop -
+                      event.currentTarget.clientHeight < 32
+                  ) {
+                    onListEnd?.();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {regularOptions.length > 0 ? (
+                  regularOptions.map((option, index) => {
+                    const isSelected = multiple
+                      ? value?.includes(option.value)
+                      : value === option.value;
+                    const isHighlighted = index === highlightedIndex;
 
-                      return (
-                        <div
-                          key={`${String(option.value)}-${index}`}
-                          className={`group px-4 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between ${
-                            isHighlighted || isSelected
-                              ? "bg-[rgba(var(--color-primary)/0.12)]"
-                              : ""
-                          } hover:bg-[rgba(var(--color-primary)/0.12)]`}
-                          onClick={() => handleSelect(option)}
-                          onMouseEnter={() => setHighlightedIndex(index)}
-                          onMouseLeave={() => setHighlightedIndex(-1)}
+                    return (
+                      <div
+                        key={`${String(option.value)}-${index}`}
+                        className={`group px-3.5 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 ${
+                          isHighlighted || isSelected
+                            ? "bg-[rgba(var(--color-primary)/0.12)]"
+                            : ""
+                        } hover:bg-[rgba(var(--color-primary)/0.12)]`}
+                        onClick={() => handleSelect(option)}
+                        onMouseEnter={() => setHighlightedIndex(index)}
+                        onMouseLeave={() => setHighlightedIndex(-1)}
+                      >
+                        <span
+                          className={`flex-1 min-w-0 truncate text-sm ${isHighlighted || isSelected ? "text-[rgb(var(--color-primary))] font-medium" : "text-[rgb(var(--color-text-primary))]"} group-hover:text-[rgb(var(--color-primary))] transition-colors duration-150`}
+                          title={typeof option.label === "string" ? option.label : undefined}
                         >
-                          <span
-                            className={`${isHighlighted || isSelected ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-primary))]"} group-hover:text-[rgb(var(--color-primary))] transition-colors duration-150`}
-                          >
-                            {option.label}
-                          </span>
-                          {(isHighlighted || isSelected) && (
-                            <Check className="w-4 h-4 text-[rgb(var(--color-primary))] transition-transform duration-200" />
-                          )}
-                        </div>
-                      );
-                    })
-                  ) : loading ? (
-                    <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
-                      <LoaderCircle className="w-4 h-4 animate-spin" />
-                      Loading items...
-                    </div>
-                  ) : (
-                    <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] text-center">
-                      No options found
-                    </div>
-                  )}
-                  {loadingMore && (
-                    <div className="px-4 py-2 text-xs text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
-                      <LoaderCircle className="w-4 h-4 animate-spin" />
-                      Loading more...
-                    </div>
-                  )}
-                </div>
-
-                {/* Fixed Add Options at Bottom */}
-                {addOptions.length > 0 && (
-                  <div
-                    className="flex-shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] sticky bottom-0 z-10"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {addOptions.map((option, index) => {
-                      const addOptionIndex = regularOptions.length + index;
-                      const isHighlighted = addOptionIndex === highlightedIndex;
-
-                      return (
-                        <div
-                          key={option.value || `add-option-${index}`}
-                          className={`group px-4 py-2 cursor-pointer transition-colors duration-150 ${
-                            isHighlighted
-                              ? "bg-[rgba(var(--color-primary)/0.12)]"
-                              : ""
-                          } hover:bg-[rgba(var(--color-primary)/0.12)]`}
-                          onClick={() => handleSelect(option)}
-                          onMouseEnter={() =>
-                            setHighlightedIndex(addOptionIndex)
-                          }
-                          onMouseLeave={() => setHighlightedIndex(-1)}
-                        >
-                          <span className="text-[rgb(var(--color-primary))] group-hover:text-[rgb(var(--color-primary))] text-sm transition-colors duration-150">
-                            {option.label}
-                          </span>
-                        </div>
-                      );
-                    })}
+                          {option.label}
+                        </span>
+                        {(isHighlighted || isSelected) && (
+                          <Check className="w-4 h-4 text-[rgb(var(--color-primary))] flex-shrink-0 transition-transform duration-200" />
+                        )}
+                      </div>
+                    );
+                  })
+                ) : loading ? (
+                  <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                    Loading items...
+                  </div>
+                ) : (
+                  <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] text-center">
+                    No options found
+                  </div>
+                )}
+                {loadingMore && (
+                  <div className="px-4 py-2 text-xs text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                    Loading more...
                   </div>
                 )}
               </div>
+
+              {/* Fixed Add Options at Bottom */}
+              {addOptions.length > 0 && (
+                <div
+                  className="flex-shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {addOptions.map((option, index) => {
+                    const addOptionIndex = regularOptions.length + index;
+                    const isHighlighted = addOptionIndex === highlightedIndex;
+
+                    return (
+                      <div
+                        key={option.value || `add-option-${index}`}
+                        className={`group px-3.5 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 ${
+                          isHighlighted
+                            ? "bg-[rgba(var(--color-primary)/0.12)]"
+                            : ""
+                        } hover:bg-[rgba(var(--color-primary)/0.12)]`}
+                        onClick={() => handleSelect(option)}
+                        onMouseEnter={() =>
+                          setHighlightedIndex(addOptionIndex)
+                        }
+                        onMouseLeave={() => setHighlightedIndex(-1)}
+                      >
+                        <span className="text-[rgb(var(--color-primary))] font-medium group-hover:text-[rgb(var(--color-primary))] text-sm transition-colors duration-150 truncate">
+                          {option.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>,
             document.body
           )}
