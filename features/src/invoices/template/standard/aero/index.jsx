@@ -109,20 +109,25 @@ const AeroTemplate = ({ invoiceData, selectedStore }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {getItemRows(items).map(({ index, item, qty, unitPrice, lineDiscount, lineAmount }) => (
-                            <tr key={index}>
-                                <td>
-                                    <span className={styles.productName}>{item.product?.name || item.productName || "Product"}</span>
-                                    {settings.showDescription && (item.description || item.product?.description) && <small className={styles.itemDescription}>{item.description || item.product.description}</small>}
-                                </td>
-                                <td style={{ textAlign: "center" }}>{qty}{item.uom ? ` ${item.uom}` : ""}</td>
-                                <td style={{ textAlign: "right" }}>{fmt(unitPrice)}</td>
-                                <td style={{ textAlign: "right", color: lineDiscount > 0 ? "#e74c3c" : "#aaa" }}>
-                                    {lineDiscount > 0 ? `-${fmt(lineDiscount)}` : "—"}
-                                </td>
-                                <td style={{ textAlign: "right", fontWeight: 600 }}>{fmt(lineAmount)}</td>
-                            </tr>
-                        ))}
+                        {getItemRows(items).map(({ index, item, qty, unitPrice, lineDiscount, lineAmount }) => {
+                            const productId = item.product?.id || item.product?._id || item.productId || item.product;
+                            const variantId = item.variant?.id || item.variant?._id || item.variant;
+                            const rowKey = `${productId || item.productName || "invoice-item"}:${variantId || "default"}:${item.id || item._id || "line"}:${index}`;
+                            return (
+                                <tr key={rowKey}>
+                                    <td>
+                                        <span className={styles.productName}>{item.product?.name || item.productName || "Product"}</span>
+                                        {settings.showDescription && (item.description || item.product?.description) && <small className={styles.itemDescription}>{item.description || item.product.description}</small>}
+                                    </td>
+                                    <td style={{ textAlign: "center" }}>{qty}{item.uom ? ` ${item.uom}` : ""}</td>
+                                    <td style={{ textAlign: "right" }}>{fmt(unitPrice)}</td>
+                                    <td style={{ textAlign: "right", color: lineDiscount > 0 ? "#e74c3c" : "#aaa" }}>
+                                        {lineDiscount > 0 ? `-${fmt(lineDiscount)}` : "—"}
+                                    </td>
+                                    <td style={{ textAlign: "right", fontWeight: 600 }}>{fmt(lineAmount)}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                     <tfoot>
                         <tr className={styles.tableFooterRow}>
@@ -140,7 +145,7 @@ const AeroTemplate = ({ invoiceData, selectedStore }) => {
                 {/* B2C Totals */}
                 <div className={styles.totals}>
                     <div className={styles.totalNotes}>
-                        {settings.showTaxDetails && taxBreakdown.length > 0 && <div className={styles.taxBreakdown}><strong>Tax Details</strong>{taxBreakdown.map((line, index) => <div key={index}><span>{line.name} @ {line.rate}%</span><span>{formatMoney(line.amount, settings.showAmountDecimals)}</span></div>)}</div>}
+                        {settings.showTaxDetails && taxBreakdown.length > 0 && <div className={styles.taxBreakdown}><strong>Tax Details</strong>{taxBreakdown.map((line, index) => <div key={`${line.name}:${line.rate}:${index}`}><span>{line.name} @ {line.rate}%</span><span>{formatMoney(line.amount, settings.showAmountDecimals)}</span></div>)}</div>}
                         {settings.showTerms && terms && <div className={styles.terms}><strong>Terms &amp; Conditions</strong><span>{terms}</span></div>}
                     </div>
                     <div className={styles.totalsBox} data-invoice-plain-bg>
