@@ -42,7 +42,7 @@ export function PurchaseOrderTableView({ model }) {
 	} = model;
 	return (
 		<div className="h-full">
-			<div className="overflow-auto min-h-[calc(100vh-300px)]">
+				<div className="min-w-0">
 				<DataTable
 					className="min-w-0"
 					minWidth={800}
@@ -194,31 +194,16 @@ export function PurchaseOrderTableView({ model }) {
 														className="h-9 px-3 rounded-lg"
 													/>
 													{openSendMenuId === (row._id || row.id) && (
-														<div className="absolute right-0 top-full mt-1 w-44 bg-[rgb(var(--color-bg-primary))] rounded-lg shadow-lg border border-[rgb(var(--color-border-primary))] py-1 z-50">
-															<button
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer transition-colors duration-200"
-																onClick={() => handleWhatsAppShare(row)}
-															>
-																<MessageCircle className="w-4 h-4 text-green-500 dark:text-green-400" />{" "}
-																{t("common.whatsapp")}
-															</button>
-															<button className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer transition-colors duration-200">
-																<Mail className="w-4 h-4 text-blue-500 dark:text-blue-400" />{" "}
-																{t("common.email")}
-															</button>
-															<button className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer transition-colors duration-200">
-																<MessageSquare className="w-4 h-4 text-[rgb(var(--color-text-secondary))]" />{" "}
-																{t("common.message")}
-															</button>
-															<div className="my-1 border-t border-[rgb(var(--color-border-primary))]" />
-															<button
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer transition-colors duration-200"
-																onClick={() => handleCopyLink(row)}
-															>
-																<Copy className="w-4 h-4 text-purple-500 dark:text-purple-400" />{" "}
-																{t("common.copyLink")}
-															</button>
-														</div>
+													<RowActionsMenu
+														className="w-48 table-share-menu"
+														items={[
+															{ key: "whatsapp", label: t("common.whatsapp"), icon: MessageCircle, iconClassName: "text-green-500 dark:text-green-400", onClick: () => { handleWhatsAppShare(row); setOpenSendMenuId(null); } },
+															{ key: "email", label: t("common.email"), icon: Mail, iconClassName: "text-blue-500 dark:text-blue-400", onClick: () => setOpenSendMenuId(null) },
+															{ key: "message", label: t("common.message"), icon: MessageSquare, onClick: () => setOpenSendMenuId(null) },
+															{ key: "share-separator", type: "separator" },
+															{ key: "copy-link", label: t("common.copyLink"), icon: Copy, iconClassName: "text-purple-500 dark:text-purple-400", onClick: () => { handleCopyLink(row); setOpenSendMenuId(null); } },
+														]}
+													/>
 													)}
 												</div>
 											)}

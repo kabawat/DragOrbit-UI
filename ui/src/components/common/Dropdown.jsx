@@ -1,6 +1,7 @@
 "use client";
 import { Check, ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const Dropdown = ({
 	options = [],
@@ -23,7 +24,9 @@ const Dropdown = ({
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [highlightedIndex, setHighlightedIndex] = useState(-1);
+	const [dropdownPosition, setDropdownPosition] = useState(null);
 	const dropdownRef = useRef(null);
+	const menuRef = useRef(null);
 
 	// Get selected option(s)
 	const selectedOption = multiple
@@ -90,7 +93,11 @@ const Dropdown = ({
 	// Close dropdown when clicking outside
 	useEffect(() => {
 		const handleClickOutside = (event) => {
-			if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target) &&
+				!menuRef.current?.contains(event.target)
+			) {
 				setIsOpen(false);
 				setHighlightedIndex(-1);
 			}
@@ -99,6 +106,37 @@ const Dropdown = ({
 		document.addEventListener("mousedown", handleClickOutside);
 		return () => document.removeEventListener("mousedown", handleClickOutside);
 	}, []);
+
+	useLayoutEffect(() => {
+		if (!isOpen || !dropdownRef.current) {
+			setDropdownPosition(null);
+			return undefined;
+		}
+		const updatePosition = () => {
+			const rect = dropdownRef.current?.getBoundingClientRect();
+			if (!rect) return;
+			const width = Math.min(rect.width, window.innerWidth - 16);
+			const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+			const estimatedHeight = Math.min(240, Math.max(64, options.length * 40 + 16));
+			const spaceBelow = window.innerHeight - rect.bottom - 8;
+			const openAbove = spaceBelow < Math.min(estimatedHeight, 160) && rect.top > spaceBelow;
+			const availableHeight = openAbove ? rect.top - 12 : spaceBelow;
+			const height = Math.max(64, Math.min(240, availableHeight));
+			setDropdownPosition({
+				top: openAbove ? Math.max(8, rect.top - height - 4) : rect.bottom + 4,
+				left,
+				width,
+				maxHeight: height,
+			});
+		};
+		updatePosition();
+		window.addEventListener("resize", updatePosition);
+		window.addEventListener("scroll", updatePosition, true);
+		return () => {
+			window.removeEventListener("resize", updatePosition);
+			window.removeEventListener("scroll", updatePosition, true);
+		};
+	}, [isOpen, options.length]);
 
 	return (
 		<div className={`relative ${className}`}>
@@ -194,9 +232,14 @@ const Dropdown = ({
 					</div>
 				)}
 
-				{/* Dropdown Options */}
-				{isOpen && (
-					<div className="absolute z-50 w-full mt-1 bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))] rounded-lg shadow-lg max-h-60 overflow-hidden">
+				{/* Dropdown Options render outside overflow-clipped table surfaces. */}
+				{isOpen && dropdownPosition && createPortal(
+					<div
+						ref={menuRef}
+						style={{ top: dropdownPosition.top, left: dropdownPosition.left, width: dropdownPosition.width, maxHeight: dropdownPosition.maxHeight }}
+						onClick={(event) => event.stopPropagation()}
+						className="fixed z-[999999] bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))] rounded-lg shadow-lg overflow-hidden"
+					>
 						{/* Options List */}
 						<div className="max-h-48 overflow-y-auto">
 							{options.length > 0 ? (
@@ -238,7 +281,8 @@ const Dropdown = ({
 								</div>
 							)}
 						</div>
-					</div>
+					</div>,
+					document.body,
 				)}
 			</div>
 

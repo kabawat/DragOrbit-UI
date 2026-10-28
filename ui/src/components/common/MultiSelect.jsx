@@ -1,6 +1,6 @@
 "use client";
 import { Check, ChevronDown, Search, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const MultiSelect = ({
@@ -31,6 +31,7 @@ const MultiSelect = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [highlightedIndex, setHighlightedIndex] = useState(-1);
+	const [dropdownPosition, setDropdownPosition] = useState(null);
 	const selectRef = useRef(null);
 	const searchRef = useRef(null);
 
@@ -149,19 +150,32 @@ const MultiSelect = ({
 		setHighlightedIndex(-1);
 	}, [filteredOptions]);
 
-	// Calculate dropdown position for portal
-	const getDropdownPosition = () => {
-		if (!isOpen || !selectRef.current) return null;
-
-		const rect = selectRef.current.getBoundingClientRect();
-		return {
-			top: rect.bottom + window.scrollY,
-			left: rect.left + window.scrollX,
-			width: rect.width,
+	// Use viewport coordinates for the fixed body portal and keep it aligned
+	// while its containing table/page scrolls.
+	useLayoutEffect(() => {
+		if (!isOpen || !selectRef.current) {
+			setDropdownPosition(null);
+			return undefined;
+		}
+		const updatePosition = () => {
+			const rect = selectRef.current?.getBoundingClientRect();
+			if (!rect) return;
+			const width = Math.min(rect.width, window.innerWidth - 16);
+			const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+			const spaceBelow = window.innerHeight - rect.bottom - 8;
+			const top = spaceBelow < 160 && rect.top > spaceBelow
+				? Math.max(8, rect.top - Math.min(240, rect.top - 8))
+				: rect.bottom;
+			setDropdownPosition({ top, left, width, maxHeight: Math.max(120, Math.min(240, top === rect.bottom ? spaceBelow : rect.top - top - 8)) });
 		};
-	};
-
-	const dropdownPosition = getDropdownPosition();
+		updatePosition();
+		window.addEventListener("resize", updatePosition);
+		window.addEventListener("scroll", updatePosition, true);
+		return () => {
+			window.removeEventListener("resize", updatePosition);
+			window.removeEventListener("scroll", updatePosition, true);
+		};
+	}, [isOpen]);
 
 	return (
 		<div className={`relative ${className}`}>
@@ -274,6 +288,7 @@ const MultiSelect = ({
 								top: dropdownPosition.top,
 								left: dropdownPosition.left,
 								width: dropdownPosition.width,
+								maxHeight: dropdownPosition.maxHeight,
 							}}
 							className="select-dropdown-portal fixed z-[999999] bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))] rounded-xl shadow-lg overflow-hidden flex flex-col"
 							onClick={(e) => e.stopPropagation()}

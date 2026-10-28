@@ -66,6 +66,7 @@ export type DataTableProps<T> = {
 	/** Content layout avoids percentage widths stretching short columns. */
 	layout?: "content" | "fixed";
 	minWidth?: number;
+	/** @deprecated Vertical scrolling belongs to the containing page/region. */
 	maxHeight?: CSSProperties["maxHeight"];
 	density?: "comfortable" | "compact";
 	className?: string;
@@ -125,7 +126,6 @@ function DataTableCore<T>({
 	errorContent,
 	minWidth = 0,
 	layout = "content",
-	maxHeight,
 	density = "comfortable",
 	className = "",
 	rowProps,
@@ -324,7 +324,6 @@ function DataTableCore<T>({
 			{/* Keyboard focus lets users scroll the table without a pointer. */}
 			{renderVariant({
 				caption,
-				maxHeight,
 				children: (
 					<>
 						<table
@@ -355,7 +354,7 @@ function DataTableCore<T>({
 									/>
 								))}
 							</colgroup>
-							<thead className={`${styles.heading} sticky top-0 z-10`}>
+							<thead className={styles.heading}>
 								<tr>
 									{visibleColumns.map((column, columnIndex) => (
 										<th

@@ -21,7 +21,7 @@ export function SalesOrderListContentView({ model }) {
 	} = model;
 	return (
 		<div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
-			<div className="h-[calc(100vh-210px)] overflow-y-auto" ref={scrollRef}>
+			<div ref={scrollRef}>
 				{viewMode === "table" ? (
 					<div className="h-full">
 						<SalesOrderTable

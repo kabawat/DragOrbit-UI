@@ -37,10 +37,7 @@ export function SupplierListContentView({ model }) {
   return (
     <>
       <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
-        <div
-          ref={scrollRootRef}
-          className="h-[calc(100vh-210px)] overflow-y-auto"
-        >
+        <div ref={scrollRootRef}>
           {viewMode === "table" ? (
             <div className="h-full">
               <SupplierTable

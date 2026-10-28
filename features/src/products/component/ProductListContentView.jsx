@@ -40,10 +40,7 @@ export function ProductListContentView({ model }) {
 	return (
 		<>
 			<div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
-				<div
-					ref={scrollRootRef}
-					className="h-[calc(100vh-210px)] overflow-y-auto"
-				>
+				<div ref={scrollRootRef}>
 					{isLoading && transformedProducts.length === 0 ? (
 						<TableSkeleton rows={6} label={t("common.loading")} />
 					) : viewMode === "table" ? (

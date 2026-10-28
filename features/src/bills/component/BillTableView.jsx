@@ -39,7 +39,7 @@ export function BillTableView({ model }) {
 	} = model;
 	return (
 		<div className="h-full">
-			<div className="overflow-auto min-h-[calc(100vh-400px)]">
+			<div className="min-w-0">
 				<DataTable className="min-w-0" minWidth={800} caption="Bills">
 					<thead>
 						<tr>
@@ -161,68 +161,16 @@ export function BillTableView({ model }) {
 													</button>
 
 													{openSendMenuId === (bill._id || bill.id) && (
-														<div className="absolute right-0 top-full mt-1 w-44 bg-[rgb(var(--color-bg-primary))] rounded-lg shadow-lg border border-[rgb(var(--color-border-primary))] py-1 z-50">
-															<button
-																onClick={() => {
-																	const url = buildShareUrl(bill);
-																	const text = encodeURIComponent(
-																		`${bill.billNumber || bill.poNumber || "Details"}\n${url}`,
-																	);
-																	window.open(
-																		`https://wa.me/?text=${text}`,
-																		"_blank",
-																	);
-																	setOpenSendMenuId(null);
-																}}
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
-															>
-																<MessageCircle className="w-4 h-4" />{" "}
-																{t("common.whatsapp")}
-															</button>
-															<button
-																onClick={() => {
-																	const url = buildShareUrl(bill);
-																	const subject = encodeURIComponent(
-																		bill.billNumber ||
-																			bill.poNumber ||
-																			"Details",
-																	);
-																	const body = encodeURIComponent(
-																		`Please review:\n${url}`,
-																	);
-																	window.location.href = `mailto:?subject=${subject}&body=${body}`;
-																	setOpenSendMenuId(null);
-																}}
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
-															>
-																<Mail className="w-4 h-4" /> {t("common.email")}
-															</button>
-															<button
-																onClick={() => {
-																	const url = buildShareUrl(bill);
-																	const body = encodeURIComponent(
-																		`${bill.billNumber || bill.poNumber || ""} ${url}`,
-																	);
-																	window.location.href = `sms:?&body=${body}`;
-																	setOpenSendMenuId(null);
-																}}
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
-															>
-																<MessageSquare className="w-4 h-4" />{" "}
-																{t("common.message")}
-															</button>
-															<div className="my-1 border-t border-[rgb(var(--color-border-primary))]" />
-															<button
-																onClick={() => {
-																	handleCopy(buildShareUrl(bill));
-																	setOpenSendMenuId(null);
-																}}
-																className="w-full px-3 py-2 text-left text-sm text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
-															>
-																<Copy className="w-4 h-4" />{" "}
-																{t("common.copyLink")}
-															</button>
-														</div>
+									<RowActionsMenu
+									className="w-48 table-share-menu"
+									items={[
+										{ key: "whatsapp", label: t("common.whatsapp"), icon: MessageCircle, onClick: () => { const url = buildShareUrl(bill); const text = encodeURIComponent(`${bill.billNumber || bill.poNumber || "Details"}\n${url}`); window.open(`https://wa.me/?text=${text}`, "_blank"); setOpenSendMenuId(null); } },
+										{ key: "email", label: t("common.email"), icon: Mail, onClick: () => { const url = buildShareUrl(bill); const subject = encodeURIComponent(bill.billNumber || bill.poNumber || "Details"); const body = encodeURIComponent(`Please review:\n${url}`); window.location.href = `mailto:?subject=${subject}&body=${body}`; setOpenSendMenuId(null); } },
+										{ key: "message", label: t("common.message"), icon: MessageSquare, onClick: () => { const url = buildShareUrl(bill); const body = encodeURIComponent(`${bill.billNumber || bill.poNumber || ""} ${url}`); window.location.href = `sms:?&body=${body}`; setOpenSendMenuId(null); } },
+										{ key: "share-separator", type: "separator" },
+										{ key: "copy-link", label: t("common.copyLink"), icon: Copy, onClick: () => { handleCopy(buildShareUrl(bill)); setOpenSendMenuId(null); } },
+									]}
+								/>
 													)}
 												</div>
 											)}

@@ -82,7 +82,6 @@ export function CustomerListUI(props: Props) {
     columns={columns}
     getRowKey={customer => customer.id}
     loading={props.loading}
-    maxHeight="65vh"
     toolbar={<TableToolbar
       search={{ label: "Search customers", placeholder: "Search customers…", value: props.searchValue, onChange: props.setSearchValue }}
       filters={props.filters}
@@ -128,15 +127,14 @@ const columns: TableColumn<Customer>[] = [
   rows={customers}
   getRowKey={row => row.id}
   minWidth={1100}
-  maxHeight={480}
   rowPinning={{ top: ["customer-1"], bottom: ["customer-20"] }}
 />
 ```
 
 - Pinned columns are grouped at the left edge; relative order within each group stays the same. Specify width for predictable space; percentage widths also work. Rendered widths are measured so multiple pinned columns do not overlap.
 - Row pinning uses exact getRowKey values (number 1 and string "1" differ). Rows are grouped at top/middle/bottom, preserving source order within each group. A row listed in both groups pins to the top and renders once. Keys not present in rows are ignored; pinning does not fetch missing records.
-- The column header remains sticky. Top rows stack below the measured header height; bottom rows stack above the bottom edge. Rendered row heights are measured, including wrapped content. ResizeObserver updates offsets after size changes.
-- Set maxHeight to create vertical scrolling inside the table. Without a constrained height, the table normally grows with its content. Column freezing applies to horizontal scrolling; row freezing applies to vertical scrolling. Their intersection stays pinned in both directions.
+- Vertical scrolling stays with the containing page or region; the table surface only scrolls horizontally when its columns exceed the available width. The header moves with the table rows.
+- `maxHeight` is deprecated and no longer constrains the table surface. Column freezing applies to horizontal scrolling. Row pinning remains available for layouts that provide a vertical scroll container around the table.
 - Pinned cells have opaque theme backgrounds and layer ordering to keep scrolling content behind them. Keep the total pinned widths/heights smaller than the viewport so some space remains for scrolling content.
 - Loading/error/empty states do not render pinned data rows. Column pinning is local UI state; rowPinning remains a controlled prop.
 

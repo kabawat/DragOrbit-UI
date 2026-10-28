@@ -25,7 +25,8 @@
 	background: rgb(var(--color-primary));
 }
 .scroller {
-	overflow: auto;
+	overflow-x: auto;
+	overflow-y: visible;
 	border: 1px solid rgb(var(--color-border-primary));
 	border-radius: 12px;
 	background: rgb(var(--color-bg-primary));
