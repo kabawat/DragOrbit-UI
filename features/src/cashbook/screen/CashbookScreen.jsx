@@ -9,6 +9,7 @@ import {
 	RefreshCw,
 	Save,
 	Search,
+	Settings,
 } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import CashbookDayHistory from "../component/CashbookDayHistory";
@@ -77,6 +78,7 @@ export function CashbookScreen({
 	handleCashIn,
 	handleCashOut,
 	onRefresh,
+	onOpenSettings,
 	selectedDate = "",
 	onDateChange,
 	listError,
@@ -290,6 +292,17 @@ export function CashbookScreen({
 				)}
 			</div>
 			<div className="flex flex-wrap items-center justify-end gap-2">
+				{onOpenSettings && (
+					<Button
+						type="button"
+						variant="outline"
+						leftIcon={Settings}
+						onClick={onOpenSettings}
+						className="min-h-10 shrink-0 rounded-lg shadow-none!"
+					>
+						{t("cashbook.settings.title")}
+					</Button>
+				)}
 				{historyAction}
 				{reconcileAction}
 

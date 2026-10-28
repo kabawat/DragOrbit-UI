@@ -11,7 +11,6 @@ export function StoreSettingsView({ model }) {
     selectedStore,
     handleEditStore,
     handleDeleteStore,
-    handleShowCatalog,
     StoreAddDrawer,
     isAddDrawerOpen,
     setIsAddDrawerOpen,
@@ -30,11 +29,6 @@ export function StoreSettingsView({ model }) {
     setIsDeleteModalOpen,
     setStoreToDelete,
     handleDeleteSuccess,
-    CatalogQRModal,
-    isCatalogModalOpen,
-    setIsCatalogModalOpen,
-    setActiveStore,
-    activeStore,
   } = model;
   return (
     <div className="space-y-6">
@@ -53,7 +47,6 @@ export function StoreSettingsView({ model }) {
         storeLimit={storeLimit}
         onEditStore={handleEditStore}
         onDeleteStore={handleDeleteStore}
-        onShowCatalog={handleShowCatalog}
       />
 
       <StoreAddDrawer
@@ -85,15 +78,6 @@ export function StoreSettingsView({ model }) {
         }}
         onSuccess={handleDeleteSuccess}
         onError={showError}
-      />
-
-      <CatalogQRModal
-        isOpen={isCatalogModalOpen}
-        onClose={() => {
-          setIsCatalogModalOpen(false);
-          setActiveStore(null);
-        }}
-        store={activeStore}
       />
     </div>
   );

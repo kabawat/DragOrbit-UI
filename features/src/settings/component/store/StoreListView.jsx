@@ -1,5 +1,5 @@
 "use client";
-import { Building2, Crown, Edit2, Plus, QrCode, Trash2 } from "lucide-react";
+import { Building2, Crown, Edit2, Plus, Trash2 } from "lucide-react";
 export function StoreListView({ model }) {
   const {
     stores,
@@ -8,11 +8,9 @@ export function StoreListView({ model }) {
     handleDeleteStore,
     t,
     CopyableContactValue,
-    onShowCatalog,
     onAddStore,
     canAddStore = true,
     storeLimit = null,
-    catalogHost,
   } = model;
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -116,38 +114,9 @@ export function StoreListView({ model }) {
               )}
             </div>
 
-            {/* Public Catalog - only show when catalog exists */}
-            {store.catalogId && (
-              <div className="mt-auto pt-4 border-t border-[rgb(var(--color-border-primary))]/40">
-                <button
-                  type="button"
-                  onClick={() => onShowCatalog?.(store)}
-                  className="w-full bg-[rgb(var(--color-primary))]/5 px-3 py-2 rounded-lg border border-[rgb(var(--color-primary))]/10 hover:bg-[rgb(var(--color-primary))]/10 transition-all flex items-center justify-between gap-2 overflow-hidden group"
-                >
-                  <div className="flex flex-col items-start truncate text-left">
-                    <span className="text-[0.625rem] uppercase tracking-wider font-bold text-[rgb(var(--color-primary))] mb-0.5">
-                      {t("settings.publicCatalog")}
-                    </span>
-                    <code className="text-xs text-[rgb(var(--color-primary))] truncate w-full">
-                      {catalogHost}/c/{store.catalogId}
-                    </code>
-                  </div>
-                  <div className="flex-shrink-0 p-1.5 bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))] rounded-md group-hover:bg-[rgb(var(--color-primary))] group-hover:text-white transition-all">
-                    <QrCode className="w-4 h-4" />
-                  </div>
-                </button>
-              </div>
-            )}
-
             {/* Current Store Badge */}
             {isCurrent && (
-              <div
-                className={
-                  store.catalogId
-                    ? "pt-3 text-right"
-                    : "mt-auto pt-4 text-right"
-                }
-              >
+              <div className="mt-auto pt-4 text-right">
                 <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[0.625rem] font-bold uppercase tracking-wider bg-green-500/10 text-green-600 border border-green-500/20">
                   {t("settings.currentStore")}
                 </span>
