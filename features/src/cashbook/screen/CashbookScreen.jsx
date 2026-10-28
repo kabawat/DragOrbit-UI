@@ -12,6 +12,7 @@ import {
 	Wallet,
 } from "lucide-react";
 import { useId, useMemo, useRef, useState } from "react";
+import CashbookDayHistory from "../component/CashbookDayHistory";
 
 function formatCurrency(value) {
 	return `₹${(Number(value) || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -19,7 +20,11 @@ function formatCurrency(value) {
 function formatTime(value) {
 	const date = new Date(value);
 	return value && !Number.isNaN(date.getTime())
-		? date.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })
+		? date.toLocaleTimeString("en-IN", {
+				hour: "2-digit",
+				minute: "2-digit",
+				timeZone: "Asia/Kolkata",
+			})
 		: "—";
 }
 const surface =
@@ -28,6 +33,14 @@ const surface =
 export function CashbookScreen({
 	t,
 	entrySettings,
+	days = [],
+	ledgerVersion,
+	onReconcile,
+	pendingSync = false,
+	canEdit,
+	hasMore,
+	onLoadMore,
+	moreLoading,
 	amount,
 	setAmount,
 	description,
@@ -60,11 +73,15 @@ export function CashbookScreen({
 	const [entryOpen, setEntryOpen] = useState(false);
 	const openEntry = () => {
 		setDirection(entrySettings?.defaultEntryType || "CASH_IN");
+		setCategory("OTHER");
+		setEntryDate(today);
 		setEntryOpen(true);
 	};
 	const closeEntry = () => {
 		if (!saving.current) setEntryOpen(false);
 	};
+	const [category, setCategory] = useState("OTHER");
+	const [entryDate, setEntryDate] = useState("");
 	const [direction, setDirection] = useState("CASH_IN");
 	const [query, setQuery] = useState("");
 	const [filter, setFilter] = useState("ALL");
@@ -80,6 +97,7 @@ export function CashbookScreen({
 		)
 			setDescription("");
 		setDirection(next);
+		setCategory("OTHER");
 	};
 	const validAmount =
 		Number.isFinite(Number(amount)) &&
@@ -121,6 +139,25 @@ export function CashbookScreen({
 	};
 	const columns = [
 		{
+			id: "date",
+			header: t("cashbook.day.date"),
+			minWidth: 110,
+			cell: (entry) => entry.date || String(entry.entryDate).slice(0, 10),
+		},
+		{
+			id: "category",
+			header: t("cashbook.day.category"),
+			minWidth: 140,
+			cell: (entry) => t(`cashbook.categories.${entry.category || "OTHER"}`),
+		},
+		{
+			id: "balanceAfter",
+			header: t("cashbook.day.balanceAfter"),
+			minWidth: 140,
+			align: "right",
+			cell: (entry) => formatCurrency(entry.balanceAfter),
+		},
+		{
 			id: "description",
 			header: t("cashbook.descriptionLabel"),
 			minWidth: 200,
@@ -161,7 +198,9 @@ export function CashbookScreen({
 		saving.current = true;
 		setSubmitting(true);
 		try {
-			await (direction === "CASH_IN" ? handleCashIn() : handleCashOut());
+			await (direction === "CASH_IN"
+				? handleCashIn({ category, entryDate })
+				: handleCashOut({ category, entryDate }));
 			setEntryOpen(false);
 		} catch {
 			/* The entry hook supplies the error; preserve the input for retry. */
@@ -177,6 +216,18 @@ export function CashbookScreen({
 		<div
 			className={`bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-primary))] mx-auto w-full space-y-5 p-4 text-sm leading-5 sm:p-6 [&_*]:shadow-none!`}
 		>
+			{days.length > 0 && (
+				<CashbookDayHistory
+					t={t}
+					days={days}
+					ledgerVersion={ledgerVersion}
+					onReconcile={onReconcile}
+					pendingSync={pendingSync}
+					canEdit={canEdit}
+					loading={listLoading}
+					error={listError}
+				/>
+			)}
 			<div className="grid items-start gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
 				<div
 					className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:col-start-2 xl:row-start-1 xl:grid-cols-1"
@@ -427,6 +478,16 @@ export function CashbookScreen({
 							</div>
 						</>
 					)}
+					{hasMore && (
+						<Button
+							variant="outline"
+							onClick={onLoadMore}
+							disabled={moreLoading || listLoading}
+							loading={moreLoading}
+						>
+							{t("cashbook.day.loadMore")}
+						</Button>
+					)}
 				</section>
 			</div>
 			<Modal
@@ -456,6 +517,42 @@ export function CashbookScreen({
 						}
 					}}
 				>
+					<Input
+						label={t("cashbook.day.businessDate")}
+						type="date"
+						value={entryDate}
+						onChange={setEntryDate}
+						required
+						disabled={busy || disabled}
+						max={today}
+					/>
+					<Select
+						label={t("cashbook.day.category")}
+						value={category}
+						onChange={setCategory}
+						disabled={busy || disabled}
+						searchable={false}
+						options={(direction === "CASH_IN"
+							? [
+									"OTHER",
+									"SALE",
+									"CUSTOMER_PAYMENT",
+									"OWNER_DEPOSIT",
+									"BANK_WITHDRAWAL",
+								]
+							: [
+									"OTHER",
+									"EXPENSE",
+									"OWNER_WITHDRAWAL",
+									"BANK_DEPOSIT",
+									"REFUND",
+									"SUPPLIER_PAYMENT",
+								]
+						).map((value) => ({
+							value,
+							label: t(`cashbook.categories.${value}`),
+						}))}
+					/>
 					<Input
 						id={`${id}-amount`}
 						label={t("cashbook.amount")}

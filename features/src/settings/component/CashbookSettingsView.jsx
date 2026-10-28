@@ -12,13 +12,6 @@ export function CashbookSettingsView({
 	error,
 	onRetry,
 	onSave,
-	openingDate,
-	setOpeningDate,
-	openingAmount,
-	setOpeningAmount,
-	openingSaving,
-	openingError,
-	onSaveOpening,
 }) {
 	const update = (key, value) =>
 		setSettings((current) => ({ ...current, [key]: value }));
@@ -132,55 +125,6 @@ export function CashbookSettingsView({
 						disabled={saving}
 					>
 						{t("cashbook.settings.save")}
-					</Button>
-				</div>
-			</form>
-			<form
-				onSubmit={onSaveOpening}
-				className="space-y-4 rounded-xl border border-[rgb(var(--color-border-primary))] p-4"
-				aria-busy={openingSaving}
-			>
-				<div>
-					<h3 className="text-sm font-semibold">
-						{t("cashbook.settings.openingBalance")}
-					</h3>
-					<p className="mt-1 text-xs leading-5 text-[rgb(var(--color-text-secondary))]">
-						{t("cashbook.settings.openingHint")}
-					</p>
-				</div>
-				<fieldset
-					disabled={openingSaving}
-					className="grid gap-4 sm:grid-cols-2"
-				>
-					<Input
-						type="date"
-						required
-						label={t("cashbook.filterDate")}
-						value={openingDate}
-						onChange={setOpeningDate}
-					/>
-					<Input
-						type="number"
-						step="0.01"
-						required
-						label={t("cashbook.settings.openingBalance")}
-						value={openingAmount}
-						onChange={setOpeningAmount}
-					/>
-				</fieldset>
-				{openingError && (
-					<p role="alert" className="text-sm text-red-600">
-						{openingError}
-					</p>
-				)}
-				<div className="flex justify-end">
-					<Button
-						type="submit"
-						variant="outline"
-						disabled={openingSaving || openingAmount === "" || !openingDate}
-						loading={openingSaving}
-					>
-						{t("cashbook.settings.saveOpening")}
 					</Button>
 				</div>
 			</form>

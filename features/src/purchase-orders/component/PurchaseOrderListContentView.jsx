@@ -56,9 +56,8 @@ export function PurchaseOrderListContentView({ model }) {
     <>
       <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
         <div
-          ref={scrollRootRef}
+          ref={scrollRootRef || scrollRef}
           className="h-[calc(100vh-210px)] overflow-y-auto"
-          ref={scrollRef}
         >
           {viewMode === "table" ? (
             <div className="h-full">

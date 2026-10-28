@@ -52,7 +52,7 @@ Matches store-fe Button: default primary/sm, eight variants, five sizes, leftIco
 
 ## Connect a Next.js + Tailwind 4 app (Yarn 1)
 
-From dragbizz-store-fe, install a live local link:
+From Dragbizz-Store, install a live local link:
 
 ```sh
 yarn add @dragorbit/ui@link:../dragorbit/ui
