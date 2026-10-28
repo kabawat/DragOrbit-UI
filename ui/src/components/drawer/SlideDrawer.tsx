@@ -7,6 +7,7 @@ export type SlideDrawerProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	children: ReactNode;
+	footer?: ReactNode;
 	title?: ReactNode;
 	icon?: ComponentType<{ className?: string }>;
 	description?: ReactNode;
@@ -30,6 +31,7 @@ export function SlideDrawer({
 	icon: Icon,
 	description,
 	children,
+	footer,
 	width = "w-full md:w-2/3",
 	showDownloadButton = false,
 	onDownload,
@@ -54,6 +56,7 @@ export function SlideDrawer({
 			resizable={resizable}
 			position={position}
 			showCloseButton
+			footer={footer}
 			className={`dragorbit-slide-drawer ${width} ${className}`}
 			style={{ height: autoHeight ? undefined : "calc(100dvh - 20px)" }}
 			title={
