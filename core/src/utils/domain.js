@@ -1,38 +1,75 @@
-export function isAuthPath(pathname = "") {
-  return (
-    pathname === "/login" ||
-    pathname === "/register" ||
-    pathname.startsWith("/forgot-password") ||
-    pathname.startsWith("/reset-password")
-  );
+export const DEFAULT_PLATFORM_DOMAINS = [
+  "dragbizz.local",
+  "dragbizz.io",
+  "dragbizz.com",
+  "localhost",
+  "127.0.0.1",
+];
+
+export const RESERVED_SUBDOMAINS = new Set([
+  "www",
+  "api",
+  "admin",
+  "app",
+  "dashboard",
+  "mail",
+  "smtp",
+  "pop",
+  "imap",
+  "ftp",
+  "staging",
+  "dev",
+  "test",
+  "demo",
+  "status",
+  "support",
+  "help",
+  "auth",
+  "login",
+  "register",
+  "signup",
+  "billing",
+  "store",
+  "catalog",
+  "portal",
+  "internal",
+  "root",
+  "ns",
+  "dns",
+  "cdn",
+  "static",
+  "assets",
+  "public",
+  "docs",
+  "account",
+  "accounts",
+  "checkout",
+  "payment",
+  "payments",
+]);
+
+export function getPlatformDomains() {
+  const envVal =
+    typeof process !== "undefined"
+      ? process.env?.NEXT_PUBLIC_PLATFORM_DOMAINS ||
+        process.env?.PLATFORM_DOMAINS
+      : null;
+
+  if (!envVal || typeof envVal !== "string") {
+    return DEFAULT_PLATFORM_DOMAINS;
+  }
+
+  const parsed = envVal
+    .split(",")
+    .map((d) => d.trim().toLowerCase())
+    .filter(Boolean);
+
+  return parsed.length > 0 ? parsed : DEFAULT_PLATFORM_DOMAINS;
 }
 
-export function isPublicPath(pathname = "") {
-  if (!pathname || pathname === "/") return true;
-  return (
-    isAuthPath(pathname) ||
-    pathname.startsWith("/pricing") ||
-    pathname.startsWith("/solutions") ||
-    pathname.startsWith("/product") ||
-    pathname.startsWith("/case-studies") ||
-    pathname.startsWith("/integrations") ||
-    pathname.startsWith("/help") ||
-    pathname.startsWith("/privacy") ||
-    pathname.startsWith("/terms") ||
-    pathname.startsWith("/about") ||
-    pathname.startsWith("/contact") ||
-    pathname.startsWith("/security") ||
-    pathname.startsWith("/refund-policy") ||
-    pathname.startsWith("/shipping-policy") ||
-    pathname.startsWith("/cookie-policy") ||
-    pathname.startsWith("/data-deletion") ||
-    pathname.startsWith("/blog") ||
-    pathname.startsWith("/c") ||
-    pathname.startsWith("/checkout") ||
-    pathname.startsWith("/payment") ||
-    pathname.startsWith("/view") ||
-    pathname.startsWith("/invite")
-  );
+export function isReservedSubdomain(subdomain = "") {
+  if (!subdomain) return false;
+  return RESERVED_SUBDOMAINS.has(String(subdomain).toLowerCase().trim());
 }
 
 export function getDomainInfo(input) {
@@ -42,42 +79,125 @@ export function getDomainInfo(input) {
       : input?.headers?.get?.("host") ||
         input?.nextUrl?.host ||
         (typeof window !== "undefined" ? window.location.host : "")
-  ).toLowerCase();
+  )
+    .toLowerCase()
+    .trim();
 
-  const [hostname, port] = host.split(":");
+  const [hostname, port] = host ? host.split(":") : ["", ""];
   const portSuffix = port ? `:${port}` : "";
+  const platformDomains = getPlatformDomains();
 
-  if (hostname === "localhost" || hostname === "127.0.0.1" || /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)) {
-    return { isSubdomain: false, subdomain: null, apexHost: host, mainDomain: hostname };
+  if (!hostname) {
+    const defaultHost = platformDomains[0] || DEFAULT_PLATFORM_DOMAINS[0];
+    return {
+      hostname: defaultHost,
+      port: null,
+      isSubdomain: false,
+      subdomain: null,
+      apexHost: defaultHost,
+      mainDomain: defaultHost,
+      isPlatformDomain: true,
+      isCustomDomain: false,
+      isReserved: false,
+      catalogSlug: null,
+    };
   }
 
+  // Local development / direct IP access
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    /^(\d{1,3}\.){3}\d{1,3}$/.test(hostname)
+  ) {
+    return {
+      hostname,
+      port: port || null,
+      isSubdomain: false,
+      subdomain: null,
+      apexHost: host,
+      mainDomain: hostname,
+      isPlatformDomain: true,
+      isCustomDomain: false,
+      isReserved: false,
+      catalogSlug: null,
+    };
+  }
+
+  // Local development subdomain (e.g. xyz.localhost)
   if (hostname.endsWith(".localhost")) {
     const subdomain = hostname.slice(0, -10);
+    const isReserved = isReservedSubdomain(subdomain);
     return {
+      hostname,
+      port: port || null,
       isSubdomain: Boolean(subdomain),
       subdomain: subdomain || null,
       apexHost: `localhost${portSuffix}`,
       mainDomain: "localhost",
+      isPlatformDomain: true,
+      isCustomDomain: false,
+      isReserved,
+      catalogSlug: !isReserved && subdomain ? subdomain : null,
     };
   }
 
-  const parts = hostname.split(".");
-  if (parts.length > 2) {
-    const subdomain = parts.slice(0, -2).join(".");
-    const apexHostname = parts.slice(-2).join(".");
-    return {
-      isSubdomain: true,
-      subdomain,
-      apexHost: `${apexHostname}${portSuffix}`,
-      mainDomain: apexHostname,
-    };
+  // Platform apex domains or subdomains
+  for (const plat of platformDomains) {
+    if (hostname === plat) {
+      return {
+        hostname,
+        port: port || null,
+        isSubdomain: false,
+        subdomain: null,
+        apexHost: `${plat}${portSuffix}`,
+        mainDomain: plat,
+        isPlatformDomain: true,
+        isCustomDomain: false,
+        isReserved: false,
+        catalogSlug: null,
+      };
+    }
+    if (hostname.endsWith(`.${plat}`)) {
+      const subdomain = hostname.slice(0, -(plat.length + 1));
+      const isReserved = isReservedSubdomain(subdomain);
+      return {
+        hostname,
+        port: port || null,
+        isSubdomain: true,
+        subdomain,
+        apexHost: `${plat}${portSuffix}`,
+        mainDomain: plat,
+        isPlatformDomain: true,
+        isCustomDomain: false,
+        isReserved,
+        catalogSlug: !isReserved && subdomain ? subdomain : null,
+      };
+    }
   }
 
-  return { isSubdomain: false, subdomain: null, apexHost: host, mainDomain: hostname };
+  // Custom domain support (e.g. www.xyzstore.com or xyzstore.com)
+  const cleanCustomDomain = hostname.startsWith("www.")
+    ? hostname.slice(4)
+    : hostname;
+
+  return {
+    hostname,
+    port: port || null,
+    isSubdomain: false,
+    subdomain: null,
+    apexHost: host,
+    mainDomain: hostname,
+    isPlatformDomain: false,
+    isCustomDomain: true,
+    customDomain: hostname,
+    isReserved: false,
+    catalogSlug: cleanCustomDomain,
+  };
 }
 
 export function getMainDomainUrl(path = "/", currentUrlOrHost) {
-  const protocol = typeof window !== "undefined" ? window.location.protocol : "http:";
+  const protocol =
+    typeof window !== "undefined" ? window.location.protocol : "http:";
   const { apexHost } = getDomainInfo(currentUrlOrHost);
   const cleanPath = path ? (path.startsWith("/") ? path : `/${path}`) : "";
   return `${protocol}//${apexHost}${cleanPath}`;
@@ -93,67 +213,85 @@ export function getCurrentSubdomain(currentUrlOrHost) {
 
 export function isLocalhost() {
   if (typeof window === "undefined") return false;
-  return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  return (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  );
 }
 
 export function redirectToMainDomain(path = "/") {
-  if (typeof window !== "undefined") window.location.href = getMainDomainUrl(path);
-}
-
-export function updateSubdomain(url, subdomain = null) {
-  const base = typeof window !== "undefined" ? window.location.origin : "http://dragbizz.local";
-  const u = new URL(url, base);
-  const { apexHost } = getDomainInfo(u.host);
-  u.host = subdomain ? `${subdomain}.${apexHost}` : apexHost;
-  return { url: u.toString(), hasSubdomain: Boolean(subdomain) };
-}
-
-export function redirectToSubdomain(subdomain, path = "/") {
   if (typeof window !== "undefined") {
-    window.location.replace(updateSubdomain(getMainDomainUrl(path), subdomain).url);
+    window.location.href = getMainDomainUrl(path);
   }
 }
 
-export function getDashboardUrl(tenant, path = "/dashboard") {
-  return updateSubdomain(getMainDomainUrl(path), tenant).url;
+// Resolves centralized dashboard URL on the main platform domain
+export function getDashboardUrl(
+  _tenant,
+  path = "/dashboard",
+  currentUrlOrHost
+) {
+  const cleanPath = path
+    ? path.startsWith("/")
+      ? path
+      : `/${path}`
+    : "/dashboard";
+  return getMainDomainUrl(cleanPath, currentUrlOrHost);
 }
 
-export function ensureSubdomain(tenant, path = (typeof window !== "undefined" ? window.location.pathname : "/")) {
-  if (typeof window === "undefined") return;
-  const currentSub = getCurrentSubdomain();
-  if (isLocalhost()) {
-    if (currentSub) redirectToMainDomain(path);
-    return;
+// Resolves public catalog URL on wildcard subdomain
+export function getCatalogUrl(
+  subdomainOrCatalogId,
+  path = "/",
+  currentUrlOrHost
+) {
+  const protocol =
+    typeof window !== "undefined" ? window.location.protocol : "http:";
+  const domainInfo = getDomainInfo(currentUrlOrHost);
+  const apexHost = domainInfo.apexHost || "dragbizz.local";
+  const cleanPath = path ? (path.startsWith("/") ? path : `/${path}`) : "";
+
+  if (!subdomainOrCatalogId) {
+    return `${protocol}//${apexHost}${cleanPath}`;
   }
-  if (currentSub !== tenant) redirectToSubdomain(tenant, path);
+
+  return `${protocol}//${subdomainOrCatalogId}.${apexHost}${cleanPath}`;
 }
 
-export function ensureMainDomain(path = (typeof window !== "undefined" ? window.location.pathname : "/")) {
-  if (typeof window !== "undefined" && getCurrentSubdomain()) redirectToMainDomain(path);
-}
-
-export function checkSubdomainPublicRedirect(request) {
-  const host = (request.headers.get("host") || request.nextUrl?.host || "").toLowerCase();
-
-  if (host.startsWith("www.")) {
-    const targetUrl = request.nextUrl.clone();
-    targetUrl.host = host.slice(4);
-    return { shouldRedirect: true, targetUrl: targetUrl.toString(), statusCode: 301 };
+// Prevents open redirects and maps legacy subdomain dashboard URLs to main domain
+export function sanitizeRedirectUrl(
+  targetUrl,
+  fallbackPath = "/dashboard"
+) {
+  if (!targetUrl || typeof targetUrl !== "string") {
+    return fallbackPath;
   }
 
-  const domainInfo = getDomainInfo(host);
-  if (!domainInfo.isSubdomain) return { shouldRedirect: false, domainInfo };
+  const trimmed = targetUrl.trim();
 
-  const { pathname, search } = request.nextUrl;
-  if (!isPublicPath(pathname)) return { shouldRedirect: false, domainInfo };
+  // Reject protocol-relative URLs (//evil.com)
+  if (trimmed.startsWith("//")) {
+    return fallbackPath;
+  }
 
-  const proto = request.headers.get("x-forwarded-proto") || request.nextUrl.protocol.replace(":", "") || "http";
-  const targetUrl = `${proto}://${domainInfo.apexHost}${pathname}${search || ""}`;
+  // Same-origin relative path
+  if (trimmed.startsWith("/")) {
+    return trimmed;
+  }
 
-  return {
-    shouldRedirect: true,
-    targetUrl,
-    statusCode: isAuthPath(pathname) ? 307 : 301,
-    domainInfo,
-  };
+  try {
+    const parsed = new URL(trimmed);
+    const domainInfo = getDomainInfo(parsed.host);
+
+    if (domainInfo.isPlatformDomain) {
+      if (domainInfo.isSubdomain && parsed.pathname.startsWith("/dashboard")) {
+        return `${parsed.protocol}//${domainInfo.apexHost}${parsed.pathname}${parsed.search}${parsed.hash}`;
+      }
+      return trimmed;
+    }
+
+    return fallbackPath;
+  } catch {
+    return fallbackPath;
+  }
 }
