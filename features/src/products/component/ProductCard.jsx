@@ -167,9 +167,9 @@ const ProductCard = ({
 			<div className="w-full h-32 sm:h-36 md:h-40 bg-gradient-to-br relative">
 				<div className="w-full h-full overflow-hidden rounded-t-xl relative">
 					{product.image &&
-					typeof product.image === "string" &&
-					product.image.trim() &&
-					!imageError ? (
+						typeof product.image === "string" &&
+						product.image.trim() &&
+						!imageError ? (
 						<Image
 							src={product.image}
 							alt={product.name}
@@ -191,7 +191,7 @@ const ProductCard = ({
 				{/* Catalog Status Badge */}
 				<div className="absolute top-4 left-4 z-10">
 					{product.showInCatalog !== false ? (
-						<Badge variant="success" className="shadow-sm">
+						<Badge variant="success" className="shadow-sm" size="sm">
 							{t("products.inCatalog")}
 						</Badge>
 					) : (
@@ -231,58 +231,60 @@ const ProductCard = ({
 			<div className="p-3 sm:p-4 md:p-6 space-y-2 sm:space-y-3 md:space-y-4">
 				{/* Product Name */}
 				<div>
-					<h3 className="font-bold text-md sm:text-xl mb-1 text-[rgb(var(--color-text-primary))]">
+					<h3 className="font-bold text-sm sm:text-md mb-1 text-[rgb(var(--color-text-primary))]">
 						{product.name}
 					</h3>
-					<p className="text-xs sm:text-sm font-medium text-[rgb(var(--color-text-secondary))]">
-						{product.brand}
-					</p>
+					<div className="flex gap-2 items-center">
+						<p className="text-xs sm:text-sm font-medium text-[rgb(var(--color-text-secondary))]">
+							{product.brand}
+						</p>
+						{/* Category Tags */}
+						<span className="flex flex-wrap gap-1 sm:gap-2">
+							{(() => {
+								let categoryParts = [];
+								const rawCategory = product.category;
+
+								if (Array.isArray(rawCategory)) {
+									categoryParts = rawCategory.filter(Boolean);
+								} else if (typeof rawCategory === "string" && rawCategory.trim()) {
+									categoryParts = rawCategory.split(" > ").filter(Boolean);
+								} else if (
+									rawCategory &&
+									typeof rawCategory === "object" &&
+									rawCategory.name
+								) {
+									// Handle object with name property (from API)
+									categoryParts = [rawCategory.name];
+								} else if (rawCategory) {
+									categoryParts = [String(rawCategory)];
+								}
+
+								if (getCategoryParts) categoryParts = getCategoryParts(product);
+
+								if (categoryParts.length === 0) {
+									return (
+										<span className={getCategoryBadgeClass("#6b7280")}>
+											{t("products.uncategorized")}
+										</span>
+									);
+								}
+								return (
+									<>
+										<span className={getCategoryBadgeClass("#8b5cf6")}>
+											{categoryParts[0]}
+										</span>
+										{categoryParts[1] && (
+											<span className={getCategoryBadgeClass("#3b82f6")}>
+												{categoryParts[1]}
+											</span>
+										)}
+									</>
+								);
+							})()}
+						</span>
+					</div>
 				</div>
 
-				{/* Category Tags */}
-				<div className="flex flex-wrap gap-1 sm:gap-2">
-					{(() => {
-						let categoryParts = [];
-						const rawCategory = product.category;
-
-						if (Array.isArray(rawCategory)) {
-							categoryParts = rawCategory.filter(Boolean);
-						} else if (typeof rawCategory === "string" && rawCategory.trim()) {
-							categoryParts = rawCategory.split(" > ").filter(Boolean);
-						} else if (
-							rawCategory &&
-							typeof rawCategory === "object" &&
-							rawCategory.name
-						) {
-							// Handle object with name property (from API)
-							categoryParts = [rawCategory.name];
-						} else if (rawCategory) {
-							categoryParts = [String(rawCategory)];
-						}
-
-						if (getCategoryParts) categoryParts = getCategoryParts(product);
-
-						if (categoryParts.length === 0) {
-							return (
-								<span className={getCategoryBadgeClass("#6b7280")}>
-									{t("products.uncategorized")}
-								</span>
-							);
-						}
-						return (
-							<>
-								<span className={getCategoryBadgeClass("#8b5cf6")}>
-									{categoryParts[0]}
-								</span>
-								{categoryParts[1] && (
-									<span className={getCategoryBadgeClass("#3b82f6")}>
-										{categoryParts[1]}
-									</span>
-								)}
-							</>
-						);
-					})()}
-				</div>
 
 				{/* Stock Info */}
 				<div className="flex items-center justify-between">
@@ -297,7 +299,7 @@ const ProductCard = ({
 				</div>
 
 				{/* Pricing Section */}
-				<div className="rounded-lg p-2 sm:p-3 md:p-4 space-y-1 sm:space-y-1.5 md:space-y-2 bg-gradient-to-r from-[rgb(var(--color-bg-secondary))] to-[rgb(var(--color-bg-tertiary))] border border-[rgb(var(--color-border-primary))]">
+				<div className="pt-2 sm:pt-3 md:pt-4 space-y-1 sm:space-y-1.5 md:space-y-2 border-t border-[rgb(var(--color-border-primary))]">
 					<div className="flex items-center justify-between">
 						<span className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
 							{t("products.sellingPrice")}

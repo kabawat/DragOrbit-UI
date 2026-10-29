@@ -39,7 +39,7 @@ export function ProductListContentView({ model }) {
 	} = model;
 	return (
 		<>
-			<div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
+			<div className="bg-[rgb(var(--color-bg-secondary))] rounded-xl overflow-hidden">
 				<div ref={scrollRootRef}>
 					{isLoading && transformedProducts.length === 0 ? (
 						<TableSkeleton rows={6} label={t("common.loading")} />
@@ -60,7 +60,7 @@ export function ProductListContentView({ model }) {
 						</div>
 					) : (
 						<div>
-							<div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 								{transformedProducts.map((product) => (
 									<ProductCard
 										key={product.id}

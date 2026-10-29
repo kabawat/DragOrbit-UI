@@ -18,7 +18,7 @@ const Badge = ({
 		primary: "bg-blue-500/20 text-blue-500 border border-blue-500/30",
 		secondary:
 			"bg-[rgb(var(--color-bg-tertiary))] text-[rgb(var(--color-text-secondary))]",
-		success: "bg-green-500/20 text-green-500 border border-green-500/30",
+		success: "bg-green-500/20 text-green-700 border border-green-500/30",
 		danger: "bg-red-500/20 text-red-500 border border-red-500/30",
 		warning: "bg-yellow-500/20 text-yellow-500 border border-yellow-500/30",
 		info: "bg-cyan-500/20 text-cyan-500 border border-cyan-500/30",
