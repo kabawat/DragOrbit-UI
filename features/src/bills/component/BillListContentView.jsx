@@ -88,10 +88,10 @@ export function BillListContentView({ model }) {
             <div className="text-sm text-[rgb(var(--color-text-secondary))]">
               {pagination.hasNextPage ? (
                 <>
-                  Showing{" "}
+                  Showing
                   <span className="font-semibold text-[rgb(var(--color-text-primary))]">
                     {bills.length}
-                  </span>{" "}
+                  </span>
                   bills
                   <span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
                     • Scroll down to load more
@@ -99,10 +99,10 @@ export function BillListContentView({ model }) {
                 </>
               ) : (
                 <>
-                  Showing{" "}
+                  Showing
                   <span className="font-semibold text-[rgb(var(--color-text-primary))]">
                     {bills.length}
-                  </span>{" "}
+                  </span>
                   bills
                   <span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
                     • {t("bills.noMore")}

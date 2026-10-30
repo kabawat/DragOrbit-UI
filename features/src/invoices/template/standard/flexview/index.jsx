@@ -46,7 +46,7 @@ const FlexviewTemplate = ({ invoiceData, selectedStore }) => {
                             <b>Invoice #:</b> {invoiceData.invoiceNumber}
                         </p>
                         <p>
-                            <b>Date:</b>{" "}
+                            <b>Date:</b>
                             {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                         </p>
                         {invoiceData.paymentMode && (

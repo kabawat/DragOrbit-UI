@@ -58,7 +58,7 @@ const VintageTemplate = ({ invoiceData, selectedStore }) => {
                             <strong>Payment Mode:</strong> {invoiceData.paymentMode || "Cash"}
                         </p>
                         <p>
-                            <strong>Invoice Date:</strong>{" "}
+                            <strong>Invoice Date:</strong>
                             {formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}
                         </p>
                         <p>
@@ -156,7 +156,7 @@ const VintageTemplate = ({ invoiceData, selectedStore }) => {
                 <div className={styles.footer}>
                     <p>Thank you for your business!</p>
                     <p>
-                        This is a system-generated invoice. Generated on{" "}
+                        This is a system-generated invoice. Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MM/DD/YYYY")}
                     </p>
                 </div>

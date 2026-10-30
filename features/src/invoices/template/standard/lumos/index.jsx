@@ -38,11 +38,11 @@ const LumosTemplate = ({ invoiceData, selectedStore }) => {
                 <div className={styles.invoiceBody}>
                     <div className={styles.summary}>
                         <div>
-                            <strong>Date:</strong>{" "}
+                            <strong>Date:</strong>
                             {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}
                         </div>
                         <div>
-                            <strong>Customer:</strong>{" "}
+                            <strong>Customer:</strong>
                             {invoiceData.customer?.name || "Walk-in Customer"}
                         </div>
                     </div>
@@ -163,7 +163,7 @@ const LumosTemplate = ({ invoiceData, selectedStore }) => {
                         Thank you for choosing {selectedStore?.storeName || "our store"}!
                     </p>
                     <p>
-                        Generated on{" "}
+                        Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                     </p>
                     <p>This is a system-generated invoice and requires no signature.</p>

@@ -44,7 +44,7 @@ const VelocityLedgerTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.detailBox}>
                         <div className={styles.title}>Invoice Date & Due</div>
                         <p>
-                            Issued:{" "}
+                            Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>

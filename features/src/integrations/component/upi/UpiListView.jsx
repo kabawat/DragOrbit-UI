@@ -76,7 +76,7 @@ export function UpiListView({ model }) {
                       "Accessible by stores",
                     )}
                     :
-                  </span>{" "}
+                  </span>
                   {getStoreNames(item.storeIds)}
                 </p>
               </div>

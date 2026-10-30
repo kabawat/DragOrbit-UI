@@ -110,7 +110,7 @@ export function SalesAnalyticsScreen({ model }) {
                                     {formatNumber(today.totalInvoices)}
                                   </p>
                                   <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1">
-                                    {formatNumber(today.releasedInvoices)}{" "}
+                                    {formatNumber(today.releasedInvoices)}
                                     released
                                   </p>
                                 </div>

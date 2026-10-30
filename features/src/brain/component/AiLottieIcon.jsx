@@ -41,8 +41,8 @@ export function AiLottieIcon({
         } else {
           setIsLoaded(true);
         }
-      } catch (err) {
-        console.warn("Lottie playback error:", err);
+      } catch (_err) {
+        // Lottie playback fallback
       }
     };
 

@@ -26,7 +26,7 @@ const StructuredTemplate = ({ invoiceData, selectedStore }) => {
                             Invoice #: <span>{invoiceData.invoiceNumber}</span>
                         </div>
                         <div className={styles.invoiceDetail}>
-                            Date:{" "}
+                            Date:
                             <span>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY")}
                             </span>
@@ -169,7 +169,7 @@ const StructuredTemplate = ({ invoiceData, selectedStore }) => {
                             choosing our services!
                         </p>
                         <p style={{ marginTop: "10px" }}>
-                            Generated on{" "}
+                            Generated on
                             {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                         </p>
                     </div>

@@ -149,7 +149,7 @@ const ElegantTemplate = ({ invoiceData, selectedStore }) => {
                 <div className={styles.footer}>
                     <p>Thank you for shopping with us!</p>
                     <p>
-                        Generated on{" "}
+                        Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] hh:mm A")}
                     </p>
                     <p>

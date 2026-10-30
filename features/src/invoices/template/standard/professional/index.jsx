@@ -152,7 +152,7 @@ const ProfessionalTemplate = ({ invoiceData, selectedStore }) => {
                         signature.
                     </p>
                     <p>
-                        Generated on{" "}
+                        Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                     </p>
                 </div>

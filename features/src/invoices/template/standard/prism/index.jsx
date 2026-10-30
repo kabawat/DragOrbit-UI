@@ -37,13 +37,13 @@ const PrismTemplate = ({ invoiceData, selectedStore }) => {
                         Invoice No: <strong>{invoiceData.invoiceNumber}</strong>
                     </span>
                     <span>
-                        Issue Date:{" "}
+                        Issue Date:
                         <strong>
                             {formatInvoiceDate(invoiceData.createdAt, "DD-MMM-YYYY")}
                         </strong>
                     </span>
                     <span>
-                        Due Date:{" "}
+                        Due Date:
                         <strong>
                             {formatInvoiceDate(addInvoiceDays(invoiceData.createdAt, 30), "DD-MMM-YYYY")}
                         </strong>
@@ -171,7 +171,7 @@ const PrismTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Footer */}
                 <div className={styles.footer}>
                     <p>
-                        Thank you for choosing{" "}
+                        Thank you for choosing
                         {selectedStore?.storeName || "Prism Technologies"}.
                     </p>
                     <p>Generated on {formatInvoiceDate(undefined, "YYYY-MM-DD HH:mm:ss")}</p>

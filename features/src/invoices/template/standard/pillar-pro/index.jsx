@@ -37,13 +37,13 @@ const PillarProTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.metaBlock}>
                         <div className={styles.title}>Invoice Details</div>
                         <p>
-                            #{" "}
+                            #
                             <span className={styles.valueBold}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Issued:{" "}
+                            Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>

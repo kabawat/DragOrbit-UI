@@ -120,14 +120,14 @@ export function PurchaseOrderCardView({ model }) {
           <div className="flex items-center text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
             <Calendar className="w-4 h-4 mr-2 text-[rgb(var(--color-text-tertiary))]" />
             <span>
-              {t("purchaseOrders.poDate")}:{" "}
+              {t("purchaseOrders.poDate")}:
               {formatDate(normalizedData.billDate)}
             </span>
           </div>
           <div className="flex items-center text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
             <Calendar className="w-4 h-4 mr-2 text-[rgb(var(--color-text-tertiary))]" />
             <span>
-              {t("purchaseOrders.expectedDelivery")}:{" "}
+              {t("purchaseOrders.expectedDelivery")}:
               {formatDate(normalizedData.dueDate)}
             </span>
           </div>

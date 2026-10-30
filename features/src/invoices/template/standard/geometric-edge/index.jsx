@@ -21,13 +21,13 @@ const GeometricEdgeTemplate = ({ invoiceData, selectedStore }) => {
                     <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.metaInfo}>
                         <p>
-                            Invoice No:{" "}
+                            Invoice No:
                             <span className={styles.valueBold}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Date:{" "}
+                            Date:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>

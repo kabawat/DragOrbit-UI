@@ -48,7 +48,7 @@ export function PaymentsScreen({ model }) {
                   : null
               }
             />
-          )}{" "}
+          )}
           {payments.length > 0 && content}
         </div>
       </div>

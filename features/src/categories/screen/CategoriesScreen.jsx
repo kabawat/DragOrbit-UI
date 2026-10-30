@@ -103,7 +103,7 @@ export function CategoriesScreen({ model }) {
           description={
             <span>
               {t("products.categoryDeleteConfirm") ||
-                "Are you sure you want to delete category"}{" "}
+                "Are you sure you want to delete category"}
               <strong className="font-semibold text-[rgb(var(--color-text-primary))]">
                 {categoryToDelete?.name}
               </strong>

@@ -45,7 +45,7 @@ const LuminousLedgerTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.infoBlock}>
                         <div className={styles.title}>Date & Details</div>
                         <p>
-                            Issued:{" "}
+                            Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>

@@ -73,7 +73,7 @@ export function SupplierCardView({ model }) {
             className="text-xs sm:text-sm font-medium"
             style={{ color: themeConfig.textSecondary }}
           >
-            {t("suppliers.gstin")}:{" "}
+            {t("suppliers.gstin")}:
             {supplier.gstNumber || t("common.notAvailable")}
           </p>
         </div>
@@ -223,7 +223,7 @@ export function SupplierCardView({ model }) {
             borderColor: themeConfig.border,
           }}
         >
-          {t("common.lastUpdated")}:{" "}
+          {t("common.lastUpdated")}:
           {new Date(supplier.updatedAt || Date.now()).toLocaleDateString()}
         </div>
       </div>

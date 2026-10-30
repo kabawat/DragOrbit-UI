@@ -27,7 +27,7 @@ const ZenithTemplate = ({ invoiceData, selectedStore }) => {
 
                     <div>
                         <p style={{ fontSize: "11px", opacity: 0.9, marginTop: "40px" }}>
-                            © {formatInvoiceDate(undefined, "YYYY")}{" "}
+                            © {formatInvoiceDate(undefined, "YYYY")}
                             {selectedStore?.storeName || "Your Store"}
                         </p>
                     </div>
@@ -162,7 +162,7 @@ const ZenithTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.footer}>
                         <p>Thank you for choosing us!</p>
                         <p>
-                            Generated on{" "}
+                            Generated on
                             {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                         </p>
                         <p>

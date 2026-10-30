@@ -283,7 +283,7 @@ export default function CashbookDayHistory({
 									</div>
 									{item.actor && (
 										<p className="text-xs text-[rgb(var(--color-text-secondary))]">
-											{t("cashbook.day.by")}:{" "}
+											{t("cashbook.day.by")}:
 											<span className="text-[rgb(var(--color-text-primary))]">
 												{String(item.actor)}
 											</span>

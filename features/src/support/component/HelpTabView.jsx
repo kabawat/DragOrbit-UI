@@ -226,8 +226,8 @@ export function HelpTabView({ model }) {
               Pro Tip
             </h4>
             <p className="text-xs font-semibold leading-relaxed mb-4 antialiased">
-              Try{" "}
-              <span className="underline decoration-white/40">Voice AI</span>{" "}
+              Try
+              <span className="underline decoration-white/40">Voice AI</span>
               for adding customers. Just say "Add John from Mumbai" and let us
               handle the rest!
             </p>

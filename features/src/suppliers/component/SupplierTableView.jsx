@@ -89,7 +89,7 @@ export function SupplierTableView({ model }) {
 												</p>
 												<div className="flex items-center gap-2 mt-1">
 													<span className="text-xs text-[rgb(var(--color-text-tertiary))]">
-														Added:{" "}
+														Added:
 														{new Date(
 															supplier.createdAt || Date.now(),
 														).toLocaleDateString()}

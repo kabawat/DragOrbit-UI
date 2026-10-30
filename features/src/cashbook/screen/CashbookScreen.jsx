@@ -382,7 +382,7 @@ export function CashbookScreen({
 							aria-live="polite"
 						>
 							<span>
-								{visibleEntries.length} / {entries.length}{" "}
+								{visibleEntries.length} / {entries.length}
 								{t("cashbook.entriesForDate")}
 							</span>
 							<Button

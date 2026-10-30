@@ -56,19 +56,19 @@ const RusticEleganceTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.block} style={{ textAlign: "right" }}>
                         <div className={styles.title}>Invoice Details</div>
                         <p>
-                            Invoice #:{" "}
+                            Invoice #:
                             <span className={styles.invoiceNumberValue}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Date Issued:{" "}
+                            Date Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "DD MMM, YYYY")}
                             </span>
                         </p>
                         <p>
-                            Due Date:{" "}
+                            Due Date:
                             <span className={styles.valueBold}>Upon Receipt</span>
                         </p>
                     </div>

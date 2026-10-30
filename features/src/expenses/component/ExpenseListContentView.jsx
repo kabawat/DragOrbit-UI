@@ -90,10 +90,10 @@ export function ExpenseListContentView({ model }) {
 					<div className="bg-[rgb(var(--color-bg-tertiary))] border-t border-[rgb(var(--color-border-primary))] px-6 py-4 shrink-0">
 						<div className="flex items-center justify-between">
 							<div className="text-sm text-[rgb(var(--color-text-secondary))]">
-								Showing{" "}
+								Showing
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{expenses.length}
-								</span>{" "}
+								</span>
 								expenses
 								{pagination.hasNextPage ? (
 									<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">

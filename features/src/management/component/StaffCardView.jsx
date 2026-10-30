@@ -43,7 +43,7 @@ export function StaffCardView({ model }) {
         <div className="px-4 pt-2.5 pb-0 flex items-center gap-1.5">
           <Mail size={11} className="text-yellow-500" />
           <span className="text-[0.625rem] font-medium text-yellow-500 uppercase tracking-wide">
-            Invitation Pending · Expires{" "}
+            Invitation Pending · Expires
             {new Date(staff.expiresAt).toLocaleDateString("en-IN", {
               day: "2-digit",
               month: "short",

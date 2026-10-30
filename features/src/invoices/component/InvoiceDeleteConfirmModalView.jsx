@@ -16,7 +16,7 @@ export function InvoiceDeleteConfirmModalPresentation({ model }) {
           <p className="text-[rgb(var(--color-text-secondary))] mb-6">
             {invoiceNumber ? (
               <>
-                Are you sure you want to delete invoice{" "}
+                Are you sure you want to delete invoice
                 <span className="font-semibold text-[rgb(var(--color-text-primary))]">
                   "{invoiceNumber}"
                 </span>

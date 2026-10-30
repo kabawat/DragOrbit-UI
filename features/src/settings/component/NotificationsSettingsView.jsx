@@ -149,7 +149,7 @@ export function NotificationsSettingsView({ model }) {
                         {t(`settings.notifications.${category}`)}
                       </h4>
                       <p className="mt-0.5 text-xs leading-4 text-[rgb(var(--color-text-secondary))]">
-                        {t("settings.notifications.configureCategory")}{" "}
+                        {t("settings.notifications.configureCategory")}
                         {t(`settings.notifications.${category}`)}
                       </p>
                     </div>

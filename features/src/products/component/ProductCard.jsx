@@ -289,11 +289,11 @@ const ProductCard = ({
 				{/* Stock Info */}
 				<div className="flex items-center justify-between">
 					<div className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
-						<span className="font-medium">{t("products.stock")}:</span>{" "}
+						<span className="font-medium">{t("products.stock")}:</span>
 						{product.stock} {t("products.units")}
 					</div>
 					<div className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
-						<span className="font-medium">{t("products.sku")}:</span>{" "}
+						<span className="font-medium">{t("products.sku")}:</span>
 						{product.sku}
 					</div>
 				</div>

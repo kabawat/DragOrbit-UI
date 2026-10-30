@@ -87,10 +87,10 @@ export function AccessRestricted({
 								section.
 							</p>
 							<p className="text-sm text-[rgb(var(--color-text-secondary))] leading-relaxed mb-8">
-								Please contact your{" "}
+								Please contact your
 								<span className="text-[rgb(var(--color-primary))] font-semibold">
 									store owner
-								</span>{" "}
+								</span>
 								to request access.
 							</p>
 						</>

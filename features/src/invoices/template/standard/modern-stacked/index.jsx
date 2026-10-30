@@ -54,13 +54,13 @@ const ModernStackedTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={`${styles.block} ${styles.invoiceDetails}`}>
                         <div className={styles.title}>Invoice Details</div>
                         <p>
-                            Invoice #:{" "}
+                            Invoice #:
                             <span className={styles.valueLarge}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Date Issued:{" "}
+                            Date Issued:
                             <span className={styles.valueLarge}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>
@@ -159,7 +159,7 @@ const ModernStackedTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Footer */}
                 <div className={styles.footer}>
                     <p>
-                        Payment confirms acceptance of services. Invoice generated on{" "}
+                        Payment confirms acceptance of services. Invoice generated on
                         {formatInvoiceDate(undefined, "MMMM Do YYYY, h:mm a")}.
                     </p>
                 </div>

@@ -18,11 +18,11 @@ export function DeletePaymentModalPresentation({ model }) {
         {paymentToDelete && (
           <div className="bg-[rgb(var(--color-bg-secondary))] p-4 rounded-lg mb-6">
             <p className="font-medium text-[rgb(var(--color-text-primary))]">
-              {t("payments.payment", { defaultValue: "Payment" })}:{" "}
+              {t("payments.payment", { defaultValue: "Payment" })}:
               {paymentToDelete.paymentNumber}
             </p>
             <p className="text-sm text-[rgb(var(--color-text-secondary))]">
-              {t("payments.amount", { defaultValue: "Amount" })}:{" "}
+              {t("payments.amount", { defaultValue: "Amount" })}:
               {formatCurrency(
                 paymentToDelete.totalAmount || paymentToDelete.amount,
               )}

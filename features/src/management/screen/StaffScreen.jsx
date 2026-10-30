@@ -193,10 +193,6 @@ export function StaffScreen({ model }) {
                     </div>
                   )}
                 </div>
-
-                {!listLoading && filteredStaff.length > 0 && (
-                  <TableSkeleton compact rows={2} />
-                )}
               </div>
             </div>
 

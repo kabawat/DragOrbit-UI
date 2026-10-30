@@ -173,7 +173,7 @@ export function ChatWorkspace({
           {hasHistory && (
             <div className="shrink-0 border-t border-[rgb(var(--color-border-primary))] px-3.5 py-2.5 bg-[rgb(var(--color-bg-secondary))]">
               <p className="text-[11px] font-medium text-[rgb(var(--color-text-tertiary))]">
-                {totalSessions}{" "}
+                {totalSessions}
                 {totalSessions === 1 ? "conversation" : "conversations"}
               </p>
             </div>

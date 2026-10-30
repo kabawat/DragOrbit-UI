@@ -83,7 +83,7 @@ export function GatewayListView({ model }) {
               <p className="text-sm text-[rgb(var(--color-text-secondary))]">
                 <span className="font-medium text-[rgb(var(--color-text-primary))]">
                   {t("settings.paymentGateway.accessibleByStores")}:
-                </span>{" "}
+                </span>
                 {getStoreNames(gateway.storeIds)}
               </p>
               {secretsCount > 0 && (

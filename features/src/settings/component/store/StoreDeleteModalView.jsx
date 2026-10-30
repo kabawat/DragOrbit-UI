@@ -44,15 +44,15 @@ export function StoreDeleteModalView({ model }) {
 								<span>Permanent Deletion Warning</span>
 							</p>
 							<p className="text-[rgb(var(--color-text-secondary))] leading-relaxed">
-								Deleting this store will{" "}
+								Deleting this store will
 								<span className="font-semibold text-red-400">
 									permanently remove all associated data
-								</span>{" "}
+								</span>
 								including invoices, bills, products, inventory, transactions,
-								suppliers, customers, payments, and purchase orders.{" "}
+								suppliers, customers, payments, and purchase orders.
 								<span className="font-semibold text-orange-400">
 									This action cannot be undone
-								</span>{" "}
+								</span>
 								- once deleted, the data cannot be recovered or restored. Please
 								confirm you want to proceed.
 							</p>
@@ -241,7 +241,7 @@ export function StoreDeleteModalView({ model }) {
 								Enter Verification Code
 							</h3>
 							<p className="text-xs text-[rgb(var(--color-text-secondary))]">
-								We've sent a 6-digit OTP to your{" "}
+								We've sent a 6-digit OTP to your
 								{channel === "sms" ? "phone" : "email"}
 							</p>
 						</div>
@@ -287,7 +287,7 @@ export function StoreDeleteModalView({ model }) {
 									<div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[rgb(var(--color-bg-secondary))] rounded-lg">
 										<div className="w-1.5 h-1.5 rounded-full bg-[rgb(var(--color-primary))] animate-pulse"></div>
 										<p className="text-xs text-[rgb(var(--color-text-secondary))]">
-											Expires in{" "}
+											Expires in
 											<span className="font-semibold text-[rgb(var(--color-primary))]">
 												{formatTime(timeLeft)}
 											</span>

@@ -91,10 +91,10 @@ const UpgradeModal = ({
 					<p className="text-[rgb(var(--color-text-secondary))] mb-6">
 						{featureName ? (
 							<>
-								The{" "}
+								The
 								<span className="font-semibold text-[rgb(var(--color-primary))]">
 									{featureName}
-								</span>{" "}
+								</span>
 								feature is not available in your current plan.
 							</>
 						) : (
@@ -156,7 +156,7 @@ const UpgradeModal = ({
 
 					{/* Footer Note */}
 					<p className="text-xs text-[rgb(var(--color-text-tertiary))] mt-6">
-						Need help?{" "}
+						Need help?
 						<a
 							href="/contact"
 							className="text-[rgb(var(--color-primary))] hover:underline"

@@ -20,7 +20,7 @@ export function ViewCancelInvoiceModalPresentation({ model }) {
           </div>
         </div>
         <p className="text-[rgb(var(--color-text-primary))] mb-6">
-          {t("invoices.cancelConfirmMessage", { invoiceNumber })}{" "}
+          {t("invoices.cancelConfirmMessage", { invoiceNumber })}
           {t("invoices.cancelActionCanBeReversed")}
         </p>
         <div className="flex space-x-3">

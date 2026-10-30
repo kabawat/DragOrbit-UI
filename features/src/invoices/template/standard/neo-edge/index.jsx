@@ -20,7 +20,7 @@ const NeoEdgeTemplate = ({ invoiceData, selectedStore }) => {
                 <div className={styles.header}>
                     <h1 data-invoice-header>INVOICE</h1>
                     <div className={styles.storeInfo}>
-                        <strong>{selectedStore?.storeName || "NeoEdge Solutions"}</strong>{" "}
+                        <strong>{selectedStore?.storeName || "NeoEdge Solutions"}</strong>
                         | {selectedStore?.address || "G-45, Business Park, New Delhi"}
                         <br />
                         {selectedStore?.phone && <span>Ph: {selectedStore.phone} | </span>}
@@ -36,7 +36,7 @@ const NeoEdgeTemplate = ({ invoiceData, selectedStore }) => {
                             Invoice #: <b>{invoiceData.invoiceNumber}</b>
                         </p>
                         <p>
-                            Date:{" "}
+                            Date:
                             <b>{formatInvoiceDate(invoiceData.createdAt, "DD MMM YYYY")}</b>
                         </p>
                         {invoiceData.paymentMode && (

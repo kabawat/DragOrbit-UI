@@ -125,6 +125,8 @@ export function CatalogsScreen({ model }) {
     onDelete,
     storeNames,
     busy,
+    canCreate,
+    quotaLabel,
   } = model;
   const { menu, closeMenu, openContextMenu } = useRowActionMenu();
   const contextCatalog =
@@ -193,16 +195,30 @@ export function CatalogsScreen({ model }) {
             Refresh
           </Button>
         </div>
-        <Button
-          leftIcon={Plus}
-          title="Create digital shop (Alt+N)"
-          aria-keyshortcuts="Alt+n"
-          onClick={onCreate}
-          disabled={busy}
-          className="w-full sm:w-auto"
-        >
-          Create Digital Shop
-        </Button>
+        <div className="flex w-full items-center justify-end gap-3 sm:w-auto">
+          {quotaLabel && (
+            <Badge
+              size="sm"
+              variant={canCreate === false ? "danger" : "secondary"}
+            >
+              {quotaLabel}
+            </Badge>
+          )}
+          <Button
+            leftIcon={Plus}
+            title={
+              canCreate === false
+                ? "Upgrade to create digital shop"
+                : "Create digital shop (Alt+N)"
+            }
+            aria-keyshortcuts="Alt+n"
+            onClick={onCreate}
+            disabled={busy}
+            className="w-full sm:w-auto"
+          >
+            Create Digital Shop
+          </Button>
+        </div>
       </header>
       {loading ? (
         <TableSkeleton label="Loading Digital Shops…" />
@@ -237,7 +253,13 @@ export function CatalogsScreen({ model }) {
                     onStatus("");
                   },
                 }
-              : { label: "Create Digital Shop", onClick: onCreate }
+              : {
+                  label:
+                    canCreate === false
+                      ? "Upgrade to Create Digital Shop"
+                      : "Create Digital Shop",
+                  onClick: onCreate,
+                }
           }
         />
       ) : (

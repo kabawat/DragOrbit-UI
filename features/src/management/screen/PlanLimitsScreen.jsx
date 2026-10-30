@@ -260,7 +260,7 @@ export function PlanLimitsScreen({ model }) {
                   This feature is not part of your current plan.
                 </p>
               </div>
-            )}{" "}
+            )}
             <div className="flex items-center gap-3 p-3 bg-[rgb(var(--color-bg-secondary))] rounded-xl border border-[rgb(var(--color-border-primary))]/40">
               <div
                 className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
@@ -280,7 +280,7 @@ export function PlanLimitsScreen({ model }) {
                     ? "0"
                     : selectedFeature.used.toLocaleString()}
                   <span className="text-xs font-medium text-[rgb(var(--color-text-tertiary))] ml-1 opacity-60">
-                    /{" "}
+                    /
                     {selectedFeature.limit === Infinity
                       ? "∞"
                       : selectedFeature.limit.toLocaleString()}

@@ -20,7 +20,7 @@ export function ViewDeleteInvoiceModalPresentation({ model }) {
           </div>
         </div>
         <p className="text-[rgb(var(--color-text-primary))] mb-6">
-          {t("invoices.deleteConfirmMessage", { invoiceNumber })}{" "}
+          {t("invoices.deleteConfirmMessage", { invoiceNumber })}
           {t("invoices.deletePermanentlyRemove")}
         </p>
         <div className="flex space-x-3">

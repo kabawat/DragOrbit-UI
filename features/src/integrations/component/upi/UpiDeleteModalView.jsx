@@ -45,7 +45,7 @@ export function UpiDeleteModalView({ model }) {
 						<p className="break-words font-medium text-[rgb(var(--color-text-primary))]">
 							{upiToDelete.label ? (
 								<>
-									{upiToDelete.label}:{" "}
+									{upiToDelete.label}:
 									<code className="text-[rgb(var(--color-primary))]">
 										{upiToDelete.upiId}
 									</code>

@@ -161,7 +161,7 @@ export function ExpenseAnalyticsScreen({ model }) {
                                     </div>
                                     <div className="flex justify-between text-xs text-[rgb(var(--color-text-secondary))]">
                                       <span>
-                                        {formatNumber(data.count)}{" "}
+                                        {formatNumber(data.count)}
                                         {t("common.expenses").toLowerCase()}
                                       </span>
                                       <span>
@@ -196,7 +196,7 @@ export function ExpenseAnalyticsScreen({ model }) {
                                     {formatCurrency(amounts.paidAmount)}
                                   </p>
                                   <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1">
-                                    {formatNumber(counts.paidExpenses)}{" "}
+                                    {formatNumber(counts.paidExpenses)}
                                     {t("common.expenses").toLowerCase()}
                                   </p>
                                 </div>
@@ -208,7 +208,7 @@ export function ExpenseAnalyticsScreen({ model }) {
                                     {formatCurrency(amounts.pendingAmount)}
                                   </p>
                                   <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1">
-                                    {formatNumber(counts.pendingExpenses)}{" "}
+                                    {formatNumber(counts.pendingExpenses)}
                                     {t("common.expenses").toLowerCase()}
                                   </p>
                                 </div>
@@ -220,7 +220,7 @@ export function ExpenseAnalyticsScreen({ model }) {
                                     {formatCurrency(amounts.todayAmount)}
                                   </p>
                                   <p className="text-xs text-[rgb(var(--color-text-secondary))] mt-1">
-                                    {formatNumber(counts.todayExpenses)}{" "}
+                                    {formatNumber(counts.todayExpenses)}
                                     {t("common.expenses").toLowerCase()}
                                   </p>
                                 </div>

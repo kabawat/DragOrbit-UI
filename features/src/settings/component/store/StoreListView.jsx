@@ -74,7 +74,7 @@ export function StoreListView({ model }) {
                 <p className="text-sm text-[rgb(var(--color-text-secondary))]">
                   <span className="font-medium text-[rgb(var(--color-text-primary))]">
                     {t("settings.gst")}:
-                  </span>{" "}
+                  </span>
                   {store.gst}
                 </p>
               )}
@@ -82,7 +82,7 @@ export function StoreListView({ model }) {
                 <p className="text-sm text-[rgb(var(--color-text-secondary))]">
                   <span className="font-medium text-[rgb(var(--color-text-primary))]">
                     {t("settings.pan")}:
-                  </span>{" "}
+                  </span>
                   {store.pan}
                 </p>
               )}
@@ -94,7 +94,7 @@ export function StoreListView({ model }) {
                 <p className="text-sm text-[rgb(var(--color-text-secondary))]">
                   <span className="font-medium text-[rgb(var(--color-text-primary))]">
                     {t("settings.phone")}:
-                  </span>{" "}
+                  </span>
                   <CopyableContactValue
                     value={store.phone}
                     className="text-sm inline"
@@ -105,7 +105,7 @@ export function StoreListView({ model }) {
                 <p className="text-sm text-[rgb(var(--color-text-secondary))]">
                   <span className="font-medium text-[rgb(var(--color-text-primary))]">
                     {t("settings.email")}:
-                  </span>{" "}
+                  </span>
                   <CopyableContactValue
                     value={store.email}
                     className="text-sm inline"

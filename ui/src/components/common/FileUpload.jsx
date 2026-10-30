@@ -275,7 +275,7 @@ const FileUpload = ({
 								<p className="text-xs text-[rgb(var(--color-text-tertiary))] max-w-[240px] mx-auto text-balance">
 									{sizeLimitLabel || (
 										<>
-											{accept.includes("image") ? "Images" : "Files"} up to{" "}
+											{accept.includes("image") ? "Images" : "Files"} up to
 											<span className="font-bold text-[rgb(var(--color-text-secondary))]">
 												{maxSize / (1024 * 1024)}MB
 											</span>

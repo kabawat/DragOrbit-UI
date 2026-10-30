@@ -21,7 +21,7 @@ const MatrixLedgerTemplate = ({ invoiceData, selectedStore }) => {
                     <h1 data-invoice-header>TAX INVOICE / RECEIPT</h1>
                     <div className={styles.storeInfo}>
                         <p>
-                            {selectedStore?.storeName || "Matrix Ledger Systems"} |{" "}
+                            {selectedStore?.storeName || "Matrix Ledger Systems"} |
                             {selectedStore?.address || "Data Center, Ledger Street"}
                         </p>
                         <p>
@@ -36,13 +36,13 @@ const MatrixLedgerTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.metaBlock}>
                         <div className={styles.title}>Transaction Data</div>
                         <p>
-                            Invoice #:{" "}
+                            Invoice #:
                             <span className={`${styles.valueBold} ${styles.invoiceNumber}`}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Date Issued:{" "}
+                            Date Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "YYYY-MM-DD")}
                             </span>

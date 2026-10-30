@@ -193,7 +193,7 @@ export function KhataRecordTransaction({
 						</p>
 					)}
 					<Button type="submit" fullWidth loading={busy} disabled={!canSubmit}>
-						{t("khata.recordShort")} ·{" "}
+						{t("khata.recordShort")} ·
 						{t(direction === "IN" ? "khata.cashIn" : "khata.cashOut")}
 					</Button>
 				</form>

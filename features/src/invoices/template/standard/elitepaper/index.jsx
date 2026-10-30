@@ -26,7 +26,7 @@ const ElitePaperTemplate = ({ invoiceData, selectedStore }) => {
                         <p>
                             <span className={styles.valueBold}>
                                 {selectedStore?.storeName || "ElitePaper Global"}
-                            </span>{" "}
+                            </span>
                             | {selectedStore?.address || "789 Corporate Blvd"}
                         </p>
                         <p>
@@ -41,13 +41,13 @@ const ElitePaperTemplate = ({ invoiceData, selectedStore }) => {
                     <div className={styles.infoBlock}>
                         <div className={styles.label}>Invoice Details</div>
                         <p>
-                            Invoice #:{" "}
+                            Invoice #:
                             <span className={styles.valueBold}>
                                 {invoiceData.invoiceNumber}
                             </span>
                         </p>
                         <p>
-                            Date Issued:{" "}
+                            Date Issued:
                             <span className={styles.valueBold}>
                                 {formatInvoiceDate(invoiceData.createdAt, "MMM DD, YYYY")}
                             </span>

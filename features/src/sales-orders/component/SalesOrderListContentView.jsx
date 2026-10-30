@@ -68,10 +68,10 @@ export function SalesOrderListContentView({ model }) {
 					<div className="text-sm text-[rgb(var(--color-text-secondary))]">
 						{pagination.hasNextPage ? (
 							<>
-								{t("common.showing")}{" "}
+								{t("common.showing")}
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{orders.length}
-								</span>{" "}
+								</span>
 								{t("sidebar.sellOrders").toLowerCase()}
 								<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
 									• Scroll down to load more
@@ -79,10 +79,10 @@ export function SalesOrderListContentView({ model }) {
 							</>
 						) : (
 							<>
-								{t("common.showing")}{" "}
+								{t("common.showing")}
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{orders.length}
-								</span>{" "}
+								</span>
 								{t("sidebar.sellOrders").toLowerCase()}
 								<span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
 									• No more orders

@@ -102,7 +102,7 @@ export function SubscriptionScreen({ model }) {
                           <div className="flex items-center gap-2 text-sm mt-1.5">
                             {subscription?.startDate && (
                               <span className="text-[rgb(var(--color-text-tertiary))]">
-                                Started:{" "}
+                                Started:
                                 <span className="text-[rgb(var(--color-text-secondary))] font-medium">
                                   {moment(subscription.startDate).format(
                                     "MMM D, YYYY",

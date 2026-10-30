@@ -132,7 +132,7 @@ const EclipseTemplate = ({ invoiceData, selectedStore }) => {
                 <div className={styles.footer}>
                     <p>Thank you for your business!</p>
                     <p>
-                        Generated on{" "}
+                        Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                     </p>
                     <p>

@@ -97,7 +97,7 @@ export function ProductListContentView({ model }) {
 									<>
 										{t("products.showingProducts", {
 											count: transformedProducts.length,
-										})}{" "}
+										})}
 										<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
 											• {t("products.scrollToLoadMore")}
 										</span>

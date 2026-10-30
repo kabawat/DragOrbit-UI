@@ -157,11 +157,11 @@ const TerraTemplate = ({ invoiceData, selectedStore }) => {
                 {/* Footer */}
                 <div className={styles.footer}>
                     <p>
-                        Thank you for supporting{" "}
+                        Thank you for supporting
                         {selectedStore?.storeName || "our business"}!
                     </p>
                     <p>
-                        Generated on{" "}
+                        Generated on
                         {formatInvoiceDate(invoiceData.createdAt, "MMMM DD, YYYY [at] HH:mm")}
                     </p>
                 </div>
