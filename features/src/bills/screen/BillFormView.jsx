@@ -1,9 +1,9 @@
 "use client";
 import { memo } from "react";
-import { BillTopHeader } from "../component/create/BillTopHeader.jsx";
-import { CreateBillItemsSectionPresentation } from "../component/create/BillItemsSectionView.jsx";
-import { CreateBillSidebarPresentation } from "../component/create/BillSidebarView.jsx";
-import { BillStickyActionsBar } from "../component/create/BillStickyActionsBar.jsx";
+import { BillTopHeader } from "../component/BillTopHeader.jsx";
+import { BillItemsSection } from "../component/BillItemsSection.jsx";
+import { BillSidebar } from "../component/BillSidebar.jsx";
+import { BillStickyActionsBar } from "../component/BillStickyActionsBar.jsx";
 import { calculateBillSummary } from "../utils/billUtils.js";
 
 export const BillFormView = ({
@@ -104,21 +104,21 @@ export const BillFormView = ({
                     }}
                     className="h-full"
                   >
-                    <CreateBillItemsSectionPresentation model={itemsModel} />
+                    <BillItemsSection model={itemsModel} />
                   </form>
                 </div>
               </div>
 
               {/* Right Column: Sidebar */}
               <div className="lg:col-span-1 w-full max-w-full min-w-0">
-                <CreateBillSidebarPresentation model={sidebarModel} />
+                <BillSidebar model={sidebarModel} />
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Permanently Fixed Bottom Actions Bar - ALWAYS visible at bottom, never moves on scroll */}
+      {/* Permanently Fixed Bottom Actions Bar - ALWAYS visible at bottom, never scrolls or moves */}
       <div className="shrink-0 w-full bg-[rgb(var(--color-bg-primary))] border-t border-[rgb(var(--color-border-primary))]/40 px-4 sm:px-6 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] z-30">
         <div className="max-w-8xl mx-auto w-full">
           <BillStickyActionsBar
