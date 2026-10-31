@@ -156,6 +156,22 @@ export function hideThankYouCopy(node) {
 	return cloneElement(node, {}, hideThankYouCopy(node.props.children));
 }
 
+function mixColorWithWhite(hexColor, percentage) {
+	let hex = String(hexColor || "#2563eb").replace("#", "").trim();
+	if (hex.length === 3) {
+		hex = hex.split("").map((c) => c + c).join("");
+	}
+	if (hex.length !== 6) return percentage > 0.3 ? "#93c5fd" : "#eff6ff";
+	const r = parseInt(hex.substring(0, 2), 16) || 0;
+	const g = parseInt(hex.substring(2, 4), 16) || 0;
+	const b = parseInt(hex.substring(4, 6), 16) || 0;
+	const mixedR = Math.round(r * percentage + 255 * (1 - percentage));
+	const mixedG = Math.round(g * percentage + 255 * (1 - percentage));
+	const mixedB = Math.round(b * percentage + 255 * (1 - percentage));
+	const toHex = (c) => Math.max(0, Math.min(255, c)).toString(16).padStart(2, "0");
+	return "#" + toHex(mixedR) + toHex(mixedG) + toHex(mixedB);
+}
+
 const InvoiceContainer = ({ children, className = "", style = {}, includeSignature = true, includeExtras = true, includeSummaryFields = true, includeItemDescriptions = true, includeTerms = true, includePaymentMode = true }) => {
 	const printContext = useContext(InvoicePrintSettingsContext);
 	const fitPreview = Boolean(printContext?.fitPreview);
@@ -170,8 +186,8 @@ const InvoiceContainer = ({ children, className = "", style = {}, includeSignatu
 	const luminance = (Number.parseInt(primaryColor.slice(1, 3), 16) * 299 + Number.parseInt(primaryColor.slice(3, 5), 16) * 587 + Number.parseInt(primaryColor.slice(5, 7), 16) * 114) / 1000;
 	const primaryText = luminance >= 150 ? "#111827" : "#ffffff";
 	const documentStyle = {
-		...style,
-		width: paperWidth,
+		width: "100%",
+		maxWidth: paperWidth,
 		minHeight: paperHeight,
 		"--invoice-primary-color": primaryColor,
 		"--invoice-primary-text": primaryText,
@@ -305,16 +321,23 @@ const InvoiceContainer = ({ children, className = "", style = {}, includeSignatu
 				style={{
 					"--invoice-primary-color": primaryColor,
 					"--invoice-primary-text": primaryText,
-					"--invoice-primary-tint": `color-mix(in srgb, ${primaryColor} 10%, white)`,
-					"--invoice-primary-border": `color-mix(in srgb, ${primaryColor} 45%, white)`,
+					"--invoice-primary-tint": mixColorWithWhite(primaryColor, 0.1),
+					"--invoice-primary-border": mixColorWithWhite(primaryColor, 0.45),
 				}}
 			>
+					{fitPreview ? (
 					<ResponsiveInvoiceDocument pageWidth={pageWidth} fitHeight={fitPreview}>
+						<PaperDocument id="invoice-container" className={`${styles.invoicePage} ${className}`} style={documentStyle}>
+							{printContext?.preview && <PreviewStoreFallback content={invoiceContent} store={printContext.selectedStore} settings={settings} />}
+							{invoiceContent}
+						</PaperDocument>
+					</ResponsiveInvoiceDocument>
+				) : (
 					<PaperDocument id="invoice-container" className={`${styles.invoicePage} ${className}`} style={documentStyle}>
 						{printContext?.preview && <PreviewStoreFallback content={invoiceContent} store={printContext.selectedStore} settings={settings} />}
 						{invoiceContent}
 					</PaperDocument>
-				</ResponsiveInvoiceDocument>
+				)}
 			</div>
 		</>
 	);

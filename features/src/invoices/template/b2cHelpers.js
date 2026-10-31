@@ -66,6 +66,9 @@ function resolveDisplayUnitPrice(item) {
     : 0;
   const raw =
     item.price ??
+    item.unitPrice ??
+    item.rate ??
+    item.sellingPrice ??
     item.discountedPrice ??
     productUnitPrice;
   const parsed = Number(raw);
@@ -75,15 +78,20 @@ function resolveDisplayUnitPrice(item) {
 function normalizeDisplayItem(item) {
   const productId =
     typeof item.product === "string" ? item.product : (item.product?.id ?? item.product?._id);
-  const name = item.product?.name || item.productName || "Unnamed Item";
+  const name =
+    (typeof item.product === "object" && item.product?.name ? item.product.name : null) ||
+    item.productName ||
+    item.name ||
+    item.title ||
+    "Item";
   const price = resolveDisplayUnitPrice(item);
 
   return {
     ...item,
     product:
       typeof item.product === "object" && item.product?.name
-        ? item.product
-        : { id: productId, name, sku: item.product?.sku },
+        ? { ...item.product, name }
+        : { id: productId, name, sku: item.product?.sku || item.sku || item.variant?.sku || "" },
     price,
   };
 }

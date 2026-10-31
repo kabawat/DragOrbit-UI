@@ -18,6 +18,7 @@ export { ViewCancelInvoiceModalPresentation } from "./component/view/CancelInvoi
 export { ViewDeleteInvoiceModalPresentation } from "./component/view/DeleteInvoiceModalView.jsx";
 export { ViewInvoiceSummaryCardPresentation } from "./component/view/InvoiceSummaryCardView.jsx";
 export { ResponsiveInvoiceDocument } from "./component/view/ResponsiveInvoiceDocument.jsx";
+export { InvoicePrintModal } from "./component/InvoicePrintModal.jsx";
 
 // Hooks
 export * from "./hooks/index.js";

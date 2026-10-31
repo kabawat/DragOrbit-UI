@@ -58,15 +58,25 @@ export default function MiniInvoiceContainer({
           "--invoice-company-size": companyFontSizes[settings.companyNameSize] || companyFontSizes.medium,
         }}
       >
-        <ResponsiveInvoiceDocument pageWidth={pageWidthPx} fitHeight={fitPreview}>
+        {fitPreview ? (
+          <ResponsiveInvoiceDocument pageWidth={pageWidthPx} fitHeight={fitPreview}>
+            <PaperDocument
+              id="mini-invoice-container"
+              className={`${styles.miniInvoicePage} ${className}`}
+              style={{ width: "100%", maxWidth: selectedPaperWidth, ...style }}
+            >
+              <div className={styles.miniContent}>{invoiceContent}</div>
+            </PaperDocument>
+          </ResponsiveInvoiceDocument>
+        ) : (
           <PaperDocument
             id="mini-invoice-container"
             className={`${styles.miniInvoicePage} ${className}`}
-            style={{ ...style, width: selectedPaperWidth, maxWidth: selectedPaperWidth }}
+            style={{ width: "100%", maxWidth: selectedPaperWidth, ...style }}
           >
             <div className={styles.miniContent}>{invoiceContent}</div>
           </PaperDocument>
-        </ResponsiveInvoiceDocument>
+        )}
       </div>
     </>
   );
