@@ -1,5 +1,6 @@
 "use client";
 import { TableSkeleton } from "@dragorbit/ui";
+import { ProductMasterDetailView } from "./ProductMasterDetailView.jsx";
 export function ProductListContentView({ model }) {
 	const {
 		StockInDrawer,
@@ -37,6 +38,24 @@ export function ProductListContentView({ model }) {
 		handleStockInSuccess,
 		scrollRootRef,
 	} = model;
+
+	if (viewMode === "split") {
+		return (
+			<ProductMasterDetailView
+				{...model}
+				products={transformedProducts}
+				rawProducts={model.products || []}
+				initialProductId={model.initialProductId || model.selectedProductId}
+				onEdit={handleEditProduct}
+				onDelete={handleDeleteProduct}
+				onViewDetails={handleViewProduct}
+				onStockIn={handleStockIn}
+				onCreate={model.onCreate}
+				storeId={model.storeId}
+			/>
+		);
+	}
+
 	return (
 		<>
 			<div className="bg-[rgb(var(--color-bg-secondary))] rounded-xl overflow-hidden">

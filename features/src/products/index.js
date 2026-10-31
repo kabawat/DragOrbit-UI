@@ -19,3 +19,7 @@ export { ProductInfoModalPresentation } from "./component/ProductInfoModalView.j
 export { ProductSectionInfoModalPresentation } from "./component/ProductSectionInfoModalView.jsx";
 export { SortableSectionPresentation } from "./component/SortableSectionView.jsx";
 export { StatusSectionPresentation } from "./component/StatusSectionView.jsx";
+export {
+  ProductMasterDetailView,
+  ProductMasterDetailView as ProductMasterDetailLayout,
+} from "./component/ProductMasterDetailView.jsx";
