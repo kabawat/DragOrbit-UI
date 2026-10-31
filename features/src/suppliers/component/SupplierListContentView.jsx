@@ -96,22 +96,22 @@ export function SupplierListContentView({ model }) {
             <div className="text-sm text-[rgb(var(--color-text-secondary))]">
               {pagination.hasNextPage ? (
                 <>
-                  Showing
+                  Showing{" "}
                   <span className="font-semibold text-[rgb(var(--color-text-primary))]">
                     {suppliers.length}
-                  </span>
-                  suppliers
+                  </span>{" "}
+                  {suppliers.length === 1 ? "supplier" : "suppliers"}
                   <span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
                     • Scroll down to load more
                   </span>
                 </>
               ) : (
                 <>
-                  Showing
+                  Showing{" "}
                   <span className="font-semibold text-[rgb(var(--color-text-primary))]">
                     {suppliers.length}
-                  </span>
-                  suppliers
+                  </span>{" "}
+                  {suppliers.length === 1 ? "supplier" : "suppliers"}
                   <span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
                     • No more suppliers
                   </span>
