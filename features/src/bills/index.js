@@ -16,6 +16,7 @@ export { BillTableView } from "./component/BillTableView.jsx";
 export { BillCardView } from "./component/BillCardView.jsx";
 export { BillDeleteConfirmModalPresentation } from "./component/BillDeleteConfirmModalView.jsx";
 export { BillGridPresentation } from "./component/BillGridView.jsx";
+export { BillItemsListView } from "./component/view/BillItemsListView.jsx";
 
 // Backward-compatibility aliases
 export { BillItemsSection as CreateBillItemsSectionPresentation, BillItemsSection as BillItemsSectionView } from "./component/BillItemsSection.jsx";

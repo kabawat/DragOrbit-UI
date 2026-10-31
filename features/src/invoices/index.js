@@ -1,5 +1,6 @@
 export { InvoicesScreen, default } from "./screen/InvoicesScreen.jsx";
 export { InvoiceFormView } from "./screen/InvoiceFormView.jsx";
+export { InvoiceDetailsScreen } from "./screen/InvoiceDetailsScreen.jsx";
 
 // Components
 export { AddedItemsList } from "./component/AddedItemsList.jsx";
@@ -19,6 +20,12 @@ export { ViewDeleteInvoiceModalPresentation } from "./component/view/DeleteInvoi
 export { ViewInvoiceSummaryCardPresentation } from "./component/view/InvoiceSummaryCardView.jsx";
 export { ResponsiveInvoiceDocument } from "./component/view/ResponsiveInvoiceDocument.jsx";
 export { InvoicePrintModal } from "./component/InvoicePrintModal.jsx";
+export { InvoiceHeaderView } from "./component/view/InvoiceHeaderView.jsx";
+export { InvoiceCustomerInfoView } from "./component/view/InvoiceCustomerInfoView.jsx";
+export { InvoiceItemsTableView, InvoiceItemsListView } from "./component/view/InvoiceItemsTableView.jsx";
+export { InvoiceBatchesView } from "./component/view/InvoiceBatchesView.jsx";
+export { InvoiceNotesView } from "./component/view/InvoiceNotesView.jsx";
+export { InvoiceActionsView } from "./component/view/InvoiceActionsView.jsx";
 
 // Hooks
 export * from "./hooks/index.js";

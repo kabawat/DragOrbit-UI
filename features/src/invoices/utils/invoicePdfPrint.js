@@ -79,6 +79,30 @@ export async function saveInvoicePDF({
       })
     );
 
+    // Wait for font loading if available
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      try {
+        await document.fonts.ready;
+      } catch {
+        // ignore font errors
+      }
+    }
+
+    // Wait for images inside sandbox
+    const images = Array.from(sandbox.querySelectorAll("img"));
+    if (images.length > 0) {
+      await Promise.all(
+        images.map((img) => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((res) => {
+            img.onload = res;
+            img.onerror = res;
+            setTimeout(res, 400);
+          });
+        })
+      );
+    }
+
     // Wait for React to render and fonts/images to settle
     await new Promise((resolve) => setTimeout(resolve, 350));
 
@@ -100,12 +124,31 @@ export async function saveInvoicePDF({
       height: canvasHeight,
       windowWidth: canvasWidth,
       windowHeight: canvasHeight,
+      scrollX: 0,
+      scrollY: 0,
+      x: 0,
+      y: 0,
       onclone: (clonedDoc) => {
         // Strip any unsupported transform or color functions
         const clonedTarget = clonedDoc.getElementById(sandboxId);
         if (clonedTarget) {
           clonedTarget.style.position = "static";
           clonedTarget.style.left = "0";
+          clonedTarget.style.top = "0";
+          clonedTarget.style.width = `${canvasWidth}px`;
+          clonedTarget.style.maxWidth = `${canvasWidth}px`;
+          clonedTarget.style.minWidth = `${canvasWidth}px`;
+        }
+        const clonedInvoice =
+          clonedTarget?.querySelector("#invoice-container") ||
+          clonedDoc.getElementById("invoice-container");
+        if (clonedInvoice) {
+          clonedInvoice.style.width = `${canvasWidth}px`;
+          clonedInvoice.style.maxWidth = `${canvasWidth}px`;
+          clonedInvoice.style.minWidth = `${canvasWidth}px`;
+          clonedInvoice.style.boxSizing = "border-box";
+          clonedInvoice.style.margin = "0";
+          clonedInvoice.style.transform = "none";
         }
       },
     });
@@ -248,9 +291,15 @@ export function printInvoice({
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
+          #invoice-area,
           .invoice-print-document,
           #invoice-container,
           #mini-invoice-container {
+            position: static !important;
+            left: 0 !important;
+            top: 0 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
             width: 100% !important;
             max-width: ${maxWidth} !important;
             margin: 0 auto !important;
