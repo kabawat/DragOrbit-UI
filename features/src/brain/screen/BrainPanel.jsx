@@ -147,6 +147,8 @@ const BrainPanel = ({
     activeTool,
     progress,
     chatError,
+    retryLastTurn,
+    cancelChat,
     sendChat,
     confirmPending,
     rejectPending,
@@ -463,11 +465,22 @@ const BrainPanel = ({
         }
 
         return (
-          <AgentActivityCard
-            activeTool={activeTool}
-            isConfirming={isConfirming}
-            progress={progress}
-          />
+          <div className="w-full">
+            <AgentActivityCard
+              activeTool={activeTool}
+              isConfirming={isConfirming}
+              progress={progress}
+            />
+            {isSending && typeof cancelChat === "function" && (
+              <button
+                className="ml-9 -mt-1 rounded-md px-2.5 py-1 text-xs font-medium text-[rgb(var(--color-text-secondary))] hover:bg-[rgb(var(--color-bg-secondary))]"
+                onClick={cancelChat}
+                type="button"
+              >
+                {t("common.cancel", "Cancel request")}
+              </button>
+            )}
+          </div>
         );
       })()}
 
@@ -482,7 +495,35 @@ const BrainPanel = ({
           <div className="rounded-2xl rounded-tl-sm border border-[rgb(var(--color-danger))]/25 bg-[rgb(var(--color-danger))]/8 px-3.5 py-2.5 text-[13px] leading-5 text-[rgb(var(--color-danger))] shadow-2xs">
             {chatError.code === "STORE_REQUIRED"
               ? t("voice.status.noStore")
-              : chatError.message || t("voice.errors.ai_failed")}
+              : chatError.code === "AI_RATE_LIMITED"
+                ? t(
+                    "voice.errors.rate_limited",
+                    "Too many requests. Please wait and try again."
+                  )
+                : chatError.code === "AI_REQUEST_ABORTED"
+                  ? t(
+                      "voice.errors.request_aborted",
+                      "This request was cancelled. You can send it again when ready."
+                    )
+                  : t(
+                      "voice.errors.ai_failed",
+                      "I couldn’t complete that request. Please try again."
+                    )}
+            {chatError.requestId && (
+              <span className="mt-1 block text-[11px] opacity-75">
+                {t("voice.requestReference", "Reference")}:{" "}
+                {chatError.requestId}
+              </span>
+            )}
+            {chatError.retryable && typeof retryLastTurn === "function" && (
+              <button
+                className="mt-2 rounded-md border border-current/30 px-2.5 py-1 text-xs font-semibold hover:bg-[rgb(var(--color-danger))]/10"
+                onClick={() => void retryLastTurn()}
+                type="button"
+              >
+                {t("common.retry", "Retry")}
+              </button>
+            )}
           </div>
         </div>
       )}

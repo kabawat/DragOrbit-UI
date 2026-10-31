@@ -57,9 +57,27 @@ export function AssistantMessageBubble({
                   {formatToolTitle(tool?.tool)}
                 </span>
               </div>
-              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white shadow-xs">
-                <Check className="h-3 w-3 stroke-[3]" />
-              </div>
+              {(() => {
+                const ok = tool?.success !== false;
+                const partial = tool?.resultStatus === "success_partial";
+                return (
+                  <span
+                    role="img"
+                    aria-label={
+                      ok ? (partial ? "Partial result" : "Completed") : "Failed"
+                    }
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white shadow-xs ${
+                      !ok
+                        ? "bg-rose-600"
+                        : partial
+                          ? "bg-amber-500"
+                          : "bg-emerald-600"
+                    }`}
+                  >
+                    {ok ? <Check className="h-3 w-3 stroke-[3]" /> : "!"}
+                  </span>
+                );
+              })()}
             </div>
           ))}
         </div>
@@ -161,4 +179,3 @@ export function AssistantMessageBubble({
 }
 
 export default AssistantMessageBubble;
-
