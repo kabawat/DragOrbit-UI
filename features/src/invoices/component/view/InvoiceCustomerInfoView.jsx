@@ -36,68 +36,98 @@ export function InvoiceCustomerInfoView({ customer, invoiceData }) {
     "Walk-In Customer";
 
   const customerAddress = formatCustomerAddress(customer);
-  const phone = customer?.phone || customer?.mobile || invoiceData?.customerPhone || "N/A";
-  const email = customer?.email || invoiceData?.customerEmail || "N/A";
-  const gstin = customer?.gstNumber || customer?.gstin || invoiceData?.customerGst || null;
-  const isWalkIn = !customer || (!customer.name && !customer.phone && !customer.email);
+  const phone =
+    customer?.phone || customer?.mobile || invoiceData?.customerPhone || "N/A";
+  const email =
+    customer?.email || invoiceData?.customerEmail || "N/A";
+  const gstin =
+    customer?.gstNumber || customer?.gstin || invoiceData?.customerGst || null;
+  const isWalkIn =
+    !customer || (!customer.name && !customer.phone && !customer.email);
 
   return (
-    <div className="w-full px-6 py-4 border-b border-[rgb(var(--color-border-primary))]/30 bg-[rgb(var(--color-bg-secondary))]/5">
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 lg:gap-12">
+    <div className="w-full px-5 sm:px-6 py-4 border-b border-[rgb(var(--color-border-primary))]/30 bg-[rgb(var(--color-bg-secondary))]/5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 min-w-0">
         {/* Left: Customer Identity */}
-        <div className="min-w-0 flex-1 flex items-start gap-4">
-          <div className="w-1.5 h-10 bg-[rgb(var(--color-primary))]/30 rounded-full mt-1 hidden sm:block shrink-0" />
-          <div className="space-y-0.5 min-w-0">
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-[rgb(var(--color-text-primary))] truncate">
+        <div className="min-w-0 flex-1 flex items-start gap-3">
+          <div className="p-2 bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))] rounded-lg hidden sm:flex items-center justify-center shrink-0 mt-0.5">
+            <User className="w-4 h-4" />
+          </div>
+          <div className="space-y-0.5 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2 min-w-0">
+              <h2 className="text-sm sm:text-base font-bold text-[rgb(var(--color-text-primary))] truncate max-w-full">
                 {customerName}
               </h2>
               {isWalkIn && (
-                <span className="text-[0.625rem] font-semibold px-2 py-0.5 rounded bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-secondary))] border border-[rgb(var(--color-border-primary))]/40">
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-secondary))] border border-[rgb(var(--color-border-primary))]/40 shrink-0">
                   Walk-In
                 </span>
               )}
             </div>
-            <p className="text-xs text-[rgb(var(--color-text-secondary))] font-medium line-clamp-1 max-w-xl">
+            <p
+              className="text-xs text-[rgb(var(--color-text-secondary))] font-medium truncate max-w-md"
+              title={customerAddress}
+            >
               {customerAddress}
             </p>
           </div>
         </div>
 
-        {/* Right: Contact & Identity Grid */}
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-          <div className="flex items-center gap-3">
-            <div className="space-y-0.5">
-              <p className="text-[0.5625rem] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-widest">
+        {/* Right: Contact & Identity Grid (responsive, never overflows) */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2.5 pt-2 md:pt-0 border-t md:border-t-0 border-[rgb(var(--color-border-primary))]/20 min-w-0 shrink-0">
+          {/* Phone */}
+          <div className="min-w-0 flex items-center gap-2">
+            <div className="p-1.5 rounded-md bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-tertiary))] shrink-0">
+              <Phone className="w-3.5 h-3.5" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[9px] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-wider">
                 Phone
               </p>
-              <p className="text-xs font-bold text-[rgb(var(--color-text-primary))]">
+              <p
+                className="text-xs font-semibold text-[rgb(var(--color-text-primary))] truncate max-w-[120px] sm:max-w-[150px]"
+                title={phone}
+              >
                 {phone}
               </p>
             </div>
-            <div className="h-6 w-px bg-[rgb(var(--color-border-primary))]/40 hidden sm:block" />
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="space-y-0.5">
-              <p className="text-[0.5625rem] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-widest">
+          {/* Email */}
+          <div className="min-w-0 flex items-center gap-2">
+            <div className="p-1.5 rounded-md bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-tertiary))] shrink-0">
+              <Mail className="w-3.5 h-3.5" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[9px] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-wider">
                 Email
               </p>
-              <p className="text-xs font-bold text-[rgb(var(--color-text-primary))] lowercase">
+              <p
+                className="text-xs font-semibold text-[rgb(var(--color-text-primary))] lowercase truncate max-w-[140px] sm:max-w-[180px]"
+                title={email}
+              >
                 {email}
               </p>
             </div>
-            <div className="h-6 w-px bg-[rgb(var(--color-border-primary))]/40 hidden sm:block" />
           </div>
 
+          {/* GSTIN */}
           {gstin && (
-            <div className="space-y-0.5">
-              <p className="text-[0.5625rem] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-widest">
-                GSTIN
-              </p>
-              <p className="text-xs font-black text-[rgb(var(--color-primary))] tracking-wide">
-                {gstin}
-              </p>
+            <div className="min-w-0 flex items-center gap-2">
+              <div className="p-1.5 rounded-md bg-[rgb(var(--color-primary))]/10 text-[rgb(var(--color-primary))] shrink-0">
+                <Building2 className="w-3.5 h-3.5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[9px] font-bold text-[rgb(var(--color-text-tertiary))] uppercase tracking-wider">
+                  GSTIN
+                </p>
+                <p
+                  className="text-xs font-bold text-[rgb(var(--color-primary))] font-mono tracking-wide truncate max-w-[140px]"
+                  title={gstin}
+                >
+                  {gstin}
+                </p>
+              </div>
             </div>
           )}
         </div>

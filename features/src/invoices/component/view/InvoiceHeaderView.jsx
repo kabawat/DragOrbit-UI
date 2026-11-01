@@ -49,15 +49,15 @@ export function InvoiceHeaderView({
       : "bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20";
 
   return (
-    <div className="px-6 py-5 border-b border-[rgb(var(--color-border-primary))]/30">
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+    <div className="px-5 sm:px-6 py-4 sm:py-5 border-b border-[rgb(var(--color-border-primary))]/30">
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-6 min-w-0">
         {/* Left: Document info */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4 min-w-0 flex-1">
           <div className="p-2.5 bg-[rgb(var(--color-primary))]/10 rounded-xl hidden sm:flex items-center justify-center shrink-0">
             <Receipt className="w-6 h-6 text-[rgb(var(--color-primary))]" />
           </div>
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
+          <div className="space-y-1.5 min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-[0.625rem] uppercase tracking-[0.25em] font-bold text-[rgb(var(--color-text-tertiary))]">
                 {docTypeLabel}
               </span>
@@ -69,25 +69,25 @@ export function InvoiceHeaderView({
               )}
             </div>
 
-            <h1 className="text-xl md:text-2xl font-black text-[rgb(var(--color-text-primary))] tracking-tight">
+            <h1 className="text-xl md:text-2xl font-black text-[rgb(var(--color-text-primary))] tracking-tight truncate">
               #{invoiceNumber}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[rgb(var(--color-text-secondary))] pt-0.5">
-              <span className="flex items-center gap-1.5 font-medium">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-[rgb(var(--color-text-secondary))] pt-0.5 min-w-0">
+              <span className="flex items-center gap-1.5 font-medium shrink-0">
                 <Clock className="w-3.5 h-3.5 text-[rgb(var(--color-text-tertiary))]" />
                 Issued: {formatDate(issueDate)}
               </span>
 
               {invoiceData.placeOfSupply && (
-                <span className="flex items-center gap-1.5 font-medium">
-                  <MapPin className="w-3.5 h-3.5 text-[rgb(var(--color-text-tertiary))]" />
+                <span className="flex items-center gap-1.5 font-medium truncate max-w-[180px]">
+                  <MapPin className="w-3.5 h-3.5 text-[rgb(var(--color-text-tertiary))] shrink-0" />
                   POS: {invoiceData.placeOfSupply}
                 </span>
               )}
 
               {invoiceData.paymentMode && (
-                <span className="flex items-center gap-1.5 font-medium">
+                <span className="flex items-center gap-1.5 font-medium shrink-0">
                   <Tag className="w-3.5 h-3.5 text-[rgb(var(--color-text-tertiary))]" />
                   Mode: {invoiceData.paymentMode}
                 </span>
@@ -97,7 +97,7 @@ export function InvoiceHeaderView({
         </div>
 
         {/* Right: Badges */}
-        <div className="flex flex-wrap items-center gap-2 self-start md:self-auto">
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
           <Badge
             size="sm"
             className={`${

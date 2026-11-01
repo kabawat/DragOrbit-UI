@@ -9,6 +9,7 @@ import {
   Edit,
   FileCheck,
   FileText,
+  Plus,
   Printer,
   Receipt,
   RotateCcw,
@@ -59,6 +60,8 @@ export function InvoiceActionsView({
   onReleaseInvoice,
   onPrintInvoice,
   onDownloadPDF,
+  onPrintAndSave,
+  onCreateNewInvoice,
   onUpdatePaymentStatus,
   onCancelInvoice,
   onIssueCreditNote,
@@ -88,7 +91,7 @@ export function InvoiceActionsView({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]/60 overflow-hidden">
+      <div className="bg-white dark:bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]/60 relative">
         {/* Actions Header */}
         <div className="p-5 border-b border-[rgb(var(--color-border-primary))]/30">
           <div className="flex items-center gap-3">
@@ -100,100 +103,107 @@ export function InvoiceActionsView({
         </div>
 
         {/* Primary Action Buttons Row */}
-        <div className="p-5 flex flex-wrap items-center gap-2 border-b border-[rgb(var(--color-border-primary))]/20">
-          {isDraft ? (
-            <>
+        <div className="p-5 flex flex-col gap-2.5 border-b border-[rgb(var(--color-border-primary))]/20">
+          {/* Main 2 Buttons: 1st Print & Save, 2nd Create New Invoice */}
+          <div className="flex items-center gap-2.5 w-full">
+            {(onPrintAndSave || onPrintInvoice) && (
+              <Button
+                variant="primary"
+                className="flex-1 min-w-[130px] h-9 font-bold text-xs uppercase px-3 shadow-none"
+                onClick={onPrintAndSave || onPrintInvoice}
+                leftIcon={Printer}
+                size="sm"
+              >
+                {t("invoice.printAndSave", { defaultValue: "Print & Save" })}
+              </Button>
+            )}
+
+            {onCreateNewInvoice && (
+              <Button
+                variant="outline"
+                className="flex-1 min-w-[140px] h-9 font-bold text-xs uppercase px-3"
+                onClick={onCreateNewInvoice}
+                leftIcon={Plus}
+                size="sm"
+              >
+                {t("invoice.createNewInvoice", { defaultValue: "Create New Invoice" })}
+              </Button>
+            )}
+          </div>
+
+          {/* Draft Actions: Edit & Release */}
+          {isDraft && (onEditInvoice || onReleaseInvoice) && (
+            <div className="flex items-center gap-2 w-full pt-1">
               {onEditInvoice && (
                 <Button
                   variant="outline"
-                  className="flex-1 min-w-[100px] h-9 font-bold text-xs uppercase px-3"
+                  className="flex-1 h-8 font-bold text-xs uppercase px-3"
                   onClick={onEditInvoice}
                   leftIcon={Edit}
                   size="sm"
                 >
-                  Edit
+                  {t("common.edit", { defaultValue: "Edit" })}
                 </Button>
               )}
               {onReleaseInvoice && (
                 <Button
                   variant="primary"
-                  className="flex-1 min-w-[110px] h-9 font-bold text-xs uppercase px-3 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="flex-1 h-8 font-bold text-xs uppercase px-3 bg-emerald-600 hover:bg-emerald-700 text-white"
                   onClick={onReleaseInvoice}
                   leftIcon={CheckCircle2}
                   size="sm"
                 >
-                  Release
+                  {t("common.release", { defaultValue: "Release" })}
                 </Button>
               )}
-            </>
-          ) : (
-            <>
-              {onPrintInvoice && (
-                <Button
-                  variant="primary"
-                  className="flex-1 min-w-[90px] h-9 font-bold text-xs uppercase px-3"
-                  onClick={onPrintInvoice}
-                  leftIcon={Printer}
-                  size="sm"
-                >
-                  Print
-                </Button>
-              )}
+            </div>
+          )}
 
-              {onDownloadPDF && (
-                <Button
-                  variant="outline"
-                  className="flex-1 min-w-[90px] h-9 font-bold text-xs uppercase px-3"
-                  onClick={() => onDownloadPDF(invoiceData)}
-                  leftIcon={Download}
-                  size="sm"
-                >
-                  PDF
-                </Button>
-              )}
-
+          {/* Secondary Actions: Pay Status, Cancel, Credit Note */}
+          {!isDraft && (!isPaid || !isCancelled) && (
+            <div className="flex flex-wrap items-center gap-2 w-full pt-1">
               {!isCancelled && !isPaid && onUpdatePaymentStatus && (
                 <Button
                   variant="outline"
-                  className="flex-1 min-w-[130px] h-9 font-bold text-xs uppercase px-3"
+                  className="flex-1 min-w-[110px] h-8 font-bold text-xs uppercase px-2"
                   onClick={onUpdatePaymentStatus}
                   leftIcon={CreditCard}
                   size="sm"
                 >
-                  Pay Status
+                  {t("invoice.payStatus", { defaultValue: "Pay Status" })}
                 </Button>
               )}
 
               {!isCancelled && onCancelInvoice && (
                 <Button
                   variant="outline"
-                  className="h-9 text-rose-600 border-rose-600/20 hover:bg-rose-600/5 font-bold text-xs uppercase px-3"
+                  className="h-8 text-rose-600 border-rose-600/20 hover:bg-rose-600/5 font-bold text-xs uppercase px-2.5"
                   onClick={onCancelInvoice}
                   leftIcon={XCircle}
                   size="sm"
                 >
-                  Cancel
+                  {t("common.cancel", { defaultValue: "Cancel" })}
                 </Button>
               )}
 
               {!isCancelled && onIssueCreditNote && (
                 <Button
                   variant="outline"
-                  className="h-9 text-amber-600 border-amber-600/20 hover:bg-amber-600/5 font-bold text-xs uppercase px-3"
+                  className="h-8 text-amber-600 border-amber-600/20 hover:bg-amber-600/5 font-bold text-xs uppercase px-2.5"
                   onClick={onIssueCreditNote}
                   leftIcon={RotateCcw}
                   size="sm"
                 >
-                  Credit Note
+                  {t("invoice.creditNote", { defaultValue: "Credit Note" })}
                 </Button>
               )}
-            </>
+            </div>
           )}
         </div>
 
         {/* Extra host action slots (e.g. POS quick payment buttons, sharing menu) */}
         {extraActions && (
-          <div className="px-5 py-3 border-b border-[rgb(var(--color-border-primary))]/20 bg-[rgb(var(--color-bg-secondary))]/5 flex flex-wrap gap-2">
+          <div className="px-5 py-3 border-b border-[rgb(var(--color-border-primary))]/20 bg-[rgb(var(--color-bg-secondary))]/5 flex flex-wrap items-center gap-2 relative z-30">
             {extraActions}
           </div>
         )}

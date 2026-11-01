@@ -153,9 +153,9 @@ export function BillItemsListView({
                     <span className="block text-[10px] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))] mb-0.5">
                       GST
                     </span>
-                    <Badge variant="primary" size="xs">
+                    <span className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                       {gstRate ? `${gstRate}%` : "0%"}
-                    </Badge>
+                    </span>
                   </div>
 
                   {/* Line Total */}

@@ -19,6 +19,8 @@ export function InvoiceDetailsScreen({
   onReleaseInvoice,
   onPrintInvoice,
   onDownloadPDF,
+  onPrintAndSave,
+  onCreateNewInvoice,
   onUpdatePaymentStatus,
   onCancelInvoice,
   onIssueCreditNote,
@@ -91,6 +93,8 @@ export function InvoiceDetailsScreen({
                   onReleaseInvoice={onReleaseInvoice}
                   onPrintInvoice={onPrintInvoice}
                   onDownloadPDF={onDownloadPDF}
+                  onPrintAndSave={onPrintAndSave}
+                  onCreateNewInvoice={onCreateNewInvoice}
                   onUpdatePaymentStatus={onUpdatePaymentStatus}
                   onCancelInvoice={onCancelInvoice}
                   onIssueCreditNote={onIssueCreditNote}
