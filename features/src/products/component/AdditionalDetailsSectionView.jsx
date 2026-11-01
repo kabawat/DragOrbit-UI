@@ -18,7 +18,7 @@ export function AdditionalDetailsSectionPresentation({ model }) {
   return (
     <>
       {/* Show in Catalog - correct place inside Catalog information section */}
-      <div className="mb-6">
+      <div className="mb-3.5">
         <Toggle
           label={t("products.showInCatalog")}
           checked={formData.showInCatalog !== false}
@@ -29,7 +29,7 @@ export function AdditionalDetailsSectionPresentation({ model }) {
       </div>
 
       {/* Add catalog content (descriptions, features, etc.) */}
-      <div className="mb-6">
+      <div className="mb-3.5">
         <Toggle
           label={t("products.addCatalogContent")}
           checked={formData.content?.isEnabled || false}
@@ -47,7 +47,7 @@ export function AdditionalDetailsSectionPresentation({ model }) {
       {formData.content?.isEnabled && (
         <>
           {/* Short Description */}
-          <div className="mb-6">
+          <div className="mb-3.5">
             <Textarea
               label={t("products.shortDescription")}
               placeholder={t("products.enterShortDescription")}
@@ -64,7 +64,7 @@ export function AdditionalDetailsSectionPresentation({ model }) {
           </div>
 
           {/* Product Features */}
-          <div className="mb-6">
+          <div className="mb-3.5">
             <TagInput
               label={t("products.productFeatures")}
               placeholder={t("products.addKeyFeatures")}
@@ -78,7 +78,7 @@ export function AdditionalDetailsSectionPresentation({ model }) {
           </div>
 
           {/* Product Tags */}
-          <div className="mb-6">
+          <div className="mb-3.5">
             <TagInput
               label={t("products.productTags")}
               placeholder={t("products.addTags")}
@@ -92,8 +92,8 @@ export function AdditionalDetailsSectionPresentation({ model }) {
           </div>
 
           {/* Product Specifications */}
-          <div className="mb-6">
-            <h4 className="text-sm font-medium text-[rgb(var(--color-text-primary))] mb-3">
+          <div className="mb-3.5">
+            <h4 className="text-sm font-medium text-[rgb(var(--color-text-primary))] mb-2">
               {t("products.productSpecifications")}
             </h4>
             <div className="space-y-3">

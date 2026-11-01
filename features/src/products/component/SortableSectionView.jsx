@@ -26,7 +26,7 @@ export function SortableSectionPresentation({ model }) {
   return (
     <div ref={setNodeRef} style={style} className="break-inside-avoid">
       <Card
-        className={`relative ${glassStyles.card}`}
+        className={`relative !p-4 sm:!p-5 shadow-sm rounded-xl border border-[rgb(var(--color-border-primary))] ${glassStyles.card}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -34,32 +34,35 @@ export function SortableSectionPresentation({ model }) {
         <div
           {...attributes}
           {...listeners}
-          className={`absolute top-2 right-2 p-2 cursor-grab active:cursor-grabbing text-gray-600 z-50 ${glassStyles.dragHandle} ${isHovered ? "opacity-100" : "opacity-0"}`}
+          className={`absolute top-2 right-2 p-1.5 rounded-md cursor-grab active:cursor-grabbing text-gray-500 z-50 ${glassStyles.dragHandle} ${isHovered ? "opacity-100" : "opacity-0"} transition-opacity`}
         >
-          <GripVertical className="w-4 h-4" />
+          <GripVertical className="w-3.5 h-3.5" />
         </div>
 
-        <CardHeader className={`${glassStyles.header} pr-20`}>
-          <div className="flex items-center space-x-3">
+        <CardHeader className={`${glassStyles.header} pr-12 !pb-2.5 !mb-3 border-b border-[rgb(var(--color-border-primary)/0.6)]`}>
+          <div className="flex items-center space-x-2.5">
             <div
-              className={`p-2 backdrop-blur-sm rounded-lg ${glassStyles.icon}`}
+              className={`p-1.5 backdrop-blur-sm rounded-lg shrink-0 ${glassStyles.icon}`}
             >
-              <Icon className="w-5 h-5 text-[rgb(var(--color-primary))]" />
+              <Icon className="w-4 h-4 text-[rgb(var(--color-primary))]" />
             </div>
-            <div className="flex-1">
-              <div className="flex items-center space-x-2">
-                <CardTitle className={`text-lg ${glassStyles.title}`}>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center space-x-1.5">
+                <CardTitle className={`text-sm sm:text-base font-semibold truncate ${glassStyles.title}`}>
                   {title}
                 </CardTitle>
-                <SharedTooltip content={t("products.sectionInformation")}><button aria-label={t("products.sectionInformation")}
-                  onClick={() => onInfoClick(id)}
-                  className="p-1 hover:bg-[rgb(var(--color-bg-secondary))] rounded-full transition-colors duration-200 group/info cursor-pointer"
-
-                >
-                  <Info className="w-4 h-4 text-[rgb(var(--color-text-tertiary))] group-hover/info:text-[rgb(var(--color-primary))]" />
-                </button></SharedTooltip>
+                <SharedTooltip content={t("products.sectionInformation")}>
+                  <button
+                    type="button"
+                    aria-label={t("products.sectionInformation")}
+                    onClick={() => onInfoClick(id)}
+                    className="p-0.5 hover:bg-[rgb(var(--color-bg-secondary))] rounded-full transition-colors duration-200 group/info cursor-pointer"
+                  >
+                    <Info className="w-3.5 h-3.5 text-[rgb(var(--color-text-tertiary))] group-hover/info:text-[rgb(var(--color-primary))]" />
+                  </button>
+                </SharedTooltip>
               </div>
-              <CardDescription className={glassStyles.description}>
+              <CardDescription className={`text-xs ${glassStyles.description} mt-0.5 truncate`}>
                 {subtitle}
               </CardDescription>
             </div>

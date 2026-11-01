@@ -165,9 +165,15 @@ const ProductTable = ({
 								{product.brand}
 							</p>
 							<div className="flex items-center gap-2 mt-1">
-								<span className="text-xs text-[rgb(var(--color-text-tertiary))]">
-									SKU: {product.sku}
-								</span>
+								{product.hasMultipleVariants && Number(product.variantsCount) > 1 ? (
+									<span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 font-medium">
+										{`${product.variantsCount} Variants`}
+									</span>
+								) : (
+									<span className="text-xs text-[rgb(var(--color-text-tertiary))]">
+										SKU: {product.sku || "N/A"}
+									</span>
+								)}
 							</div>
 						</div>
 					</div>
@@ -243,11 +249,18 @@ const ProductTable = ({
 			header: t("products.price"),
 			width: "14%",
 			cell: (product) => (
-				<>
+				<div className="flex flex-col">
 					<span className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
-						₹{product.sellingPrice.toLocaleString()}
+						{product.hasMultipleVariants && product.priceRange && product.priceRange.min !== product.priceRange.max
+							? `₹${product.priceRange.min.toLocaleString()} – ₹${product.priceRange.max.toLocaleString()}`
+							: `₹${(product.sellingPrice || 0).toLocaleString()}`}
 					</span>
-				</>
+					{product.hasMultipleVariants && Number(product.variantsCount) > 1 && (
+						<span className="text-[10px] text-purple-600 dark:text-purple-400 font-medium">
+							{product.variantsCount ? `${product.variantsCount} variants` : "Multi-variant"}
+						</span>
+					)}
+				</div>
 			),
 		},
 		{

@@ -289,12 +289,18 @@ const ProductCard = ({
 				{/* Stock Info */}
 				<div className="flex items-center justify-between">
 					<div className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
-						<span className="font-medium">{t("products.stock")}:</span>
+						<span className="font-medium">{t("products.stock")}:</span>{" "}
 						{product.stock} {t("products.units")}
 					</div>
 					<div className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
-						<span className="font-medium">{t("products.sku")}:</span>
-						{product.sku}
+						<span className="font-medium">{t("products.sku")}:</span>{" "}
+						{product.hasMultipleVariants && Number(product.variantsCount) > 1 ? (
+							<span className="inline-block text-[11px] px-1.5 py-0.5 rounded bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800 font-semibold">
+								{`${product.variantsCount} Variants`}
+							</span>
+						) : (
+							<span>{product.sku || "N/A"}</span>
+						)}
 					</div>
 				</div>
 
@@ -305,10 +311,12 @@ const ProductCard = ({
 							{t("products.sellingPrice")}
 						</span>
 						<span className="text-sm sm:text-base md:text-lg font-bold text-[rgb(var(--color-text-primary))]">
-							₹{product.sellingPrice.toLocaleString()}
+							{product.hasMultipleVariants && product.priceRange && product.priceRange.min !== product.priceRange.max
+								? `₹${product.priceRange.min.toLocaleString()} – ₹${product.priceRange.max.toLocaleString()}`
+								: `₹${(product.sellingPrice || 0).toLocaleString()}`}
 						</span>
 					</div>
-					{product.mrp > product.sellingPrice && (
+					{!product.hasMultipleVariants && product.mrp > product.sellingPrice && (
 						<div className="flex items-center justify-between">
 							<span className="text-xs sm:text-sm text-[rgb(var(--color-text-secondary))]">
 								{t("products.mrp")}
@@ -318,7 +326,7 @@ const ProductCard = ({
 							</span>
 						</div>
 					)}
-					{discount > 0 && (
+					{!product.hasMultipleVariants && discount > 0 && (
 						<div className="flex items-center justify-between">
 							<span className="text-xs sm:text-sm text-green-500 font-medium">
 								{t("products.discount")}

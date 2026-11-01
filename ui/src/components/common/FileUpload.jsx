@@ -219,7 +219,7 @@ const FileUpload = ({
 						}
             ${error ? "border-red-500 bg-red-50/50" : ""}
             ${disabled ? "opacity-50 cursor-not-allowed" : ""}
-            ${variant === "compact" ? "aspect-square flex items-center justify-center p-2" : value.length > 0 ? "mb-4 p-4" : "p-10"}
+            ${variant === "compact" ? "aspect-square flex items-center justify-center p-2" : value.length > 0 ? "mb-3 p-3.5" : "py-6 px-4"}
             ${className}
           `}
 					onDrop={handleDrop}
@@ -229,13 +229,13 @@ const FileUpload = ({
 				>
 					<div className="text-center w-full leading-relaxed">
 						{loading ? (
-							<div className="flex flex-col items-center justify-center space-y-4 py-4">
-								<div className="w-12 h-12 border-4 border-[rgb(var(--color-primary))]/20 border-t-[rgb(var(--color-primary))] rounded-full animate-spin"></div>
-								<div className="space-y-1">
-									<p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+							<div className="flex flex-col items-center justify-center space-y-3 py-3">
+								<div className="w-8 h-8 border-3 border-[rgb(var(--color-primary))]/20 border-t-[rgb(var(--color-primary))] rounded-full animate-spin"></div>
+								<div className="space-y-0.5">
+									<p className="text-xs font-semibold text-[rgb(var(--color-text-primary))]">
 										{t("common.uploading") || "Uploading Assets..."}
 									</p>
-									<p className="text-xs text-[rgb(var(--color-text-tertiary))]">
+									<p className="text-[11px] text-[rgb(var(--color-text-tertiary))]">
 										{t("common.pleaseWait") ||
 											"Please wait while we secure your file"}
 									</p>
@@ -257,13 +257,13 @@ const FileUpload = ({
 						) : (
 							<div className="flex flex-col items-center">
 								<div
-									className={`p-5 rounded-full mb-4 transition-transform duration-500 ${isDragOver ? "bg-[rgb(var(--color-primary))]/20 scale-110 shadow-lg" : "bg-[rgb(var(--color-bg-tertiary))]"}`}
+									className={`p-2.5 rounded-xl mb-2 transition-transform duration-300 ${isDragOver ? "bg-[rgb(var(--color-primary))]/20 scale-105 shadow-md" : "bg-[rgb(var(--color-bg-tertiary))]"}`}
 								>
 									<Upload
-										className={`w-10 h-10 ${isDragOver ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-tertiary))]"}`}
+										className={`w-6 h-6 ${isDragOver ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-tertiary))]"}`}
 									/>
 								</div>
-								<h4 className="text-base font-bold text-[rgb(var(--color-text-primary))] mb-1">
+								<h4 className="text-sm font-semibold text-[rgb(var(--color-text-primary))] mb-0.5">
 									{isDragOver
 										? t("common.dropFilesHere") || "Drop files here"
 										: dropZoneLabel ||
@@ -272,11 +272,11 @@ const FileUpload = ({
 												: t("common.clickToUploadOrDrag") ||
 													"Upload your brand assets")}
 								</h4>
-								<p className="text-xs text-[rgb(var(--color-text-tertiary))] max-w-[240px] mx-auto text-balance">
+								<p className="text-[11px] text-[rgb(var(--color-text-tertiary))] max-w-[280px] mx-auto text-balance">
 									{sizeLimitLabel || (
 										<>
-											{accept.includes("image") ? "Images" : "Files"} up to
-											<span className="font-bold text-[rgb(var(--color-text-secondary))]">
+											{accept.includes("image") ? "Images" : "Files"} up to{" "}
+											<span className="font-semibold text-[rgb(var(--color-text-secondary))]">
 												{maxSize / (1024 * 1024)}MB
 											</span>
 											{multiple && ` • Max ${maxFiles} files`}

@@ -15,7 +15,7 @@ import {
   MoreVertical,
   Package,
   Plus,
-  Printer,
+  RefreshCw,
   Search,
   Shield,
   Tag,
@@ -23,7 +23,6 @@ import {
   X,
   XCircle,
   Zap,
-  RefreshCw,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
@@ -40,18 +39,6 @@ function extractProductRecord(raw) {
     return data[0] || null;
   }
   return data || null;
-}
-
-function extractVariantsList(raw) {
-  if (!raw) return [];
-  let data = raw;
-  if (data.data !== undefined) {
-    data = data.data;
-  }
-  if (data && typeof data === "object" && data.data !== undefined) {
-    data = data.data;
-  }
-  return Array.isArray(data) ? data : [];
 }
 
 function formatDateTime(dateVal, momentFn) {
@@ -91,104 +78,100 @@ function buildCompleteProduct(detailed, preview) {
       : Array.isArray(base.variants)
         ? base.variants
         : [];
-  const defaultVariant = variants.find((v) => v?.isDefault) || variants[0] || null;
+  const defaultVariant = variants.find((v) => v.isDefault) || variants[0];
+  const hasMultipleVariants =
+    full.hasMultipleVariants !== undefined
+      ? Boolean(full.hasMultipleVariants)
+      : base.hasMultipleVariants !== undefined
+        ? Boolean(base.hasMultipleVariants)
+        : variants.length > 1;
 
-  // Selling Price (never drop to 0 if base preview had a positive price)
-  const sellingPrice =
-    (full.sellingPrice !== undefined && full.sellingPrice !== "" && Number(full.sellingPrice) > 0 ? full.sellingPrice : undefined) ??
-    (pricing.sellingPrice !== undefined && pricing.sellingPrice !== "" && Number(pricing.sellingPrice) > 0 ? pricing.sellingPrice : undefined) ??
-    (defaultVariant?.sellingPrice !== undefined && defaultVariant?.sellingPrice !== "" && Number(defaultVariant?.sellingPrice) > 0 ? defaultVariant?.sellingPrice : undefined) ??
-    (base.sellingPrice !== undefined && base.sellingPrice !== "" && Number(base.sellingPrice) > 0 ? base.sellingPrice : undefined) ??
-    full.sellingPrice ??
-    pricing.sellingPrice ??
-    base.sellingPrice ??
-    0;
+  const totalVariantsStock =
+    variants.length > 0
+      ? variants.reduce(
+          (sum, v) =>
+            sum +
+            Number(
+              v.stock ??
+                v.inventory?.availableQuantity ??
+                v.inventory?.totalQuantity ??
+                v.stockQuantity ??
+                0
+            ),
+          0
+        )
+      : undefined;
 
-  // MRP
-  const mrp =
-    (full.mrp !== undefined && full.mrp !== "" && Number(full.mrp) > 0 ? full.mrp : undefined) ??
-    (pricing.mrp !== undefined && pricing.mrp !== "" && Number(pricing.mrp) > 0 ? pricing.mrp : undefined) ??
-    (defaultVariant?.mrp !== undefined && defaultVariant?.mrp !== "" && Number(defaultVariant?.mrp) > 0 ? defaultVariant?.mrp : undefined) ??
-    (base.mrp !== undefined && base.mrp !== "" && Number(base.mrp) > 0 ? base.mrp : undefined) ??
-    full.mrp ??
-    pricing.mrp ??
-    base.mrp ??
-    0;
+  // Multi-variant pricing ranges
+  const variantPrices = variants
+    .map((v) => Number(v.sellingPrice))
+    .filter((p) => !isNaN(p) && p > 0);
+  const minPrice = variantPrices.length > 0 ? Math.min(...variantPrices) : 0;
+  const maxPrice = variantPrices.length > 0 ? Math.max(...variantPrices) : minPrice;
 
-  // Base / Purchase Price
-  const basePrice =
-    (full.basePrice !== undefined && full.basePrice !== "" && Number(full.basePrice) > 0 ? full.basePrice : undefined) ??
-    (full.purchasePrice !== undefined && full.purchasePrice !== "" && Number(full.purchasePrice) > 0 ? full.purchasePrice : undefined) ??
-    (pricing.basePrice !== undefined && pricing.basePrice !== "" && Number(pricing.basePrice) > 0 ? pricing.basePrice : undefined) ??
-    (defaultVariant?.basePrice !== undefined && defaultVariant?.basePrice !== "" && Number(defaultVariant?.basePrice) > 0 ? defaultVariant?.basePrice : undefined) ??
-    (base.basePrice !== undefined && base.basePrice !== "" && Number(base.basePrice) > 0 ? base.basePrice : undefined) ??
-    (base.purchasePrice !== undefined && base.purchasePrice !== "" && Number(base.purchasePrice) > 0 ? base.purchasePrice : undefined) ??
-    full.basePrice ??
-    base.basePrice ??
-    base.purchasePrice ??
-    0;
+  const variantMrps = variants
+    .map((v) => Number(v.mrp))
+    .filter((m) => !isNaN(m) && m > 0);
+  const minMrp = variantMrps.length > 0 ? Math.min(...variantMrps) : 0;
+  const maxMrp = variantMrps.length > 0 ? Math.max(...variantMrps) : minMrp;
 
-  // Stock
-  const stock =
-    (full.stock !== undefined && full.stock !== "" && Number(full.stock) > 0 ? Number(full.stock) : undefined) ??
-    (full.stockQuantity !== undefined && full.stockQuantity !== "" && Number(full.stockQuantity) > 0 ? Number(full.stockQuantity) : undefined) ??
-    (defaultVariant?.stock !== undefined && defaultVariant?.stock !== "" && Number(defaultVariant?.stock) > 0 ? Number(defaultVariant?.stock) : undefined) ??
-    (defaultVariant?.stockQuantity !== undefined && defaultVariant?.stockQuantity !== "" && Number(defaultVariant?.stockQuantity) > 0 ? Number(defaultVariant?.stockQuantity) : undefined) ??
-    (base.stock !== undefined && base.stock !== "" ? Number(base.stock) : undefined) ??
-    (full.stock !== undefined && full.stock !== "" ? Number(full.stock) : undefined) ??
-    0;
+  const variantCosts = variants
+    .map((v) => Number(v.stock?.purchasePrice ?? v.purchasePrice ?? v.basePrice ?? 0))
+    .filter((c) => !isNaN(c) && c > 0);
+  const minCost = variantCosts.length > 0 ? Math.min(...variantCosts) : 0;
+  const maxCost = variantCosts.length > 0 ? Math.max(...variantCosts) : minCost;
 
-  const sku =
-    full.sku ||
-    defaultVariant?.sku ||
-    base.sku ||
-    "";
+  let sellingPrice, mrp, basePrice, stock, sku, barcode;
 
-  const barcode =
-    full.barcode ||
-    defaultVariant?.barcode ||
-    base.barcode ||
-    "";
+  if (hasMultipleVariants) {
+    sellingPrice = minPrice;
+    mrp = maxMrp;
+    basePrice = minCost;
+    stock = totalVariantsStock !== undefined ? totalVariantsStock : (Number(full.stock) || 0);
+    sku = "Multiple SKUs";
+    barcode = "";
+  } else {
+    // Single / Default Product: use default variant details
+    sellingPrice =
+      (full.sellingPrice !== undefined && full.sellingPrice !== "" && Number(full.sellingPrice) > 0 ? full.sellingPrice : undefined) ??
+      (pricing.sellingPrice !== undefined && pricing.sellingPrice !== "" && Number(pricing.sellingPrice) > 0 ? pricing.sellingPrice : undefined) ??
+      (defaultVariant?.sellingPrice !== undefined && defaultVariant?.sellingPrice !== "" && Number(defaultVariant?.sellingPrice) > 0 ? defaultVariant?.sellingPrice : undefined) ??
+      (base.sellingPrice !== undefined && base.sellingPrice !== "" && Number(base.sellingPrice) > 0 ? base.sellingPrice : undefined) ??
+      0;
 
-  const uom =
-    full.uom ||
-    pricing.uom ||
-    defaultVariant?.uom ||
-    base.uom ||
-    "PCS";
+    mrp =
+      (full.mrp !== undefined && full.mrp !== "" && Number(full.mrp) > 0 ? full.mrp : undefined) ??
+      (pricing.mrp !== undefined && pricing.mrp !== "" && Number(pricing.mrp) > 0 ? pricing.mrp : undefined) ??
+      (defaultVariant?.mrp !== undefined && defaultVariant?.mrp !== "" && Number(defaultVariant?.mrp) > 0 ? defaultVariant?.mrp : undefined) ??
+      (base.mrp !== undefined && base.mrp !== "" && Number(base.mrp) > 0 ? base.mrp : undefined) ??
+      0;
 
-  const discount =
-    full.discount ??
-    pricing.discount ??
-    defaultVariant?.discount ??
-    base.discount ??
-    0;
+    basePrice =
+      (full.basePrice !== undefined && full.basePrice !== "" && Number(full.basePrice) > 0 ? full.basePrice : undefined) ??
+      (full.purchasePrice !== undefined && full.purchasePrice !== "" && Number(full.purchasePrice) > 0 ? full.purchasePrice : undefined) ??
+      (defaultVariant?.stock?.purchasePrice !== undefined && Number(defaultVariant?.stock?.purchasePrice) > 0 ? defaultVariant?.stock?.purchasePrice : undefined) ??
+      (defaultVariant?.purchasePrice !== undefined && Number(defaultVariant?.purchasePrice) > 0 ? defaultVariant?.purchasePrice : undefined) ??
+      (defaultVariant?.basePrice !== undefined && Number(defaultVariant?.basePrice) > 0 ? defaultVariant?.basePrice : undefined) ??
+      (base.basePrice !== undefined && Number(base.basePrice) > 0 ? base.basePrice : undefined) ??
+      0;
 
-  const hsnCode =
-    full.hsnCode ||
-    full.hsn ||
-    gstInfo.hsnCode ||
-    base.hsnCode ||
-    base.hsn ||
-    "";
+    stock =
+      (full.stock !== undefined && full.stock !== "" && Number(full.stock) > 0 ? Number(full.stock) : undefined) ??
+      (defaultVariant?.stock?.stock !== undefined ? Number(defaultVariant.stock.stock) : undefined) ??
+      (defaultVariant?.stock !== undefined && Number(defaultVariant.stock) > 0 ? Number(defaultVariant.stock) : undefined) ??
+      (defaultVariant?.inventory?.availableQuantity !== undefined ? Number(defaultVariant.inventory.availableQuantity) : undefined) ??
+      (base.stock !== undefined ? Number(base.stock) : undefined) ??
+      0;
 
-  const gstRate =
-    full.gstRate ??
-    full.taxRate ??
-    full.gst ??
-    gstInfo.gstRate ??
-    base.gstRate ??
-    base.taxRate ??
-    base.gst ??
-    0;
+    sku = full.sku || defaultVariant?.sku || base.sku || "";
+    barcode = full.barcode || defaultVariant?.barcode || base.barcode || "";
+  }
 
-  const isGstIncluded =
-    full.isTaxInclusive ??
-    full.isGstIncluded ??
-    gstInfo.isGstIncluded ??
-    base.isGstIncluded ??
-    base.isTaxInclusive ??
-    false;
+  const uom = full.uom || pricing.uom || defaultVariant?.uom || base.uom || "PCS";
+  const discount = full.discount ?? pricing.discount ?? defaultVariant?.discount ?? base.discount ?? 0;
+  const hsnCode = full.hsnCode || full.hsn || gstInfo.hsnCode || base.hsnCode || base.hsn || "";
+  const gstRate = full.gstRate ?? full.taxRate ?? full.gst ?? gstInfo.gstRate ?? base.gstRate ?? base.taxRate ?? base.gst ?? 0;
+  const isGstIncluded = full.isTaxInclusive ?? full.isGstIncluded ?? gstInfo.isGstIncluded ?? base.isGstIncluded ?? base.isTaxInclusive ?? false;
 
   return {
     ...base,
@@ -197,6 +180,10 @@ function buildCompleteProduct(detailed, preview) {
     name: full.name || base.name || "",
     brand: full.brand || base.brand || "",
     category: full.category || base.category || null,
+    hasMultipleVariants,
+    priceRange: { min: minPrice, max: maxPrice },
+    mrpRange: { min: minMrp, max: maxMrp },
+    costRange: { min: minCost, max: maxCost },
     sellingPrice,
     mrp,
     basePrice,
@@ -212,7 +199,7 @@ function buildCompleteProduct(detailed, preview) {
     taxRate: gstRate,
     isGstIncluded,
     isTaxInclusive: isGstIncluded,
-    variants,
+    variants: hasMultipleVariants ? variants : [],
     timestamps: full.timestamps || base.timestamps,
     createdAt: full.createdAt || full.timestamps?.createdAt || base.createdAt,
     updatedAt: full.updatedAt || full.timestamps?.updatedAt || base.updatedAt,
@@ -233,6 +220,7 @@ export function ProductMasterDetailView({
   onEdit,
   onDelete,
   onViewDetails,
+  onViewVariants,
   onCreate,
   onSelectProduct,
   storeId = "",
@@ -241,7 +229,6 @@ export function ProductMasterDetailView({
   moment: momentProp = null,
   onFetchDetails = null,
   productService = null,
-  variantService = null,
   onDownloadPDF = null,
   PrintTemplate = null,
   containerHeight = "calc(100vh - 195px)",
@@ -275,6 +262,29 @@ export function ProductMasterDetailView({
   const [openRowMenuId, setOpenRowMenuId] = useState(null);
   const [showMobileDetail, setShowMobileDetail] = useState(
     Boolean(initialProductId)
+  );
+
+  // Navigate to variants page / view variant
+  const handleNavigateToVariants = useCallback(
+    (variantId = null) => {
+      if (onViewVariants) {
+        onViewVariants(productData, variantId);
+        return;
+      }
+      if (typeof window !== "undefined") {
+        const isDashboard = window.location.pathname.includes("/dashboard");
+        if (variantId) {
+          window.location.href = isDashboard
+            ? `/dashboard/variants/view/${variantId}`
+            : `/variants/${variantId}`;
+        } else {
+          window.location.href = isDashboard
+            ? "/dashboard/variants"
+            : "/variants";
+        }
+      }
+    },
+    [onViewVariants, productData]
   );
 
   // Tracking refs
@@ -320,7 +330,9 @@ export function ProductMasterDetailView({
   // If currently selected product was deleted or no longer exists, fallback to first
   useEffect(() => {
     if (selectedProductId && products.length > 0) {
-      const exists = products.some((p) => String(p.id || p._id) === String(selectedProductId));
+      const exists = products.some(
+        (p) => String(p.id || p._id) === String(selectedProductId)
+      );
       if (!exists) {
         const first = products[0];
         setSelectedProductId(first?.id || first?._id);
@@ -376,16 +388,19 @@ export function ProductMasterDetailView({
             setDetailsError(null);
           } else {
             setDetailsError(
-              t("errors.failedToFetchData", { item: t("common.product", "Product") }) ||
-              "Failed to load product details"
+              t("errors.failedToFetchData", {
+                item: t("common.product", "Product"),
+              }) || "Failed to load product details"
             );
           }
         } catch (err) {
           if (fetchId !== activeFetchIdRef.current) return;
           setDetailsError(
             err?.message ||
-            t("errors.failedToFetchData", { item: t("common.product", "Product") }) ||
-            "Failed to load product details"
+              t("errors.failedToFetchData", {
+                item: t("common.product", "Product"),
+              }) ||
+              "Failed to load product details"
           );
         } finally {
           if (fetchId === activeFetchIdRef.current) {
@@ -398,48 +413,34 @@ export function ProductMasterDetailView({
       // If productService is provided
       if (productService && storeId) {
         try {
-          const rawResult = await productService.getProducts({ store: storeId, id: prodId });
+          const rawResult = await productService.getProducts({
+            store: storeId,
+            id: prodId,
+          });
           if (fetchId !== activeFetchIdRef.current) return;
 
           const product = extractProductRecord(rawResult);
 
           if (product) {
-            let variants = [];
-            if (variantService) {
-              try {
-                const variantsResult = await variantService.getVariants({
-                  store: storeId,
-                  product: prodId,
-                  limit: 20,
-                });
-                variants = extractVariantsList(variantsResult);
-              } catch {
-                // variants fetch optional
-              }
-            }
-
-            const complete = buildCompleteProduct(
-              {
-                ...product,
-                variants: variants.length > 0 ? variants : product?.variants,
-              },
-              preview
-            );
+            const complete = buildCompleteProduct(product, preview);
 
             setProductData(complete);
             setDetailsError(null);
           } else {
             setDetailsError(
-              t("errors.failedToFetchData", { item: t("common.product", "Product") }) ||
-              "Failed to load product details"
+              t("errors.failedToFetchData", {
+                item: t("common.product", "Product"),
+              }) || "Failed to load product details"
             );
           }
         } catch (err) {
           if (fetchId !== activeFetchIdRef.current) return;
           setDetailsError(
             err?.message ||
-            t("errors.failedToFetchData", { item: t("common.product", "Product") }) ||
-            "Failed to load product details"
+              t("errors.failedToFetchData", {
+                item: t("common.product", "Product"),
+              }) ||
+              "Failed to load product details"
           );
         } finally {
           if (fetchId === activeFetchIdRef.current) {
@@ -451,7 +452,7 @@ export function ProductMasterDetailView({
 
       setDetailsLoading(false);
     },
-    [onFetchDetails, productService, variantService, storeId, t]
+    [onFetchDetails, productService, storeId, t]
   );
 
   const fetchProductFullDetailsRef = useRef(fetchProductFullDetails);
@@ -478,6 +479,14 @@ export function ProductMasterDetailView({
   // Helper status badges
   const getStatusBadge = (status) => {
     const s = String(status || "").toLowerCase();
+    if (s === "out_of_stock") {
+      return (
+        <Badge variant="danger" size="sm">
+          <XCircle className="w-3 h-3 mr-1 inline" />
+          {t("products.outOfStock", "Out of Stock")}
+        </Badge>
+      );
+    }
     if (s === "published" || s === "active") {
       return (
         <Badge variant="success" size="sm">
@@ -545,8 +554,33 @@ export function ProductMasterDetailView({
 
   const currentStock = Number(productData?.stock || 0);
   const stockValue =
-    currentStock *
-    Number(productData?.sellingPrice || productData?.basePrice || 0);
+    productData?.hasMultipleVariants &&
+    Array.isArray(productData?.variants) &&
+    productData.variants.length > 0
+      ? productData.variants.reduce((sum, v) => {
+          const vStock = Number(
+            v.stock ??
+              v.inventory?.availableQuantity ??
+              v.inventory?.totalQuantity ??
+              v.stockQuantity ??
+              0
+          );
+          const vPrice = Number(
+            v.stock?.purchasePrice ??
+              v.purchasePrice ??
+              v.basePrice ??
+              v.sellingPrice ??
+              0
+          );
+          return sum + vStock * vPrice;
+        }, 0)
+      : currentStock *
+        Number(
+          productData?.basePrice ||
+            productData?.purchasePrice ||
+            productData?.sellingPrice ||
+            0
+        );
 
   return (
     <>
@@ -574,8 +608,9 @@ export function ProductMasterDetailView({
         {/* LEFT COLUMN: PRODUCTS LIST               */}
         {/* ========================================================= */}
         <div
-          className={`w-full md:w-80 lg:w-96 flex-shrink-0 flex flex-col border-r border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] transition-all ${showMobileDetail ? "hidden md:flex" : "flex"
-            }`}
+          className={`w-full md:w-80 lg:w-96 flex-shrink-0 flex flex-col border-r border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] transition-all ${
+            showMobileDetail ? "hidden md:flex" : "flex"
+          }`}
         >
           {/* Top Search & Add Product Bar */}
           <div className="p-3 border-b border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] flex items-center gap-2">
@@ -598,7 +633,6 @@ export function ProductMasterDetailView({
                 </button>
               )}
             </div>
-
           </div>
 
           {/* List Column Header (Vyapar inspired: ITEM | QUANTITY) */}
@@ -637,9 +671,9 @@ export function ProductMasterDetailView({
                 <p className="text-sm font-medium">
                   {localSearch
                     ? t(
-                      "products.noResultsDescription",
-                      "No products match your search."
-                    )
+                        "products.noResultsDescription",
+                        "No products match your search."
+                      )
                     : t("products.noProducts", "No products found")}
                 </p>
                 {canEdit && !localSearch && onCreate && (
@@ -662,16 +696,24 @@ export function ProductMasterDetailView({
                   prod.category?.name ||
                   (Array.isArray(prod.category)
                     ? prod.category.join(", ")
-                    : prod.category) ||
+                    : typeof prod.category === "string"
+                      ? prod.category
+                      : "") ||
+                  prod.categoryLabel ||
                   "";
+                const variantsCount =
+                  prod.variantsCount ??
+                  prod.variants_count ??
+                  (Array.isArray(prod.variants) ? prod.variants.length : 0);
 
                 return (
                   <div
                     key={prodId}
-                    className={`relative flex items-center justify-between transition-all duration-150 group select-none ${isSelected
-                      ? "bg-[rgb(var(--color-primary))]/10 dark:bg-[rgb(var(--color-primary))]/20 border-l-4 border-l-[rgb(var(--color-primary))] shadow-sm"
-                      : "hover:bg-[rgb(var(--color-bg-secondary))] border-l-4 border-l-transparent"
-                      }`}
+                    className={`relative flex items-center justify-between transition-all duration-150 group select-none ${
+                      isSelected
+                        ? "bg-[rgb(var(--color-primary))]/10 dark:bg-[rgb(var(--color-primary))]/20 border-l-4 border-l-[rgb(var(--color-primary))] shadow-sm"
+                        : "hover:bg-[rgb(var(--color-bg-secondary))] border-l-4 border-l-transparent"
+                    }`}
                   >
                     {/* Clickable item body */}
                     <button
@@ -682,17 +724,20 @@ export function ProductMasterDetailView({
                       {/* Left: Name + Brand/Category + SKU */}
                       <div className="min-w-0 flex-1">
                         <h4
-                          className={`text-sm truncate transition-colors ${isSelected
-                            ? "font-bold text-[rgb(var(--color-primary))]"
-                            : "font-medium text-[rgb(var(--color-text-primary))] group-hover:text-[rgb(var(--color-primary))]"
-                            }`}
+                          className={`text-sm truncate transition-colors ${
+                            isSelected
+                              ? "font-bold text-[rgb(var(--color-primary))]"
+                              : "font-medium text-[rgb(var(--color-text-primary))] group-hover:text-[rgb(var(--color-primary))]"
+                          }`}
                         >
                           {prod.name}
                         </h4>
 
-                        <div className="flex items-center gap-2 mt-1 text-xs text-[rgb(var(--color-text-secondary))] truncate">
+                        <div className="flex items-center gap-1.5 mt-1 text-xs text-[rgb(var(--color-text-secondary))] truncate">
                           {prod.brand && (
-                            <span className="font-medium">{prod.brand}</span>
+                            <span className="font-semibold text-[rgb(var(--color-text-primary))]">
+                              {prod.brand}
+                            </span>
                           )}
                           {prod.brand && categoryLabel && <span>•</span>}
                           {categoryLabel && (
@@ -700,22 +745,33 @@ export function ProductMasterDetailView({
                           )}
                         </div>
 
-                        <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                        <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
                           {getStatusBadge(prod.status)}
+                          {prod.hasMultipleVariants !== false &&
+                            Number(variantsCount) > 1 && (
+                              <Badge
+                                variant="secondary"
+                                size="sm"
+                                className="font-medium"
+                              >
+                                <Tag className="w-3 h-3 mr-1 inline" />
+                                {variantsCount}{" "}
+                                {t("products.variants", "Variants")}
+                              </Badge>
+                            )}
                           {prod.showInCatalog !== false ? (
                             <span
                               className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"
-                              title="In Digital Shop"
+                              title={t("products.inCatalog", "In Digital Shop")}
                             />
                           ) : (
                             <span
                               className="inline-block w-1.5 h-1.5 rounded-full bg-gray-400"
-                              title="Hidden"
+                              title={t("products.hidden", "Hidden")}
                             />
                           )}
                         </div>
                       </div>
-
                     </button>
 
                     {/* 3-dots action menu */}
@@ -787,7 +843,9 @@ export function ProductMasterDetailView({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setOpenRowMenuId(null);
-                                onDelete?.(prod);
+                                onDelete?.(
+                                  prodId || prod.id || prod._id || prod
+                                );
                               }}
                               className="w-full px-3 py-1.5 text-left text-xs font-medium text-rose-600 dark:text-rose-400 hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
                             >
@@ -805,11 +863,16 @@ export function ProductMasterDetailView({
 
             {/* Sentinel for infinite scroll */}
             {pagination?.hasNextPage && sentinelRef && (
-              <div ref={sentinelRef} className="h-6 w-full flex items-center justify-center p-2">
+              <div
+                ref={sentinelRef}
+                className="h-6 w-full flex items-center justify-center p-2"
+              >
                 {isFetchingMore && (
                   <div className="flex items-center gap-2 text-xs text-[rgb(var(--color-text-secondary))]">
                     <div className="w-3.5 h-3.5 border-2 border-[rgb(var(--color-primary))] border-t-transparent rounded-full animate-spin" />
-                    <span>{t("common.loadingMore", "Loading more products...")}</span>
+                    <span>
+                      {t("common.loadingMore", "Loading more products...")}
+                    </span>
                   </div>
                 )}
               </div>
@@ -821,8 +884,9 @@ export function ProductMasterDetailView({
         {/* RIGHT COLUMN: PRODUCT DETAILS VIEW                        */}
         {/* ========================================================= */}
         <div
-          className={`flex-1 flex flex-col min-w-0 bg-[rgb(var(--color-bg-primary))] overflow-hidden ${showMobileDetail ? "flex" : "hidden md:flex"
-            }`}
+          className={`flex-1 flex flex-col min-w-0 bg-[rgb(var(--color-bg-primary))] overflow-hidden ${
+            showMobileDetail ? "flex" : "hidden md:flex"
+          }`}
         >
           {/* Mobile Back Button */}
           <div className="md:hidden p-3 border-b border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2">
@@ -852,11 +916,7 @@ export function ProductMasterDetailView({
                 )}
               </p>
               {canEdit && onCreate && (
-                <Button
-                  variant="primary"
-                  onClick={onCreate}
-                  leftIcon={Plus}
-                >
+                <Button variant="primary" onClick={onCreate} leftIcon={Plus}>
                   {t("products.addProduct", "Add Product")}
                 </Button>
               )}
@@ -926,11 +986,25 @@ export function ProductMasterDetailView({
                 </div>
 
                 {/* Header Action Buttons */}
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 flex-wrap shrink-0">
+                  {productData.hasMultipleVariants && (
+                    <Button
+                      size="xs"
+                      variant="outline"
+                      onClick={() => handleNavigateToVariants()}
+                      leftIcon={Eye}
+                      className="text-purple-600 dark:text-purple-400 border-purple-300 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-950/40"
+                    >
+                      {t("products.viewVariants", "View Variants")}
+                    </Button>
+                  )}
+
                   {canEdit && onStockIn && (
                     <Button
-                      size="sm"
-                      onClick={() => onStockIn(productData.id || productData._id)}
+                      size="xs"
+                      onClick={() =>
+                        onStockIn(productData.id || productData._id)
+                      }
                       leftIcon={ArrowDownToLine}
                       className="text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
                     >
@@ -941,7 +1015,7 @@ export function ProductMasterDetailView({
                   {canEdit && onEdit && (
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="xs"
                       onClick={() => onEdit(productData.id || productData._id)}
                       leftIcon={Edit}
                       style={{ borderWidth: 1 }}
@@ -953,7 +1027,7 @@ export function ProductMasterDetailView({
                   {onDownloadPDF && (
                     <Button
                       variant="secondary"
-                      size="sm"
+                      size="xs"
                       onClick={onDownloadPDF}
                       leftIcon={Download}
                     >
@@ -963,7 +1037,7 @@ export function ProductMasterDetailView({
 
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="xs"
                     onClick={() => {
                       if (selectedProductId) {
                         fetchProductFullDetailsRef.current(selectedProductId);
@@ -978,8 +1052,15 @@ export function ProductMasterDetailView({
 
                   {canDelete && onDelete && (
                     <Button
-                      size="sm"
-                      onClick={() => onDelete(productData)}
+                      size="xs"
+                      onClick={() =>
+                        onDelete(
+                          productData?.id ||
+                            productData?._id ||
+                            selectedProductId ||
+                            productData
+                        )
+                      }
                       leftIcon={Trash2}
                       className="bg-red-600 hover:bg-red-700 text-white"
                     >
@@ -998,32 +1079,53 @@ export function ProductMasterDetailView({
               </div>
 
               {/* Quick KPI Bar */}
-              <div className="px-6 py-3 bg-[rgb(var(--color-bg-secondary))]/50 border-b border-[rgb(var(--color-border-primary))] grid grid-cols-2 sm:grid-cols-4 gap-3 flex-shrink-0">
-                {/* Selling Price */}
-                <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
-                  <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
-                    {t("products.sellingPrice", "Sale Price")}
-                  </span>
-                  <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 block truncate">
-                    {productData.sellingPrice
-                      ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
-                      : "₹0.00"}
-                  </span>
-                </div>
+              <div
+                className={`px-6 py-3 bg-[rgb(var(--color-bg-secondary))]/50 border-b border-[rgb(var(--color-border-primary))] grid gap-3 flex-shrink-0 ${
+                  productData.hasMultipleVariants
+                    ? "grid-cols-2 sm:grid-cols-3"
+                    : "grid-cols-2 sm:grid-cols-4"
+                }`}
+              >
+                {!productData.hasMultipleVariants ? (
+                  <>
+                    {/* Selling Price (single product only) */}
+                    <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                      <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
+                        {t("products.sellingPrice", "Sale Price")}
+                      </span>
+                      <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 block truncate">
+                        {productData.sellingPrice
+                          ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
+                          : "₹0.00"}
+                      </span>
+                    </div>
 
-                {/* Base Price / MRP */}
-                <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
-                  <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
-                    {t("products.mrp", "Purchase / MRP")}
-                  </span>
-                  <span className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
-                    {productData.mrp
-                      ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
-                      : productData.basePrice
-                        ? `₹${Number(productData.basePrice).toLocaleString("en-IN")}`
-                        : "₹0.00"}
-                  </span>
-                </div>
+                    {/* Base Price / MRP (single product only) */}
+                    <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                      <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
+                        {t("products.mrp", "Purchase / MRP")}
+                      </span>
+                      <span className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
+                        {productData.mrp
+                          ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
+                          : productData.basePrice
+                            ? `₹${Number(productData.basePrice).toLocaleString("en-IN")}`
+                            : "₹0.00"}
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  /* Total Variants metric for multi-variant products */
+                  <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                    <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
+                      {t("products.variants", "Variants")}
+                    </span>
+                    <span className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5 block truncate">
+                      {productData.variants?.length || 0}{" "}
+                      {t("products.variants", "Variants")}
+                    </span>
+                  </div>
+                )}
 
                 {/* Stock Quantity */}
                 <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
@@ -1031,12 +1133,13 @@ export function ProductMasterDetailView({
                     {t("products.stockQuantity", "Stock Quantity")}
                   </span>
                   <span
-                    className={`text-base font-extrabold font-mono mt-0.5 block truncate ${currentStock === 0
-                      ? "text-rose-600 dark:text-rose-400"
-                      : currentStock < 10
-                        ? "text-amber-600 dark:text-amber-400"
-                        : "text-emerald-600 dark:text-emerald-400"
-                      }`}
+                    className={`text-base font-extrabold font-mono mt-0.5 block truncate ${
+                      currentStock === 0
+                        ? "text-rose-600 dark:text-rose-400"
+                        : currentStock < 10
+                          ? "text-amber-600 dark:text-amber-400"
+                          : "text-emerald-600 dark:text-emerald-400"
+                    }`}
                   >
                     {currentStock} {t("products.units", "units")}
                   </span>
@@ -1113,12 +1216,14 @@ export function ProductMasterDetailView({
                         {t("products.sku", "SKU")}
                       </p>
                       <p className="text-sm font-bold font-mono text-[rgb(var(--color-text-primary))]">
-                        {productData.sku || t("common.na", "N/A")}
+                        {productData.hasMultipleVariants
+                          ? t("products.multipleSkus", "Multiple SKUs")
+                          : (productData.sku || t("common.na", "N/A"))}
                       </p>
                     </div>
 
                     {/* Barcode */}
-                    {productData.barcode && (
+                    {!productData.hasMultipleVariants && productData.barcode && (
                       <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
                         <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
                           {t("products.barcode", "Barcode")}
@@ -1143,102 +1248,105 @@ export function ProductMasterDetailView({
                   </div>
                 </div>
 
-                {/* 2. Pricing Information Card */}
-                <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg flex items-center justify-center">
-                      <IndianRupee className="w-5 h-5 text-green-500" />
-                    </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
-                        {t(
-                          "products.pricingInformation",
-                          "Pricing Information"
-                        )}
-                      </h3>
-                      <p className="text-xs text-[rgb(var(--color-text-secondary))]">
-                        {t(
-                          "products.pricingDetails",
-                          "Cost, pricing and margin breakdown"
-                        )}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {/* Selling Price */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
-                        {t("products.sellingPrice", "Selling Price")}
-                      </p>
-                      <p className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
-                        {productData.sellingPrice
-                          ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
-                          : "₹0.00"}
-                      </p>
+                {/* 2. Pricing Information Card (ONLY for single product) */}
+                {!productData.hasMultipleVariants && (
+                  <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="w-10 h-10 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg flex items-center justify-center">
+                        <IndianRupee className="w-5 h-5 text-green-500" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                          {t(
+                            "products.pricingInformation",
+                            "Pricing Information"
+                          )}
+                        </h3>
+                        <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                          {t(
+                            "products.pricingDetails",
+                            "Cost, pricing and margin breakdown"
+                          )}
+                        </p>
+                      </div>
                     </div>
 
-                    {/* MRP */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
-                        {t("products.mrp", "MRP")}
-                      </p>
-                      <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
-                        {productData.mrp
-                          ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
-                          : "₹0.00"}
-                      </p>
-                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {/* Selling Price */}
+                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                          {t("products.sellingPrice", "Selling Price")}
+                        </p>
+                        <p className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                          {productData.sellingPrice
+                            ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
+                            : "₹0.00"}
+                        </p>
+                      </div>
 
-                    {/* Purchase Price */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
-                        {t("products.purchasePrice", "Purchase Price")}
-                      </p>
-                      <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
-                        {productData.basePrice || productData.purchasePrice
-                          ? `₹${Number(productData.basePrice || productData.purchasePrice).toLocaleString("en-IN")}`
-                          : "₹0.00"}
-                      </p>
-                    </div>
+                      {/* MRP */}
+                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                          {t("products.mrp", "MRP")}
+                        </p>
+                        <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
+                          {productData.mrp
+                            ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
+                            : "₹0.00"}
+                        </p>
+                      </div>
 
-                    {/* Profit Margin */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
-                        {t("products.margin", "Profit Margin")}
-                      </p>
-                      {(() => {
-                        const cost = Number(
-                          productData.basePrice ||
-                          productData.purchasePrice ||
-                          0
-                        );
-                        const sale = Number(productData.sellingPrice || 0);
-                        if (cost > 0 && sale > 0) {
-                          const margin = (((sale - cost) / sale) * 100).toFixed(
-                            1
+                      {/* Purchase Price */}
+                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                          {t("products.purchasePrice", "Purchase Price")}
+                        </p>
+                        <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
+                          {productData.basePrice || productData.purchasePrice
+                            ? `₹${Number(productData.basePrice || productData.purchasePrice).toLocaleString("en-IN")}`
+                            : "₹0.00"}
+                        </p>
+                      </div>
+
+                      {/* Profit Margin */}
+                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                          {t("products.margin", "Profit Margin")}
+                        </p>
+                        {(() => {
+                          const cost = Number(
+                            productData.basePrice ||
+                              productData.purchasePrice ||
+                              0
                           );
-                          const isProfit = Number(margin) >= 0;
-                          return (
-                            <p
-                              className={`text-base font-extrabold font-mono ${isProfit
-                                ? "text-emerald-600 dark:text-emerald-400"
-                                : "text-rose-600 dark:text-rose-400"
+                          const sale = Number(productData.sellingPrice || 0);
+                          if (cost > 0 && sale > 0) {
+                            const margin = (((sale - cost) / sale) * 100).toFixed(
+                              1
+                            );
+                            const isProfit = Number(margin) >= 0;
+                            return (
+                              <p
+                                className={`text-base font-extrabold font-mono ${
+                                  isProfit
+                                    ? "text-emerald-600 dark:text-emerald-400"
+                                    : "text-rose-600 dark:text-rose-400"
                                 }`}
-                            >
-                              {isProfit ? `+${margin}%` : `${margin}%`}
+                              >
+                                {isProfit ? `+${margin}%` : `${margin}%`}
+                              </p>
+                            );
+                          }
+                          return (
+                            <p className="text-base font-bold text-[rgb(var(--color-text-secondary))]">
+                              {t("common.na", "N/A")}
                             </p>
                           );
-                        }
-                        return (
-                          <p className="text-base font-bold text-[rgb(var(--color-text-secondary))]">
-                            {t("common.na", "N/A")}
-                          </p>
-                        );
-                      })()}
+                        })()}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* 3. Inventory & Stock Status Card */}
                 <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
@@ -1254,7 +1362,10 @@ export function ProductMasterDetailView({
                         )}
                       </h3>
                       <p className="text-xs text-[rgb(var(--color-text-secondary))]">
-                        {t("products.stockDetails", "Current stock levels and tracking")}
+                        {t(
+                          "products.stockDetails",
+                          "Current stock levels and tracking"
+                        )}
                       </p>
                     </div>
                   </div>
@@ -1267,12 +1378,13 @@ export function ProductMasterDetailView({
                       </p>
                       <div className="flex items-center gap-2">
                         <span
-                          className={`text-xl font-extrabold font-mono ${currentStock === 0
-                            ? "text-rose-600 dark:text-rose-400"
-                            : currentStock < 10
-                              ? "text-amber-600 dark:text-amber-400"
-                              : "text-emerald-600 dark:text-emerald-400"
-                            }`}
+                          className={`text-xl font-extrabold font-mono ${
+                            currentStock === 0
+                              ? "text-rose-600 dark:text-rose-400"
+                              : currentStock < 10
+                                ? "text-amber-600 dark:text-amber-400"
+                                : "text-emerald-600 dark:text-emerald-400"
+                          }`}
                         >
                           {currentStock}
                         </span>
@@ -1298,67 +1410,161 @@ export function ProductMasterDetailView({
                         {t("products.minAlert", "Low Stock Alert Level")}
                       </p>
                       <p className="text-sm font-bold text-[rgb(var(--color-text-primary))] font-mono">
-                        {productData.minStockLevel || productData.lowStockAlert || 5}{" "}
+                        {productData.minStockLevel ||
+                          productData.lowStockAlert ||
+                          5}{" "}
                         {t("products.units", "units")}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* 4. Variants Section (if available) */}
-                {Array.isArray(productData.variants) &&
+                {/* 4. Variants Section (only rendered when product has multiple variants) */}
+                {productData.hasMultipleVariants &&
+                  Array.isArray(productData.variants) &&
                   productData.variants.length > 0 && (
                     <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                      <div className="flex items-center space-x-3 mb-6">
-                        <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-lg flex items-center justify-center">
-                          <Zap className="w-5 h-5 text-purple-500" />
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-lg flex items-center justify-center">
+                            <Zap className="w-5 h-5 text-purple-500" />
+                          </div>
+                          <div>
+                            <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                              {t("products.variants", "Product Variants")} (
+                              {productData.variants.length})
+                            </h3>
+                            <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                              {t(
+                                "products.variantsDescription",
+                                "Sizes, colors and available options"
+                              )}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
-                            {t("products.variants", "Product Variants")} (
-                            {productData.variants.length})
-                          </h3>
-                          <p className="text-xs text-[rgb(var(--color-text-secondary))]">
-                            {t(
-                              "products.variantsDescription",
-                              "Sizes, colors and available options"
-                            )}
-                          </p>
-                        </div>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleNavigateToVariants()}
+                          leftIcon={Eye}
+                          className="text-purple-600 dark:text-purple-400 border-purple-300 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-950/40 self-start sm:self-auto"
+                        >
+                          {t(
+                            "products.viewAllVariants",
+                            "View / Manage Variants"
+                          )}
+                        </Button>
                       </div>
 
                       <div className="overflow-x-auto border border-[rgb(var(--color-border-primary))] rounded-lg">
                         <table className="w-full text-left text-xs divide-y divide-[rgb(var(--color-border-primary))]">
                           <thead className="bg-[rgb(var(--color-bg-secondary))]/70 uppercase tracking-wider font-semibold text-[rgb(var(--color-text-secondary))]">
                             <tr>
-                              <th className="px-4 py-3">{t("products.variant", "Variant")}</th>
-                              <th className="px-4 py-3">{t("products.sku", "SKU")}</th>
-                              <th className="px-4 py-3">{t("products.sellingPrice", "Price")}</th>
-                              <th className="px-4 py-3">{t("products.stock", "Stock")}</th>
+                              <th className="px-4 py-3">
+                                {t("products.variant", "Variant")}
+                              </th>
+                              <th className="px-4 py-3">
+                                {t("products.sku", "SKU")}
+                              </th>
+                              <th className="px-4 py-3">
+                                {t("products.sellingPrice", "Price")}
+                              </th>
+                              <th className="px-4 py-3">
+                                {t("products.stock", "Stock")}
+                              </th>
+                              <th className="px-4 py-3 text-right">
+                                {t("common.action", "Action")}
+                              </th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-[rgb(var(--color-border-primary))]/50">
-                            {productData.variants.map((v, idx) => (
-                              <tr
-                                key={v.id || v._id || idx}
-                                className="hover:bg-[rgb(var(--color-bg-secondary))]/40"
-                              >
-                                <td className="px-4 py-3 font-medium text-[rgb(var(--color-text-primary))]">
-                                  {v.name || v.title || `Variant #${idx + 1}`}
-                                </td>
-                                <td className="px-4 py-3 font-mono text-[rgb(var(--color-text-secondary))]">
-                                  {v.sku || "-"}
-                                </td>
-                                <td className="px-4 py-3 font-bold font-mono text-emerald-600 dark:text-emerald-400">
-                                  {v.price || v.sellingPrice
-                                    ? `₹${Number(v.price || v.sellingPrice).toLocaleString("en-IN")}`
-                                    : "₹0.00"}
-                                </td>
-                                <td className="px-4 py-3">
-                                  {renderStockPill(v.stock ?? v.quantity ?? 0)}
-                                </td>
-                              </tr>
-                            ))}
+                            {productData.variants.map((v, idx) => {
+                              const variantName =
+                                v.displayName ||
+                                v.name ||
+                                v.title ||
+                                `Variant #${idx + 1}`;
+                              const variantStock =
+                                v.stock ??
+                                v.inventory?.availableQuantity ??
+                                v.inventory?.totalQuantity ??
+                                v.quantity ??
+                                0;
+                              const variantPrice = v.sellingPrice ?? v.price;
+                              return (
+                                <tr
+                                  key={v.id || v._id || idx}
+                                  className="hover:bg-[rgb(var(--color-bg-secondary))]/40"
+                                >
+                                  <td className="px-4 py-3 font-medium text-[rgb(var(--color-text-primary))]">
+                                    <div className="flex items-center gap-2">
+                                      <span>{variantName}</span>
+                                      {v.isDefault && (
+                                        <Badge variant="secondary" size="xs">
+                                          {t("common.default", "Default")}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    {Array.isArray(v.options) &&
+                                      v.options.length > 0 && (
+                                        <div className="text-[11px] text-[rgb(var(--color-text-secondary))] mt-0.5">
+                                          {v.options
+                                            .map((o) => `${o.name}: ${o.value}`)
+                                            .join(", ")}
+                                        </div>
+                                      )}
+                                  </td>
+                                  <td className="px-4 py-3 font-mono text-[rgb(var(--color-text-secondary))]">
+                                    <div>{v.sku || "-"}</div>
+                                    {v.barcode && (
+                                      <div className="text-[10px] text-[rgb(var(--color-text-secondary))]/70 font-mono">
+                                        {v.barcode}
+                                      </div>
+                                    )}
+                                  </td>
+                                  <td className="px-4 py-3 font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                                    {variantPrice !== undefined &&
+                                    variantPrice !== null
+                                      ? `₹${Number(variantPrice).toLocaleString("en-IN")}`
+                                      : "₹0.00"}
+                                    {v.mrp &&
+                                      Number(v.mrp) >
+                                        Number(variantPrice || 0) && (
+                                        <span className="ml-1.5 text-[10px] font-normal text-[rgb(var(--color-text-secondary))] line-through">
+                                          ₹
+                                          {Number(v.mrp).toLocaleString(
+                                            "en-IN"
+                                          )}
+                                        </span>
+                                      )}
+                                  </td>
+                                  <td className="px-4 py-3">
+                                    {renderStockPill(variantStock)}
+                                  </td>
+                                  <td className="px-4 py-3 text-right">
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        handleNavigateToVariants(
+                                          v.id || v._id
+                                        )
+                                      }
+                                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 transition-colors"
+                                      title={t(
+                                        "products.viewVariant",
+                                        "View & manage this variant"
+                                      )}
+                                    >
+                                      <Eye className="w-3.5 h-3.5" />
+                                      <span>
+                                        {t("common.view", "View")}
+                                      </span>
+                                    </button>
+                                  </td>
+                                </tr>
+                              );
+                            })}
                           </tbody>
                         </table>
                       </div>
@@ -1373,10 +1579,7 @@ export function ProductMasterDetailView({
                     </div>
                     <div>
                       <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
-                        {t(
-                          "products.taxCompliance",
-                          "Tax & Compliance"
-                        )}
+                        {t("products.taxCompliance", "Tax & Compliance")}
                       </h3>
                       <p className="text-xs text-[rgb(var(--color-text-secondary))]">
                         {t(
@@ -1393,7 +1596,9 @@ export function ProductMasterDetailView({
                         {t("products.hsnCode", "HSN Code")}
                       </p>
                       <p className="text-sm font-bold font-mono text-[rgb(var(--color-text-primary))]">
-                        {productData.hsn || productData.hsnCode || t("common.na", "N/A")}
+                        {productData.hsn ||
+                          productData.hsnCode ||
+                          t("common.na", "N/A")}
                       </p>
                     </div>
 
@@ -1402,7 +1607,8 @@ export function ProductMasterDetailView({
                         {t("products.taxRate", "GST / Tax Rate")}
                       </p>
                       <p className="text-sm font-bold text-[rgb(var(--color-text-primary))] font-mono">
-                        {productData.taxRate !== undefined && productData.taxRate !== null
+                        {productData.taxRate !== undefined &&
+                        productData.taxRate !== null
                           ? `${productData.taxRate}%`
                           : productData.gstRate !== undefined
                             ? `${productData.gstRate}%`

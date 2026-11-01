@@ -51,6 +51,7 @@ export function ProductListContentView({ model }) {
 				onViewDetails={handleViewProduct}
 				onStockIn={handleStockIn}
 				onCreate={model.onCreate}
+				onViewVariants={model.onViewVariants}
 				storeId={model.storeId}
 			/>
 		);
