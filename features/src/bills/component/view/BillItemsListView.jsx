@@ -54,7 +54,18 @@ export function BillItemsListView({
         </div>
       </div>
 
-      {/* Responsive Line Items List (Card/Row view matching Create Invoice/Bill) */}
+      {/* Table Column Headers: visible on sm: screens and up, hidden when wrapped / small screens */}
+      <div className="hidden sm:flex items-center justify-between px-5 py-2.5 bg-[rgb(var(--color-bg-secondary))]/40 border-b border-[rgb(var(--color-border-primary))]/30 text-[0.625rem] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))]">
+        <div className="flex-1 min-w-0">Item Details</div>
+        <div className="flex items-center gap-4 sm:gap-5 shrink-0 text-right">
+          <div className="w-14 text-center">Qty</div>
+          <div className="w-20 text-right">Price</div>
+          <div className="w-14 text-center">GST</div>
+          <div className="w-24 text-right pr-1">Amount</div>
+        </div>
+      </div>
+
+      {/* Responsive Line Items List */}
       <div className="divide-y divide-[rgb(var(--color-border-primary))]/20 w-full">
         {items.map((item, index) => {
           const productName =
@@ -79,12 +90,12 @@ export function BillItemsListView({
           return (
             <div
               key={`${item.product || item._id || index}-${index}`}
-              className="p-4 sm:p-5 hover:bg-[rgb(var(--color-bg-secondary))]/30 transition-colors w-full"
+              className="p-4 sm:px-5 sm:py-3.5 hover:bg-[rgb(var(--color-bg-secondary))]/30 transition-colors w-full"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-6 w-full">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-5 w-full">
                 {/* Left side: #SR badge + Product Name + SKU / HSN + UOM */}
                 <div className="flex items-start gap-3 min-w-0 flex-1">
-                  <span className="font-mono text-xs font-bold text-[rgb(var(--color-text-secondary))] bg-[rgb(var(--color-bg-secondary))] px-2 py-1 rounded-md shrink-0 mt-0.5">
+                  <span className="font-mono text-xs font-bold text-[rgb(var(--color-text-secondary))] bg-[rgb(var(--color-bg-secondary))] px-2 py-0.5 rounded shrink-0 mt-0.5">
                     #{index + 1}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -99,7 +110,7 @@ export function BillItemsListView({
                       )}
                     </div>
                     {(sku || (hsnCode && hsnCode !== "-")) && (
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-[rgb(var(--color-text-tertiary))] font-mono">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 mt-1 text-xs text-[rgb(var(--color-text-tertiary))] font-mono">
                         {sku && (
                           <span>
                             SKU:{" "}
@@ -121,49 +132,53 @@ export function BillItemsListView({
                   </div>
                 </div>
 
-                {/* Right side: Responsive metrics row / grid (Qty, Price, GST, Line Total) */}
-                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between sm:justify-end gap-3 sm:gap-5 pt-2 sm:pt-0 border-t sm:border-t-0 border-[rgb(var(--color-border-primary))]/20 shrink-0">
+                {/* Right side: Desktop / Tablet metrics row (Aligned under table header, NO repeated labels) */}
+                <div className="hidden sm:flex items-center gap-4 sm:gap-5 shrink-0">
                   {/* Quantity */}
-                  <div className="text-left sm:text-center min-w-[60px]">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))] mb-0.5">
-                      Qty
-                    </span>
+                  <div className="w-14 text-center">
                     <span className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
                       {qty}
-                      {uom ? (
-                        <span className="text-xs font-normal text-[rgb(var(--color-text-tertiary))] ml-1">
-                          {uom}
-                        </span>
-                      ) : null}
                     </span>
                   </div>
 
                   {/* Unit Price */}
-                  <div className="text-left sm:text-right min-w-[80px]">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))] mb-0.5">
-                      Unit Price
-                    </span>
+                  <div className="w-20 text-right">
                     <span className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                       {formatCurrency(unitPrice)}
                     </span>
                   </div>
 
                   {/* GST */}
-                  <div className="text-left sm:text-center min-w-[65px]">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))] mb-0.5">
-                      GST
-                    </span>
+                  <div className="w-14 text-center">
                     <span className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                       {gstRate ? `${gstRate}%` : "0%"}
                     </span>
                   </div>
 
                   {/* Line Total */}
-                  <div className="text-right min-w-[95px] pl-2 sm:pl-4 border-l sm:border-l border-[rgb(var(--color-border-primary))]/30">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-[rgb(var(--color-text-tertiary))] mb-0.5">
-                      Amount
-                    </span>
+                  <div className="w-24 text-right pr-1">
                     <span className="text-base font-black text-[rgb(var(--color-text-primary))]">
+                      {formatCurrency(itemTotal)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Mobile metrics row (Clean, compact, no horizontal scrolling or cluttered labels) */}
+                <div className="flex sm:hidden items-center justify-between pt-2.5 border-t border-[rgb(var(--color-border-primary))]/20 text-xs">
+                  <div className="flex flex-wrap items-center gap-1.5 text-[rgb(var(--color-text-secondary))]">
+                    <span className="font-bold text-[rgb(var(--color-text-primary))]">
+                      {qty} {uom || ""}
+                    </span>
+                    <span>×</span>
+                    <span>{formatCurrency(unitPrice)}</span>
+                    {gstRate > 0 && (
+                      <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-secondary))]">
+                        +{gstRate}% GST
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <span className="text-sm font-black text-[rgb(var(--color-text-primary))]">
                       {formatCurrency(itemTotal)}
                     </span>
                   </div>

@@ -55,8 +55,13 @@ export function getThemeTokens(
 		if (value)
 			variables[cssVar] = value.startsWith("#") ? hexToRgbSpace(value) : value;
 	}
-	variables["--color-bg-tertiary"] = hexToRgbSpace(colors.surface);
-	variables["--color-border-secondary"] = hexToRgbSpace(colors.border);
+	variables["--color-bg-tertiary"] =
+		mode === "dark" ? "30 30 32" : hexToRgbSpace(colors.surface);
+	variables["--color-border-secondary"] =
+		mode === "dark" ? "45 45 48" : hexToRgbSpace(colors.border);
+	variables["--color-text-tertiary"] = mode === "dark" ? "209 213 219" : "156 163 175";
+	variables["--color-border-primary-light"] =
+		mode === "dark" ? "rgba(75, 85, 99, 0.4)" : "rgba(229, 231, 235, 0.3)";
 	return { themeName: name, variant: mode, colors, variables };
 }
 /** Produces bootstrap text; browser effects happen only when the host executes it. */

@@ -107,7 +107,8 @@
 }
 
 /* Dark Theme Variant */
-[data-theme="default"][data-variant="dark"] {
+[data-variant="dark"],
+.dark {
 	--color-bg-primary: 9 9 11;
 	/* zinc-950 */
 	--color-bg-secondary: 18 18 18;

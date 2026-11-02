@@ -1,5 +1,5 @@
 "use client";
-import { Copy, Download, Mail, MessageCircle, Send } from "lucide-react";
+import { Copy, Download, Mail, MessageCircle, Share2 } from "lucide-react";
 
 export function InvoiceShareMenuPresentation({ model }) {
   const {
@@ -18,9 +18,12 @@ export function InvoiceShareMenuPresentation({ model }) {
     handleEmail,
     handleCopyLink,
     align = "left",
+    direction = "down",
   } = model;
 
   const alignClass = align === "right" ? "right-0" : "left-0";
+  const directionClass =
+    direction === "up" ? "bottom-full mb-1.5" : "top-full mt-1.5";
 
   return (
     <div
@@ -33,21 +36,21 @@ export function InvoiceShareMenuPresentation({ model }) {
         className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-[rgb(var(--color-border-primary))]/60 bg-[rgb(var(--color-bg-primary))] hover:bg-[rgb(var(--color-bg-secondary))] text-[rgb(var(--color-text-primary))] text-xs font-semibold transition-colors duration-200 cursor-pointer shadow-none ${buttonClassName}`}
         title={
           typeof t === "function"
-            ? t("common.send", { defaultValue: "Send" })
-            : "Send"
+            ? t("common.share", { defaultValue: "Share" })
+            : "Share"
         }
       >
-        <Send className="w-3.5 h-3.5 text-[rgb(var(--color-primary))]" />
+        <Share2 className="w-3.5 h-3.5 text-[rgb(var(--color-primary))]" />
         <span>
           {typeof t === "function"
-            ? t("common.send", { defaultValue: "Send" }) || "Send"
-            : "Send"}
+            ? t("common.share", { defaultValue: "Share" }) || "Share"
+            : "Share"}
         </span>
       </button>
 
       {isOpen ? (
         <div
-          className={`absolute ${alignClass} top-full mt-1.5 w-48 sm:w-52 bg-[rgb(var(--color-bg-primary))] rounded-xl shadow-xl border border-[rgb(var(--color-border-primary))] py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 ${dropdownClassName}`}
+          className={`absolute ${alignClass} ${directionClass} w-48 sm:w-52 bg-[rgb(var(--color-bg-primary))] rounded-xl shadow-xl border border-[rgb(var(--color-border-primary))] py-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 ${dropdownClassName}`}
         >
           {showDownload && onDownloadPDF ? (
             <>

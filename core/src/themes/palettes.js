@@ -13,6 +13,7 @@ export const themes = {
 	rose: warmThemes.rose,
 
 	// Cool Themes
+	azure: coolThemes.azure,
 	violet: coolThemes.violet,
 	indigo: coolThemes.indigo,
 	purple: coolThemes.purple,
