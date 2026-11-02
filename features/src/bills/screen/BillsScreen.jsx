@@ -71,3 +71,5 @@ export function BillsScreen({ model }) {
     </div>
   );
 }
+
+export default BillsScreen;

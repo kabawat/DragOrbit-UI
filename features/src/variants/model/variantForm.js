@@ -51,9 +51,9 @@ export function normalizeVariantRecord(variant = {}) {
 		barcode: variant.barcode ?? "",
 		options: Array.isArray(variant.options)
 			? variant.options.map((o) => ({
-					name: o?.name ?? "",
-					value: o?.value ?? "",
-				}))
+				name: o?.name ?? "",
+				value: o?.value ?? "",
+			}))
 			: [],
 		mrp: variant.mrp ?? "",
 		sellingPrice: variant.sellingPrice ?? "",
@@ -225,10 +225,6 @@ export function extractImageUrls(images = []) {
 		.filter(Boolean);
 }
 
-/**
- * Persist uploaded image URLs against a newly created variant.
- * Call after createVariant succeeds while form still holds storage URLs.
- */
 export async function syncVariantImagesAfterCreate({
 	variantId,
 	images,
@@ -258,3 +254,219 @@ export function variantDisplayLabel(variant) {
 		"Variant"
 	);
 }
+
+export const MAX_VARIANTS_PER_BATCH = 5;
+
+export function computeDiscount(mrp, sellingPrice, fallbackDiscount) {
+	const numMrp = Number(mrp);
+	const numSp = Number(sellingPrice);
+	if (
+		Number.isFinite(numMrp) &&
+		Number.isFinite(numSp) &&
+		numMrp > 0 &&
+		numSp <= numMrp
+	) {
+		const rawDiscount = ((numMrp - numSp) / numMrp) * 100;
+		return Number(rawDiscount.toFixed(2));
+	}
+	const numFallback = Number(fallbackDiscount);
+	return Number.isFinite(numFallback) ? numFallback : 0;
+}
+
+export function createEmptyBatchVariant(index = 0, defaultValues = {}) {
+	const baseSku = defaultValues.sku ? `${defaultValues.sku}-V${index + 1}` : "";
+	return {
+		id: `var_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+		displayName: "",
+		sku: baseSku,
+		barcode: "",
+		mrp: defaultValues.mrp ?? "",
+		sellingPrice: defaultValues.sellingPrice ?? "",
+		discount: defaultValues.discount ?? "",
+		stock: "",
+		purchasePrice: "",
+		supplierId: defaultValues.supplierId || "",
+		status: "ACTIVE",
+		showInCatalog: true,
+		sortOrder: index,
+		options: [],
+		images: [],
+	};
+}
+
+export function buildBatchVariantsPayload({
+	store = "",
+	product = "",
+	variants = [],
+} = {}) {
+	const resolvedProductId =
+		typeof product === "object"
+			? (product?.id ?? product?._id ?? "")
+			: String(product || "").trim();
+
+	const resolvedStoreId =
+		typeof store === "object"
+			? (store?.storeId ?? store?.id ?? store?._id ?? "")
+			: String(store || "").trim();
+
+	const mappedVariants = (Array.isArray(variants) ? variants : [])
+		.slice(0, MAX_VARIANTS_PER_BATCH)
+		.map((v, idx) => {
+			const mrp = parseFloat(v.mrp) || 0;
+			const sellingPrice = parseFloat(v.sellingPrice) || 0;
+			const discount = computeDiscount(mrp, sellingPrice, v.discount);
+
+			const rawSku = String(v.sku || "").trim();
+			const sku = rawSku ? rawSku.toUpperCase() : undefined;
+			const rawBarcode = String(v.barcode || "").trim();
+			const barcode = rawBarcode || undefined;
+
+			const rawStock = v.stockQuantity ?? v.stock?.stock ?? v.stock;
+			const stockNum =
+				rawStock !== "" && rawStock != null ? Number(rawStock) : 0;
+
+			const purchasePrice =
+				v.stock?.purchasePrice != null && v.stock?.purchasePrice !== ""
+					? Number(v.stock.purchasePrice)
+					: v.purchasePrice != null && v.purchasePrice !== ""
+						? Number(v.purchasePrice)
+						: v.basePrice != null && v.basePrice !== ""
+							? Number(v.basePrice)
+							: 0;
+
+			const supplier =
+				v.stock?.supplier ??
+				v.supplierId ??
+				v.supplier ??
+				null;
+
+			const stockObject =
+				stockNum > 0
+					? {
+						stock: stockNum,
+						purchasePrice: purchasePrice >= 0 ? purchasePrice : 0,
+						...(supplier ? { supplier } : {}),
+					}
+					: null;
+
+			const variantItem = {
+				displayName: String(v.displayName || "").trim(),
+				mrp,
+				sellingPrice,
+				showInCatalog: v.showInCatalog !== false,
+				sortOrder: idx,
+				status: v.status || "ACTIVE",
+				discount,
+				stock: stockObject,
+			};
+
+			if (sku) variantItem.sku = sku;
+			if (barcode) variantItem.barcode = barcode;
+
+			const options = (v.options || [])
+				.filter((o) => o?.name?.trim() && o?.value?.trim())
+				.map((o) => ({ name: o.name.trim(), value: o.value.trim() }));
+			if (options.length > 0) {
+				variantItem.options = options;
+			}
+
+			if (Array.isArray(v.images) && v.images.length > 0) {
+				variantItem.images = v.images
+					.map((img) => (typeof img === "string" ? img : img?.url))
+					.filter(Boolean);
+			}
+
+			return variantItem;
+		});
+
+	return {
+		store: resolvedStoreId,
+		product: resolvedProductId,
+		variants: mappedVariants,
+	};
+}
+
+export function validateBatchVariants({ product = "", variants = [] } = {}) {
+	const errors = {};
+	const variantErrors = [];
+
+	const resolvedProductId =
+		typeof product === "object"
+			? (product?.id ?? product?._id ?? "")
+			: String(product || "").trim();
+
+	if (!resolvedProductId) {
+		errors.product = "Product is required";
+	}
+
+	if (!Array.isArray(variants) || variants.length === 0) {
+		errors.variants = "At least 1 variant is required";
+		return { isValid: false, errors, variantErrors };
+	}
+
+	if (variants.length > MAX_VARIANTS_PER_BATCH) {
+		errors.variants = `Maximum ${MAX_VARIANTS_PER_BATCH} variants can be created at a time`;
+	}
+
+	const seenSkus = new Set();
+	const seenBarcodes = new Set();
+
+	variants.forEach((v, idx) => {
+		const vErr = {};
+
+		if (!v.displayName?.trim()) {
+			vErr.displayName = "Variant Name is required";
+		}
+
+		if (v.mrp === "" || v.mrp == null) {
+			vErr.mrp = "MRP is required";
+		} else if (Number.isNaN(parseFloat(v.mrp)) || parseFloat(v.mrp) < 0) {
+			vErr.mrp = "MRP must be a non-negative number";
+		}
+
+		if (v.sellingPrice === "" || v.sellingPrice == null) {
+			vErr.sellingPrice = "Selling price is required";
+		} else if (
+			Number.isNaN(parseFloat(v.sellingPrice)) ||
+			parseFloat(v.sellingPrice) < 0
+		) {
+			vErr.sellingPrice = "Selling price must be a non-negative number";
+		}
+
+		const mrp = parseFloat(v.mrp);
+		const sp = parseFloat(v.sellingPrice);
+		if (!Number.isNaN(mrp) && !Number.isNaN(sp) && sp > mrp) {
+			vErr.sellingPrice = "Selling price cannot exceed MRP";
+		}
+
+		const sku = String(v.sku || "").trim().toUpperCase();
+		if (sku) {
+			if (seenSkus.has(sku)) {
+				vErr.sku = `Duplicate SKU "${sku}" within batch`;
+			} else {
+				seenSkus.add(sku);
+			}
+		}
+
+		const barcode = String(v.barcode || "").trim();
+		if (barcode) {
+			if (seenBarcodes.has(barcode)) {
+				vErr.barcode = `Duplicate Barcode "${barcode}" within batch`;
+			} else {
+				seenBarcodes.add(barcode);
+			}
+		}
+
+		variantErrors.push(vErr);
+		if (Object.keys(vErr).length > 0) {
+			errors[`variant_${idx}`] = vErr;
+		}
+	});
+
+	return {
+		isValid: Object.keys(errors).length === 0,
+		errors,
+		variantErrors,
+	};
+}
+

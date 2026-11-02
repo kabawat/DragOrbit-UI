@@ -1,5 +1,5 @@
 // Screens
-export { BillsScreen, default } from "./screen/BillsScreen.jsx";
+export { BillsScreen, BillsScreen as default } from "./screen/BillsScreen.jsx";
 export { BillFormView } from "./screen/BillFormView.jsx";
 
 // Components - Form & Create

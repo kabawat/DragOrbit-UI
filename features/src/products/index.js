@@ -11,7 +11,16 @@ export { ProductDeleteSuccessModalView } from "./component/ProductDeleteSuccessM
 export { ProductErrorModalView } from "./component/ProductErrorModalView.jsx";
 export { AdditionalDetailsSectionPresentation } from "./component/AdditionalDetailsSectionView.jsx";
 export { OpeningQuantitySectionPresentation } from "./component/OpeningQuantitySectionView.jsx";
-export { PricingGSTSectionPresentation } from "./component/PricingGSTSectionView.jsx";
+export {
+  PricingGSTSectionPresentation,
+  PricingGSTSectionView,
+} from "./component/PricingGSTSectionView.jsx";
+export { BasicInfoSectionView } from "./component/BasicInfoSectionView.jsx";
+export { VariantsSectionView } from "./component/VariantsSectionView.jsx";
+export {
+  ProductFormView,
+  ProductFormView as ProductFormPresentation,
+} from "./component/ProductFormView.jsx";
 export { PricingSectionPresentation } from "./component/PricingSectionView.jsx";
 export { ProductAddSuccessModalPresentation } from "./component/ProductAddSuccessModalView.jsx";
 export { ProductGridPresentation } from "./component/ProductGridView.jsx";
@@ -23,3 +32,5 @@ export {
   ProductMasterDetailView,
   ProductMasterDetailView as ProductMasterDetailLayout,
 } from "./component/ProductMasterDetailView.jsx";
+
+export * from "./model/productForm.js";
