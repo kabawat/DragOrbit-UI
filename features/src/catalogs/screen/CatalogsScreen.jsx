@@ -288,7 +288,7 @@ export function CatalogsScreen({ model }) {
                     <TableCell className="max-w-64 !whitespace-normal">
                       <button
                         type="button"
-                        className="break-words text-left font-medium hover:underline"
+                        className="break-words text-left font-medium hover:underline cursor-pointer"
                         onClick={() => onOpen(catalog, "view")}
                         disabled={busy}
                       >
