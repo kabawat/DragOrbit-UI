@@ -115,11 +115,18 @@ export function SubscriptionScreen({ model }) {
                               {t("subscription.planRateLabel")}
                             </span>
                             <span className="text-lg font-medium text-[rgb(var(--color-text-primary))]">
-                              {subscription?.paymentId?.currency === "INR"
+                              {subscription?.currency === "INR"
                                 ? "₹"
-                                : "$"}
-                              {subscription?.paymentId?.amount || "0"}/
-                              {t("subscription.monthly").toLowerCase()}
+                                : subscription?.currency === "EUR"
+                                  ? "€"
+                                  : "$"}
+                              {Number(subscription?.amount || 0).toLocaleString(
+                                "en-IN"
+                              )}
+                              /
+                              {(
+                                subscription?.billingCycle || "MONTHLY"
+                              ).toLowerCase()}
                             </span>
                           </div>
                         </div>

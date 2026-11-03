@@ -32,11 +32,13 @@ export function StoreSettingsView({ model }) {
   } = model;
   return (
     <div className="space-y-6">
-      <StoreHeader
-        storesCount={stores?.length}
-        isLoading={isLoading}
-        onAddStore={handleAddStore}
-      />
+      {StoreHeader ? (
+        <StoreHeader
+          storesCount={stores?.length}
+          isLoading={isLoading}
+          onAddStore={handleAddStore}
+        />
+      ) : null}
 
       <StoreList
         stores={stores}
