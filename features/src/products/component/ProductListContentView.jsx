@@ -169,6 +169,7 @@ export function ProductListContentView({ model }) {
 				isOpen={showStockInDrawer}
 				onClose={handleCloseStockInDrawer}
 				item={productForStockIn}
+				product={productForStockIn}
 				onSuccess={handleStockInSuccess}
 				type="product"
 			/>

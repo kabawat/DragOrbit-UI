@@ -813,7 +813,7 @@ export function ProductMasterDetailView({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setOpenRowMenuId(null);
-                                onStockIn?.(prodId);
+                                onStockIn?.(prod || prodId);
                               }}
                               className="w-full px-3 py-1.5 text-left text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-[rgb(var(--color-bg-secondary))] flex items-center gap-2 cursor-pointer"
                             >
@@ -1003,7 +1003,7 @@ export function ProductMasterDetailView({
                     <Button
                       size="xs"
                       onClick={() =>
-                        onStockIn(productData.id || productData._id)
+                        onStockIn(productData || productData?.id || productData?._id)
                       }
                       leftIcon={ArrowDownToLine}
                       className="text-emerald-600 dark:text-emerald-400 border-emerald-300 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/40"
@@ -1698,6 +1698,7 @@ export function ProductMasterDetailView({
           isOpen={showStockInDrawer}
           onClose={handleCloseStockInDrawer}
           product={productForStockIn}
+          item={productForStockIn}
           onSuccess={(result) => {
             if (productForStockIn) {
               const pId = productForStockIn.id || productForStockIn._id;

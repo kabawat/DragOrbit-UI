@@ -5,7 +5,7 @@ import {
 	TableRowActions,
 	TableSkeleton,
 } from "@dragorbit/ui";
-import { Edit, Layers, Plus, Trash2 } from "lucide-react";
+import { ArrowDownToLine, Edit, Layers, Plus, Trash2 } from "lucide-react";
 export function VariantsTable({ model }) {
 	const {
 		t,
@@ -17,6 +17,7 @@ export function VariantsTable({ model }) {
 		onCreate,
 		onEdit,
 		onView,
+		onStockIn,
 	} = model;
 	return (
 		<DataTable
@@ -136,6 +137,13 @@ export function VariantsTable({ model }) {
 						<TableRowActions
 							label={`${t("common.actions")}: ${variantDisplayLabel(variant)}`}
 							actions={[
+								{
+									id: "stock-in",
+									label: t("products.stockIn") || "Stock In",
+									icon: ArrowDownToLine,
+									hidden: !can("edit"),
+									onClick: () => onStockIn?.(variant),
+								},
 								{
 									id: "edit",
 									label: t("common.edit"),

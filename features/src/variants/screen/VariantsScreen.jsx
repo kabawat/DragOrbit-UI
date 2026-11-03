@@ -1,10 +1,65 @@
 "use client";
 import { Button } from "@dragorbit/ui";
 import { Plus } from "lucide-react";
+import { useState } from "react";
 import { VariantDeleteDialog } from "../component/VariantDeleteDialog.jsx";
 import { VariantsTable } from "../component/VariantsTable.jsx";
+
 export function VariantsScreen({ model }) {
-	const { t, variants, can, variantToDelete, onCreate } = model;
+	const {
+		t,
+		variants,
+		can,
+		variantToDelete,
+		onCreate,
+		StockInDrawer,
+		onStockIn: parentOnStockIn,
+		stockInVariant: parentStockInVariant,
+		showStockInDrawer: parentShowStockInDrawer,
+		handleCloseStockInDrawer: parentHandleCloseStockInDrawer,
+		handleStockInSuccess: parentHandleStockInSuccess,
+	} = model;
+
+	const [localStockInVariant, setLocalStockInVariant] = useState(null);
+
+	const activeStockInVariant =
+		parentStockInVariant !== undefined
+			? parentStockInVariant
+			: localStockInVariant;
+
+	const isStockInOpen =
+		parentShowStockInDrawer !== undefined
+			? parentShowStockInDrawer
+			: Boolean(localStockInVariant);
+
+	const handleStockIn = (variant) => {
+		if (parentOnStockIn) {
+			parentOnStockIn(variant);
+		} else {
+			setLocalStockInVariant(variant);
+		}
+	};
+
+	const handleCloseStockIn = () => {
+		if (parentHandleCloseStockInDrawer) {
+			parentHandleCloseStockInDrawer();
+		} else {
+			setLocalStockInVariant(null);
+		}
+	};
+
+	const handleSuccessStockIn = (msg) => {
+		if (parentHandleStockInSuccess) {
+			parentHandleStockInSuccess(msg);
+		}
+		handleCloseStockIn();
+	};
+
+	const tableModel = {
+		...model,
+		onStockIn: handleStockIn,
+	};
+
 	return (
 		<div className="overflow-hidden">
 			<div className="max-w-8xl mx-auto w-full">
@@ -36,11 +91,22 @@ export function VariantsScreen({ model }) {
 				</div>
 
 				<div className="px-5 pb-6">
-					<VariantsTable model={model} />
+					<VariantsTable model={tableModel} />
 				</div>
 			</div>
 
 			{variantToDelete && <VariantDeleteDialog model={model} />}
+
+			{StockInDrawer && (
+				<StockInDrawer
+					isOpen={isStockInOpen}
+					onClose={handleCloseStockIn}
+					item={activeStockInVariant}
+					product={activeStockInVariant}
+					type="variant"
+					onSuccess={handleSuccessStockIn}
+				/>
+			)}
 		</div>
 	);
 }
