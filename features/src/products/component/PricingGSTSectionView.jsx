@@ -46,7 +46,7 @@ export function PricingGSTSectionView({
           displayName:
             formData.displayName !== undefined
               ? formData.displayName
-              : formData.name || formData.productName || "",
+              : "",
           images:
             Array.isArray(formData.variantImages) && formData.variantImages.length > 0
               ? formData.variantImages

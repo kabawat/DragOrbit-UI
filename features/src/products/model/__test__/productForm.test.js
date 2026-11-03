@@ -194,3 +194,31 @@ test("buildUnifiedProductPayload: multi-variant mode sets displayName from varia
     { name: "Size", value: "L" },
   ]);
 });
+
+test("buildUnifiedProductPayload: strips product name prefix so only typed variant name is passed", () => {
+  const payload = buildUnifiedProductPayload({
+    formData: {
+      name: "Vivo y12",
+      displayName: "Vivo y12 128GB",
+      category: "cat-mobile",
+      store: "store-1",
+      mrp: 12000,
+      sellingPrice: 10000,
+      stock: 10,
+      purchasePrice: 8000,
+    },
+    hasVariants: true,
+    variants: [
+      {
+        displayName: "Vivo y12 64GB",
+        mrp: 10000,
+        sellingPrice: 8500,
+      },
+    ],
+  });
+
+  assert.equal(payload.name, "Vivo y12");
+  assert.equal(payload.variants.length, 2);
+  assert.equal(payload.variants[0].displayName, "128GB");
+  assert.equal(payload.variants[1].displayName, "64GB");
+});

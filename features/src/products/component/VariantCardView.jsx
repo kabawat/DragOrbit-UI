@@ -65,18 +65,7 @@ export function VariantCardView({
   const handleSuffixChange = (e) => {
     const val = e.target.value;
     setSuffix(val);
-
-    const base = String(baseProductName || "").trim();
-    let fullDisplayName = "";
-    if (base && val.trim()) {
-      fullDisplayName = `${base} ${val.trim()}`;
-    } else if (base) {
-      fullDisplayName = base;
-    } else {
-      fullDisplayName = val.trim();
-    }
-
-    onFieldChange("displayName", fullDisplayName);
+    onFieldChange("displayName", val);
     onFieldChange("variantSuffix", val);
   };
 
@@ -85,7 +74,11 @@ export function VariantCardView({
   }, [data.mrp, data.sellingPrice]);
 
   const handleAutoSku = () => {
-    const sku = generateAutoSku(data.displayName || baseProductName);
+    const sku = generateAutoSku(
+      baseProductName && data.displayName
+        ? `${baseProductName} ${data.displayName}`
+        : data.displayName || baseProductName,
+    );
     onFieldChange("sku", sku);
   };
 

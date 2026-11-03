@@ -1,9 +1,10 @@
 "use client";
-import { Button } from "@dragorbit/ui";
+import { Button, ConfirmDialog } from "@dragorbit/ui";
 
 import { Plus } from "lucide-react";
 import { Suspense } from "react";
 import { BrandsTable } from "../component/BrandsTable.jsx";
+
 export function BrandsScreen({ model }) {
 	const {
 		t,
@@ -14,7 +15,24 @@ export function BrandsScreen({ model }) {
 		showDrawer,
 		storeId,
 		fetchBrands,
+		brandToEdit,
+		setBrandToEdit,
+		brandToDelete,
+		setBrandToDelete,
+		isDeleting,
+		handleConfirmDelete,
+		onCreate,
 	} = model;
+
+	const handleOpenCreate = () => {
+		if (onCreate) {
+			onCreate();
+		} else {
+			setBrandToEdit?.(null);
+			setShowDrawer(true);
+		}
+	};
+
 	return (
 		<div className="overflow-hidden">
 			<div className="max-w-8xl mx-auto w-full">
@@ -39,7 +57,7 @@ export function BrandsScreen({ model }) {
 						</p>
 					</div>
 					{canCreate && (
-						<Button leftIcon={Plus} onClick={() => setShowDrawer(true)}>
+						<Button leftIcon={Plus} onClick={handleOpenCreate}>
 							{t("products.addNewBrand") || "Add Brand"}
 						</Button>
 					)}
@@ -54,14 +72,49 @@ export function BrandsScreen({ model }) {
 				<Suspense fallback={null}>
 					<BrandDrawer
 						isOpen={showDrawer}
-						onClose={() => setShowDrawer(false)}
+						onClose={() => {
+							setShowDrawer(false);
+							setBrandToEdit?.(null);
+						}}
 						storeId={storeId}
+						brandToEdit={brandToEdit}
 						onBrandAdded={() => {
 							setShowDrawer(false);
+							setBrandToEdit?.(null);
+							fetchBrands();
+						}}
+						onBrandUpdated={() => {
+							setShowDrawer(false);
+							setBrandToEdit?.(null);
 							fetchBrands();
 						}}
 					/>
 				</Suspense>
+			)}
+
+			{brandToDelete && (
+				<ConfirmDialog
+					isOpen={Boolean(brandToDelete)}
+					onClose={() => {
+						if (!isDeleting) setBrandToDelete(null);
+					}}
+					onConfirm={handleConfirmDelete}
+					busy={isDeleting}
+					title={t("products.deleteBrand") || "Delete Brand"}
+					description={
+						<span>
+							{t("products.brandDeleteConfirm") ||
+								"Are you sure you want to delete brand"}{" "}
+							<strong className="font-semibold text-[rgb(var(--color-text-primary))]">
+								{brandToDelete?.name}
+							</strong>
+							?
+						</span>
+					}
+					confirmLabel={t("common.delete") || "Delete"}
+					cancelLabel={t("common.cancel") || "Cancel"}
+					variant="danger"
+				/>
 			)}
 		</div>
 	);

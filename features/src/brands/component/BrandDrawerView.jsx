@@ -1,7 +1,7 @@
 "use client";
 import { Award, Save } from "lucide-react";
-import { Input, TagInput, Textarea } from "@dragorbit/ui";
-import { FormDrawer } from "@dragorbit/ui";
+import { FormDrawer, Input, TagInput, Textarea } from "@dragorbit/ui";
+
 export function BrandDrawerView({ model }) {
 	const {
 		isOpen,
@@ -15,17 +15,29 @@ export function BrandDrawerView({ model }) {
 		FileUpload,
 		handleIconUpload,
 		handleRemoveIcon,
+		isEditing = false,
 	} = model;
+
 	return (
 		<FormDrawer
 			isOpen={isOpen}
 			onClose={handleClose}
-			title={t("products.addNewBrand")}
+			title={
+				isEditing
+					? t("products.editBrand") || "Edit Brand"
+					: t("products.addNewBrand") || "Add Brand"
+			}
 			icon={Award}
 			width="w-full md:w-2/3 lg:w-1/2"
 			onSave={handleAddBrand}
 			onCancel={handleClose}
-			saveLabel={addBrandLoading ? t("common.saving") : t("products.addBrand")}
+			saveLabel={
+				addBrandLoading
+					? t("common.saving")
+					: isEditing
+						? t("products.updateBrand") || "Update Brand"
+						: t("products.addBrand") || "Add Brand"
+			}
 			cancelLabel={t("common.cancel")}
 			isSaving={addBrandLoading}
 			saveIcon={Save}
@@ -68,7 +80,7 @@ export function BrandDrawerView({ model }) {
 						accept="image/*"
 						multiple={false}
 						value={
-							newBrandData.metadata.icon ? [newBrandData.metadata.icon] : []
+							newBrandData.metadata?.icon ? [newBrandData.metadata.icon] : []
 						}
 						onChange={handleIconUpload}
 						onRemove={handleRemoveIcon}
@@ -82,7 +94,7 @@ export function BrandDrawerView({ model }) {
 						label={t("products.tags")}
 						placeholder={t("products.addTagsPlaceholder")}
 						countLabel={t("products.tagCount")}
-						value={newBrandData.metadata.tags}
+						value={newBrandData.metadata?.tags || []}
 						onChange={(value) =>
 							setNewBrandData((prev) => ({
 								...prev,

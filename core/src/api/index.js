@@ -112,13 +112,23 @@ function handleError(error) {
 			responseData.message || responseData.error,
 			"An unexpected error occurred.",
 		);
-		const fields = responseData.fields || null;
+		const fields = responseData.fields
+			? { ...responseData.fields }
+			: responseData.canForceDelete !== undefined
+			? { canForceDelete: responseData.canForceDelete }
+			: null;
+		if (fields && responseData.canForceDelete !== undefined) {
+			fields.canForceDelete = responseData.canForceDelete;
+		}
 		return {
 			success: false,
 			message,
 			displayMessage: formatErrorWithFields(message, fields),
 			code: responseData.code || "UNKNOWN_ERROR",
 			fields,
+			canForceDelete: Boolean(
+				responseData.canForceDelete || responseData.fields?.canForceDelete,
+			),
 			status: error.response.status,
 		};
 	}

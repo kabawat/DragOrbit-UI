@@ -165,6 +165,24 @@ function buildGstPayload(rawGstInfo = {}) {
   return result;
 }
 
+export function stripProductNamePrefix(displayName, productName) {
+  const disp = String(displayName || "").trim();
+  const base = String(productName || "").trim();
+  if (!disp) return "";
+  if (!base) return disp;
+  if (disp.toLowerCase().startsWith(base.toLowerCase())) {
+    const remainder = disp.slice(base.length);
+    if (remainder.startsWith(" - ")) return remainder.slice(3).trim();
+    if (remainder.startsWith(" + ")) return remainder.slice(3).trim();
+    if (remainder.startsWith(" ")) return remainder.slice(1).trim();
+    if (remainder.startsWith("-") || remainder.startsWith("+")) {
+      return remainder.slice(1).trim();
+    }
+    return remainder.trim();
+  }
+  return disp;
+}
+
 export function validateProductForm(formData = {}, storeId = null) {
   const fields = {};
 
@@ -295,9 +313,12 @@ export function buildUnifiedProductPayload({
 
   if (hasVariants) {
     // 1. Primary Variant (from Section 1 Basic Info & Section 2 Pricing & Inventory)
-    const primaryDisplayName =
-      String(formData.displayName || "").trim() ||
-      (formData.name ? `${formData.name} - Variant 1` : "Variant 1");
+    // Product name is shown only at the start of the input box in the UI, NOT prepended in payload
+    const cleanedPrimaryName = stripProductNamePrefix(
+      formData.displayName,
+      formData.name
+    );
+    const primaryDisplayName = cleanedPrimaryName || "Variant 1";
 
     const primaryVariantImages = (formData.variantImages ?? [])
       .map((img) => {
@@ -372,12 +393,13 @@ export function buildUnifiedProductPayload({
           .map((o) => ({ name: o.name.trim(), value: o.value.trim() }));
 
         const autoOptionLabel = cleanOptions.map((o) => o.value).join(" / ");
-        const fallbackDisplayName = autoOptionLabel
-          ? `${formData.name || "Product"} - ${autoOptionLabel}`
-          : `${formData.name || "Product"} - Variant ${idx + 2}`;
+        const fallbackDisplayName = autoOptionLabel || `Variant ${idx + 2}`;
 
-        const vDisplayName =
-          String(v.displayName || "").trim() || fallbackDisplayName;
+        const cleanedVName = stripProductNamePrefix(
+          v.displayName,
+          formData.name
+        );
+        const vDisplayName = cleanedVName || fallbackDisplayName;
 
         const vMrp = toNumber(v.mrp) ?? 0;
         const vSellingPrice = toNumber(v.sellingPrice) ?? 0;
