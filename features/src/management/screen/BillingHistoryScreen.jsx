@@ -1,23 +1,14 @@
 "use client";
+import { Badge, Button, Card, CardBody, TableSkeleton } from "@dragorbit/ui";
 import {
-  Card,
-  CardBody,
-  Badge,
-  Button,
-  TableSkeleton,
-} from "@dragorbit/ui";
-import {
-  ArrowLeft,
-  Download,
-  Receipt,
-  FileText,
-  RefreshCw,
-  Loader2,
+  AlertCircle,
+  AlertTriangle,
   CheckCircle2,
   Clock,
-  AlertTriangle,
-  CreditCard,
-  AlertCircle,
+  Download,
+  FileText,
+  Loader2,
+  Receipt,
 } from "lucide-react";
 
 export function BillingHistoryScreen({ model }) {
@@ -94,7 +85,8 @@ export function BillingHistoryScreen({ model }) {
       return (
         <span className="inline-flex items-center text-xs font-medium text-amber-600 dark:text-amber-400">
           <Clock className="w-3 h-3 mr-1 animate-pulse" />
-          {t?.("subscription.billingHistory.invoiceProcessing") || "Generating..."}
+          {t?.("subscription.billingHistory.invoiceProcessing") ||
+            "Generating..."}
         </span>
       );
     }
@@ -107,9 +99,7 @@ export function BillingHistoryScreen({ model }) {
       );
     }
     return (
-      <span className="text-xs text-[rgb(var(--color-text-tertiary))]">
-        -
-      </span>
+      <span className="text-xs text-[rgb(var(--color-text-tertiary))]">-</span>
     );
   };
 
@@ -118,51 +108,6 @@ export function BillingHistoryScreen({ model }) {
       <div className="max-w-8xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
           <div className="lg:col-span-3 space-y-6">
-            {/* Header Card */}
-            <Card className="bg-[rgb(var(--color-bg-primary))] border-[rgb(var(--color-border-primary))] overflow-hidden">
-              <CardBody className="p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={onBack}
-                      className="p-2 h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0"
-                      aria-label="Back to Subscription"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </Button>
-                    <div>
-                      <h3 className="text-lg font-semibold text-[rgb(var(--color-text-primary))] flex items-center gap-2">
-                        <Receipt className="w-5 h-5 text-[rgb(var(--color-primary))]" />
-                        {t?.("subscription.billingHistory.title") ||
-                          "Billing History & Invoices"}
-                      </h3>
-                      <p className="text-sm text-[rgb(var(--color-text-secondary))] mt-0.5">
-                        {t?.("subscription.billingHistory.description") ||
-                          "Review past payments, subscription renewals, and download tax invoices."}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-start sm:self-center">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={onRefresh}
-                      disabled={isLoading}
-                      className="flex items-center gap-1.5 text-xs font-medium rounded-xl"
-                    >
-                      <RefreshCw
-                        className={`w-3.5 h-3.5 ${isLoading ? "animate-spin" : ""}`}
-                      />
-                      <span>Refresh</span>
-                    </Button>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-
             {/* Error Message */}
             {error && (
               <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 flex items-center justify-between gap-4">
@@ -246,7 +191,9 @@ export function BillingHistoryScreen({ model }) {
                             isDownloading === inv.invoiceId;
                           const invoiceNumber =
                             inv.receipt ||
-                            `INV-${String(inv.invoiceId || "").slice(-6).toUpperCase()}`;
+                            `INV-${String(inv.invoiceId || "")
+                              .slice(-6)
+                              .toUpperCase()}`;
 
                           return (
                             <tr
@@ -277,7 +224,7 @@ export function BillingHistoryScreen({ model }) {
                               <td className="py-4 px-5 font-semibold text-[rgb(var(--color-text-primary))] whitespace-nowrap">
                                 {formatAmount(
                                   inv.finalAmount ?? inv.baseAmount,
-                                  inv.currency,
+                                  inv.currency
                                 )}
                               </td>
                               <td className="py-4 px-5 whitespace-nowrap">
@@ -299,7 +246,7 @@ export function BillingHistoryScreen({ model }) {
                                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
                                       <span>
                                         {t?.(
-                                          "subscription.billingHistory.downloading",
+                                          "subscription.billingHistory.downloading"
                                         ) || "Downloading..."}
                                       </span>
                                     </>
@@ -308,7 +255,7 @@ export function BillingHistoryScreen({ model }) {
                                       <Download className="w-3.5 h-3.5" />
                                       <span>
                                         {t?.(
-                                          "subscription.billingHistory.downloadPdf",
+                                          "subscription.billingHistory.downloadPdf"
                                         ) || "Download PDF"}
                                       </span>
                                     </>
@@ -325,14 +272,18 @@ export function BillingHistoryScreen({ model }) {
                   {/* Mobile Cards View */}
                   <div className="md:hidden divide-y divide-[rgb(var(--color-border-primary))]">
                     {invoices.map((inv) => {
-                      const isCurDownloading =
-                        isDownloading === inv.invoiceId;
+                      const isCurDownloading = isDownloading === inv.invoiceId;
                       const invoiceNumber =
                         inv.receipt ||
-                        `INV-${String(inv.invoiceId || "").slice(-6).toUpperCase()}`;
+                        `INV-${String(inv.invoiceId || "")
+                          .slice(-6)
+                          .toUpperCase()}`;
 
                       return (
-                        <div key={inv.invoiceId || inv.orderId} className="p-4 space-y-3">
+                        <div
+                          key={inv.invoiceId || inv.orderId}
+                          className="p-4 space-y-3"
+                        >
                           <div className="flex items-start justify-between gap-2">
                             <div>
                               <div className="font-semibold text-sm text-[rgb(var(--color-text-primary))] flex items-center gap-1.5">
@@ -366,7 +317,7 @@ export function BillingHistoryScreen({ model }) {
                               <p className="font-bold text-sm text-[rgb(var(--color-text-primary))] mt-0.5">
                                 {formatAmount(
                                   inv.finalAmount ?? inv.baseAmount,
-                                  inv.currency,
+                                  inv.currency
                                 )}
                               </p>
                             </div>
@@ -384,8 +335,9 @@ export function BillingHistoryScreen({ model }) {
                             </div>
                             <div>
                               <span className="text-[rgb(var(--color-text-tertiary))]">
-                                {t?.("subscription.billingHistory.invoiceStatus") ||
-                                  "Invoice"}
+                                {t?.(
+                                  "subscription.billingHistory.invoiceStatus"
+                                ) || "Invoice"}
                                 :
                               </span>
                               <div className="mt-0.5">
@@ -406,7 +358,7 @@ export function BillingHistoryScreen({ model }) {
                                 <Loader2 className="w-4 h-4 animate-spin" />
                                 <span>
                                   {t?.(
-                                    "subscription.billingHistory.downloading",
+                                    "subscription.billingHistory.downloading"
                                   ) || "Downloading..."}
                                 </span>
                               </>
@@ -415,7 +367,7 @@ export function BillingHistoryScreen({ model }) {
                                 <Download className="w-4 h-4" />
                                 <span>
                                   {t?.(
-                                    "subscription.billingHistory.downloadPdf",
+                                    "subscription.billingHistory.downloadPdf"
                                   ) || "Download PDF"}
                                 </span>
                               </>
@@ -437,4 +389,3 @@ export function BillingHistoryScreen({ model }) {
     </div>
   );
 }
-

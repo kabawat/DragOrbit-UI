@@ -1,15 +1,6 @@
 "use client";
-import { TableSkeleton } from "@dragorbit/ui";
-import {
-  CreditCard,
-  CheckCircle2,
-  ShieldCheck,
-  Zap,
-  Info,
-  Receipt,
-  ArrowRight,
-} from "lucide-react";
-import { Card, CardBody, Badge, Button } from "@dragorbit/ui";
+import { Badge, Button, Card, CardBody, TableSkeleton } from "@dragorbit/ui";
+import { CheckCircle2, CreditCard, Info, ShieldCheck, Zap } from "lucide-react";
 export function SubscriptionScreen({ model }) {
   const {
     isLoading,
@@ -20,7 +11,6 @@ export function SubscriptionScreen({ model }) {
     isKhataFree,
     moment,
     ManagementShortcuts,
-    onViewBillingHistory,
   } = model;
   return (
     <div className="flex-1 p-5">
@@ -108,7 +98,7 @@ export function SubscriptionScreen({ model }) {
                                 Started:
                                 <span className="text-[rgb(var(--color-text-secondary))] font-medium">
                                   {moment(subscription.startDate).format(
-                                    "MMM D, YYYY",
+                                    "MMM D, YYYY"
                                   )}
                                 </span>
                               </span>
@@ -157,7 +147,7 @@ export function SubscriptionScreen({ model }) {
                             .filter(
                               (f) =>
                                 f.usageType === "UNLIMITED" ||
-                                (f.maxLimit ?? 0) > 0,
+                                (f.maxLimit ?? 0) > 0
                             )
                             .slice(0, 8)
                             .map((feature) => (
@@ -175,9 +165,9 @@ export function SubscriptionScreen({ model }) {
                                       `subscription.featureDetails.${feature.module}`,
                                       {
                                         defaultValue: t(
-                                          "subscription.featureDetailsFallback",
+                                          "subscription.featureDetailsFallback"
                                         ),
-                                      },
+                                      }
                                     )}
                                   </p>
                                 </div>
@@ -189,39 +179,6 @@ export function SubscriptionScreen({ model }) {
                   </CardBody>
                 </>
               )}
-            </Card>
-
-            <Card className="bg-[rgb(var(--color-bg-primary))] border-[rgb(var(--color-border-primary))] overflow-hidden">
-              <CardBody className="p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-start sm:items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[rgb(var(--color-primary))]/10 flex items-center justify-center border border-[rgb(var(--color-primary))]/20 flex-shrink-0">
-                      <Receipt className="w-6 h-6 text-[rgb(var(--color-primary))]" />
-                    </div>
-                    <div>
-                      <h4 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
-                        {t?.("subscription.billingHistory.title") ||
-                          "Billing History & Invoices"}
-                      </h4>
-                      <p className="text-sm text-[rgb(var(--color-text-secondary))] mt-0.5">
-                        {t?.("subscription.billingHistory.description") ||
-                          "Review past subscription payments, renewal dates, and download official tax invoices."}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="outline"
-                    onClick={onViewBillingHistory}
-                    className="flex items-center gap-2 whitespace-nowrap self-start sm:self-center"
-                  >
-                    <span>
-                      {t?.("subscription.billingHistory.viewHistory") ||
-                        "View Billing History"}
-                    </span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </div>
-              </CardBody>
             </Card>
           </div>
           <ManagementShortcuts />
