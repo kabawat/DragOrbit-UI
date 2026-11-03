@@ -514,15 +514,15 @@ export function ProductMasterDetailView({
   const getCatalogVisibilityBadge = (showInCatalog) => {
     if (showInCatalog !== false) {
       return (
-        <Badge variant="success" className="flex items-center gap-1">
-          <Eye className="w-3 h-3" />
+        <Badge variant="success" size="sm">
+          <Eye className="w-3 h-3 mr-1 inline" />
           {t("products.inCatalog", "In Digital Shop")}
         </Badge>
       );
     }
     return (
-      <Badge variant="secondary" className="flex items-center gap-1">
-        <XCircle className="w-3 h-3" />
+      <Badge variant="secondary" size="sm">
+        <XCircle className="w-3 h-3 mr-1 inline" />
         {t("products.hidden", "Hidden")}
       </Badge>
     );
@@ -719,7 +719,7 @@ export function ProductMasterDetailView({
                     <button
                       type="button"
                       onClick={() => handleSelectProduct(prod)}
-                      className="flex-1 min-w-0 p-3.5 pr-1 text-left flex items-start justify-between gap-3 cursor-pointer focus:outline-none"
+                      className="flex-1 min-w-0 px-3 py-2.5 pr-1 text-left flex items-start justify-between gap-2.5 cursor-pointer focus:outline-none"
                     >
                       {/* Left: Name + Brand/Category + SKU */}
                       <div className="min-w-0 flex-1">
@@ -923,15 +923,15 @@ export function ProductMasterDetailView({
             </div>
           ) : detailsLoading ? (
             /* Loading skeleton */
-            <div className="flex-1 p-6 space-y-6 overflow-y-auto">
-              <div className="animate-pulse space-y-4">
-                <div className="h-8 bg-[rgb(var(--color-border-primary))] rounded w-1/3" />
-                <div className="h-4 bg-[rgb(var(--color-border-primary))]/60 rounded w-1/4" />
-                <div className="grid grid-cols-4 gap-4 mt-6">
+            <div className="flex-1 p-3.5 sm:p-4 space-y-3 overflow-y-auto">
+              <div className="animate-pulse space-y-3">
+                <div className="h-6 bg-[rgb(var(--color-border-primary))] rounded w-1/3" />
+                <div className="h-3 bg-[rgb(var(--color-border-primary))]/60 rounded w-1/4" />
+                <div className="grid grid-cols-4 gap-2.5 mt-4">
                   {[1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="h-20 bg-[rgb(var(--color-bg-secondary))] rounded-lg"
+                      className="h-14 bg-[rgb(var(--color-bg-secondary))] rounded-md"
                     />
                   ))}
                 </div>
@@ -957,25 +957,25 @@ export function ProductMasterDetailView({
             /* Full Product Details Content */
             <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
               {/* Product Top Header Bar */}
-              <div className="px-6 py-4 border-b border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] flex flex-col sm:flex-row sm:items-center justify-between gap-4 flex-shrink-0">
+              <div className="px-4 py-3 sm:px-5 sm:py-3 border-b border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-shrink-0">
                 <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-2.5 mb-1.5">
-                    <h2 className="text-xl sm:text-2xl font-bold text-[rgb(var(--color-text-primary))] tracking-tight truncate">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h2 className="text-lg sm:text-xl font-bold text-[rgb(var(--color-text-primary))] tracking-tight truncate">
                       {productData.name}
                     </h2>
                     {productData.brand && (
-                      <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40 font-medium">
+                      <span className="text-[11px] px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900/40 font-medium">
                         {productData.brand}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     {getStatusBadge(productData.status)}
-                    {getCatalogVisibilityBadge(productData.showInCatalog)}
                     {(productData.category?.name || productData.category) && (
                       <Badge
                         variant="purple"
+                        size="xs"
                         className="flex items-center gap-1"
                       >
                         <Tag className="w-3 h-3" />
@@ -1080,7 +1080,7 @@ export function ProductMasterDetailView({
 
               {/* Quick KPI Bar */}
               <div
-                className={`px-6 py-3 bg-[rgb(var(--color-bg-secondary))]/50 border-b border-[rgb(var(--color-border-primary))] grid gap-3 flex-shrink-0 ${
+                className={`px-4 py-2 sm:px-5 sm:py-2.5 bg-[rgb(var(--color-bg-secondary))]/50 border-b border-[rgb(var(--color-border-primary))] grid gap-2 sm:gap-2.5 flex-shrink-0 ${
                   productData.hasMultipleVariants
                     ? "grid-cols-2 sm:grid-cols-3"
                     : "grid-cols-2 sm:grid-cols-4"
@@ -1089,11 +1089,11 @@ export function ProductMasterDetailView({
                 {!productData.hasMultipleVariants ? (
                   <>
                     {/* Selling Price (single product only) */}
-                    <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                    <div className="p-2 px-2.5 rounded-md bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
                       <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
                         {t("products.sellingPrice", "Sale Price")}
                       </span>
-                      <span className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 block truncate">
+                      <span className="text-sm sm:text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono mt-0.5 block truncate">
                         {productData.sellingPrice
                           ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
                           : "₹0.00"}
@@ -1101,11 +1101,11 @@ export function ProductMasterDetailView({
                     </div>
 
                     {/* Base Price / MRP (single product only) */}
-                    <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                    <div className="p-2 px-2.5 rounded-md bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
                       <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
                         {t("products.mrp", "Purchase / MRP")}
                       </span>
-                      <span className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
+                      <span className="text-sm sm:text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
                         {productData.mrp
                           ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
                           : productData.basePrice
@@ -1116,11 +1116,11 @@ export function ProductMasterDetailView({
                   </>
                 ) : (
                   /* Total Variants metric for multi-variant products */
-                  <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                  <div className="p-2 px-2.5 rounded-md bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
                     <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
                       {t("products.variants", "Variants")}
                     </span>
-                    <span className="text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5 block truncate">
+                    <span className="text-sm sm:text-base font-extrabold text-purple-600 dark:text-purple-400 font-mono mt-0.5 block truncate">
                       {productData.variants?.length || 0}{" "}
                       {t("products.variants", "Variants")}
                     </span>
@@ -1128,12 +1128,12 @@ export function ProductMasterDetailView({
                 )}
 
                 {/* Stock Quantity */}
-                <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                <div className="p-2 px-2.5 rounded-md bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
                   <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
                     {t("products.stockQuantity", "Stock Quantity")}
                   </span>
                   <span
-                    className={`text-base font-extrabold font-mono mt-0.5 block truncate ${
+                    className={`text-sm sm:text-base font-extrabold font-mono mt-0.5 block truncate ${
                       currentStock === 0
                         ? "text-rose-600 dark:text-rose-400"
                         : currentStock < 10
@@ -1146,64 +1146,64 @@ export function ProductMasterDetailView({
                 </div>
 
                 {/* Stock Value */}
-                <div className="p-2.5 rounded-lg bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
+                <div className="p-2 px-2.5 rounded-md bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]/60">
                   <span className="text-[10px] font-bold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider block">
                     {t("products.stockValue", "Stock Value")}
                   </span>
-                  <span className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
+                  <span className="text-sm sm:text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono mt-0.5 block truncate">
                     ₹{stockValue.toLocaleString("en-IN")}
                   </span>
                 </div>
               </div>
 
               {/* Scrollable Detailed Sections */}
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6">
+              <div className="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-4 space-y-3 sm:space-y-3.5">
                 {/* 1. Basic Product Information Card */}
-                <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-[rgb(var(--color-primary))]/20 to-[rgb(var(--color-primary))]/10 rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-[rgb(var(--color-primary))]" />
+                <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-7 h-7 bg-gradient-to-br from-[rgb(var(--color-primary))]/20 to-[rgb(var(--color-primary))]/10 rounded-md flex items-center justify-center shrink-0">
+                      <Package className="w-4 h-4 text-[rgb(var(--color-primary))]" />
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                      <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                         {t(
                           "products.productInformation",
                           "Product Information"
                         )}
                       </h3>
-                      <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                      <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                         {t("products.basicDetails", "Basic product details")}
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
                     {/* Name */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.productName", "Product Name")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                         {productData.name || t("common.na", "N/A")}
                       </p>
                     </div>
 
                     {/* Brand */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.brand", "Brand")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                         {productData.brand || t("common.na", "N/A")}
                       </p>
                     </div>
 
                     {/* Category */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.category", "Category")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                         {productData.category?.name ||
                           productData.category ||
                           t("common.na", "N/A")}
@@ -1211,11 +1211,11 @@ export function ProductMasterDetailView({
                     </div>
 
                     {/* SKU */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.sku", "SKU")}
                       </p>
-                      <p className="text-sm font-bold font-mono text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold font-mono text-[rgb(var(--color-text-primary))] truncate">
                         {productData.hasMultipleVariants
                           ? t("products.multipleSkus", "Multiple SKUs")
                           : (productData.sku || t("common.na", "N/A"))}
@@ -1224,11 +1224,11 @@ export function ProductMasterDetailView({
 
                     {/* Barcode */}
                     {!productData.hasMultipleVariants && productData.barcode && (
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.barcode", "Barcode")}
                         </p>
-                        <p className="text-sm font-bold font-mono text-[rgb(var(--color-text-primary))]">
+                        <p className="text-xs sm:text-sm font-bold font-mono text-[rgb(var(--color-text-primary))] truncate">
                           {productData.barcode}
                         </p>
                       </div>
@@ -1236,11 +1236,11 @@ export function ProductMasterDetailView({
 
                     {/* Unit of Measure */}
                     {productData.uom && (
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.unitOfMeasure", "Unit of Measure")}
                         </p>
-                        <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                        <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                           {productData.uom}
                         </p>
                       </div>
@@ -1250,19 +1250,19 @@ export function ProductMasterDetailView({
 
                 {/* 2. Pricing Information Card (ONLY for single product) */}
                 {!productData.hasMultipleVariants && (
-                  <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                    <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-10 h-10 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-lg flex items-center justify-center">
-                        <IndianRupee className="w-5 h-5 text-green-500" />
+                  <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-7 h-7 bg-gradient-to-br from-green-500/20 to-green-500/10 rounded-md flex items-center justify-center shrink-0">
+                        <IndianRupee className="w-4 h-4 text-green-500" />
                       </div>
                       <div>
-                        <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                        <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                           {t(
                             "products.pricingInformation",
                             "Pricing Information"
                           )}
                         </h3>
-                        <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                        <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                           {t(
                             "products.pricingDetails",
                             "Cost, pricing and margin breakdown"
@@ -1271,13 +1271,13 @@ export function ProductMasterDetailView({
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
                       {/* Selling Price */}
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.sellingPrice", "Selling Price")}
                         </p>
-                        <p className="text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
+                        <p className="text-sm sm:text-base font-extrabold text-emerald-600 dark:text-emerald-400 font-mono">
                           {productData.sellingPrice
                             ? `₹${Number(productData.sellingPrice).toLocaleString("en-IN")}`
                             : "₹0.00"}
@@ -1285,11 +1285,11 @@ export function ProductMasterDetailView({
                       </div>
 
                       {/* MRP */}
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.mrp", "MRP")}
                         </p>
-                        <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
+                        <p className="text-sm sm:text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
                           {productData.mrp
                             ? `₹${Number(productData.mrp).toLocaleString("en-IN")}`
                             : "₹0.00"}
@@ -1297,11 +1297,11 @@ export function ProductMasterDetailView({
                       </div>
 
                       {/* Purchase Price */}
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.purchasePrice", "Purchase Price")}
                         </p>
-                        <p className="text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
+                        <p className="text-sm sm:text-base font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
                           {productData.basePrice || productData.purchasePrice
                             ? `₹${Number(productData.basePrice || productData.purchasePrice).toLocaleString("en-IN")}`
                             : "₹0.00"}
@@ -1309,8 +1309,8 @@ export function ProductMasterDetailView({
                       </div>
 
                       {/* Profit Margin */}
-                      <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                           {t("products.margin", "Profit Margin")}
                         </p>
                         {(() => {
@@ -1327,7 +1327,7 @@ export function ProductMasterDetailView({
                             const isProfit = Number(margin) >= 0;
                             return (
                               <p
-                                className={`text-base font-extrabold font-mono ${
+                                className={`text-sm sm:text-base font-extrabold font-mono ${
                                   isProfit
                                     ? "text-emerald-600 dark:text-emerald-400"
                                     : "text-rose-600 dark:text-rose-400"
@@ -1338,7 +1338,7 @@ export function ProductMasterDetailView({
                             );
                           }
                           return (
-                            <p className="text-base font-bold text-[rgb(var(--color-text-secondary))]">
+                            <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-secondary))]">
                               {t("common.na", "N/A")}
                             </p>
                           );
@@ -1349,19 +1349,19 @@ export function ProductMasterDetailView({
                 )}
 
                 {/* 3. Inventory & Stock Status Card */}
-                <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-amber-500/20 to-amber-500/10 rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-amber-500" />
+                <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-7 h-7 bg-gradient-to-br from-amber-500/20 to-amber-500/10 rounded-md flex items-center justify-center shrink-0">
+                      <Package className="w-4 h-4 text-amber-500" />
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                      <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                         {t(
                           "products.inventoryInformation",
                           "Inventory & Stock"
                         )}
                       </h3>
-                      <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                      <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                         {t(
                           "products.stockDetails",
                           "Current stock levels and tracking"
@@ -1370,15 +1370,15 @@ export function ProductMasterDetailView({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-2.5">
                     {/* Current Stock */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.currentStock", "Current Stock")}
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5">
                         <span
-                          className={`text-xl font-extrabold font-mono ${
+                          className={`text-base sm:text-lg font-extrabold font-mono ${
                             currentStock === 0
                               ? "text-rose-600 dark:text-rose-400"
                               : currentStock < 10
@@ -1388,28 +1388,28 @@ export function ProductMasterDetailView({
                         >
                           {currentStock}
                         </span>
-                        <span className="text-xs text-[rgb(var(--color-text-secondary))]">
+                        <span className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                           {t("products.units", "units")}
                         </span>
                       </div>
                     </div>
 
                     {/* Stock Value */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.stockValue", "Total Stock Value")}
                       </p>
-                      <p className="text-xl font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
+                      <p className="text-base sm:text-lg font-extrabold text-[rgb(var(--color-text-primary))] font-mono">
                         ₹{stockValue.toLocaleString("en-IN")}
                       </p>
                     </div>
 
                     {/* Min Alert Level */}
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.minAlert", "Low Stock Alert Level")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))] font-mono">
+                      <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] font-mono">
                         {productData.minStockLevel ||
                           productData.lowStockAlert ||
                           5}{" "}
@@ -1423,18 +1423,18 @@ export function ProductMasterDetailView({
                 {productData.hasMultipleVariants &&
                   Array.isArray(productData.variants) &&
                   productData.variants.length > 0 && (
-                    <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-lg flex items-center justify-center">
-                            <Zap className="w-5 h-5 text-purple-500" />
+                    <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 mb-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-7 h-7 bg-gradient-to-br from-purple-500/20 to-purple-500/10 rounded-md flex items-center justify-center shrink-0">
+                            <Zap className="w-4 h-4 text-purple-500" />
                           </div>
                           <div>
-                            <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                            <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                               {t("products.variants", "Product Variants")} (
                               {productData.variants.length})
                             </h3>
-                            <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                            <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                               {t(
                                 "products.variantsDescription",
                                 "Sizes, colors and available options"
@@ -1445,7 +1445,7 @@ export function ProductMasterDetailView({
 
                         <Button
                           variant="outline"
-                          size="sm"
+                          size="xs"
                           onClick={() => handleNavigateToVariants()}
                           leftIcon={Eye}
                           className="text-purple-600 dark:text-purple-400 border-purple-300 dark:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-950/40 self-start sm:self-auto"
@@ -1461,19 +1461,19 @@ export function ProductMasterDetailView({
                         <table className="w-full text-left text-xs divide-y divide-[rgb(var(--color-border-primary))]">
                           <thead className="bg-[rgb(var(--color-bg-secondary))]/70 uppercase tracking-wider font-semibold text-[rgb(var(--color-text-secondary))]">
                             <tr>
-                              <th className="px-4 py-3">
+                              <th className="px-3 py-2 text-[11px]">
                                 {t("products.variant", "Variant")}
                               </th>
-                              <th className="px-4 py-3">
+                              <th className="px-3 py-2 text-[11px]">
                                 {t("products.sku", "SKU")}
                               </th>
-                              <th className="px-4 py-3">
+                              <th className="px-3 py-2 text-[11px]">
                                 {t("products.sellingPrice", "Price")}
                               </th>
-                              <th className="px-4 py-3">
+                              <th className="px-3 py-2 text-[11px]">
                                 {t("products.stock", "Stock")}
                               </th>
-                              <th className="px-4 py-3 text-right">
+                              <th className="px-3 py-2 text-[11px] text-right">
                                 {t("common.action", "Action")}
                               </th>
                             </tr>
@@ -1497,7 +1497,7 @@ export function ProductMasterDetailView({
                                   key={v.id || v._id || idx}
                                   className="hover:bg-[rgb(var(--color-bg-secondary))]/40"
                                 >
-                                  <td className="px-4 py-3 font-medium text-[rgb(var(--color-text-primary))]">
+                                  <td className="px-3 py-2 font-medium text-[rgb(var(--color-text-primary))]">
                                     <div className="flex items-center gap-2">
                                       <span>{variantName}</span>
                                       {v.isDefault && (
@@ -1515,7 +1515,7 @@ export function ProductMasterDetailView({
                                         </div>
                                       )}
                                   </td>
-                                  <td className="px-4 py-3 font-mono text-[rgb(var(--color-text-secondary))]">
+                                  <td className="px-3 py-2 font-mono text-[rgb(var(--color-text-secondary))]">
                                     <div>{v.sku || "-"}</div>
                                     {v.barcode && (
                                       <div className="text-[10px] text-[rgb(var(--color-text-secondary))]/70 font-mono">
@@ -1523,7 +1523,7 @@ export function ProductMasterDetailView({
                                       </div>
                                     )}
                                   </td>
-                                  <td className="px-4 py-3 font-bold font-mono text-emerald-600 dark:text-emerald-400">
+                                  <td className="px-3 py-2 font-bold font-mono text-emerald-600 dark:text-emerald-400">
                                     {variantPrice !== undefined &&
                                     variantPrice !== null
                                       ? `₹${Number(variantPrice).toLocaleString("en-IN")}`
@@ -1539,10 +1539,10 @@ export function ProductMasterDetailView({
                                         </span>
                                       )}
                                   </td>
-                                  <td className="px-4 py-3">
+                                  <td className="px-3 py-2">
                                     {renderStockPill(variantStock)}
                                   </td>
-                                  <td className="px-4 py-3 text-right">
+                                  <td className="px-3 py-2 text-right">
                                     <button
                                       type="button"
                                       onClick={() =>
@@ -1550,7 +1550,7 @@ export function ProductMasterDetailView({
                                           v.id || v._id
                                         )
                                       }
-                                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 transition-colors"
+                                      className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-md text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 transition-colors"
                                       title={t(
                                         "products.viewVariant",
                                         "View & manage this variant"
@@ -1572,16 +1572,16 @@ export function ProductMasterDetailView({
                   )}
 
                 {/* 5. Tax & Compliance Card */}
-                <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-indigo-500/20 to-indigo-500/10 rounded-lg flex items-center justify-center">
-                      <Shield className="w-5 h-5 text-indigo-500" />
+                <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-7 h-7 bg-gradient-to-br from-indigo-500/20 to-indigo-500/10 rounded-md flex items-center justify-center shrink-0">
+                      <Shield className="w-4 h-4 text-indigo-500" />
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                      <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                         {t("products.taxCompliance", "Tax & Compliance")}
                       </h3>
-                      <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                      <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                         {t(
                           "products.taxDetails",
                           "GST, HSN code and statutory tax information"
@@ -1590,23 +1590,23 @@ export function ProductMasterDetailView({
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.hsnCode", "HSN Code")}
                       </p>
-                      <p className="text-sm font-bold font-mono text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold font-mono text-[rgb(var(--color-text-primary))] truncate">
                         {productData.hsn ||
                           productData.hsnCode ||
                           t("common.na", "N/A")}
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.taxRate", "GST / Tax Rate")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))] font-mono">
+                      <p className="text-xs sm:text-sm font-bold font-mono text-[rgb(var(--color-text-primary))] truncate">
                         {productData.taxRate !== undefined &&
                         productData.taxRate !== null
                           ? `${productData.taxRate}%`
@@ -1616,11 +1616,11 @@ export function ProductMasterDetailView({
                       </p>
                     </div>
 
-                    <div className="p-3.5 bg-[rgb(var(--color-bg-secondary))]/50 rounded-lg border border-[rgb(var(--color-border-primary))]/40">
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-0.5">
                         {t("products.taxInclusive", "Tax Type")}
                       </p>
-                      <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                      <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                         {productData.isTaxInclusive
                           ? t("products.inclusive", "Inclusive of Tax")
                           : t("products.exclusive", "Exclusive of Tax")}
@@ -1630,56 +1630,56 @@ export function ProductMasterDetailView({
                 </div>
 
                 {/* 6. Additional Product Metadata Card */}
-                <div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))] p-6 shadow-sm">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-10 h-10 bg-gradient-to-br from-slate-500/20 to-slate-500/10 rounded-lg flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-slate-500" />
+                <div className="bg-[rgb(var(--color-bg-primary))] rounded-lg border border-[rgb(var(--color-border-primary))] p-3.5 sm:p-4 shadow-xs">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="w-7 h-7 bg-gradient-to-br from-slate-500/20 to-slate-500/10 rounded-md flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4 text-slate-500" />
                     </div>
                     <div>
-                      <h3 className="text-base font-semibold text-[rgb(var(--color-text-primary))]">
+                      <h3 className="text-sm font-semibold text-[rgb(var(--color-text-primary))]">
                         {t(
                           "products.additionalInformation",
                           "Additional Information"
                         )}
                       </h3>
-                      <p className="text-xs text-[rgb(var(--color-text-secondary))]">
+                      <p className="text-[11px] text-[rgb(var(--color-text-secondary))]">
                         {t("products.metadata", "Product status and metadata")}
                       </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-1">
                         {t("products.status", "Status")}
                       </p>
                       {getStatusBadge(productData.status)}
                     </div>
 
-                    <div>
-                      <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1.5">
+                    <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                      <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-1">
                         {t("products.visibility", "Digital Shop Visibility")}
                       </p>
                       {getCatalogVisibilityBadge(productData.showInCatalog)}
                     </div>
 
                     {productData.createdAt && (
-                      <div>
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1.5">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-1">
                           {t("products.createdDate", "Created Date")}
                         </p>
-                        <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                        <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                           {formatDateTime(productData.createdAt, momentProp)}
                         </p>
                       </div>
                     )}
 
                     {productData.updatedAt && (
-                      <div>
-                        <p className="text-xs font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wide mb-1.5">
+                      <div className="p-2.5 px-3 bg-[rgb(var(--color-bg-secondary))]/40 rounded-md border border-[rgb(var(--color-border-primary))]/40">
+                        <p className="text-[10px] font-semibold text-[rgb(var(--color-text-secondary))] uppercase tracking-wider mb-1">
                           {t("products.lastUpdated", "Last Updated")}
                         </p>
-                        <p className="text-sm font-bold text-[rgb(var(--color-text-primary))]">
+                        <p className="text-xs sm:text-sm font-bold text-[rgb(var(--color-text-primary))] truncate">
                           {formatDateTime(productData.updatedAt, momentProp)}
                         </p>
                       </div>

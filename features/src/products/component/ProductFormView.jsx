@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Image as ImageIcon, IndianRupee, Package } from "lucide-react";
+import { Eye, IndianRupee, Package } from "lucide-react";
 import { BasicInfoSectionView } from "./BasicInfoSectionView.jsx";
 import { PricingGSTSectionView } from "./PricingGSTSectionView.jsx";
 import { SortableSectionPresentation } from "./SortableSectionView.jsx";
@@ -37,11 +37,10 @@ export function ProductFormView({
 }) {
   return (
     <div className={`space-y-4 ${className}`}>
-      {/* 2-Column Responsive Form Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start">
-        {/* Left Column (Primary Details & Pricing) */}
-        <div className="lg:col-span-7 space-y-4">
-          {/* Basic Info Section */}
+      {/* 2-Column Responsive Layout: Exactly 50% - 50% on desktop (lg+), 1 Column on mobile */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 items-start">
+        {/* Left Column (50%): Basic Info Section (Sticky on desktop) */}
+        <div className="w-full min-w-0 lg:sticky lg:top-4">
           <SortableSectionPresentation
             model={{
               id: "basic",
@@ -78,39 +77,7 @@ export function ProductFormView({
                   currencyOptions={currencyOptions}
                   uomOptions={uomOptions}
                   hasStoreGst={hasStoreGst}
-                  t={t}
-                />
-              ),
-            }}
-          />
-
-          {/* Pricing & GST Section */}
-          <SortableSectionPresentation
-            model={{
-              id: "pricing-gst",
-              title: t("products.pricingAndInventory", "Pricing & Inventory"),
-              subtitle: t(
-                "products.pricingAndInventorySubtitle",
-                "MRP, selling price, purchase price, SKU, barcode, and stock"
-              ),
-              Icon: IndianRupee,
-              onInfoClick: onInfoClick || (() => {}),
-              t,
-              glassStyles: {
-                card: "backdrop-blur-sm bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]",
-                header: "border-b border-[rgb(var(--color-border-primary)/0.6)]",
-                body: "",
-                icon: "bg-[rgb(var(--color-primary)/0.1)] text-[rgb(var(--color-primary))]",
-                dragHandle: "text-gray-400 hover:text-gray-600",
-                title: "text-[rgb(var(--color-text-primary))]",
-                description: "text-[rgb(var(--color-text-secondary))]",
-              },
-              children: (
-                <PricingGSTSectionView
-                  formData={formData}
-                  onChange={onChange}
-                  errors={fieldErrors}
-                  hasVariants={hasVariants}
+                  onUploadImages={onUploadVariantImages}
                   t={t}
                 />
               ),
@@ -118,19 +85,19 @@ export function ProductFormView({
           />
         </div>
 
-        {/* Right Column (Media & Catalog Info) */}
-        <div className="lg:col-span-5 space-y-4">
-          {/* Media Section Slot */}
-          {mediaSlot && (
+        {/* Right Column (50%): Pricing & Inventory OR Variants */}
+        <div className="w-full min-w-0">
+          {!hasVariants ? (
+            /* Single Product: Pricing & Inventory Section */
             <SortableSectionPresentation
               model={{
-                id: "media",
-                title: t("products.media", "Media & Images"),
+                id: "pricing-gst",
+                title: t("products.pricingAndInventory", "Pricing & Inventory"),
                 subtitle: t(
-                  "products.mediaSubtitle",
-                  "Upload product photos and media for your catalog"
+                  "products.pricingAndInventorySubtitle",
+                  "MRP, selling price, purchase price, SKU, barcode, and stock"
                 ),
-                Icon: ImageIcon,
+                Icon: IndianRupee,
                 onInfoClick: onInfoClick || (() => {}),
                 t,
                 glassStyles: {
@@ -142,42 +109,19 @@ export function ProductFormView({
                   title: "text-[rgb(var(--color-text-primary))]",
                   description: "text-[rgb(var(--color-text-secondary))]",
                 },
-                children: mediaSlot,
-              }}
-            />
-          )}
-
-          {/* Catalog & Additional Details Slot */}
-          {additionalDetailsSlot && (
-            <SortableSectionPresentation
-              model={{
-                id: "content",
-                title: t("products.catalogInformation", "Digital Catalog Details"),
-                subtitle: t(
-                  "products.catalogInformationSubtitle",
-                  "Online store visibility, description, and specifications"
+                children: (
+                  <PricingGSTSectionView
+                    formData={formData}
+                    onChange={onChange}
+                    errors={fieldErrors}
+                    hasVariants={false}
+                    t={t}
+                  />
                 ),
-                Icon: Eye,
-                onInfoClick: onInfoClick || (() => {}),
-                t,
-                glassStyles: {
-                  card: "backdrop-blur-sm bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]",
-                  header: "border-b border-[rgb(var(--color-border-primary)/0.6)]",
-                  body: "",
-                  icon: "bg-[rgb(var(--color-primary)/0.1)] text-[rgb(var(--color-primary))]",
-                  dragHandle: "text-gray-400 hover:text-gray-600",
-                  title: "text-[rgb(var(--color-text-primary))]",
-                  description: "text-[rgb(var(--color-text-secondary))]",
-                },
-                children: additionalDetailsSlot,
               }}
             />
-          )}
-        </div>
-
-        {/* Full-Width Bottom: Variants Creator Section */}
-        {showVariants && hasVariants && (
-          <div className="lg:col-span-12 pt-2">
+          ) : (
+            /* Multi-Variant Mode: Variants List (Vertically stacked in 50% column) */
             <VariantsSectionView
               variants={variants}
               onChange={onVariantsChange}
@@ -185,11 +129,69 @@ export function ProductFormView({
               onHasVariantsChange={onHasVariantsChange}
               baseFormData={formData}
               onUploadImages={onUploadVariantImages}
+              variant1Card={
+                <PricingGSTSectionView
+                  formData={formData}
+                  onChange={onChange}
+                  errors={fieldErrors}
+                  hasVariants={true}
+                  onUploadImages={onUploadVariantImages}
+                  onDuplicate={() => {
+                    const nextIndex = variants.length + 1;
+                    const duplicated = {
+                      id: `var_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+                      displayName: formData.displayName ? `${formData.displayName} (Copy)` : "",
+                      mrp: formData.mrp || "",
+                      sellingPrice: formData.sellingPrice || "",
+                      sku: formData.sku ? `${formData.sku}-COPY` : "",
+                      barcode: "",
+                      stock: formData.stock !== undefined && formData.stock !== null ? formData.stock : "",
+                      purchasePrice: formData.purchasePrice || formData.basePrice || "",
+                      basePrice: formData.basePrice || formData.purchasePrice || "",
+                      status: formData.status || "ACTIVE",
+                      options: (formData.options || []).map((opt) => ({
+                        ...opt,
+                        id: `opt_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+                      })),
+                      images: [...(formData.variantImages || formData.images || [])],
+                    };
+                    onVariantsChange([...variants, duplicated]);
+                  }}
+                  t={t}
+                />
+              }
               t={t}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {/* Catalog & Additional Details Slot (Full Width) */}
+      {additionalDetailsSlot && (
+        <SortableSectionPresentation
+          model={{
+            id: "content",
+            title: t("products.catalogInformation", "Digital Catalog Details"),
+            subtitle: t(
+              "products.catalogInformationSubtitle",
+              "Online store visibility, description, and specifications"
+            ),
+            Icon: Eye,
+            onInfoClick: onInfoClick || (() => {}),
+            t,
+            glassStyles: {
+              card: "backdrop-blur-sm bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))]",
+              header: "border-b border-[rgb(var(--color-border-primary)/0.6)]",
+              body: "",
+              icon: "bg-[rgb(var(--color-primary)/0.1)] text-[rgb(var(--color-primary))]",
+              dragHandle: "text-gray-400 hover:text-gray-600",
+              title: "text-[rgb(var(--color-text-primary))]",
+              description: "text-[rgb(var(--color-text-secondary))]",
+            },
+            children: additionalDetailsSlot,
+          }}
+        />
+      )}
     </div>
   );
 }

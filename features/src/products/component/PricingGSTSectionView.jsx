@@ -4,13 +4,13 @@ import {
   Barcode,
   Hash,
   IndianRupee,
-  Info,
   Package,
   Sparkles,
 } from "lucide-react";
 import { useMemo } from "react";
 import { Input } from "@dragorbit/ui";
 import { calculateSavings, generateAutoSku } from "../model/productForm.js";
+import { VariantCardView } from "./VariantCardView.jsx";
 
 const defaultT = (key, fallback) => fallback || key;
 
@@ -19,6 +19,8 @@ export function PricingGSTSectionView({
   onChange = () => {},
   errors = {},
   hasVariants = false,
+  onUploadImages,
+  onDuplicate,
   t = defaultT,
 }) {
   const handleFieldChange = (field, value) => {
@@ -34,55 +36,48 @@ export function PricingGSTSectionView({
     return calculateSavings(formData.mrp, formData.sellingPrice);
   }, [formData.mrp, formData.sellingPrice]);
 
+  // When product has multiple variants, Variant 1 uses the unified VariantCardView
+  if (hasVariants) {
+    return (
+      <VariantCardView
+        variantNumber={1}
+        data={{
+          ...formData,
+          displayName:
+            formData.displayName !== undefined
+              ? formData.displayName
+              : formData.name || formData.productName || "",
+          images:
+            Array.isArray(formData.variantImages) && formData.variantImages.length > 0
+              ? formData.variantImages
+              : formData.images || [],
+        }}
+        baseProductName={formData.name || formData.productName || ""}
+        errors={errors}
+        canRemove={false}
+        onFieldChange={(field, val) => {
+          if (field === "images") {
+            handleFieldChange("variantImages", val);
+          } else {
+            handleFieldChange(field, val);
+          }
+        }}
+        onDuplicate={onDuplicate}
+        onUploadImages={onUploadImages}
+        t={t}
+      />
+    );
+  }
+
+  // When product does NOT have variants, render simple Pricing & Inventory form (Image 3)
   return (
     <div className="space-y-3.5">
-      {hasVariants && (
-        <div className="space-y-2.5">
-          <div className="flex items-center gap-2 p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-700 dark:text-blue-300">
-            <Info className="w-4 h-4 shrink-0" />
-            <span>
-              {t(
-                "products.variantsPricingNotice",
-                "Variants mode active: Product title is common. Enter specific variant details (Variant Name, MRP, Price, Stock, SKU) below."
-              )}
-            </span>
-          </div>
-
-          <div>
-            <Input
-              label={t(
-                "products.variantDisplayName",
-                "Variant Name (वेरिएंट का नाम)"
-              )}
-              placeholder={
-                formData.name
-                  ? `${formData.name} - Variant 1`
-                  : t(
-                      "products.enterVariantDisplayName",
-                      "Enter variant name (e.g. Red, 64GB, Size M)"
-                    )
-              }
-              value={formData.displayName || ""}
-              onChange={(val) => handleFieldChange("displayName", val)}
-              error={errors.displayName}
-              errorMessage={errors.displayName}
-              leftIcon={Package}
-              helperText={t(
-                "products.variantDisplayNameHelp",
-                "Specific name for this variant. Product title remains common across all variants."
-              )}
-              className="text-sm font-medium"
-            />
-          </div>
-        </div>
-      )}
-
       {/* Row 1: MRP & Selling Price */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
         <div>
           <Input
             type="number"
-            label={t("products.mrp", "MRP (Maximum Retail Price)")}
+            label={t("products.mrp", "MRP")}
             placeholder={t("products.enterAmount", "0.00")}
             value={formData.mrp || ""}
             onChange={(val) => handleFieldChange("mrp", val)}
@@ -127,7 +122,7 @@ export function PricingGSTSectionView({
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs font-medium text-[rgb(var(--color-text-secondary))]">
-              {t("products.sku", "SKU (Item Code)")}
+              {t("products.sku", "SKU")}
             </span>
             <button
               type="button"
@@ -135,7 +130,7 @@ export function PricingGSTSectionView({
               className="inline-flex items-center gap-1 text-[11px] font-semibold text-[rgb(var(--color-primary))] hover:underline cursor-pointer"
             >
               <Sparkles className="w-3 h-3" />
-              <span>{t("products.autoSku", "Auto SKU")}</span>
+              <span>{t("products.autoSku", "Auto Sku")}</span>
             </button>
           </div>
           <Input
@@ -152,7 +147,7 @@ export function PricingGSTSectionView({
 
         <div>
           <span className="block text-xs font-medium text-[rgb(var(--color-text-secondary))] mb-1">
-            {t("products.barcode", "Barcode / UPC / EAN")}
+            {t("products.barcode", "Barcode")}
           </span>
           <Input
             placeholder={t("products.enterBarcode", "Scan or enter barcode")}
@@ -165,47 +160,56 @@ export function PricingGSTSectionView({
         </div>
       </div>
 
-      {/* Row 3: Initial Stock & Conditional Purchase Price (Only when stock is added) */}
+      {/* Row 3: Initial Stock & Purchase Price */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
         <div>
           <Input
             type="number"
-            label={t("products.openingStock", "Initial Stock (Quantity)")}
+            label={t("products.openingStock", "Opening Stock")}
             placeholder="0"
             value={
-              formData.stock !== undefined && formData.stock !== null
-                ? formData.stock
-                : ""
+              typeof formData.openingStock === "object" && formData.openingStock !== null
+                ? String(formData.openingStock.quantity || "")
+                : formData.openingStock !== undefined && formData.openingStock !== null && formData.openingStock !== ""
+                  ? String(formData.openingStock)
+                  : formData.stock !== undefined && formData.stock !== null
+                    ? String(formData.stock)
+                    : ""
             }
-            onChange={(val) => handleFieldChange("stock", val)}
-            error={errors.stock}
-            errorMessage={errors.stock}
+            onChange={(val) => {
+              handleFieldChange("stock", val);
+              handleFieldChange("openingStock", val);
+            }}
+            error={errors.stock || errors.openingStock}
+            errorMessage={errors.stock || errors.openingStock}
             leftIcon={Package}
             min={0}
           />
         </div>
 
-        {formData.stock !== undefined &&
-          formData.stock !== "" &&
-          Number(formData.stock) > 0 && (
-            <div>
-              <Input
-                type="number"
-                label={t("products.purchasePrice", "Purchase / Cost Price")}
-                placeholder={t("products.enterAmount", "0.00")}
-                value={formData.basePrice || formData.purchasePrice || ""}
-                onChange={(val) => {
-                  handleFieldChange("basePrice", val);
-                  handleFieldChange("purchasePrice", val);
-                }}
-                error={errors.purchasePrice || errors.basePrice}
-                errorMessage={errors.purchasePrice || errors.basePrice}
-                leftIcon={IndianRupee}
-                min={0}
-                step={0.01}
-              />
-            </div>
-          )}
+        <div>
+          <Input
+            type="number"
+            label={t("products.purchasePrice", "Purchase Price")}
+            placeholder={t("products.enterAmount", "0.00")}
+            value={
+              formData.basePrice !== undefined &&
+              formData.basePrice !== null &&
+              formData.basePrice !== ""
+                ? formData.basePrice
+                : formData.purchasePrice || ""
+            }
+            onChange={(val) => {
+              handleFieldChange("basePrice", val);
+              handleFieldChange("purchasePrice", val);
+            }}
+            error={errors.purchasePrice || errors.basePrice}
+            errorMessage={errors.purchasePrice || errors.basePrice}
+            leftIcon={IndianRupee}
+            min={0}
+            step={0.01}
+          />
+        </div>
       </div>
     </div>
   );

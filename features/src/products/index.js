@@ -17,6 +17,7 @@ export {
 } from "./component/PricingGSTSectionView.jsx";
 export { BasicInfoSectionView } from "./component/BasicInfoSectionView.jsx";
 export { VariantsSectionView } from "./component/VariantsSectionView.jsx";
+export { VariantCardView } from "./component/VariantCardView.jsx";
 export {
   ProductFormView,
   ProductFormView as ProductFormPresentation,

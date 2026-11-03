@@ -299,7 +299,21 @@ export function buildUnifiedProductPayload({
       String(formData.displayName || "").trim() ||
       (formData.name ? `${formData.name} - Variant 1` : "Variant 1");
 
-    const defaultImages = images.length > 0 ? images : [];
+    const primaryVariantImages = (formData.variantImages ?? [])
+      .map((img) => {
+        if (typeof img === "string") return img;
+        if (img && typeof img === "object" && img.url) return img.url;
+        if (img instanceof File && img.uploadedUrl) return img.uploadedUrl;
+        return null;
+      })
+      .filter(Boolean);
+
+    const defaultImages =
+      primaryVariantImages.length > 0
+        ? primaryVariantImages
+        : images.length > 0
+          ? images
+          : [];
     const defaultStockQty =
       toNumber(
         formData.stockQuantity ?? formData.stock ?? formData.openingStock?.quantity
@@ -311,6 +325,10 @@ export function buildUnifiedProductPayload({
     const defaultSupplier =
       formData.supplierId ?? formData.openingStock?.supplier ?? null;
 
+    const primaryCleanOptions = (formData.options || [])
+      .filter((o) => o?.name?.trim() && o?.value?.trim())
+      .map((o) => ({ name: o.name.trim(), value: o.value.trim() }));
+
     const primaryVariant = {
       displayName: primaryDisplayName,
       images: defaultImages,
@@ -320,6 +338,7 @@ export function buildUnifiedProductPayload({
       showInCatalog: formData.showInCatalog !== false,
       sortOrder: 0,
       status: formData.status || "ACTIVE",
+      ...(primaryCleanOptions.length > 0 ? { options: primaryCleanOptions } : {}),
       stock:
         defaultStockQty > 0
           ? {

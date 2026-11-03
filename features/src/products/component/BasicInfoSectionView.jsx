@@ -1,6 +1,7 @@
 "use client";
 
-import { Hash, Package, Plus } from "lucide-react";
+import { Hash, Loader2, Package, Plus, Trash2, Upload } from "lucide-react";
+import { useState } from "react";
 import { Input, Select } from "@dragorbit/ui";
 import {
   DEFAULT_CURRENCY_OPTIONS,
@@ -24,8 +25,39 @@ export function BasicInfoSectionView({
   currencyOptions = DEFAULT_CURRENCY_OPTIONS,
   uomOptions = DEFAULT_UOM_OPTIONS,
   hasStoreGst = false,
+  onUploadImages,
   t = defaultT,
 }) {
+  const [isUploading, setIsUploading] = useState(false);
+  const images = Array.isArray(formData.images) ? formData.images : [];
+
+  const handleUploadFiles = async (files) => {
+    if (!files || files.length === 0) return;
+    setIsUploading(true);
+    try {
+      if (onUploadImages) {
+        const uploaded = await onUploadImages(files);
+        if (uploaded && uploaded.length > 0) {
+          const existing = Array.isArray(formData.images) ? formData.images : [];
+          handleFieldChange("images", [...existing, ...uploaded]);
+        }
+      } else {
+        const local = Array.from(files).map((f) => URL.createObjectURL(f));
+        const existing = Array.isArray(formData.images) ? formData.images : [];
+        handleFieldChange("images", [...existing, ...local]);
+      }
+    } catch (err) {
+      console.error("Product image upload failed:", err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleRemoveImage = (imgIdx) => {
+    const existing = Array.isArray(formData.images) ? [...formData.images] : [];
+    existing.splice(imgIdx, 1);
+    handleFieldChange("images", existing);
+  };
   const handleFieldChange = (field, value) => {
     onChange(field, value);
   };
@@ -243,6 +275,75 @@ export function BasicInfoSectionView({
             }
             className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
           />
+        </div>
+      </div>
+
+      {/* Product Images (Compact, variant-style below HSN & GST) */}
+      <div className="space-y-2 pt-3 border-t border-[rgb(var(--color-border-primary)/0.6)]">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-[rgb(var(--color-text-secondary))]">
+              {t("products.productImages", "Product Images")}
+            </span>
+            {images.length > 0 && (
+              <span className="px-1.5 py-0.2 text-[10px] font-semibold bg-[rgb(var(--color-primary)/0.1)] text-[rgb(var(--color-primary))] rounded-full">
+                {images.length}
+              </span>
+            )}
+          </div>
+          <label className="inline-flex items-center gap-1 text-[11px] font-semibold text-[rgb(var(--color-primary))] hover:underline cursor-pointer">
+            <Upload className="w-3 h-3" />
+            <span>{t("products.uploadPhotos", "Upload Photos")}</span>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleUploadFiles(e.target.files)}
+              disabled={isUploading}
+            />
+          </label>
+        </div>
+
+        {isUploading && (
+          <div className="flex items-center gap-2 py-1 text-xs text-blue-600">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            <span>{t("products.uploadingPhotos", "Uploading photos...")}</span>
+          </div>
+        )}
+
+        <div className="flex flex-wrap items-center gap-2">
+          {images.map((img, imgIdx) => (
+            <div
+              key={imgIdx}
+              className="relative group w-14 h-14 rounded-lg overflow-hidden border border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-secondary))]"
+            >
+              <img
+                src={typeof img === "string" ? img : img?.url}
+                alt={`Product photo ${imgIdx + 1}`}
+                className="w-full h-full object-cover"
+              />
+              {imgIdx === 0 && (
+                <span className="absolute bottom-0 inset-x-0 bg-black/60 text-[9px] text-white text-center py-0.5 font-medium leading-tight">
+                  Cover
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => handleRemoveImage(imgIdx)}
+                className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                title={t("products.removePhoto", "Remove")}
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+
+          {images.length === 0 && !isUploading && (
+            <p className="text-[11px] text-[rgb(var(--color-text-tertiary))] italic">
+              {t("products.noImagesUploaded", "No images uploaded yet")}
+            </p>
+          )}
         </div>
       </div>
     </div>

@@ -177,8 +177,10 @@ class HttpService {
 		return this.authAxios.patch(this.buildUrl(url, params), data);
 	}
 
-	async delete(url, params = {}) {
-		return this.authAxios.delete(this.buildUrl(url, params));
+	async delete(url, params = {}, config = {}) {
+		const axiosConfig =
+			typeof config === "object" && config !== null ? { ...config } : {};
+		return this.authAxios.delete(this.buildUrl(url, params), axiosConfig);
 	}
 
 	// Helper
