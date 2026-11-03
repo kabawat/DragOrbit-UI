@@ -1,4 +1,5 @@
 export { SubscriptionScreen } from "./screen/SubscriptionScreen.jsx";
+export { BillingHistoryScreen } from "./screen/BillingHistoryScreen.jsx";
 export { PlanLimitsScreen } from "./screen/PlanLimitsScreen.jsx";
 export { InviteStaffDrawerView } from "./component/InviteStaffDrawerView.jsx";
 export { MarkAttendanceDrawerView } from "./component/MarkAttendanceDrawerView.jsx";
