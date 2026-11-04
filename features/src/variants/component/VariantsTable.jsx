@@ -38,7 +38,7 @@ export function VariantsTable({ model }) {
 				{
 					id: "name",
 					header: t("products.displayName") || "Display name",
-					width: "22%",
+					width: "28%",
 					cell: (variant) => (
 						<>
 							<button
@@ -60,22 +60,16 @@ export function VariantsTable({ model }) {
 					),
 				},
 				{
-					id: "product",
-					header: t("sidebar.products") || "Product",
-					width: "18%",
-					cell: (variant) => variant.product?.name || "—",
-				},
-				{
 					id: "sku",
 					header: t("products.sku") || "SKU",
-					width: "16%",
+					width: "20%",
 					cell: (variant) => variant.sku || "—",
 				},
 				{
 					id: "stock",
 					header: t("products.stock") || "Stock",
 					align: "center",
-					width: "12%",
+					width: "16%",
 					cell: (variant) => {
 						const rawStock =
 							variant.stock ??
@@ -86,25 +80,25 @@ export function VariantsTable({ model }) {
 							return <span className="text-[rgb(var(--color-text-secondary))]">—</span>;
 						}
 						const count = Number(rawStock);
-						if (isNaN(count)) {
+						if (Number.isNaN(count)) {
 							return <span className="text-[rgb(var(--color-text-secondary))]">—</span>;
 						}
 						if (count <= 0) {
 							return (
-								<span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50">
+								<span className="text-sm font-medium text-rose-600 dark:text-rose-400">
 									0 {t("products.units") || "units"}
 								</span>
 							);
 						}
 						if (count < 10) {
 							return (
-								<span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50">
+								<span className="text-sm font-medium text-amber-600 dark:text-amber-400">
 									{count} {t("products.units") || "units"}
 								</span>
 							);
 						}
 						return (
-							<span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/50">
+							<span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
 								{count} {t("products.units") || "units"}
 							</span>
 						);
