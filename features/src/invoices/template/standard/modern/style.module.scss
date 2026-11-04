@@ -1,0 +1,206 @@
+.modernInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+    line-height: 1.6 !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 40px !important;
+    padding-bottom: 20px !important;
+    border-bottom: 4px solid #007bff !important;
+}
+
+.headerLeft {
+    flex: 1 !important;
+
+    h1 {
+        font-size: 36px !important;
+        font-weight: 300 !important;
+        color: #007bff !important;
+        margin-bottom: 5px !important;
+        margin-top: 0 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+    }
+
+    .subtitle {
+        color: #666 !important;
+        font-size: 14px !important;
+    }
+}
+
+.headerRight {
+    text-align: right !important;
+    flex: 1 !important;
+
+    .invoiceNumberValue {
+        font-size: 20px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        margin-bottom: 5px !important;
+    }
+
+    .dateText {
+        font-size: 14px !important;
+        color: #666 !important;
+    }
+}
+
+.infoGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 40px !important;
+    margin-bottom: 40px !important;
+}
+
+.infoSection {
+    background: #f8f9fa !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    border-left: 4px solid #007bff !important;
+
+    h3 {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: #007bff !important;
+        margin-bottom: 15px !important;
+        margin-top: 0 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+    }
+
+    .entityName {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        margin-bottom: 10px !important;
+    }
+
+    p {
+        margin: 4px 0 !important;
+        color: #666 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.modernTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        background: linear-gradient(135deg, #007bff, #0056b3) !important;
+        color: white !important;
+        padding: 15px 12px !important;
+        text-align: left !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    :global(td) {
+        padding: 12px !important;
+        border-bottom: 1px solid #e9ecef !important;
+        font-size: 13px !important;
+    }
+
+    :global(tbody tr:nth-child(even)) {
+        background-color: #f8f9fa !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #666 !important;
+    margin-top: 2px !important;
+}
+
+.totalsArea {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-top: 30px !important;
+}
+
+.totalsBox {
+    width: 350px !important;
+    background: #f8f9fa !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e9ecef !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    border-bottom: 1px solid #e9ecef !important;
+
+    span:first-child {
+        color: #555 !important;
+    }
+
+    span:last-child {
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+}
+
+.grandTotalRow {
+    border-bottom: none !important;
+    border-top: 2px solid #007bff !important;
+    margin-top: 10px !important;
+    padding-top: 15px !important;
+    font-weight: 600 !important;
+    font-size: 18px !important;
+
+    span:first-child,
+    span:last-child {
+        color: #007bff !important;
+        font-weight: 800 !important;
+    }
+}
+
+.footer {
+    margin-top: 40px !important;
+    text-align: center !important;
+    padding: 20px !important;
+    background: #f8f9fa !important;
+    border-radius: 8px !important;
+
+    p {
+        margin: 5px 0 !important;
+        color: #666 !important;
+        font-size: 12px !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

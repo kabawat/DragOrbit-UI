@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 import { Search, Grid3X3, List, Package, Loader2 } from "lucide-react";
 import { Select, EmptyState } from "@dragorbit/ui";
 import ProductCard from "./ProductCard.jsx";
@@ -20,6 +21,7 @@ export function ProductPanelView({ model }) {
 		sentinelRef,
 		isFetchingMore,
 		getProductPrice,
+		cartQtyById,
 		t,
 		actions,
 	} = model;
@@ -93,12 +95,7 @@ export function ProductPanelView({ model }) {
 				}`}
 			>
 				{isLoading && !products.length ? (
-					<div className="col-span-full flex flex-col items-center justify-center py-16 text-[rgb(var(--color-text-secondary))]">
-						<Loader2 className="w-8 h-8 mb-3 animate-spin opacity-50" />
-						<p className="text-sm">
-							{t("pos.loadingProducts") || "Loading products..."}
-						</p>
-					</div>
+					<TableSkeleton className="col-span-full" compact rows={3} />
 				) : filteredProducts.length === 0 ? (
 					<div className="col-span-full">
 						<EmptyState
@@ -110,7 +107,7 @@ export function ProductPanelView({ model }) {
 							}
 							description={
 								search
-									? t("pos.noProductsSearchHint") ||
+							? t("pos.noProductsSearchHint", { search }) ||
 										`No products matching "${search}".`
 									: t("pos.noProductsCategoryHint") ||
 										"Try another category or sync products."
@@ -120,15 +117,23 @@ export function ProductPanelView({ model }) {
 					</div>
 				) : (
 					<>
-						{filteredProducts.map((p) => (
-							<ProductCard
-								getProductPrice={getProductPrice}
-								key={p._id || p.id}
-								product={p}
-								onAdd={addToCart}
-								viewMode={viewMode}
-							/>
-						))}
+						{filteredProducts.map((p) => {
+							const lineId = String(p._id || p.id || "");
+							const selectedQty =
+								typeof cartQtyById?.get === "function"
+									? cartQtyById.get(lineId) || 0
+									: cartQtyById?.[lineId] || 0;
+							return (
+								<ProductCard
+									getProductPrice={getProductPrice}
+									key={lineId}
+									product={p}
+									onAdd={addToCart}
+									viewMode={viewMode}
+									selectedQty={selectedQty}
+								/>
+							);
+						})}
 						{pagination.hasNextPage && (
 							<div
 								ref={sentinelRef}

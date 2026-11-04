@@ -113,7 +113,6 @@ export function EditableGrid<T extends { id: string }>({
 		originalOrder: string[];
 	} | null>(null);
 	const grid = useRef<HTMLDivElement>(null);
-	const [availableColumns, setAvailableColumns] = useState(1);
 	const l = { ...defaultLayoutLabels, ...labels };
 	useEffect(() => {
 		draftRef.current = normalizeGridLayout(layout, JSON.parse(idsKey), cap);
@@ -122,24 +121,12 @@ export function EditableGrid<T extends { id: string }>({
 		setDrag(null);
 		gesture.current = null;
 	}, [layoutKey, idsKey, cap, reorderable]);
-	useEffect(() => {
-		const el = grid.current;
-		if (!el) return;
-		const measure = () =>
-			setAvailableColumns(
-				Math.max(
-					1,
-					Math.floor(
-						(el.clientWidth + 16) / (Math.max(120, itemMinWidth) + 16),
-					),
-				),
-			);
-		measure();
-		const observer = new ResizeObserver(measure);
-		observer.observe(el);
-		return () => observer.disconnect();
-	}, [itemMinWidth]);
 	const current = normalizeGridLayout(draft, ids, cap);
+	const minimumColumns = Math.max(1, Math.min(cap, Math.floor(minCol) || 1));
+	const columns = Math.max(minimumColumns, current.columns);
+	const itemWidth = Number.isFinite(itemMinWidth) ? Math.max(120, itemMinWidth) : 180;
+	// CSS fits columns on the first paint, including consumers with a forced minimum.
+	const minimumTrack = `min(calc((100% - ${minimumColumns - 1}rem) / ${minimumColumns}), max(${itemWidth}px, calc((100% - ${columns - 1}rem) / ${columns})))`;
 	const items = current.order
 		.map((id) => data.find((item) => item.id === id))
 		.filter((item): item is T => Boolean(item));
@@ -300,7 +287,7 @@ export function EditableGrid<T extends { id: string }>({
 				ref={grid}
 				className="grid gap-4"
 				style={{
-					gridTemplateColumns: `repeat(${Math.min(cap, Math.max(Math.min(cap, minCol), Math.min(current.columns, availableColumns)))}, minmax(0, 1fr))`,
+					gridTemplateColumns: `repeat(auto-fill, minmax(${minimumTrack}, 1fr))`,
 				}}
 			>
 				{items.map((item) => (

@@ -154,15 +154,15 @@ export function CustomerListHeaderView({ model }) {
 				}}
 				actions={
 					<>
-						{" "}
-						{syncStatus}{" "}
+						
+						{syncStatus}
 						{canCreate ? (
 							<CustomerImportMenu
 								ref={importMenuRef}
 								onOpeningBalance={() => setShowOpeningBalanceDrawer(true)}
 								onBulkUpload={() => setShowBulkUploadDrawer(true)}
 							/>
-						) : null}{" "}
+						) : null}
 					</>
 				}
 				create={{

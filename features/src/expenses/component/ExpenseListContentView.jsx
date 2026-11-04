@@ -1,4 +1,6 @@
 "use client";
+
+import { TableSkeleton } from "@dragorbit/ui";
 /** Host model supplies state/actions; this component owns the shared markup. */
 export function ExpenseListContentView({ model }) {
 	const {
@@ -33,23 +35,6 @@ export function ExpenseListContentView({ model }) {
 				<div className="h-[calc(100vh-210px)] overflow-y-auto">
 					{viewMode === "table" ? (
 						<>
-							{/* Fixed Table Header — outside scroll container so it never scrolls */}
-							<ExpenseTable
-								expenses={expenses}
-								onEdit={canEdit ? handleOpenEdit : undefined}
-								onDelete={
-									canDelete
-										? (id) => deleteModalRef.current?.open(id)
-										: undefined
-								}
-								onView={canView ? onView : undefined}
-								sortBy={sortBy}
-								sortOrder={sortOrder}
-								onSort={handleSort}
-								headerOnly
-							/>
-
-							{/* Scrollable Body */}
 							<div className="flex-1 overflow-y-auto overflow-x-auto">
 								<ExpenseTable
 									expenses={expenses}
@@ -63,7 +48,7 @@ export function ExpenseListContentView({ model }) {
 									sortBy={sortBy}
 									sortOrder={sortOrder}
 									onSort={handleSort}
-									bodyOnly
+									loading={isLoading}
 								/>
 
 								{/* Sentinel — IntersectionObserver triggers load more */}
@@ -71,16 +56,7 @@ export function ExpenseListContentView({ model }) {
 									<div ref={sentinelRef} className="h-4 w-full" />
 								)}
 
-								{(isFetchingMore || isLoading) && (
-									<div className="flex items-center justify-center py-8">
-										<div className="flex items-center gap-3">
-											<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-											<span className="text-sm text-[rgb(var(--color-text-secondary))]">
-												{t("common.loadingMore") || "Loading more..."}
-											</span>
-										</div>
-									</div>
-								)}
+								{isFetchingMore && <TableSkeleton compact rows={2} />}
 							</div>
 						</>
 					) : (
@@ -106,16 +82,7 @@ export function ExpenseListContentView({ model }) {
 								<div ref={sentinelRef} className="h-4 w-full" />
 							)}
 
-							{(isFetchingMore || isLoading) && (
-								<div className="flex items-center justify-center py-8">
-									<div className="flex items-center gap-3">
-										<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-										<span className="text-sm text-[rgb(var(--color-text-secondary))]">
-											{t("common.loadingMore") || "Loading more..."}
-										</span>
-									</div>
-								</div>
-							)}
+							{isFetchingMore && <TableSkeleton compact rows={2} />}
 						</div>
 					)}
 
@@ -127,7 +94,7 @@ export function ExpenseListContentView({ model }) {
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{expenses.length}
 								</span>{" "}
-								expenses
+								{expenses.length === 1 ? "expense" : "expenses"}
 								{pagination.hasNextPage ? (
 									<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
 										• Scroll down to load more

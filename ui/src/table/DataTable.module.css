@@ -1,0 +1,26 @@
+.heading {
+	background: var(--table-header-background, rgb(var(--color-bg-secondary)));
+}
+.body > tr:nth-child(even) {
+	background: var(--table-row-even-background, transparent);
+}
+.body > tr:hover,
+.body > tr:hover > td[data-pinned-column] {
+	background: rgb(var(--color-bg-tertiary));
+}
+.body > tr > td {
+	padding: var(--table-cell-padding, 1rem 1.5rem);
+	border-bottom: 1px solid rgb(var(--color-border-primary));
+}
+.body > tr:nth-child(even) > td[data-pinned-column] {
+	background: var(--table-row-even-background, rgb(var(--color-bg-primary)));
+}
+
+.body > tr > td.state {
+	padding: 0;
+}
+.table tfoot td {
+	padding: var(--table-cell-padding, 1rem 1.5rem);
+	font-size: 0.875rem;
+	background: rgb(var(--color-bg-secondary));
+}

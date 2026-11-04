@@ -35,6 +35,7 @@ export function buildDashboardMetrics(summary, t) {
 		value: `${currency ? "₹" : ""}${totals[id].toLocaleString("en-IN")}`,
 		logo,
 		iconColor,
+		iconTone: "subtle",
 		change: "0%",
 		changeType,
 	}));

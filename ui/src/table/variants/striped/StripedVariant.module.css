@@ -1,0 +1,12 @@
+.variant {
+	--table-header-background: color-mix(
+		in srgb,
+		rgb(var(--color-primary)) 8%,
+		rgb(var(--color-bg-primary))
+	);
+	--table-row-even-background: color-mix(
+		in srgb,
+		rgb(var(--color-primary)) 3%,
+		rgb(var(--color-bg-primary))
+	);
+}

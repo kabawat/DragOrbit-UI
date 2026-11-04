@@ -10,7 +10,6 @@ import {
 	ShoppingCart,
 	UserPlus,
 	Users,
-	Warehouse,
 } from "lucide-react";
 
 const STAFF_MODULES = [
@@ -49,15 +48,6 @@ const STAFF_MODULES = [
 		description: "Manage catalog and variants",
 		color: "text-purple-500",
 		bg: "bg-purple-500/10",
-	},
-	{
-		key: "inventory",
-		title: "Stock & Inventory",
-		icon: Warehouse,
-		route: "stock",
-		description: "Track levels, adjustments and warehouses",
-		color: "text-indigo-500",
-		bg: "bg-indigo-500/10",
 	},
 	{
 		key: "customer",
@@ -146,7 +136,6 @@ export function createDashboardRoutes(prefix = "/dashboard") {
 		"invoices/create",
 		"suppliers",
 		"cashbook",
-		"stock/alerts",
 	];
 	return Object.fromEntries(paths.map((path) => [path, `${prefix}/${path}`]));
 }

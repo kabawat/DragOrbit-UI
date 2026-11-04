@@ -1,8 +1,8 @@
 /* Theme Variables */
 :root {
 	/* Default Theme Colors */
-	--color-primary: 59 130 246;
-	/* blue-500 */
+	--color-primary: 24 124 197;
+	/* #187CC5 */
 	--color-secondary: 107 114 128;
 	/* gray-500 */
 	--color-success: 34 197 94;
@@ -107,7 +107,8 @@
 }
 
 /* Dark Theme Variant */
-[data-theme="default"][data-variant="dark"] {
+[data-variant="dark"],
+.dark {
 	--color-bg-primary: 9 9 11;
 	/* zinc-950 */
 	--color-bg-secondary: 18 18 18;

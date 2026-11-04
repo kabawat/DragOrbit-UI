@@ -1,8 +1,9 @@
 "use client";
-import { ArrowRight, Check, Lock, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, Lock, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Button from "./Button";
+import { DragBizzLogoIcon } from "./DragBizzLogoIcon";
 
 const UpgradeModal = ({
 	isOpen,
@@ -90,10 +91,10 @@ const UpgradeModal = ({
 					<p className="text-[rgb(var(--color-text-secondary))] mb-6">
 						{featureName ? (
 							<>
-								The{" "}
+								The
 								<span className="font-semibold text-[rgb(var(--color-primary))]">
 									{featureName}
-								</span>{" "}
+								</span>
 								feature is not available in your current plan.
 							</>
 						) : (
@@ -105,7 +106,7 @@ const UpgradeModal = ({
 					{requiredFeature && (
 						<div className="bg-[rgb(var(--color-bg-secondary))] border border-[rgb(var(--color-border-primary))] rounded-lg p-4 mb-6">
 							<div className="flex items-center justify-center mb-2">
-								<Sparkles className="w-5 h-5 text-[rgb(var(--color-primary))] mr-2" />
+								<DragBizzLogoIcon className="w-5 h-5 text-[rgb(var(--color-primary))] mr-2" />
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									Required Feature: {requiredFeature}
 								</span>
@@ -155,7 +156,7 @@ const UpgradeModal = ({
 
 					{/* Footer Note */}
 					<p className="text-xs text-[rgb(var(--color-text-tertiary))] mt-6">
-						Need help?{" "}
+						Need help?
 						<a
 							href="/contact"
 							className="text-[rgb(var(--color-primary))] hover:underline"

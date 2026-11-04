@@ -1,0 +1,57 @@
+.document {
+  color: #111827;
+}
+
+.invoice {
+  width: 100%;
+  padding: 8px;
+  color: #111827;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.invoice p { margin: 2px 0; }
+.title { margin: 0 0 5px; text-align: center; font-size: 16px; font-weight: 700; }
+.merchant, .partyGrid, .shipTo, .items, .summaryGrid, .bottomGrid, .footerGrid { border: 1px solid #4b5563; }
+.merchant { display: flex; min-height: 74px; align-items: center; gap: 10px; padding: 6px 10px; }
+.logo { width: 64px; height: 58px; flex: 0 0 64px; object-fit: contain; }
+.merchantInfo { min-width: 0; }
+.merchantInfo h2 { margin: 0 0 3px; font-size: 15px; line-height: 1.2; }
+.partyGrid { display: grid; grid-template-columns: 1fr 1fr; border-top: 0; }
+.partyGrid > div + div { border-left: 1px solid #4b5563; }
+.partyGrid h3, .shipTo h3, .bottomGrid h3, .footerGrid h3, .taxSummary h3 { margin: 0; padding: 4px 6px; border-bottom: 1px solid #4b5563; background: #f3f4f6; font-size: 10px; font-weight: 700; }
+.cellBody { min-height: 54px; padding: 5px 6px; }
+.shipTo { border-top: 0; }
+.shipTo p { padding: 5px 6px; }
+.items { width: 100%; margin-top: 6px; border-collapse: collapse; table-layout: auto; }
+.items th, .items td { padding: 4px 5px; border: 1px solid #4b5563; text-align: right; vertical-align: top; }
+.items th { background: #f3f4f6; font-size: 9px; }
+.items th:nth-child(2), .items td:nth-child(2) { min-width: 100px; text-align: left; }
+.items td small { display: block; margin-top: 2px; color: #4b5563; }
+.items tfoot td { background: #f9fafb; }
+.summaryGrid { display: grid; grid-template-columns: minmax(0, 1fr) 165px; border-top: 0; }
+.taxSummary { min-width: 0; }
+.taxSummary table { width: 100%; border-collapse: collapse; }
+.taxSummary th, .taxSummary td { padding: 4px; border: 1px solid #4b5563; text-align: right; }
+.taxSummary th { background: #f9fafb; }
+.amountSummary { border-left: 1px solid #4b5563; }
+.summaryRow { display: flex; justify-content: space-between; gap: 8px; padding: 3px 5px; border-bottom: 1px solid #d1d5db; }
+.bottomGrid, .footerGrid { display: grid; grid-template-columns: 1fr 1fr; border-top: 0; }
+.bottomGrid > div + div, .footerGrid > div + div { border-left: 1px solid #4b5563; }
+.bottomGrid p, .bank p { min-height: 18px; padding: 5px 6px; }
+.footerGrid { min-height: 78px; }
+.sign { display: flex; min-width: 0; flex-direction: column; }
+.signArea { display: flex; flex: 1; min-height: 46px; align-items: center; justify-content: center; padding: 3px; }
+.signArea img { display: block; max-width: 150px; max-height: 42px; object-fit: contain; }
+.signLabel { padding: 2px 4px 5px; text-align: center; }
+
+@media (max-width: 560px) {
+  .invoice { padding: 5px; }
+  .summaryGrid { grid-template-columns: minmax(0, 1fr) 132px; }
+  .items th, .items td { padding: 3px 2px; font-size: 8px; }
+  .items th:nth-child(2), .items td:nth-child(2) { min-width: 72px; }
+}
+
+@media print {
+  .invoice { padding: 0; }
+}

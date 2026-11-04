@@ -147,6 +147,29 @@ class CoolThemes {
 				border: "#1e1e20",
 			},
 		);
+
+		this.azure = new Theme(
+			"Azure",
+			"Bright and refreshing",
+			{
+				primary: "#187CC5",
+				secondary: "#7dd3fc",
+				background: "#f5fbff",
+				surface: "#eaf7ff",
+				text: "#0c344b",
+				textSecondary: "#164e70",
+				border: "#cceeff",
+			},
+			{
+				primary: "#187CC5",
+				secondary: "#7dd3fc",
+				background: "#09090b",
+				surface: "#121212",
+				text: "#f9fafb",
+				textSecondary: "#d1d5db",
+				border: "#1e1e20",
+			},
+		);
 	}
 }
 

@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 /** Host model supplies state/actions; this component owns the shared markup. */
 export function SalesOrderListContentView({ model }) {
 	const {
@@ -20,7 +21,7 @@ export function SalesOrderListContentView({ model }) {
 	} = model;
 	return (
 		<div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
-			<div className="h-[calc(100vh-210px)] overflow-y-auto" ref={scrollRef}>
+			<div ref={scrollRef}>
 				{viewMode === "table" ? (
 					<div className="h-full">
 						<SalesOrderTable
@@ -57,14 +58,7 @@ export function SalesOrderListContentView({ model }) {
 
 				{/* Infinite scroll loading indicator */}
 				{(isFetchingMore || (isLoading && orders.length > 0)) && (
-					<div className="col-span-full flex items-center justify-center py-8">
-						<div className="flex items-center gap-3">
-							<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-							<span className="text-sm text-[rgb(var(--color-text-secondary))]">
-								{t("common.loadingMore")}
-							</span>
-						</div>
-					</div>
+					<TableSkeleton compact rows={2} />
 				)}
 			</div>
 
@@ -74,10 +68,10 @@ export function SalesOrderListContentView({ model }) {
 					<div className="text-sm text-[rgb(var(--color-text-secondary))]">
 						{pagination.hasNextPage ? (
 							<>
-								{t("common.showing")}{" "}
+								{t("common.showing")}
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{orders.length}
-								</span>{" "}
+								</span>
 								{t("sidebar.sellOrders").toLowerCase()}
 								<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
 									• Scroll down to load more
@@ -85,10 +79,10 @@ export function SalesOrderListContentView({ model }) {
 							</>
 						) : (
 							<>
-								{t("common.showing")}{" "}
+								{t("common.showing")}
 								<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 									{orders.length}
-								</span>{" "}
+								</span>
 								{t("sidebar.sellOrders").toLowerCase()}
 								<span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
 									• No more orders

@@ -1,0 +1,182 @@
+.lumosInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+    font-family: var(--font-primary) !important;
+    color: #2f3640 !important;
+}
+
+.header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%) !important;
+    color: white !important;
+    padding: 25px 35px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+
+    h1 {
+        margin: 0 !important;
+        font-size: 26px !important;
+        font-weight: 600 !important;
+        letter-spacing: 1px !important;
+        text-transform: uppercase !important;
+    }
+}
+
+.storeInfo {
+    text-align: right !important;
+    font-size: 12px !important;
+    line-height: 1.6 !important;
+
+    strong {
+        display: block !important;
+        font-size: 14px !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+    }
+}
+
+.invoiceBody {
+    padding: 35px 10px !important;
+}
+
+.summary {
+    background: #f9fafc !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 15px 20px !important;
+    margin-bottom: 30px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 13px !important;
+    color: #333 !important;
+}
+
+.infoSection {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 35px !important;
+}
+
+.infoBlock {
+    width: 48% !important;
+
+    .label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #8c8c8c !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .value {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #2f3640 !important;
+    }
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 25px !important;
+}
+
+.lumosTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        text-align: left !important;
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #7f8c8d !important;
+        padding: 12px 0 !important;
+        border-bottom: 2px solid #e6e9ec !important;
+    }
+
+    :global(td) {
+        padding: 12px 0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        font-size: 13px !important;
+        color: #2f3640 !important;
+    }
+}
+
+.productName {
+    font-weight: 500 !important;
+}
+
+.totals {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    width: 100% !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 260px !important;
+    margin-bottom: 5px !important;
+
+    .label {
+        width: 140px !important;
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        text-align: right !important;
+        margin-right: 15px !important;
+    }
+
+    .amount {
+        width: 100px !important;
+        text-align: right !important;
+        font-weight: 500 !important;
+    }
+}
+
+.finalTotal {
+    border-top: 2px solid #c5c6ca !important;
+    padding-top: 8px !important;
+    margin-top: 10px !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+    font-size: 16px !important;
+}
+
+.footer {
+    background: #f9fafc !important;
+    text-align: center !important;
+    padding: 20px !important;
+    font-size: 11px !important;
+    color: #7f8c8d !important;
+    border-top: 1px solid #e0e0e0 !important;
+
+    p {
+        margin: 3px 0 !important;
+    }
+}
+
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #2575fc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #f9fafc !important;
+        font-size: 13px !important;
+        color: #2f3640 !important;
+    }
+}

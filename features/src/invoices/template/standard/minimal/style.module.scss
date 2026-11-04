@@ -1,0 +1,172 @@
+.minimalInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #2c3e50 !important;
+}
+
+.header {
+    text-align: center !important;
+    margin-bottom: 50px !important;
+
+    h1 {
+        font-size: 24px !important;
+        font-weight: 300 !important;
+        color: #2c3e50 !important;
+        margin-bottom: 10px !important;
+        margin-top: 0 !important;
+        letter-spacing: 3px !important;
+        text-transform: uppercase !important;
+    }
+}
+
+.invoiceNumber {
+    font-size: 14px !important;
+    color: #7f8c8d !important;
+    margin-bottom: 20px !important;
+}
+
+.date {
+    font-size: 12px !important;
+    color: #95a5a6 !important;
+}
+
+.infoSection {
+    margin-bottom: 40px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.section {
+    width: 45% !important;
+
+    .label {
+        font-size: 11px !important;
+        color: #95a5a6 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        margin-bottom: 8px !important;
+    }
+
+    .companyName,
+    .customerName {
+        font-size: 16px !important;
+        font-weight: 400 !important;
+        color: #2c3e50 !important;
+        margin-bottom: 5px !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 40px !important;
+}
+
+.minimalTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        padding: 15px 0 !important;
+        text-align: left !important;
+        font-weight: 400 !important;
+        font-size: 11px !important;
+        color: #95a5a6 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        border-bottom: 1px solid #ecf0f1 !important;
+    }
+
+    :global(td) {
+        padding: 12px 0 !important;
+        border-bottom: 1px solid #ecf0f1 !important;
+        font-size: 13px !important;
+    }
+}
+
+.productName {
+    font-weight: 400 !important;
+    color: #2c3e50 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #95a5a6 !important;
+    margin-top: 2px !important;
+}
+
+.totals {
+    margin-top: 30px !important;
+    text-align: right !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: flex-end !important;
+    margin-bottom: 8px !important;
+
+    .label {
+        width: 120px !important;
+        text-align: right !important;
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        margin-right: 15px !important;
+    }
+
+    .amount {
+        width: 100px !important;
+        text-align: right !important;
+        font-size: 12px !important;
+        color: #2c3e50 !important;
+    }
+}
+
+.finalTotal {
+    border-top: 1px solid #bdc3c7 !important;
+    padding-top: 10px !important;
+    margin-top: 15px !important;
+
+    .label,
+    .amount {
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        color: #2c3e50 !important;
+    }
+}
+
+.footer {
+    margin-top: 60px !important;
+    text-align: center !important;
+    padding-top: 30px !important;
+    border-top: 1px solid #ecf0f1 !important;
+
+    p {
+        font-size: 10px !important;
+        color: #95a5a6 !important;
+        margin-bottom: 3px !important;
+        line-height: 1.4 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

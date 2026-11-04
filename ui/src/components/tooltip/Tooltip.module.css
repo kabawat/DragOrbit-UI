@@ -1,0 +1,33 @@
+.tooltip {
+	position: fixed;
+	z-index: 2147483647;
+	width: max-content;
+	max-width: min(280px, calc(100vw - 16px));
+	padding: 8px 12px;
+	border: 1px solid rgb(var(--color-border-primary, 220 227 237));
+	border-radius: 8px;
+	background: rgb(var(--color-bg-primary, 255 255 255));
+	color: rgb(var(--color-text-primary, 28 40 60));
+	box-shadow: 0 4px 16px rgb(0 0 0 / 12%);
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.5;
+	text-align: left;
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+	pointer-events: auto;
+	animation: appear 120ms ease-out;
+}
+@keyframes appear {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.tooltip {
+		animation: none;
+	}
+}

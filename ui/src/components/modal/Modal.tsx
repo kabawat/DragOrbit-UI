@@ -1,17 +1,20 @@
 "use client";
+import { X } from "lucide-react";
 import {
+	type CSSProperties,
+	type PointerEvent,
+	type ReactNode,
 	useEffect,
 	useId,
 	useRef,
 	useState,
-	type ReactNode,
-	type PointerEvent,
-	type CSSProperties,
 } from "react";
-import { X } from "lucide-react";
 import { createPortal } from "react-dom";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 import "./modal.css";
 const modalStack: HTMLDivElement[] = [];
+// Legacy dialogs use 9999. Shared dialogs sit above them, in opening order.
+let nextModalLayer = 10000;
 let previousBodyOverflow = "";
 export interface ModalProps {
 	isOpen: boolean;
@@ -24,6 +27,10 @@ export interface ModalProps {
 	showCloseButton?: boolean;
 	closeLabel?: string;
 	className?: string;
+	/** Opt-in padding for content; existing self-padded dialogs remain unchanged. */
+	bodyClassName?: string;
+	footer?: ReactNode;
+	size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full";
 	overlayClassName?: string;
 	title?: ReactNode;
 	headerActions?: ReactNode;
@@ -38,6 +45,9 @@ export function Modal({
 	children,
 	labelledBy,
 	className = "",
+	bodyClassName = "",
+	footer,
+	size,
 	overlayClassName = "",
 	title,
 	headerActions,
@@ -199,6 +209,8 @@ export function Modal({
 		if (!element) return;
 		if (!modalStack.length) previousBodyOverflow = document.body.style.overflow;
 		modalStack.push(element);
+		const overlay = element.parentElement;
+		if (overlay) overlay.style.zIndex = String(nextModalLayer++);
 		document.body.style.overflow = "hidden";
 		element.focus();
 		const keydown = (event: KeyboardEvent) => {
@@ -252,8 +264,10 @@ export function Modal({
 			const wasTop = modalStack[modalStack.length - 1] === element;
 			const index = modalStack.indexOf(element);
 			if (index >= 0) modalStack.splice(index, 1);
-			if (!modalStack.length)
+			if (!modalStack.length) {
 				document.body.style.overflow = previousBodyOverflow;
+				nextModalLayer = 10000;
+			}
 			document.removeEventListener("keydown", keydown);
 			if (wasTop) {
 				const top = modalStack[modalStack.length - 1];
@@ -270,7 +284,9 @@ export function Modal({
 		onLostPointerCapture: end,
 	};
 	return createPortal(
+		// biome-ignore lint/a11y/noStaticElementInteractions: decorative backdrop; keyboard dismissal and focus are managed by the dialog.
 		<div
+			role="presentation"
 			className={`dragorbit-modal-overlay ${overlayClassName}`}
 			data-position={position}
 			data-open={visible}
@@ -291,8 +307,22 @@ export function Modal({
 				aria-labelledby={titleId}
 				aria-label={titleId ? undefined : ariaLabel}
 				tabIndex={-1}
-				className={`dragorbit-modal-panel ${title || showCloseButton ? "dragorbit-modal-window" : ""} ${className}`}
+				className={`dragorbit-modal-panel dragorbit-modal-window ${className}`}
 				style={{
+					...(size
+						? {
+								width: "100%",
+								maxWidth: {
+									sm: "24rem",
+									md: "32rem",
+									lg: "40rem",
+									xl: "48rem",
+									"2xl": "56rem",
+									"3xl": "64rem",
+									full: "100%",
+								}[size],
+							}
+						: {}),
 					...style,
 					...(bounds
 						? {
@@ -300,6 +330,7 @@ export function Modal({
 								left: bounds.left,
 								top: bounds.top,
 								width: bounds.width,
+								maxWidth: "calc(100vw - 20px)",
 								height: bounds.height,
 							}
 						: {}),
@@ -324,25 +355,28 @@ export function Modal({
 						</div>
 					</header>
 				)}
-				{title || showCloseButton ? (
-					<div className="dragorbit-modal-content">{children}</div>
+				{title || showCloseButton || bodyClassName ? (
+					<div className={`dragorbit-modal-content ${bodyClassName}`}>
+						{children}
+					</div>
 				) : (
 					children
 				)}
+				{footer && <div className="dragorbit-modal-footer">{footer}</div>}
 				{resizable && (
 					<>
-						<div
+						<SharedTooltip content={"Drag to resize width"}><div
 							className="dragorbit-resize-width"
-							title="Drag to resize width"
+
 							onPointerDown={(event) => begin(event, "width")}
 							{...handlers}
-						/>
-						<div
+						/></SharedTooltip>
+						<SharedTooltip content={"Drag to resize height"}><div
 							className="dragorbit-resize-height"
-							title="Drag to resize height"
+
 							onPointerDown={(event) => begin(event, "height")}
 							{...handlers}
-						/>
+						/></SharedTooltip>
 					</>
 				)}
 			</div>

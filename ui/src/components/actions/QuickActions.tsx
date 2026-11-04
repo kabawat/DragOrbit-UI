@@ -24,9 +24,13 @@ export function QuickAction({
 			type="button"
 			onClick={data.onClick ?? data.onclick}
 			disabled={disabled || data.disabled}
-			className={`group flex flex-col w-full h-full min-w-0 items-center justify-center gap-2 rounded-xl border px-2 py-4 text-center transition-colors focus-visible:outline-2 cursor-pointer focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--color-primary))] disabled:opacity-60 disabled:cursor-default border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-primary))] hover:border-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-bg-tertiary))]"}`}
+			className={`group flex flex-col w-full h-full min-w-0 items-center justify-center gap-2 rounded-xl border px-2 py-4 text-center transition-colors focus-visible:outline-2 cursor-pointer focus-visible:outline-offset-2 focus-visible:outline-[rgb(var(--color-primary))] disabled:opacity-60 disabled:cursor-default border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-primary))] hover:border-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-bg-tertiary))]`}
 		>
-			{Icon && <Icon className="h-6 w-6 shrink-0" aria-hidden />}
+			{Icon && (
+				<span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[rgb(var(--color-primary))]/5 text-[rgb(var(--color-primary))]">
+					<Icon className="h-5 w-5" aria-hidden />
+				</span>
+			)}
 			<span className="w-full min-w-0 break-words text-sm font-medium">
 				{data.title}
 			</span>

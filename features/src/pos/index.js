@@ -7,3 +7,4 @@ export { default as CartItem } from "./component/CartItem.jsx";
 export { default as CartItemsList } from "./component/CartItemsList.jsx";
 export { ProductPanelView } from "./component/ProductPanelView.jsx";
 export { CartPanelView } from "./component/CartPanelView.jsx";
+export { CartPaymentSectionPresentation } from "./component/cart/PaymentSectionView.jsx";

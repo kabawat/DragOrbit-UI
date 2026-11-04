@@ -1,0 +1,205 @@
+.modernInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #34495e !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    padding-bottom: 20px !important;
+    border-bottom: 3px solid #2980b9 !important;
+    margin-bottom: 30px !important;
+}
+
+.headerLeft h1 {
+    font-size: 32px !important;
+    font-weight: 700 !important;
+    color: #2980b9 !important;
+    margin: 0 !important;
+}
+
+.headerRight {
+    text-align: right !important;
+
+    .invoiceDetail {
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        margin-bottom: 5px !important;
+
+        span {
+            font-weight: 400 !important;
+            color: #7f8c8d !important;
+            margin-left: 10px !important;
+        }
+    }
+
+    .date {
+        font-size: 13px !important;
+        color: #95a5a6 !important;
+    }
+}
+
+.addressInfo {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 40px !important;
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #ecf0f1 !important;
+}
+
+.addressBlock {
+    width: 45% !important;
+
+    h3 {
+        font-size: 14px !important;
+        color: #2980b9 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 2px solid #ecf0f1 !important;
+        padding-bottom: 5px !important;
+        margin-bottom: 10px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        color: #34495e !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+}
+
+.structedTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        padding: 15px 10px !important;
+        text-align: left !important;
+        font-weight: 500 !important;
+        font-size: 12px !important;
+        color: white !important;
+        background-color: #2980b9 !important;
+        text-transform: uppercase !important;
+    }
+
+    :global(td) {
+        padding: 12px 10px !important;
+        border-bottom: 1px solid #ecf0f1 !important;
+        font-size: 14px !important;
+    }
+
+    :global(tbody tr:nth-child(even)) {
+        background-color: #f9f9f9 !important;
+    }
+}
+
+.productDetail {
+    font-weight: 500 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #95a5a6 !important;
+    display: block !important;
+    margin-top: 2px !important;
+}
+
+.totalsSummary {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totals {
+    width: 300px !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 8px 0 !important;
+    font-size: 14px !important;
+}
+
+.totalLabel {
+    font-weight: 400 !important;
+    color: #34495e !important;
+}
+
+.amount {
+    font-weight: 500 !important;
+    color: #34495e !important;
+}
+
+.finalRow {
+    border-top: 2px solid #2980b9 !important;
+    margin-top: 15px !important;
+    padding-top: 15px !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 700 !important;
+        font-size: 18px !important;
+        color: #2980b9 !important;
+    }
+}
+
+.footer {
+    margin-top: 60px !important;
+    padding-top: 30px !important;
+    border-top: 1px solid #ecf0f1 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+}
+
+.termsNotes {
+    width: 60% !important;
+
+    h4 {
+        font-size: 13px !important;
+        color: #2980b9 !important;
+        margin-bottom: 5px !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        line-height: 1.5 !important;
+        margin: 5px 0 !important;
+    }
+}
+
+.signature {
+    width: 30% !important;
+    text-align: right !important;
+    border-top: 1px dashed #bdc3c7 !important;
+    margin-top: 20px !important;
+    padding-top: 5px !important;
+    font-size: 11px !important;
+    color: #95a5a6 !important;
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

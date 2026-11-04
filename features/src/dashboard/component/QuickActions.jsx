@@ -8,6 +8,7 @@ export function QuickActions({ t, routes, onNavigate, layout, onSave, scope }) {
 			title={t("dashboard.quickActions")}
 			data={getQuickActions(t, routes, onNavigate)}
 			layout={layout}
+			itemMinWidth={120}
 			onSave={onSave}
 		/>
 	);

@@ -395,6 +395,11 @@ const labels = {
 	"settings.currentStore": "Current Store",
 	"settings.createNewStore": "Create New Store",
 	"settings.addAnotherStoreToAccount": "Add another store to your account",
+	"settings.upgradeToAddStore": "Upgrade to Add Store",
+	"settings.storePlanLimitReached":
+		"Your plan allows {limit} store(s). Upgrade to add more.",
+	"settings.storePlanLimitReachedGeneric":
+		"Store limit reached on your current plan. Upgrade to add more.",
 	"settings.storeName": "Store Name",
 	"settings.enterStoreName": "Enter store name",
 	"settings.phoneNumber": "Phone Number",

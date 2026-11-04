@@ -1,0 +1,174 @@
+.monoInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #1a1a1a !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 50px !important;
+}
+
+.headerLeft {
+    h1 {
+        font-size: 48px !important;
+        font-weight: 300 !important;
+        margin: 0 !important;
+        letter-spacing: 5px !important;
+        text-transform: uppercase !important;
+        color: #1a1a1a !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        color: #555 !important;
+        margin: 4px 0 !important;
+    }
+}
+
+.headerRight {
+    text-align: right !important;
+    line-height: 1.6 !important;
+
+    .title {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #888 !important;
+        margin-bottom: 5px !important;
+    }
+
+    .invoiceNumberValue {
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #1a1a1a !important;
+    }
+}
+
+.addressBlock {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding-bottom: 15px !important;
+}
+
+.addressDetails {
+    width: 45% !important;
+
+    .blockTitle {
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        font-weight: 700 !important;
+        margin-bottom: 10px !important;
+        color: #1a1a1a !important;
+    }
+
+    p {
+        margin: 3px 0 !important;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+    }
+}
+
+.customerName {
+    font-weight: 700 !important;
+}
+
+.dateIssued {
+    text-align: right !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    padding-top: 15px !important;
+}
+
+.tableContainer {
+    margin-bottom: 40px !important;
+}
+
+.monoTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        border-top: 2px solid #1a1a1a !important;
+        border-bottom: 1px solid #1a1a1a !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        padding: 10px 0 !important;
+        color: #1a1a1a !important;
+    }
+
+    td {
+        padding: 12px 0 !important;
+        border-bottom: 1px dashed #cccccc !important;
+        font-size: 14px !important;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none !important;
+    }
+}
+
+.productName {
+    font-weight: 400 !important;
+}
+
+.totalsTable {
+    width: 250px !important;
+    margin-left: auto !important;
+    border-top: 1px solid #1a1a1a !important;
+    padding-top: 15px !important;
+}
+
+.totalRow {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 5px 0 !important;
+    font-size: 16px !important;
+
+    .totalLabel {
+        font-weight: 300 !important;
+    }
+
+    .amount {
+        font-weight: 500 !important;
+        color: #1a1a1a !important;
+    }
+}
+
+.finalRow {
+    border-top: 3px solid #1a1a1a !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+    font-size: 24px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+
+    .finalAmount {
+        font-weight: 700 !important;
+        color: #1a1a1a !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

@@ -1,0 +1,200 @@
+.terraInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+    font-size: 13px !important;
+}
+
+.header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    margin-bottom: 30px !important;
+    padding-bottom: 15px !important;
+    border-bottom: 3px solid #2ecc71 !important;
+}
+
+.storeBlock {
+    width: 50% !important;
+
+    h2 {
+        font-size: 26px !important;
+        font-weight: 700 !important;
+        color: #2ecc71 !important;
+        margin: 0 0 5px 0 !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.titleBlock {
+    text-align: right !important;
+
+    h1 {
+        font-size: 36px !important;
+        color: #333 !important;
+        margin: 0 !important;
+        font-weight: 300 !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        margin-top: 10px !important;
+    }
+}
+
+.detailsGrid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 40px !important;
+    margin-bottom: 30px !important;
+}
+
+.detailBox {
+    border: 1px solid #ddd !important;
+    padding: 15px !important;
+    border-radius: 4px !important;
+
+    .label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #7f8c8d !important;
+        margin-bottom: 5px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .value {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+    }
+
+    p {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+        color: #555 !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 25px !important;
+}
+
+.terraTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    thead tr {
+        background-color: #2ecc71 !important;
+        color: white !important;
+    }
+
+    th {
+        text-align: left !important;
+        font-size: 12px !important;
+        text-transform: uppercase !important;
+        padding: 10px 15px !important;
+        color: white !important;
+    }
+
+    td {
+        padding: 10px 15px !important;
+        border-bottom: 1px solid #eee !important;
+        font-size: 13px !important;
+    }
+
+    tbody tr:last-child td {
+        border-bottom: none !important;
+    }
+}
+
+.productName {
+    font-weight: 600 !important;
+    color: #333 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #999 !important;
+    margin-top: 2px !important;
+}
+
+.totalsContainer {
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.totals {
+    width: 300px !important;
+    padding: 10px 0 !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 5px 0 !important;
+    border-bottom: 1px dotted #ccc !important;
+    font-size: 14px !important;
+}
+
+.totalLabel {
+    color: #555 !important;
+    font-weight: 500 !important;
+}
+
+.amount {
+    font-weight: 500 !important;
+}
+
+.finalRow {
+    border-bottom: none !important;
+    padding-top: 10px !important;
+    margin-top: 10px !important;
+    font-size: 16px !important;
+    color: #2ecc71 !important;
+    border-top: 2px solid #2ecc71 !important;
+
+    .finalLabel,
+    .finalAmount {
+        font-weight: 700 !important;
+    }
+}
+
+.footer {
+    text-align: center !important;
+    margin-top: 40px !important;
+    padding-top: 20px !important;
+    border-top: 1px solid #eee !important;
+    font-size: 11px !important;
+    color: #7f8c8d !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

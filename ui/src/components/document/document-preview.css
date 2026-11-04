@@ -1,0 +1,24 @@
+.dragorbit-document-preview {
+	width: 100%;
+	min-width: 0;
+	overflow: hidden;
+}
+.dragorbit-document-preview-frame {
+	position: relative;
+	margin-inline: auto;
+}
+.dragorbit-document-preview-paper {
+	width: max-content;
+	transform-origin: top left;
+}
+@media print {
+	.dragorbit-document-preview,
+	.dragorbit-document-preview-frame,
+	.dragorbit-document-preview-paper {
+		width: auto !important;
+		height: auto !important;
+		max-height: none !important;
+		overflow: visible !important;
+		transform: none !important;
+	}
+}

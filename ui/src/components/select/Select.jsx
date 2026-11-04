@@ -1,7 +1,7 @@
 "use client";
-import { Check, ChevronDown, Search } from "lucide-react";
+import { Check, ChevronDown, LoaderCircle, Search } from "lucide-react";
 import { cn } from "../../utils/cn";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const Select = ({
@@ -18,17 +18,24 @@ const Select = ({
   searchable = false,
   multiple = false,
   clearable = false,
+  serverSearch = false,
+  onSearchChange,
+  onListEnd,
+  loading = false,
+  loadingMore = false,
+  hasMore = false,
   className = "",
   size = "sm",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [dropdownPosition, setDropdownPosition] = useState(null);
   const selectRef = useRef(null);
   const searchRef = useRef(null);
 
   // Filter options based on search term
-  const filteredOptions = searchable
+  const filteredOptions = searchable && !serverSearch
     ? options.filter(
         (option) =>
           option.isAddOption ||
@@ -59,7 +66,7 @@ const Select = ({
     } else {
       onChange?.(option.value);
       setIsOpen(false);
-      setSearchTerm("");
+      if (!serverSearch) setSearchTerm("");
     }
   };
 
@@ -102,7 +109,7 @@ const Select = ({
       case "Escape":
         if (isOpen) { e.preventDefault(); e.stopPropagation(); }
         setIsOpen(false);
-        setSearchTerm("");
+        if (!serverSearch) setSearchTerm("");
         setHighlightedIndex(-1);
         break;
     }
@@ -124,7 +131,7 @@ const Select = ({
 
       if (!isClickInsideSelect && !isClickInsideDropdown) {
         setIsOpen(false);
-        setSearchTerm("");
+        if (!serverSearch) setSearchTerm("");
         setHighlightedIndex(-1);
       }
     };
@@ -142,19 +149,45 @@ const Select = ({
     setHighlightedIndex(-1);
   }, []);
 
-  // Calculate dropdown position for portal
-  const getDropdownPosition = () => {
-    if (!isOpen || !selectRef.current) return null;
+  // The menu is fixed in a body portal; use viewport coordinates and track
+  // table/page scrolling so it remains attached to its trigger.
+  useLayoutEffect(() => {
+    if (!isOpen || !selectRef.current) {
+      setDropdownPosition(null);
+      return undefined;
+    }
+    const updatePosition = () => {
+      const rect = selectRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const width = Math.min(rect.width, window.innerWidth - 16);
+      const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+      const gap = 4;
+      const spaceBelow = window.innerHeight - rect.bottom - gap - 8;
+      const spaceAbove = rect.top - gap - 8;
+      const maxDropdownHeight = 320;
+      const preferUp = spaceBelow < 180 && spaceAbove > spaceBelow;
 
-    const rect = selectRef.current.getBoundingClientRect();
-    return {
-      top: rect.bottom + window.scrollY,
-      left: rect.left + window.scrollX,
-      width: rect.width,
+      let top = 0;
+      let maxHeight = 0;
+
+      if (preferUp) {
+        maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceAbove));
+        top = Math.max(8, rect.top - maxHeight - gap);
+      } else {
+        maxHeight = Math.max(140, Math.min(maxDropdownHeight, spaceBelow));
+        top = rect.bottom + gap;
+      }
+
+      setDropdownPosition({ top, left, width, maxHeight });
     };
-  };
-
-  const dropdownPosition = getDropdownPosition();
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
+  }, [isOpen]);
 
   return (
     <div className={cn("relative select-container", className)}>
@@ -252,6 +285,7 @@ const Select = ({
                 top: dropdownPosition.top,
                 left: dropdownPosition.left,
                 width: dropdownPosition.width,
+                maxHeight: dropdownPosition.maxHeight,
               }}
               data-dragorbit-dialog-owner={selectRef.current?.closest("[role=dialog]")?.id}
               className="select-dropdown-portal fixed z-[999999] bg-[rgb(var(--color-bg-primary))] border border-[rgb(var(--color-border-primary))] rounded-xl shadow-lg overflow-hidden flex flex-col"
@@ -260,7 +294,7 @@ const Select = ({
               {/* Search Input */}
               {searchable && (
                 <div
-                  className="p-2 border-b border-[rgb(var(--color-border-primary))]"
+                  className="p-2 border-b border-[rgb(var(--color-border-primary))] flex-shrink-0 bg-[rgb(var(--color-bg-primary))]"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="relative">
@@ -269,16 +303,20 @@ const Select = ({
                     />
                     <input
                       ref={searchRef}
+                      data-ignore-barcode-scanner="true"
                       type="text"
                       placeholder="Search options..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        onSearchChange?.(e.target.value);
+                      }}
                       onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => {
                         e.stopPropagation();
                         if (e.key === "Escape") {
                           setIsOpen(false);
-                          setSearchTerm("");
+                          if (!serverSearch) setSearchTerm("");
                           setHighlightedIndex(-1);
                         }
                       }}
@@ -288,83 +326,104 @@ const Select = ({
                 </div>
               )}
 
-              {/* Options List */}
-              <div className="flex flex-col max-h-[240px]">
-                {/* Scrollable Regular Options */}
-                <div
-                  className="flex-1 overflow-y-auto min-h-0"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {regularOptions.length > 0 ? (
-                    regularOptions.map((option, index) => {
-                      const isSelected = multiple
-                        ? value?.includes(option.value)
-                        : value === option.value;
-                      const isHighlighted = index === highlightedIndex;
+              {/* Scrollable Regular Options */}
+              <div
+                className="flex-1 min-h-0 overflow-y-auto overscroll-contain py-1"
+                onScroll={(event) => {
+                  if (
+                    hasMore &&
+                    !loading &&
+                    !loadingMore &&
+                    event.currentTarget.scrollHeight -
+                      event.currentTarget.scrollTop -
+                      event.currentTarget.clientHeight < 32
+                  ) {
+                    onListEnd?.();
+                  }
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {regularOptions.length > 0 ? (
+                  regularOptions.map((option, index) => {
+                    const isSelected = multiple
+                      ? value?.includes(option.value)
+                      : value === option.value;
+                    const isHighlighted = index === highlightedIndex;
 
-                      return (
-                        <div
-                          key={`${String(option.value)}-${index}`}
-                          className={`group px-4 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between ${
-                            isHighlighted || isSelected
-                              ? "bg-[rgba(var(--color-primary)/0.12)]"
-                              : ""
-                          } hover:bg-[rgba(var(--color-primary)/0.12)]`}
-                          onClick={() => handleSelect(option)}
-                          onMouseEnter={() => setHighlightedIndex(index)}
-                          onMouseLeave={() => setHighlightedIndex(-1)}
+                    return (
+                      <div
+                        key={`${String(option.value)}-${index}`}
+                        className={`group px-3.5 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 ${
+                          isHighlighted || isSelected
+                            ? "bg-[rgba(var(--color-primary)/0.12)]"
+                            : ""
+                        } hover:bg-[rgba(var(--color-primary)/0.12)]`}
+                        onClick={() => handleSelect(option)}
+                        onMouseEnter={() => setHighlightedIndex(index)}
+                        onMouseLeave={() => setHighlightedIndex(-1)}
+                      >
+                        <span
+                          className={`flex-1 min-w-0 truncate text-sm ${isHighlighted || isSelected ? "text-[rgb(var(--color-primary))] font-medium" : "text-[rgb(var(--color-text-primary))]"} group-hover:text-[rgb(var(--color-primary))] transition-colors duration-150`}
+                          title={typeof option.label === "string" ? option.label : undefined}
                         >
-                          <span
-                            className={`${isHighlighted || isSelected ? "text-[rgb(var(--color-primary))]" : "text-[rgb(var(--color-text-primary))]"} group-hover:text-[rgb(var(--color-primary))] transition-colors duration-150`}
-                          >
-                            {option.label}
-                          </span>
-                          {(isHighlighted || isSelected) && (
-                            <Check className="w-4 h-4 text-[rgb(var(--color-primary))] transition-transform duration-200" />
-                          )}
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] text-center">
-                      No options found
-                    </div>
-                  )}
-                </div>
-
-                {/* Fixed Add Options at Bottom */}
-                {addOptions.length > 0 && (
-                  <div
-                    className="flex-shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))] sticky bottom-0 z-10"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {addOptions.map((option, index) => {
-                      const addOptionIndex = regularOptions.length + index;
-                      const isHighlighted = addOptionIndex === highlightedIndex;
-
-                      return (
-                        <div
-                          key={option.value || `add-option-${index}`}
-                          className={`group px-4 py-2 cursor-pointer transition-colors duration-150 ${
-                            isHighlighted
-                              ? "bg-[rgba(var(--color-primary)/0.12)]"
-                              : ""
-                          } hover:bg-[rgba(var(--color-primary)/0.12)]`}
-                          onClick={() => handleSelect(option)}
-                          onMouseEnter={() =>
-                            setHighlightedIndex(addOptionIndex)
-                          }
-                          onMouseLeave={() => setHighlightedIndex(-1)}
-                        >
-                          <span className="text-[rgb(var(--color-primary))] group-hover:text-[rgb(var(--color-primary))] text-sm transition-colors duration-150">
-                            {option.label}
-                          </span>
-                        </div>
-                      );
-                    })}
+                          {option.label}
+                        </span>
+                        {(isHighlighted || isSelected) && (
+                          <Check className="w-4 h-4 text-[rgb(var(--color-primary))] flex-shrink-0 transition-transform duration-200" />
+                        )}
+                      </div>
+                    );
+                  })
+                ) : loading ? (
+                  <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                    Loading items...
+                  </div>
+                ) : (
+                  <div className="px-4 py-3 text-sm text-[rgb(var(--color-text-secondary))] text-center">
+                    No options found
+                  </div>
+                )}
+                {loadingMore && (
+                  <div className="px-4 py-2 text-xs text-[rgb(var(--color-text-secondary))] flex items-center justify-center gap-2">
+                    <LoaderCircle className="w-4 h-4 animate-spin" />
+                    Loading more...
                   </div>
                 )}
               </div>
+
+              {/* Fixed Add Options at Bottom */}
+              {addOptions.length > 0 && (
+                <div
+                  className="flex-shrink-0 border-t border-[rgb(var(--color-border-primary))] bg-[rgb(var(--color-bg-primary))]"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {addOptions.map((option, index) => {
+                    const addOptionIndex = regularOptions.length + index;
+                    const isHighlighted = addOptionIndex === highlightedIndex;
+
+                    return (
+                      <div
+                        key={option.value || `add-option-${index}`}
+                        className={`group px-3.5 py-2 cursor-pointer transition-colors duration-150 flex items-center justify-between gap-2 ${
+                          isHighlighted
+                            ? "bg-[rgba(var(--color-primary)/0.12)]"
+                            : ""
+                        } hover:bg-[rgba(var(--color-primary)/0.12)]`}
+                        onClick={() => handleSelect(option)}
+                        onMouseEnter={() =>
+                          setHighlightedIndex(addOptionIndex)
+                        }
+                        onMouseLeave={() => setHighlightedIndex(-1)}
+                      >
+                        <span className="text-[rgb(var(--color-primary))] font-medium group-hover:text-[rgb(var(--color-primary))] text-sm transition-colors duration-150 truncate">
+                          {option.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>,
             document.body
           )}

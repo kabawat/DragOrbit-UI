@@ -32,23 +32,21 @@ const Textarea = forwardRef(
 
 		// Base classes
 		const baseClasses =
-			"w-full border-2 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1";
+			"w-full border rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-primary))]";
 
 		// Padding classes - adjust based on leftIcon
-		const paddingClasses = LeftIcon ? "pl-12 pr-4 py-3" : "px-4 py-3";
+		const paddingClasses = LeftIcon ? "pl-12 pr-4 py-2.5" : "px-3.5 py-2.5 text-sm";
 
 		// State classes
 		const stateClasses = error
-			? "border-red-500 bg-red-50 focus:border-red-500 focus:ring-red-500"
+			? "!border-red-500 !bg-red-50 focus:!border-red-500 focus:!ring-red-500"
 			: success
-				? "border-green-500 bg-green-50 focus:border-green-500 focus:ring-green-500"
-				: isFocused
-					? "border-blue-500 focus:border-blue-500 focus:ring-blue-500"
-					: "border-gray-300 focus:border-blue-500 focus:ring-blue-500";
+				? "!border-green-500 !bg-green-50 focus:!border-green-500 focus:!ring-green-500"
+				: "border-[rgb(var(--color-border-primary))] focus:border-[rgb(var(--color-primary))] focus:ring-[rgb(var(--color-primary))]";
 
 		const disabledClasses = disabled
-			? "bg-gray-100 cursor-not-allowed text-gray-500"
-			: "bg-white";
+			? "bg-[rgb(var(--color-bg-tertiary))] cursor-not-allowed opacity-50"
+			: "";
 
 		// Resize classes
 		const resizeClasses = {
@@ -86,7 +84,7 @@ const Textarea = forwardRef(
 			<div className="w-full">
 				{/* Label */}
 				{label && (
-					<label className="block text-sm font-medium text-gray-700 mb-2">
+					<label htmlFor={id} className="block text-sm font-medium text-[rgb(var(--color-text-primary))] mb-2">
 						<span className="flex items-center gap-2">
 							<span>{label}</span>
 							{required && <span className="text-red-500">*</span>}

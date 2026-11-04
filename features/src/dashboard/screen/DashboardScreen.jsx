@@ -1,5 +1,6 @@
 "use client";
-import { useMemo } from "react";
+import { Button } from "@dragorbit/ui";
+import { useMemo, useState } from "react";
 import { CashbookSummaryCard } from "../component/CashbookSummaryCard";
 import { DashboardSections } from "../component/DashboardSections";
 import { DashboardStats } from "../component/DashboardStats";
@@ -33,14 +34,28 @@ export function DashboardScreen({
 	sectionOrder,
 	onSaveSections,
 	layoutVariant = "overview",
+	storeOverview: StoreOverview,
+	intelligencePanel: IntelligencePanel,
+	salesTrendPanel: SalesTrendPanel,
 }) {
-	const { summary, loading, today } = useDashboardData({
+	const [salesTrendDays, setSalesTrendDays] = useState(7);
+	const {
+		summary,
+		loading,
+		today,
+		salesTrend,
+		salesTrendLoading,
+		salesTrendError,
+		error,
+		retry,
+	} = useDashboardData({
 		repository,
 		storeId,
 		ready,
 		isStaff,
 		initialSummary,
 		onSummary,
+		salesTrendDays,
 	});
 	const metrics = useMemo(
 		() => buildDashboardMetrics(summary, t),
@@ -54,6 +69,18 @@ export function DashboardScreen({
 					onNavigate={(module) => onNavigate?.(module.path)}
 				/>
 			</div>
+		);
+	if (error && !loading && !summary.length)
+		return (
+			<section role="alert" className="space-y-4 p-6">
+				<h1 className="text-base font-semibold">Unable to load dashboard</h1>
+				<p className="text-sm text-[rgb(var(--color-text-secondary))]">
+					{error}
+				</p>
+				<Button type="button" onClick={retry}>
+					Try again
+				</Button>
+			</section>
 		);
 	const stats = (
 		<DashboardStats
@@ -76,7 +103,14 @@ export function DashboardScreen({
 			scope={scope}
 		/>
 	);
-	const stores = <StoresSummaryTable data={summary} loading={loading} t={t} />;
+	const stores = (
+		<StoresSummaryTable
+			data={summary}
+			loading={loading}
+			t={t}
+			fitContainer={layoutVariant === "store"}
+		/>
+	);
 	const cashbook = storeId && (
 		<CashbookSummaryCard
 			today={today}
@@ -88,17 +122,53 @@ export function DashboardScreen({
 		<LowStockCard
 			count={lowStockCount}
 			t={t}
-			onClick={() => onNavigate?.(routes["stock/alerts"])}
+			onClick={() => onNavigate?.(routes.products)}
 		/>
 	);
-	
+	if (layoutVariant === "store" && StoreOverview) {
+		return (
+			<div className="store-dashboard-screen">
+				<div className="store-dashboard-grid">
+					<StoreOverview
+						summary={summary}
+						metrics={metrics}
+						loading={loading}
+						t={t}
+					/>
+					{IntelligencePanel && (
+						<aside aria-label="Proactive retail intelligence">
+							<IntelligencePanel summary={summary} />
+						</aside>
+					)}
+				</div>
+				{SalesTrendPanel && (
+					<SalesTrendPanel
+						data={salesTrend}
+						loading={salesTrendLoading}
+						error={salesTrendError}
+						selectedDays={salesTrendDays}
+						onRangeChange={setSalesTrendDays}
+						onNavigate={onNavigate}
+					/>
+				)}
+				<div className="store-dashboard-secondary-grid">
+					{cashbook && (
+						<div className="store-dashboard-cashbook">{cashbook}</div>
+					)}
+					<section className="store-dashboard-quick-actions">{actions}</section>
+				</div>
+				<div className="store-dashboard-table">{stores}</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="p-4 sm:p-6 lg:p-8 space-y-6">
 			{layoutVariant === "sectioned" ? (
 				<>
+					{stats}
 					{cashbook}
 					{alerts}
-					{stats}
 					<DashboardSections
 						sections={sectionOrder}
 						onSave={onSaveSections}
@@ -109,13 +179,8 @@ export function DashboardScreen({
 			) : (
 				<>
 					<div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-4">
-						<div className="order-2 min-w-0 xl:order-1 xl:col-span-3">
-							{stats}
-						</div>
-						<aside
-							className="order-1 min-w-0 xl:order-2"
-							aria-label={t("dashboard.quickActions")}
-						>
+						<div className="min-w-0 xl:col-span-3">{stats}</div>
+						<aside className="min-w-0" aria-label={t("dashboard.quickActions")}>
 							{actions}
 						</aside>
 					</div>

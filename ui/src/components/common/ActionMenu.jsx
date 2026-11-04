@@ -7,6 +7,7 @@ import {
 	Receipt,
 	Trash2,
 } from "lucide-react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 
 const ActionMenu = ({
 	item,
@@ -67,13 +68,13 @@ const ActionMenu = ({
 
 	return (
 		<div className={`relative ${className}`} ref={menuRef} {...props}>
-			<button
+			<SharedTooltip content={"More Actions"}><button aria-label={"More Actions"}
 				onClick={() => onToggle(item._id || item.id)}
 				className={`p-2 hover:bg-[rgb(var(--color-bg-secondary))] rounded-lg transition-colors duration-200 group/btn cursor-pointer ${buttonClassName}`}
-				title="More Actions"
+
 			>
 				<MoreVertical className="w-4 h-4 text-[rgb(var(--color-text-secondary))] group-hover/btn:text-[rgb(var(--color-primary))]" />
-			</button>
+			</button></SharedTooltip>
 
 			{isOpen && (
 				<div className="absolute right-0 top-full mt-1 w-48 bg-[rgb(var(--color-bg-primary))] rounded-lg shadow-lg border border-[rgb(var(--color-border-primary))] py-1 z-50">

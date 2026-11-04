@@ -1,3 +1,4 @@
+// Generated from index.js by scripts/build-api.cjs. Do not edit directly.
 function attachQueryParams(baseUrl, params = {}) {
 	if (!baseUrl) {
 		return "";
@@ -68,13 +69,41 @@ function formatErrorWithFields(message, fields) {
 }
 
 function handleSuccess(response) {
-	const responseBody = response?.data || {};
-	const data =
-		responseBody.data !== undefined ? responseBody.data : responseBody;
-	const message = normalizeMessage(responseBody.message);
-	const pagination = responseBody.pagination || null;
-
-	return { success: true, data, message, pagination };
+	const body = response?.data ?? response;
+	if (
+		response?.success === false ||
+		response?.status === false ||
+		(response?.success !== true &&
+			response?.status !== true &&
+			(body?.success === false || body?.status === false))
+	) {
+		const failure =
+			response?.success === false || response?.status === false
+				? response
+				: body;
+		const error = new Error(
+			normalizeMessage(failure?.message, "Request failed."),
+		);
+		error.response = {
+			status: failure?.statusCode ?? response?.status ?? null,
+			data:
+				failure?.error && typeof failure.error === "object"
+					? {
+							...failure.error,
+							message: failure.message,
+							fields: failure.error.fields || failure.fields,
+						}
+					: failure,
+		};
+		throw error;
+	}
+	const data = body && Object.hasOwn(body, "data") ? body.data : body;
+	return {
+		success: true,
+		data,
+		message: normalizeMessage(body?.message || response?.message),
+		pagination: body?.pagination || response?.pagination || null,
+	};
 }
 
 function handleError(error) {
@@ -84,13 +113,23 @@ function handleError(error) {
 			responseData.message || responseData.error,
 			"An unexpected error occurred.",
 		);
-		const fields = responseData.fields || null;
+		const fields = responseData.fields
+			? { ...responseData.fields }
+			: responseData.canForceDelete !== undefined
+			? { canForceDelete: responseData.canForceDelete }
+			: null;
+		if (fields && responseData.canForceDelete !== undefined) {
+			fields.canForceDelete = responseData.canForceDelete;
+		}
 		return {
 			success: false,
 			message,
 			displayMessage: formatErrorWithFields(message, fields),
 			code: responseData.code || "UNKNOWN_ERROR",
 			fields,
+			canForceDelete: Boolean(
+				responseData.canForceDelete || responseData.fields?.canForceDelete,
+			),
 			status: error.response.status,
 		};
 	}
@@ -148,25 +187,19 @@ class HttpService {
 		return this.authAxios.patch(this.buildUrl(url, params), data);
 	}
 
-	async delete(url, params = {}) {
-		return this.authAxios.delete(this.buildUrl(url, params));
+	async delete(url, params = {}, config = {}) {
+		const axiosConfig =
+			typeof config === "object" && config !== null ? { ...config } : {};
+		return this.authAxios.delete(this.buildUrl(url, params), axiosConfig);
 	}
 
 	// Helper
 	buildResourceUrl(resourceEndpoint, resourceId, storeId = null) {
-		let url = resourceId
+		const url = resourceId
 			? `${resourceEndpoint}/${resourceId}`
 			: resourceEndpoint;
 		return storeId ? this.buildUrl(url, { store: storeId }) : url;
 	}
 }
 
-module.exports = {
-	attachQueryParams,
-	HttpService,
-	normalizeMessage,
-	handleSuccess,
-	handleError,
-	formatErrorWithFields,
-	toApiError,
-};
+module.exports = { attachQueryParams, HttpService, normalizeMessage, handleSuccess, handleError, formatErrorWithFields, toApiError };

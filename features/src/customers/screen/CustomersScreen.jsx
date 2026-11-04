@@ -8,6 +8,7 @@ export function CustomersScreen({
 	t,
 	customers,
 	isLoading,
+	hasLoaded = true,
 	error,
 	CustomerListHeader,
 	CustomerListContent,
@@ -42,10 +43,14 @@ export function CustomersScreen({
 				/>
 
 				<div className="px-5">
-					{isLoading && customers.length === 0 && !error && <PageLoader />}
+					{((!hasLoaded && !error) ||
+						(isLoading && customers.length === 0)) && (
+						<PageLoader text={t("common.loading")} />
+					)}
 
-					{!isLoading && customers.length === 0 && (
+					{hasLoaded && !isLoading && customers.length === 0 && (
 						<EmptyState
+                fullHeight
 							className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary))]"
 							title={
 								isFiltered ? t("common.noResults") : t("customers.noCustomers")
@@ -62,7 +67,7 @@ export function CustomersScreen({
 						/>
 					)}
 
-					{customers.length > 0 && (
+					{hasLoaded && customers.length > 0 && (
 						<CustomerListContent
 							searchValue={searchValue}
 							isActive={isActive}

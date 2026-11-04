@@ -1,0 +1,409 @@
+/* Aether Template Specific Styles */
+.aetherInvoice {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background: white;
+    font-family: var(--font-primary) !important;
+    color: #2c3e50;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+.extrasSlot {
+    width: 100%;
+}
+
+:global(.invoice-print-document #invoice-container) .extrasSlot [data-invoice-extras-root] {
+    margin: 8px 0 20px;
+    padding-top: 0;
+    border-top: 0;
+}
+
+.leftPanel {
+    width: 28%;
+    flex: 0 0 28%;
+    background: var(--invoice-primary-color, #2563eb);
+    color: var(--invoice-primary-text, #fff);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.storeInfo,
+.customerInfo {
+    width: 100%;
+}
+
+.logoWrap {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 18px;
+}
+
+.logo {
+    display: block;
+    width: min(100%, 132px);
+    height: 96px;
+    object-fit: contain;
+}
+
+.storeName {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--invoice-primary-text, #fff) !important;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice .leftPanel .storeName {
+    color: var(--invoice-primary-text, #fff) !important;
+}
+
+.storeInfo p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--invoice-primary-text, #fff);
+    opacity: 0.86;
+    margin: 2px 0;
+}
+
+.customerInfo {
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    overflow-wrap: anywhere;
+}
+
+.leftSectionTitle {
+    margin-bottom: 8px;
+    color: var(--invoice-primary-text, #fff);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.customerInfo strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--invoice-primary-text, #fff);
+    font-size: 14px;
+}
+
+.leftPanel > div:last-child {
+    width: 100%;
+    margin-top: auto;
+}
+
+.customerInfo p {
+    margin: 2px 0;
+    color: var(--invoice-primary-text, #fff);
+    font-size: 11px;
+    line-height: 1.45;
+    opacity: 0.86;
+}
+
+.termsInfo {
+    width: 100%;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    overflow-wrap: anywhere;
+}
+
+.termsInfo p {
+    margin: 0;
+    color: var(--invoice-primary-text, #fff);
+    font-size: 11px;
+    line-height: 1.45;
+    opacity: 0.86;
+}
+
+.rightPanel {
+    width: 72%;
+    min-width: 0;
+    padding: 26px 28px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice .header {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: #2c3e50 !important;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice .header * {
+    color: #2c3e50 !important;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice .header .title {
+    color: var(--invoice-primary-color, #2c3e50) !important;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 0;
+}
+
+.date {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+.invoiceNumber {
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.paymentMode {
+    margin-top: 4px;
+    font-size: 11px;
+    color: #7f8c8d;
+}
+
+.infoSection {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.infoBlock {
+    width: 50%;
+    min-width: 0;
+}
+
+.label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #95a5a6;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.table th {
+    text-align: left;
+    font-size: 11px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    padding: 8px 5px;
+    border-bottom: 1px solid #e5e8ea;
+}
+
+.table td {
+    padding: 9px 5px;
+    border-bottom: 1px solid #f1f2f6;
+    font-size: 13px;
+    vertical-align: top;
+}
+
+.productName {
+    font-weight: 500;
+    color: #2d3436;
+}
+
+.productSku {
+    font-size: 11px;
+    color: #95a5a6;
+    display: block;
+    margin-top: 2px;
+}
+
+.totals {
+    margin: 4px 0 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.95fr);
+    align-items: start;
+    gap: 24px;
+}
+
+.taxBreakdown {
+    min-width: 0;
+    font-size: 11px;
+    color: #7f8c8d;
+}
+
+.taxBreakdown > strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #2c3e50;
+}
+
+.taxRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 3px 0;
+    border-bottom: 1px solid #f1f2f6;
+}
+
+.summary {
+    min-width: 0;
+    width: 100%;
+}
+
+.amountWords {
+    display: grid;
+    gap: 3px;
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #f1f2f6;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+.amountWords strong {
+    color: #7f8c8d;
+}
+
+.amountWords span {
+    text-align: right;
+}
+
+.signatureBlock {
+    display: flex;
+    min-height: 54px;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-top: 12px;
+    color: #64748b;
+    font-size: 9px;
+}
+
+.signatureBlock img {
+    max-width: 150px;
+    max-height: 42px;
+    object-fit: contain;
+}
+
+.signatureBlock span {
+    min-width: 150px;
+    padding-top: 4px;
+    border-top: 1px solid #94a3b8;
+    text-align: center;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    width: min(100%, 280px);
+    margin-bottom: 5px;
+}
+
+.totalLabel {
+    flex: 1;
+    font-size: 12px;
+    color: #7f8c8d;
+    text-align: left;
+    margin-right: 10px;
+}
+
+.totalAmount {
+    width: 100px;
+    font-size: 13px;
+    text-align: right;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.finalTotal {
+    border-top: 1px solid #bdc3c7;
+    padding-top: 10px;
+    margin-top: 5px;
+}
+
+.finalTotal .totalLabel,
+.finalTotal .totalAmount {
+    font-weight: 700;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+// Keep the final amount legible when the selected invoice accent is red/dark.
+:global(.invoice-print-document #invoice-container) .aetherInvoice .finalTotal {
+    background: var(--invoice-primary-color, #c62828) !important;
+    border-color: var(--invoice-primary-color, #c62828) !important;
+    border-radius: 3px;
+    padding: 8px 10px;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice .finalTotal .totalLabel,
+:global(.invoice-print-document #invoice-container) .aetherInvoice .finalTotal .totalAmount {
+    color: var(--invoice-primary-text, #fff) !important;
+}
+
+:global(.invoice-print-document #invoice-container) .aetherInvoice [data-invoice-plain-bg] {
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.footer {
+    text-align: center;
+    margin-top: auto;
+    padding-top: 18px;
+    font-size: 10px;
+    color: #95a5a6;
+    border-top: 1px solid #f1f2f6;
+}
+
+.footer p {
+    margin: 3px 0;
+}
+
+// ── B2C shared ────────────────────────────────────────────────────────────────
+.gstNote {
+    font-size: 10px;
+    color: #95a5a6;
+    margin-top: 6px;
+    font-style: italic;
+    text-align: right;
+}
+
+.tableFooterRow {
+    background-color: #f8f9fa;
+    border-top: 2px solid #2c3e50;
+
+    :global(td) {
+        font-size: 13px;
+        font-weight: 700;
+        padding: 10px 0;
+        color: #2c3e50;
+        border-bottom: none;
+    }
+}

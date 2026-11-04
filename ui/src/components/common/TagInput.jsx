@@ -22,7 +22,6 @@ const TagInput = ({
 	...props
 }) => {
 	const [inputValue, setInputValue] = useState("");
-	const [isFocused, setIsFocused] = useState(false);
 	const inputRef = useRef(null);
 
 	// Handle input change
@@ -83,15 +82,9 @@ const TagInput = ({
 
 	// Handle blur
 	const handleBlur = () => {
-		setIsFocused(false);
 		if (inputValue.trim()) {
 			addTag();
 		}
-	};
-
-	// Handle focus
-	const handleFocus = () => {
-		setIsFocused(true);
 	};
 
 	// Clear all tags
@@ -112,24 +105,18 @@ const TagInput = ({
 			{/* Tag Input Container */}
 			<div
 				className={`
-          relative border border-[rgb(var(--color-border-primary))] rounded-lg transition-all duration-200 focus-within:ring-2 focus-within:ring-[rgb(var(--color-primary))] focus-within:border-[rgb(var(--color-primary))]
-          ${
-						error
-							? "border-red-500 focus-within:ring-red-500"
-							: isFocused
-								? "border-[rgb(var(--color-primary))] focus-within:ring-[rgb(var(--color-primary))]"
-								: "border-[rgb(var(--color-border-primary))] focus-within:ring-[rgb(var(--color-primary))]"
-					}
-          ${disabled ? "bg-[rgb(var(--color-bg-tertiary))] cursor-not-allowed" : "bg-[rgb(var(--color-bg-primary))]"}
+          tag-input-container relative w-full border border-[rgb(var(--color-border-primary))] rounded-lg transition-all duration-200 bg-[rgb(var(--color-bg-primary))] text-[rgb(var(--color-text-primary))]
+          ${error ? "!border-red-500" : ""}
+          ${disabled ? "bg-[rgb(var(--color-bg-tertiary))] cursor-not-allowed opacity-50" : ""}
         `}
 				onClick={() => !disabled && inputRef.current?.focus()}
 			>
-				<div className="flex flex-wrap items-center gap-2 p-3 min-h-[48px]">
+				<div className="flex flex-wrap items-center gap-1.5 px-3.5 py-1.5 min-h-10">
 					{/* Existing Tags */}
 					{value.map((tag, index) => (
 						<span
 							key={index}
-							className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-[rgb(var(--color-primary))] text-white border border-[rgb(var(--color-primary))]"
+							className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[rgb(var(--color-primary))] text-white"
 						>
 							{tag}
 							{!disabled && (
@@ -139,7 +126,7 @@ const TagInput = ({
 										e.stopPropagation();
 										removeTag(index);
 									}}
-									className="ml-2 hover:text-red-300 transition-colors duration-200 text-white"
+									className="ml-1.5 hover:text-red-200 transition-colors duration-200 text-white cursor-pointer"
 								>
 									<X className="w-3 h-3" />
 								</button>
@@ -151,18 +138,19 @@ const TagInput = ({
 					<div className="flex-1 min-w-[120px]">
 						<input
 							ref={inputRef}
+							id={id}
+							name={name}
 							type="text"
 							value={inputValue}
 							onChange={handleInputChange}
 							onKeyDown={handleKeyDown}
-							onFocus={handleFocus}
 							onBlur={handleBlur}
 							placeholder={value.length === 0 ? placeholder : ""}
 							disabled={disabled || (maxTags && value.length >= maxTags)}
-							className="w-full border-none outline-none bg-transparent text-[rgb(var(--color-text-primary))] placeholder-[rgb(var(--color-text-tertiary))]"
+							className="w-full border-0 !border-none outline-none focus:outline-none focus:ring-0 focus:shadow-none !shadow-none bg-transparent text-[rgb(var(--color-text-primary))] placeholder-[rgb(var(--color-text-tertiary))] text-sm py-0.5"
 							maxLength={maxTagLength}
+							style={{ border: "none", outline: "none", boxShadow: "none" }}
 							{...props}
-							style={{ border: "none" }}
 						/>
 					</div>
 
@@ -171,7 +159,7 @@ const TagInput = ({
 						<button
 							type="button"
 							onClick={addTag}
-							className="p-1 text-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))] hover:bg-opacity-10 rounded transition-colors duration-200"
+							className="p-1 text-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))] hover:bg-opacity-10 rounded transition-colors duration-200 cursor-pointer"
 						>
 							<Plus className="w-4 h-4" />
 						</button>
@@ -183,9 +171,10 @@ const TagInput = ({
 					<button
 						type="button"
 						onClick={clearAllTags}
-						className="absolute top-2 right-2 p-1 text-[rgb(var(--color-text-tertiary))] hover:text-[rgb(var(--color-text-primary))] transition-colors duration-200"
+						className="absolute top-2.5 right-2.5 p-1 text-[rgb(var(--color-text-tertiary))] hover:text-[rgb(var(--color-text-primary))] transition-colors duration-200 cursor-pointer"
+						title="Clear all"
 					>
-						<X className="w-4 h-4" />
+						<X className="w-3.5 h-3.5" />
 					</button>
 				)}
 			</div>
@@ -212,8 +201,8 @@ const TagInput = ({
 					<span className="text-xs text-[rgb(var(--color-text-secondary))]">
 						{countLabel
 							? countLabel
-									.replace("{count}", value.length)
-									.replace("{max}", maxTags)
+								.replace("{count}", value.length)
+								.replace("{max}", maxTags)
 							: `${value.length}/${maxTags} tags`}
 					</span>
 				</div>

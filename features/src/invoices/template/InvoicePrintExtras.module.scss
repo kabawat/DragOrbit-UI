@@ -1,0 +1,247 @@
+.extras {
+  display: grid;
+  gap: 10px;
+  margin: 16px 24px 20px;
+  padding-top: 12px;
+  border-top: 1px solid #d1d5db;
+  color: #111827;
+  font-size: 12px;
+}
+
+.previewStoreFallback {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 12px 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #d1d5db;
+  color: #111827;
+  font-size: 10px;
+}
+
+.previewStoreFallback > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+}
+
+.previewStoreFallback img {
+  width: 42px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px 18px;
+}
+
+.summaryLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.summaryRow {
+  display: flex;
+  width: min(100%, 320px);
+  margin-left: auto;
+  justify-content: space-between;
+  gap: 12px;
+  background: transparent !important;
+  color: inherit;
+}
+
+.summaryRow strong { text-align: right; }
+
+.summaryLayout .grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.thankYou {
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.generatedOn {
+  margin: 0;
+  color: #6b7280;
+  font-size: 9px;
+  text-align: center;
+}
+
+.thermalGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.summaryLayout.thermalGrid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.row {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.row strong {
+  text-align: right;
+}
+
+.block p {
+  margin: 4px 0 0;
+}
+
+.itemDescription {
+  display: block;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.taxTable {
+  display: grid;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.taxRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+}
+
+.taxRow span {
+  text-align: right;
+}
+
+.acknowledgement {
+  margin: 4px 0 0;
+  padding: 10px 14px 12px;
+  border-top: 1px dashed #6b7280;
+  box-sizing: border-box;
+  color: #111827;
+  font-size: 9px;
+}
+
+.acknowledgementCopy {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  line-height: 1.25;
+}
+
+.acknowledgementCopy strong {
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.acknowledgementCopy span {
+  overflow-wrap: anywhere;
+}
+
+.acknowledgementCopy p {
+  margin: 0;
+}
+
+.acknowledgementAmounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 14px;
+}
+
+.acknowledgementAmounts b {
+  color: #374151;
+  font-weight: 600;
+}
+
+.acknowledgementLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(140px, 0.32fr);
+  align-items: end;
+  gap: 16px;
+}
+
+.acknowledgementSign {
+  display: grid;
+  gap: 4px;
+  color: #4b5563;
+  font-size: 8px;
+}
+
+.acknowledgementSignLine {
+  display: block;
+  height: 16px;
+  border-bottom: 1px solid #9ca3af;
+}
+
+.thermalAcknowledgement .acknowledgementLayout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.thermalAcknowledgement .acknowledgementSign {
+  max-width: 150px;
+}
+
+@media (max-width: 480px) {
+  .summaryLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .acknowledgementLayout {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 0.4fr);
+    gap: 8px;
+  }
+}
+
+/* The dashed top edge acts as the tear-off line for the receipt copy. */
+.acknowledgement::before {
+  content: "✂  Cut here";
+  display: block;
+  margin: -9px 0 3px;
+  padding-right: 4px;
+  color: #6b7280;
+  background: white;
+  font-size: 8px;
+  text-align: right;
+}
+
+.signatureBlock {
+  display: flex;
+  min-height: 56px;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.savedSignature {
+  max-width: 150px;
+  max-height: 42px;
+  object-fit: contain;
+}
+
+.typedSignature {
+  max-width: 180px;
+  overflow: hidden;
+  color: #111827;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.signatureLine {
+  min-width: 150px;
+  padding-top: 5px;
+  border-top: 1px solid #6b7280;
+  text-align: center;
+}

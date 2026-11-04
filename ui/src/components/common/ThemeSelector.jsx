@@ -10,15 +10,16 @@ import {
 	X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Tooltip as SharedTooltip } from "../tooltip/Tooltip";
 
 export const SettingsButton = ({ className = "", t, theme }) => {
 	const { isSettingsOpen, setIsSettingsOpen } = theme;
 
 	return (
-		<button
+		<SharedTooltip content={t("settings.title")}><button
 			onClick={() => setIsSettingsOpen(!isSettingsOpen)}
 			className={`relative p-2 rounded-xl transition-all duration-300 group cursor-pointer flex items-center justify-center active:scale-95 hover:bg-[rgb(var(--color-text-primary)/0.05)] border border-transparent hover:border-[rgb(var(--color-border-primary)/0.5)] navbar-settings-btn ${className}`}
-			title={t("settings.title")}
+
 		>
 			<Settings
 				className={`w-5 h-5 text-[rgb(var(--color-text-secondary))] transition-all duration-500 ${
@@ -30,7 +31,7 @@ export const SettingsButton = ({ className = "", t, theme }) => {
 			{isSettingsOpen && (
 				<span className="absolute -top-1 -right-1 w-2 h-2 bg-[rgb(var(--color-primary))] rounded-full animate-pulse" />
 			)}
-		</button>
+		</button></SharedTooltip>
 	);
 };
 

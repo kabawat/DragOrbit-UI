@@ -1,0 +1,200 @@
+.prismInvoice {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    background: white !important;
+    font-family: var(--font-primary) !important;
+    color: #2c3e50 !important;
+}
+
+.header {
+    background-color: #3498db !important;
+    color: white !important;
+    padding: 30px 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+
+    h1 {
+        font-family: var(--font-primary) !important;
+        font-size: 36px !important;
+        font-weight: 700 !important;
+        margin: 0 !important;
+        letter-spacing: 2px !important;
+        color: white !important;
+    }
+}
+
+.storeDetails {
+    text-align: right !important;
+    font-size: 12px !important;
+
+    h2 {
+        font-family: var(--font-primary) !important;
+        font-size: 20px !important;
+        margin: 0 !important;
+        font-weight: 400 !important;
+        color: #ecf0f1 !important;
+    }
+
+    p {
+        margin: 2px 0 !important;
+        color: #bdc3c7 !important;
+    }
+}
+
+.infoBar {
+    background-color: #ecf0f1 !important;
+    padding: 15px 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 13px !important;
+    color: #34495e !important;
+    font-weight: 500 !important;
+    border-bottom: 2px solid #ddd !important;
+
+    strong {
+        font-weight: 700 !important;
+        font-size: 14px !important;
+        color: #3498db !important;
+    }
+}
+
+.detailsSection {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 30px 20px !important;
+}
+
+.detailsBlock {
+    width: 48% !important;
+    font-family: var(--font-primary) !important;
+
+    .label {
+        font-size: 11px !important;
+        text-transform: uppercase !important;
+        color: #7f8c8d !important;
+        margin-bottom: 5px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px !important;
+        border-bottom: 1px solid #eee !important;
+        padding-bottom: 5px !important;
+    }
+
+    .value {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        color: #3498db !important;
+        margin-bottom: 15px !important;
+    }
+
+    p {
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+        color: #555 !important;
+        margin: 2px 0 !important;
+    }
+}
+
+.tableContainer {
+    margin-bottom: 30px !important;
+    padding: 0px 20px;
+}
+
+.prismTable {
+    width: 100% !important;
+    border-collapse: collapse !important;
+
+    :global(th) {
+        text-align: left !important;
+        font-size: 12px !important;
+        color: #7f8c8d !important;
+        text-transform: uppercase !important;
+        padding: 15px 40px !important;
+        border-bottom: 1px solid #ddd !important;
+    }
+
+    :global(td) {
+        padding: 10px 0px !important;
+        border-bottom: 1px solid #eee !important;
+        font-size: 14px !important;
+    }
+}
+
+.productName {
+    font-weight: 500 !important;
+    font-family: var(--font-primary) !important;
+    color: #333 !important;
+}
+
+.productSku {
+    font-size: 11px !important;
+    color: #999 !important;
+    font-family: var(--font-primary) !important;
+}
+
+.totalsContainer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    padding-right: 40px !important;
+    padding-bottom: 30px !important;
+}
+
+.totals {
+    width: 300px !important;
+}
+
+.row {
+    display: flex !important;
+    justify-content: space-between !important;
+    padding: 6px 0 !important;
+    font-size: 14px !important;
+
+    .totalLabel {
+        color: #555 !important;
+        font-family: var(--font-primary) !important;
+    }
+
+    .amount {
+        font-weight: 500 !important;
+    }
+}
+
+.finalTotalBlock {
+    background-color: #3498db !important;
+    color: white !important;
+    padding: 20px 20px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    font-family: var(--font-primary) !important;
+}
+
+.footer {
+    text-align: center !important;
+    padding: 30px 20px !important;
+    font-size: 11px !important;
+    color: #7f8c8d !important;
+
+    p {
+        margin: 5px 0 !important;
+    }
+}
+
+.gstNote {
+    font-size: 11px !important;
+    color: #888 !important;
+    margin: 4px 0 8px !important;
+    font-style: italic !important;
+}
+
+.tableFooterRow {
+    td {
+        border-top: 2px solid #ccc !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        background: #fafafa !important;
+        font-size: 13px !important;
+    }
+}

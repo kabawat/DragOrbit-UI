@@ -1,4 +1,5 @@
 "use client";
+import { TableSkeleton } from "@dragorbit/ui";
 /** Host model supplies state/actions; this component owns the shared markup. */
 export function InvoiceListContentView({ model }) {
 	const {
@@ -46,7 +47,7 @@ export function InvoiceListContentView({ model }) {
 	return (
 		<>
 			<div className="bg-[rgb(var(--color-bg-primary))] rounded-xl border border-[rgb(var(--color-border-primary)/0.6)] overflow-hidden">
-				<div className="h-[calc(100vh-210px)] overflow-y-auto custom-scrollbar">
+				<div>
 					{viewMode === "table" ? (
 						<div className="min-h-full">
 							<InvoiceTable
@@ -68,7 +69,7 @@ export function InvoiceListContentView({ model }) {
 						</div>
 					) : (
 						<div>
-							<div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+							<div className="p-4 sm:p-5 md:p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 sm:gap-5">
 								{invoices.map((invoice) => (
 									<InvoiceCard
 										key={invoice.id || invoice._id}
@@ -95,15 +96,8 @@ export function InvoiceListContentView({ model }) {
 						<div ref={sentinelRef} className="h-4 w-full" />
 					)}
 
-					{(isFetchingMore || isLoading) && invoices.length > 0 && (
-						<div className="flex items-center justify-center py-16">
-							<div className="flex items-center gap-3">
-								<div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[rgb(var(--color-primary))]" />
-								<span className="text-sm text-[rgb(var(--color-text-secondary))]">
-									{t("common.loadingMore") || "Loading more..."}
-								</span>
-							</div>
-						</div>
+					{isFetchingMore && invoices.length > 0 && (
+						<TableSkeleton compact rows={2} />
 					)}
 				</div>
 
@@ -116,7 +110,7 @@ export function InvoiceListContentView({ model }) {
 									<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 										{invoices.length}
 									</span>{" "}
-									invoices
+									{invoices.length === 1 ? "invoice" : "invoices"}
 									<span className="ml-2 text-xs text-[rgb(var(--color-primary))]">
 										• Scroll down to load more
 									</span>
@@ -127,7 +121,7 @@ export function InvoiceListContentView({ model }) {
 									<span className="font-semibold text-[rgb(var(--color-text-primary))]">
 										{invoices.length}
 									</span>{" "}
-									invoices
+									{invoices.length === 1 ? "invoice" : "invoices"}
 									<span className="ml-2 text-xs text-[rgb(var(--color-text-tertiary))]">
 										• No more invoices
 									</span>
